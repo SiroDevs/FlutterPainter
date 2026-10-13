@@ -1,21 +1,20 @@
 # Flutter Painter
 
-A desktop vector painting tool, in the spirit of MS Paint, built with Flutter.
+A desktop vector painting tool, in the spirit of MS Paint with a control like that of Canva, built with Flutter.
 You draw shapes on layers, trace over a background picture if you like, and
 **export the result as plain Dart** that paints the same picture on a
-`dart:ui` `Canvas`. It was made to build game sprites (the RoadBash bike rider)
-visually instead of guessing coordinates in code.
+`dart:ui` `Canvas`. It was made to build game sprites visually instead of guessing coordinates in code.
 
 Everything is vector: shapes are stored as points, colours and stroke widths,
 never as pixels, so a drawing stays sharp at any zoom and exports to compact
 code.
 
-The code follows the same architecture as RoadBash: **bloc + Freezed**,
+<image src="./screenshots/image1.png"> 
+The code follows the clean architecture: **bloc + Freezed**,
 **injectable / get_it** dependency injection, a **data / domain / feature**
 split, and `go_router`. See [Architecture](#architecture).
 
 - [Getting started](#getting-started)
-- [A tour of the window](#a-tour-of-the-window)
 - [Drawing](#drawing)
 - [Tracing over a background image](#tracing-over-a-background-image)
 - [Layers](#layers)
@@ -54,22 +53,6 @@ Packages: `flutter_bloc`, `freezed`, `injectable` + `get_it`, `go_router`,
 `desktop_drop` (drag a file onto the window), `path_provider` (the folder for
 side copies).
 
-## A tour of the window
-
-```
-+--------------------------------------------------------------------------+
-| New  Open  Save  Save as  Auto-save  [Export Dart]  Undo Redo  Zoom ...  |  top bar
-| [ Rider x ] [ Untitled 2 * x ] [ + ]                                     |  project tabs
-+------+---------------------------------------------+---------------------+
-| tool |                                             | Layers              |
-| pal- |                canvas                       | Background image    |
-| ette |                                             | Properties          |
-+------+---------------------------------------------+---------------------+
-| fill/stroke swatches | hex | palette | colours already used              |
-| x 52.0  y 98.5   hint for the current tool                               |
-+--------------------------------------------------------------------------+
-```
-
 - **Top bar:** file actions, the Auto-save switch, Export Dart, undo/redo, zoom,
   grid and snap toggles, background colour, canvas size, light/dark theme and the
   project name.
@@ -91,14 +74,14 @@ scale that suits your game and change it with **Canvas size**.
 
 ## Drawing
 
-| Tool | How it works |
-|------|--------------|
-| **Select** | Click a shape to select it. Drag to move it. Drag a corner handle to resize it. On lines and polygons the handles are the points themselves: drag one to reshape. **Double-click an edge** to add a point there, **Alt-click a point** to delete it. |
-| **Rectangle** | Drag. Hold Shift for a square. Set a corner radius in Properties. |
-| **Ellipse** | Drag. Hold Shift for a circle. |
-| **Line** | Drag. Hold Shift to snap to 45 degree steps. |
-| **Polygon / line path** | Click to place points one after another. See below. |
-| **Freehand** | Drag. The stroke is smoothed with quadratic curves; the exported code uses the same curves. |
+| Tool                    | How it works                                                                                                                                                                                                                                         |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Select**              | Click a shape to select it. Drag to move it. Drag a corner handle to resize it. On lines and polygons the handles are the points themselves: drag one to reshape. **Double-click an edge** to add a point there, **Alt-click a point** to delete it. |
+| **Rectangle**           | Drag. Hold Shift for a square. Set a corner radius in Properties.                                                                                                                                                                                    |
+| **Ellipse**             | Drag. Hold Shift for a circle.                                                                                                                                                                                                                       |
+| **Line**                | Drag. Hold Shift to snap to 45 degree steps.                                                                                                                                                                                                         |
+| **Polygon / line path** | Click to place points one after another. See below.                                                                                                                                                                                                  |
+| **Freehand**            | Drag. The stroke is smoothed with quadratic curves; the exported code uses the same curves.                                                                                                                                                          |
 
 ### Making a shape out of lines
 
@@ -138,7 +121,7 @@ Load a picture and draw over it to copy its outline.
 1. In the **Background image** panel press **Load**, or drag an image file
    (PNG, JPG, WebP, BMP, GIF) onto the window. It is fitted to the canvas box.
 2. Lower **Opacity** so your lines stand out against it.
-3. Choose **Move image** (or the *Move background image* tool) and drag it into
+3. Choose **Move image** (or the _Move background image_ tool) and drag it into
    place. Adjust **Scale** with the slider (it scales about the image centre).
    **Fit to canvas** resets both.
 4. Switch back to a drawing tool and trace. The image sits under the grid and
@@ -196,7 +179,10 @@ readable JSON, so it diffs well in git:
         {
           "kind": "rect",
           "name": "Rear tyre",
-          "points": [[48.0, 96.0], [72.0, 164.0]],
+          "points": [
+            [48.0, 96.0],
+            [72.0, 164.0]
+          ],
           "fill": 4279638296,
           "stroke": null,
           "strokeWidth": 1.0,
@@ -207,8 +193,11 @@ readable JSON, so it diffs well in git:
   ],
   "reference": {
     "id": "3fa2c1-48211",
-    "x": 0.0, "y": 0.0, "scale": 0.25,
-    "opacity": 0.5, "visible": true,
+    "x": 0.0,
+    "y": 0.0,
+    "scale": 0.25,
+    "opacity": 0.5,
+    "visible": true,
     "data": "<base64 image bytes>"
   }
 }
@@ -228,7 +217,7 @@ the domain models lives in `lib/data/mappers/drawing_mapper.dart`.
 The goal: you never lose work, and you never overwrite a file by accident.
 
 **Side copies.** As soon as a project has unsaved changes, Flutter Painter keeps
-a safe side copy of it (a *draft*) in the app's support folder, rewritten about a
+a safe side copy of it (a _draft_) in the app's support folder, rewritten about a
 second after each edit. Your real `.flp` file is not touched until you save.
 
 **Save (Ctrl+S).** Writes your latest state into the real file and deletes the
@@ -249,7 +238,7 @@ saved still use side copies until you save them. The switch is remembered
 between launches.
 
 **Closing.** Closing a tab with unsaved changes asks **Save / Don't save /
-Cancel**; for a project that was never saved, *Save* opens the Save As dialog
+Cancel**; for a project that was never saved, _Save_ opens the Save As dialog
 and cancelling it keeps the tab open. Closing the window does the same for every
 project with unsaved changes.
 
@@ -299,20 +288,20 @@ layers, so you can rotate or tint one without touching the others).
 
 Use Cmd instead of Ctrl on macOS.
 
-| Keys | Action |
-|------|--------|
-| Ctrl+N / Ctrl+O | New project / open |
-| Ctrl+S / Ctrl+Shift+S | Save / save as |
-| Ctrl+W | Close the current tab |
-| Ctrl+E | Export Dart |
-| Ctrl+Z, Ctrl+Y or Ctrl+Shift+Z | Undo, redo |
-| Ctrl+D | Duplicate the selected shape |
-| Delete / Backspace | Delete the selected shape |
-| Enter | Finish a polygon as an open line path |
-| Shift+Enter | Finish a polygon as a closed shape |
-| Esc | Cancel the shape being drawn and return to Select |
-| Shift (while dragging) | Square / circle / 45 degree line |
-| Alt+click a point | Delete that point of a line or polygon |
+| Keys                           | Action                                            |
+| ------------------------------ | ------------------------------------------------- |
+| Ctrl+N / Ctrl+O                | New project / open                                |
+| Ctrl+S / Ctrl+Shift+S          | Save / save as                                    |
+| Ctrl+W                         | Close the current tab                             |
+| Ctrl+E                         | Export Dart                                       |
+| Ctrl+Z, Ctrl+Y or Ctrl+Shift+Z | Undo, redo                                        |
+| Ctrl+D                         | Duplicate the selected shape                      |
+| Delete / Backspace             | Delete the selected shape                         |
+| Enter                          | Finish a polygon as an open line path             |
+| Shift+Enter                    | Finish a polygon as a closed shape                |
+| Esc                            | Cancel the shape being drawn and return to Select |
+| Shift (while dragging)         | Square / circle / 45 degree line                  |
+| Alt+click a point              | Delete that point of a line or polygon            |
 
 Shortcuts that edit shapes are ignored while a text field (such as the hex box)
 has the keyboard.
@@ -330,6 +319,7 @@ passed on its command line (`main(List<String> args)`).
   reg add HKCU\Software\Classes\FlutterPainter.Project\shell\open\command /ve ^
       /d "\"C:\Apps\flutter_painter\flutter_painter.exe\" \"%1\"" /f
   ```
+
 - **Linux:** add a `.desktop` file with `Exec=/path/to/flutter_painter %f` and
   `MimeType=application/x-flp;` plus a matching mime type for `*.flp`.
 - **macOS:** Finder passes documents to the app through an Apple event rather
@@ -420,16 +410,16 @@ same: the domain asks a repo, the repo uses a source, the source does the IO.
 
 ### What moved where (from the first version)
 
-| Before | Now |
-|--------|-----|
-| `EditorController` (ChangeNotifier) | `EditorBloc` + `feature/editor/logic/*` |
-| `*_ops.dart` extensions | `*_logic.dart` pure classes |
-| `model/*` (mutable) | `domain/models/*` (Freezed, immutable) |
-| `Workspace`, `tab_actions` | `WorkspaceCubit`, `ProjectSaver`, `workspace/flows` |
-| `storage/*` | `data/sources`, `data/mappers`, `domain/repos` |
-| `AppSettings` (settings.json) | `PrefsRepo` (shared_preferences) |
-| `DartExporter` | `domain/services/dart_exporter.dart` |
-| Flutter `ChangeNotifier` listeners | `BlocBuilder` / `BlocProvider` |
+| Before                              | Now                                                 |
+| ----------------------------------- | --------------------------------------------------- |
+| `EditorController` (ChangeNotifier) | `EditorBloc` + `feature/editor/logic/*`             |
+| `*_ops.dart` extensions             | `*_logic.dart` pure classes                         |
+| `model/*` (mutable)                 | `domain/models/*` (Freezed, immutable)              |
+| `Workspace`, `tab_actions`          | `WorkspaceCubit`, `ProjectSaver`, `workspace/flows` |
+| `storage/*`                         | `data/sources`, `data/mappers`, `domain/repos`      |
+| `AppSettings` (settings.json)       | `PrefsRepo` (shared_preferences)                    |
+| `DartExporter`                      | `domain/services/dart_exporter.dart`                |
+| Flutter `ChangeNotifier` listeners  | `BlocBuilder` / `BlocProvider`                      |
 
 ## Tests
 
