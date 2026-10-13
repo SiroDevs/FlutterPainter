@@ -1,15 +1,28 @@
 part of 'export_cubit.dart';
 
-@freezed
-abstract class ExportState with _$ExportState {
-  const factory ExportState({
-    /// The generated Dart source for the current options.
-    @Default('') String code,
+class ExportState extends Equatable {
+  const ExportState({
+    this.code = '',
+    this.perLayer = true,
+    this.status = '',
+  });
 
-    /// One class per layer (true) or a single class with a method per layer.
-    @Default(true) bool perLayer,
+  /// The generated Dart source for the current options.
+  final String code;
 
-    /// Feedback line: copied, saved to a path, or an error.
-    @Default('') String status,
-  }) = _ExportState;
+  /// One class per layer (true) or a single class with a method per layer.
+  final bool perLayer;
+
+  /// Feedback line: copied, saved to a path, or an error.
+  final String status;
+
+  ExportState copyWith({String? code, bool? perLayer, String? status}) =>
+      ExportState(
+        code: code ?? this.code,
+        perLayer: perLayer ?? this.perLayer,
+        status: status ?? this.status,
+      );
+
+  @override
+  List<Object?> get props => [code, perLayer, status];
 }

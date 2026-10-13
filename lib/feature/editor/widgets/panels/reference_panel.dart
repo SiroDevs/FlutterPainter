@@ -43,7 +43,7 @@ class ReferencePanel extends StatelessWidget {
                 Checkbox(
                   value: r.visible,
                   onChanged: (v) =>
-                      bloc.add(EditorEvent.referenceVisibilityChanged(v ?? true)),
+                      bloc.add(ReferenceVisibilityChanged(v ?? true)),
                 ),
                 const Text('Show'),
                 const Spacer(),
@@ -51,19 +51,19 @@ class ReferencePanel extends StatelessWidget {
                   tooltip: 'Move image (tool)',
                   iconSize: 18,
                   icon: const Icon(Icons.open_with),
-                  onPressed: () => bloc.add(const EditorEvent.toolSelected(Tool.reference)),
+                  onPressed: () => bloc.add(const ToolSelected(Tool.reference)),
                 ),
                 IconButton(
                   tooltip: 'Fit to canvas',
                   iconSize: 18,
                   icon: const Icon(Icons.fit_screen),
-                  onPressed: () => bloc.add(const EditorEvent.referenceFitted()),
+                  onPressed: () => bloc.add(const ReferenceFitted()),
                 ),
                 IconButton(
                   tooltip: 'Remove image',
                   iconSize: 18,
                   icon: const Icon(Icons.delete_outline),
-                  onPressed: () => bloc.add(const EditorEvent.referenceRemoved()),
+                  onPressed: () => bloc.add(const ReferenceRemoved()),
                 ),
               ]),
               LabeledSlider(
@@ -72,8 +72,8 @@ class ReferencePanel extends StatelessWidget {
                 value: r.opacity,
                 min: 0.05,
                 max: 1,
-                onChanged: (v) => bloc.add(EditorEvent.referenceOpacityChanged(v)),
-                onChangeEnd: () => bloc.add(const EditorEvent.changesCommitted()),
+                onChanged: (v) => bloc.add(ReferenceOpacityChanged(v)),
+                onChangeEnd: () => bloc.add(const ChangesCommitted()),
               ),
               LabeledSlider(
                 compact: true,
@@ -81,8 +81,8 @@ class ReferencePanel extends StatelessWidget {
                 value: r.scale,
                 min: 0.01,
                 max: 4,
-                onChanged: (v) => bloc.add(EditorEvent.referenceScaleChanged(v)),
-                onChangeEnd: () => bloc.add(const EditorEvent.changesCommitted()),
+                onChanged: (v) => bloc.add(ReferenceScaleChanged(v)),
+                onChangeEnd: () => bloc.add(const ChangesCommitted()),
               ),
             ],
           ]),

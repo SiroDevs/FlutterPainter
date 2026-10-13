@@ -22,13 +22,13 @@ class TopBar extends StatelessWidget {
       title: 'Project name (also used for class names)',
       initial: bloc.state.drawing.name,
     );
-    if (name != null && name.isNotEmpty) bloc.add(EditorEvent.drawingRenamed(name));
+    if (name != null && name.isNotEmpty) bloc.add(DrawingRenamed(name));
   }
 
   Future<void> _resize(BuildContext context, EditorBloc bloc) async {
     final d = bloc.state.drawing;
     final size = await promptSize(context, d.width, d.height);
-    if (size != null) bloc.add(EditorEvent.canvasResized(size.$1, size.$2));
+    if (size != null) bloc.add(CanvasResized(size.$1, size.$2));
   }
 
   @override
@@ -79,31 +79,31 @@ class TopBar extends StatelessWidget {
             ),
             _divider(),
             _btn(Icons.undo, 'Undo (Ctrl+Z)',
-                state.canUndo ? () => bloc.add(const EditorEvent.undoRequested()) : null),
+                state.canUndo ? () => bloc.add(const UndoRequested()) : null),
             _btn(Icons.redo, 'Redo (Ctrl+Y)',
-                state.canRedo ? () => bloc.add(const EditorEvent.redoRequested()) : null),
+                state.canRedo ? () => bloc.add(const RedoRequested()) : null),
             _divider(),
             _btn(Icons.zoom_out, 'Zoom out',
-                () => bloc.add(EditorEvent.viewZoomed(1 / 1.25, center))),
+                () => bloc.add(ViewZoomed(1 / 1.25, center))),
             SizedBox(
               width: 48,
               child: Text('${v.zoom.toStringAsFixed(1)}x', textAlign: TextAlign.center),
             ),
             _btn(Icons.zoom_in, 'Zoom in',
-                () => bloc.add(EditorEvent.viewZoomed(1.25, center))),
+                () => bloc.add(ViewZoomed(1.25, center))),
             _btn(Icons.fit_screen, 'Fit to window',
-                () => bloc.add(const EditorEvent.fitRequested())),
+                () => bloc.add(const FitRequested())),
             _divider(),
             _toggle(Icons.grid_on, 'Grid', v.grid,
-                () => bloc.add(const EditorEvent.gridToggled())),
+                () => bloc.add(const GridToggled())),
             _toggle(Icons.straighten, 'Snap to grid', v.snap,
-                () => bloc.add(const EditorEvent.snapToggled())),
+                () => bloc.add(const SnapToggled())),
             _btn(Icons.format_color_fill, 'Cycle canvas background',
-                () => bloc.add(const EditorEvent.backgroundCycled())),
+                () => bloc.add(const BackgroundCycled())),
             _btn(Icons.aspect_ratio, 'Canvas size', () => _resize(context, bloc)),
             _btn(Icons.brightness_6_outlined, 'Light / dark theme', () {
               final theme = context.read<ThemeBloc>();
-              theme.add(ThemeEvent.themeModeChanged(
+              theme.add(ThemeModeChanged(
                 theme.state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark,
               ));
             }),

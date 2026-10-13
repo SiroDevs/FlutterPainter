@@ -1,23 +1,42 @@
 // Package imports:
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 
 // Project imports:
+import '../../../core/utils/copy_with_util.dart';
 import '../../../domain/models/drawing.dart';
-
-part 'editor_seed.freezed.dart';
 
 /// What a new editor (one tab) starts from. Passed to the bloc as its
 /// injectable factory parameter.
-@freezed
-abstract class EditorSeed with _$EditorSeed {
-  const factory EditorSeed({
-    required String tabId,
-    required Drawing drawing,
+class EditorSeed extends Equatable {
+  const EditorSeed({
+    required this.tabId,
+    required this.drawing,
+    this.filePath,
+    this.recovered = false,
+  });
 
-    /// The .flp this project is saved to, if any.
-    String? filePath,
+  final String tabId;
+  final Drawing drawing;
 
-    /// True for a recovered draft: nothing here matches the file on disk.
-    @Default(false) bool recovered,
-  }) = _EditorSeed;
+  /// The .flp this project is saved to, if any.
+  final String? filePath;
+
+  /// True for a recovered draft: nothing here matches the file on disk.
+  final bool recovered;
+
+  EditorSeed copyWith({
+    String? tabId,
+    Drawing? drawing,
+    Object? filePath = unset,
+    bool? recovered,
+  }) =>
+      EditorSeed(
+        tabId: tabId ?? this.tabId,
+        drawing: drawing ?? this.drawing,
+        filePath: keep<String>(filePath, this.filePath),
+        recovered: recovered ?? this.recovered,
+      );
+
+  @override
+  List<Object?> get props => [tabId, drawing, filePath, recovered];
 }

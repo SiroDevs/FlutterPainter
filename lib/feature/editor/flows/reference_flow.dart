@@ -11,7 +11,7 @@ import '../bloc/editor_bloc.dart';
 Future<void> chooseReferenceImage(BuildContext context, EditorBloc bloc) async {
   try {
     final bytes = await getIt<FileDialogs>().pickImageBytes();
-    if (bytes != null) bloc.add(EditorEvent.referenceLoaded(bytes));
+    if (bytes != null) bloc.add(ReferenceLoaded(bytes));
   } catch (e) {
     if (context.mounted) {
       CustomSnackbar.show(context, 'Could not load that image: $e');

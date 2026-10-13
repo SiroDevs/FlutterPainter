@@ -21,7 +21,7 @@ class LayersPanel extends StatelessWidget {
       initial: state.layer.name,
     );
     if (name != null && name.isNotEmpty) {
-      bloc.add(EditorEvent.layerRenamed(state.layerIndex, name));
+      bloc.add(LayerRenamed(state.layerIndex, name));
     }
   }
 
@@ -40,14 +40,14 @@ class LayersPanel extends StatelessWidget {
             child: Row(children: [
               Text('Layers', style: Theme.of(context).textTheme.titleSmall),
               const Spacer(),
-              _btn(Icons.add, 'Add layer', () => bloc.add(const EditorEvent.layerAdded())),
+              _btn(Icons.add, 'Add layer', () => bloc.add(const LayerAdded())),
               _btn(Icons.edit_outlined, 'Rename layer', () => _rename(context)),
               _btn(Icons.arrow_upward, 'Move layer up',
-                  () => bloc.add(EditorEvent.layerMoved(active, 1))),
+                  () => bloc.add(LayerMoved(active, 1))),
               _btn(Icons.arrow_downward, 'Move layer down',
-                  () => bloc.add(EditorEvent.layerMoved(active, -1))),
+                  () => bloc.add(LayerMoved(active, -1))),
               _btn(Icons.delete_outline, 'Delete layer',
-                  () => bloc.add(EditorEvent.layerDeleted(active))),
+                  () => bloc.add(LayerDeleted(active))),
             ]),
           ),
           Expanded(
@@ -67,11 +67,11 @@ class LayersPanel extends StatelessWidget {
                       l.visible ? Icons.visibility : Icons.visibility_off,
                       size: 18,
                     ),
-                    onPressed: () => bloc.add(EditorEvent.layerVisibilityToggled(i)),
+                    onPressed: () => bloc.add(LayerVisibilityToggled(i)),
                   ),
                   title: Text(l.name),
                   trailing: Text('${l.shapes.length}'),
-                  onTap: () => bloc.add(EditorEvent.layerActivated(i)),
+                  onTap: () => bloc.add(LayerActivated(i)),
                 );
               },
             ),

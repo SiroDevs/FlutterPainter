@@ -4,10 +4,11 @@ import 'dart:ui';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
 // Project imports:
+import '../../../core/utils/copy_with_util.dart';
 import '../../../core/utils/image_util.dart';
 import '../../../domain/models/drawing.dart';
 import '../../../domain/models/edit_history.dart';
@@ -34,7 +35,6 @@ import '../models/view_settings.dart';
 part 'editor_event.dart';
 part 'editor_state.dart';
 
-part 'editor_bloc.freezed.dart';
 
 /// One bloc per open project (tab). It holds no business logic itself: every
 /// event is routed to a pure function in `logic/` that maps the old state to

@@ -45,7 +45,7 @@ class ColorBar extends StatelessWidget {
                     ),
                     onFieldSubmitted: (v) {
                       final parsed = parseHex(v);
-                      if (parsed != null) bloc.add(EditorEvent.colorPicked(parsed));
+                      if (parsed != null) bloc.add(ColorPicked(parsed));
                     },
                   ),
                   TextButton.icon(
@@ -55,8 +55,8 @@ class ColorBar extends StatelessWidget {
                     ),
                     onPressed: () => bloc.add(
                       st.editFill
-                          ? EditorEvent.fillToggled(!activeOn)
-                          : EditorEvent.strokeToggled(!activeOn),
+                          ? FillToggled(!activeOn)
+                          : StrokeToggled(!activeOn),
                     ),
                     icon: Icon(activeOn ? Icons.block : Icons.check, size: 16),
                     label: Text(activeOn ? 'None' : 'Use'),
@@ -99,7 +99,7 @@ class _Swatches extends StatelessWidget {
     Widget box(bool isFill, int color, bool on) => Tooltip(
           message: isFill ? 'Fill colour' : 'Stroke colour',
           child: GestureDetector(
-            onTap: () => bloc.add(EditorEvent.styleTargetChanged(isFill)),
+            onTap: () => bloc.add(StyleTargetChanged(isFill)),
             child: Container(
               width: 38,
               height: 38,
@@ -138,8 +138,8 @@ class _Cell extends StatelessWidget {
     return Tooltip(
       message: hexOf(color),
       child: GestureDetector(
-        onTap: () => bloc.add(EditorEvent.colorPicked(color)),
-        onSecondaryTap: () => bloc.add(EditorEvent.strokeColorPicked(color)),
+        onTap: () => bloc.add(ColorPicked(color)),
+        onSecondaryTap: () => bloc.add(StrokeColorPicked(color)),
         child: Container(
           width: size,
           height: size,

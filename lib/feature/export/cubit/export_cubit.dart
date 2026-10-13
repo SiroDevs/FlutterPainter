@@ -1,7 +1,7 @@
 // Package imports:
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
 // Project imports:
@@ -10,8 +10,6 @@ import '../../../domain/models/drawing.dart';
 import '../../../domain/services/dart_exporter.dart';
 
 part 'export_state.dart';
-
-part 'export_cubit.freezed.dart';
 
 /// Generates the Dart code for a drawing and lets the user copy or save it.
 @injectable

@@ -97,11 +97,11 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
 
     void send(EditorEvent e) => _current.add(e);
 
-    both(LogicalKeyboardKey.keyZ, () => _guarded(() => send(const EditorEvent.undoRequested())));
-    both(LogicalKeyboardKey.keyZ, () => _guarded(() => send(const EditorEvent.redoRequested())),
+    both(LogicalKeyboardKey.keyZ, () => _guarded(() => send(const UndoRequested())));
+    both(LogicalKeyboardKey.keyZ, () => _guarded(() => send(const RedoRequested())),
         shift: true);
-    both(LogicalKeyboardKey.keyY, () => _guarded(() => send(const EditorEvent.redoRequested())));
-    both(LogicalKeyboardKey.keyD, () => _guarded(() => send(const EditorEvent.shapeDuplicated())));
+    both(LogicalKeyboardKey.keyY, () => _guarded(() => send(const RedoRequested())));
+    both(LogicalKeyboardKey.keyD, () => _guarded(() => send(const ShapeDuplicated())));
     both(LogicalKeyboardKey.keyS, () => saveTab(context, _ws, _current));
     both(LogicalKeyboardKey.keyS, () => saveTab(context, _ws, _current, saveAs: true),
         shift: true);
@@ -111,16 +111,16 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     both(LogicalKeyboardKey.keyE, () => showExportDialog(context, _current.state.drawing));
 
     map[const SingleActivator(LogicalKeyboardKey.delete)] =
-        () => _guarded(() => send(const EditorEvent.shapeDeleted()));
+        () => _guarded(() => send(const ShapeDeleted()));
     map[const SingleActivator(LogicalKeyboardKey.backspace)] =
-        () => _guarded(() => send(const EditorEvent.shapeDeleted()));
+        () => _guarded(() => send(const ShapeDeleted()));
     map[const SingleActivator(LogicalKeyboardKey.enter)] =
-        () => _guarded(() => send(const EditorEvent.polygonFinished(closed: false)));
+        () => _guarded(() => send(const PolygonFinished(closed: false)));
     map[const SingleActivator(LogicalKeyboardKey.enter, shift: true)] =
-        () => _guarded(() => send(const EditorEvent.polygonFinished()));
+        () => _guarded(() => send(const PolygonFinished()));
     map[const SingleActivator(LogicalKeyboardKey.escape)] = () => _guarded(() {
-          send(const EditorEvent.draftCancelled());
-          send(const EditorEvent.toolSelected(Tool.select));
+          send(const DraftCancelled());
+          send(const ToolSelected(Tool.select));
         });
     return map;
   }

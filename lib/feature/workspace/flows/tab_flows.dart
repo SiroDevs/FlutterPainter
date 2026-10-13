@@ -40,7 +40,7 @@ Future<void> openPath(BuildContext context, WorkspaceCubit ws, String path) asyn
   try {
     if (isImageFile(path)) {
       final bytes = await _dialogs.readBytes(path);
-      ws.current.add(EditorEvent.referenceLoaded(bytes));
+      ws.current.add(ReferenceLoaded(bytes));
     } else if (isProjectFile(path)) {
       await ws.openProject(path);
     } else if (context.mounted) {

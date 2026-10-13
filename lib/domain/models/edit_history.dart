@@ -1,28 +1,27 @@
 // Package imports:
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 
 // Project imports:
 import 'drawing.dart';
-
-part 'edit_history.freezed.dart';
 
 /// Undo/redo as a list of whole-document snapshots. Drawings are immutable, so
 /// snapshots share structure and cost almost nothing. [savedIndex] marks the
 /// snapshot that matches the file on disk, which makes "unsaved changes" exact:
 /// undoing back to the saved state is clean again.
-@freezed
-abstract class EditHistory with _$EditHistory {
-  const EditHistory._();
-
-  const factory EditHistory({
-    required List<Drawing> states,
-    required int index,
-    required int savedIndex,
-  }) = _EditHistory;
+class EditHistory extends Equatable {
+  const EditHistory({
+    required this.states,
+    required this.index,
+    required this.savedIndex,
+  });
 
   /// [saved] false is for recovered drafts: nothing here matches the disk.
   factory EditHistory.initial(Drawing drawing, {bool saved = true}) =>
       EditHistory(states: [drawing], index: 0, savedIndex: saved ? 0 : -1);
+
+  final List<Drawing> states;
+  final int index;
+  final int savedIndex;
 
   static const maxStates = 200;
 
@@ -51,4 +50,18 @@ abstract class EditHistory with _$EditHistory {
 
   EditHistory markSaved() => copyWith(savedIndex: index);
   EditHistory markUnsaved() => copyWith(savedIndex: -1);
+
+  EditHistory copyWith({
+    List<Drawing>? states,
+    int? index,
+    int? savedIndex,
+  }) =>
+      EditHistory(
+        states: states ?? this.states,
+        index: index ?? this.index,
+        savedIndex: savedIndex ?? this.savedIndex,
+      );
+
+  @override
+  List<Object?> get props => [states, index, savedIndex];
 }

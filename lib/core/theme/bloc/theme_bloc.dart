@@ -3,15 +3,12 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 // Project imports:
 import '../../../domain/repos/prefs_repo.dart';
 
 part 'theme_event.dart';
-
-part 'theme_bloc.freezed.dart';
 
 /// The app's light/dark/system mode, remembered between launches.
 @lazySingleton

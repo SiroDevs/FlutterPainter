@@ -19,7 +19,7 @@ class PropertiesPanel extends StatelessWidget {
   Future<void> _rename(BuildContext context, Shape s) async {
     final bloc = context.read<EditorBloc>();
     final name = await promptText(context, title: 'Rename shape', initial: s.name);
-    if (name != null) bloc.add(EditorEvent.shapeRenamed(name));
+    if (name != null) bloc.add(ShapeRenamed(name));
   }
 
   @override
@@ -58,24 +58,24 @@ class PropertiesPanel extends StatelessWidget {
                   controlAffinity: ListTileControlAffinity.leading,
                   title: const Text('Closed shape (can be filled)'),
                   value: s.kind == ShapeKind.polygon,
-                  onChanged: (v) => bloc.add(EditorEvent.closedToggled(v ?? false)),
+                  onChanged: (v) => bloc.add(ClosedToggled(v ?? false)),
                 ),
             ],
             const SizedBox(height: 8),
             _toggle('Fill', st.fillOn, st.fillColor,
-                (v) => bloc.add(EditorEvent.fillToggled(v)),
-                () => bloc.add(const EditorEvent.styleTargetChanged(true))),
+                (v) => bloc.add(FillToggled(v)),
+                () => bloc.add(const StyleTargetChanged(true))),
             _toggle('Stroke', st.strokeOn, st.strokeColor,
-                (v) => bloc.add(EditorEvent.strokeToggled(v)),
-                () => bloc.add(const EditorEvent.styleTargetChanged(false))),
+                (v) => bloc.add(StrokeToggled(v)),
+                () => bloc.add(const StyleTargetChanged(false))),
             LabeledSlider(
               label: 'Stroke width: ${st.strokeWidth.toStringAsFixed(2)}',
               value: st.strokeWidth,
               min: 0.25,
               max: 20,
               onChanged: (v) =>
-                  bloc.add(EditorEvent.strokeWidthChanged((v * 4).round() / 4)),
-              onChangeEnd: () => bloc.add(const EditorEvent.changesCommitted()),
+                  bloc.add(StrokeWidthChanged((v * 4).round() / 4)),
+              onChangeEnd: () => bloc.add(const ChangesCommitted()),
             ),
             if (showRadius)
               LabeledSlider(
@@ -84,23 +84,23 @@ class PropertiesPanel extends StatelessWidget {
                 min: 0,
                 max: 40,
                 onChanged: (v) =>
-                    bloc.add(EditorEvent.radiusChanged((v * 4).round() / 4)),
-                onChangeEnd: () => bloc.add(const EditorEvent.changesCommitted()),
+                    bloc.add(RadiusChanged((v * 4).round() / 4)),
+                onChangeEnd: () => bloc.add(const ChangesCommitted()),
               ),
             if (s != null) ...[
               const SizedBox(height: 8),
               Wrap(spacing: 6, runSpacing: 6, children: [
                 _action(Icons.copy, 'Duplicate',
-                    () => bloc.add(const EditorEvent.shapeDuplicated())),
+                    () => bloc.add(const ShapeDuplicated())),
                 _action(Icons.delete_outline, 'Delete',
-                    () => bloc.add(const EditorEvent.shapeDeleted())),
+                    () => bloc.add(const ShapeDeleted())),
                 _action(Icons.flip_to_front, 'Forward',
-                    () => bloc.add(const EditorEvent.shapeReordered(1))),
+                    () => bloc.add(const ShapeReordered(1))),
                 _action(Icons.flip_to_back, 'Back',
-                    () => bloc.add(const EditorEvent.shapeReordered(-1))),
+                    () => bloc.add(const ShapeReordered(-1))),
                 PopupMenuButton<int>(
                   tooltip: 'Move to layer',
-                  onSelected: (i) => bloc.add(EditorEvent.shapeMovedToLayer(i)),
+                  onSelected: (i) => bloc.add(ShapeMovedToLayer(i)),
                   itemBuilder: (_) => [
                     for (var i = state.drawing.layers.length - 1; i >= 0; i--)
                       PopupMenuItem(value: i, child: Text(state.drawing.layers[i].name)),

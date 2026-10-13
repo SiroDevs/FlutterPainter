@@ -1,25 +1,42 @@
 // Package imports:
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 
 // Project imports:
+import '../../core/utils/copy_with_util.dart';
 import '../../core/utils/path_util.dart';
 import 'drawing.dart';
 
-part 'draft.freezed.dart';
-
 /// A side copy of a project with unsaved changes, kept so a crash loses nothing.
-@freezed
-abstract class Draft with _$Draft {
-  const Draft._();
+class Draft extends Equatable {
+  const Draft({
+    required this.tabId,
+    required this.drawing,
+    required this.savedAt,
+    this.path,
+  });
 
-  const factory Draft({
-    required String tabId,
-    required Drawing drawing,
-    required DateTime savedAt,
+  final String tabId;
+  final Drawing drawing;
+  final DateTime savedAt;
 
-    /// The project file this draft belongs to, if it was ever saved.
-    String? path,
-  }) = _Draft;
+  /// The project file this draft belongs to, if it was ever saved.
+  final String? path;
 
   String get title => path != null ? baseNameOf(path!) : drawing.name;
+
+  Draft copyWith({
+    String? tabId,
+    Drawing? drawing,
+    DateTime? savedAt,
+    Object? path = unset,
+  }) =>
+      Draft(
+        tabId: tabId ?? this.tabId,
+        drawing: drawing ?? this.drawing,
+        savedAt: savedAt ?? this.savedAt,
+        path: keep<String>(path, this.path),
+      );
+
+  @override
+  List<Object?> get props => [tabId, drawing, savedAt, path];
 }

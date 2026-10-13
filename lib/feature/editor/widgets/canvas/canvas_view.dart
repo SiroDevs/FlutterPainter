@@ -51,7 +51,7 @@ class _CanvasViewState extends State<CanvasView> {
     if (size == _reportedSize) return;
     _reportedSize = size;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _bloc.add(EditorEvent.viewportChanged(size));
+      if (mounted) _bloc.add(ViewportChanged(size));
     });
   }
 
@@ -69,7 +69,7 @@ class _CanvasViewState extends State<CanvasView> {
             onPointerUp: _up,
             onPointerCancel: (_) => _panning = false,
             onPointerHover: (e) =>
-                _bloc.add(EditorEvent.pointerHovered(_design(e.localPosition))),
+                _bloc.add(PointerHovered(_design(e.localPosition))),
             onPointerSignal: _signal,
             child: ClipRect(
               child: CustomPaint(
@@ -90,7 +90,7 @@ class _CanvasViewState extends State<CanvasView> {
       return;
     }
     if ((e.buttons & kPrimaryButton) == 0) return;
-    _bloc.add(EditorEvent.pointerPressed(
+    _bloc.add(PointerPressed(
       _design(e.localPosition),
       shift: HardwareKeyboard.instance.isShiftPressed,
       alt: HardwareKeyboard.instance.isAltPressed,
@@ -100,23 +100,23 @@ class _CanvasViewState extends State<CanvasView> {
 
   void _move(PointerMoveEvent e) {
     if (_panning) {
-      _bloc.add(EditorEvent.viewPanned(e.delta));
+      _bloc.add(ViewPanned(e.delta));
       return;
     }
-    _bloc.add(EditorEvent.pointerMoved(
+    _bloc.add(PointerMoved(
       _design(e.localPosition),
       shift: HardwareKeyboard.instance.isShiftPressed,
     ));
   }
 
   void _up(PointerUpEvent e) {
-    if (!_panning) _bloc.add(const EditorEvent.pointerReleased());
+    if (!_panning) _bloc.add(const PointerReleased());
     _panning = false;
   }
 
   void _signal(PointerSignalEvent e) {
     if (e is PointerScrollEvent) {
-      _bloc.add(EditorEvent.viewZoomed(
+      _bloc.add(ViewZoomed(
         e.scrollDelta.dy < 0 ? 1.12 : 1 / 1.12,
         e.localPosition,
       ));

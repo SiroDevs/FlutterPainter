@@ -1,8 +1,11 @@
 part of 'theme_bloc.dart';
 
-@freezed
-sealed class ThemeEvent with _$ThemeEvent {
-  const factory ThemeEvent.themeModeChanged(
-    ThemeMode themeMode,
-  ) = ThemeModeChanged;
+sealed class ThemeEvent {
+  const ThemeEvent();
+}
+
+class ThemeModeChanged extends ThemeEvent {
+  const ThemeModeChanged(this.themeMode);
+
+  final ThemeMode themeMode;
 }

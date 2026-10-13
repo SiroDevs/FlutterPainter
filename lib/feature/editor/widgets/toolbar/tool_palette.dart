@@ -35,7 +35,7 @@ class ToolPalette extends StatelessWidget {
                 tooltip: label,
                 icon: Icon(icon),
                 onPressed: () =>
-                    context.read<EditorBloc>().add(EditorEvent.toolSelected(tool)),
+                    context.read<EditorBloc>().add(ToolSelected(tool)),
                 style: IconButton.styleFrom(
                   backgroundColor: state.tool == tool ? scheme.primaryContainer : null,
                   foregroundColor: state.tool == tool ? scheme.onPrimaryContainer : null,

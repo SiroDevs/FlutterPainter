@@ -4,10 +4,11 @@ import 'dart:async';
 // Package imports:
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
 // Project imports:
+import '../../../core/utils/copy_with_util.dart';
 import '../../../common/constants/pref_constants.dart';
 import '../../../core/utils/app_util.dart';
 import '../../../domain/models/draft.dart';
@@ -23,7 +24,6 @@ import 'project_saver.dart';
 
 part 'workspace_state.dart';
 
-part 'workspace_cubit.freezed.dart';
 
 /// The set of open projects (tabs) and the rules for keeping their work safe.
 ///

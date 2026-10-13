@@ -178,7 +178,7 @@ it has unsaved changes, and a close button. Hover a tab to see its file path.
   selection, view and undo history are independent.
 - **Closing the last tab** leaves a fresh blank one so the window is never empty.
 
-Projects are saved as **`.flp`** ("Flutter Painter project") files. The format is
+Projects are saved as **`.flp`** ("Flutter Painter Project") files. The format is
 readable JSON, so it diffs well in git:
 
 ```json

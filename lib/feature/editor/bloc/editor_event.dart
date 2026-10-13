@@ -3,126 +3,265 @@ part of 'editor_bloc.dart';
 /// Everything that can happen in one editor tab. Pointer events carry the
 /// position in design units plus the modifier keys, so the widget stays a thin
 /// forwarder and all behaviour lives in the bloc.
-@freezed
-sealed class EditorEvent with _$EditorEvent {
-  // ---- pointer ----------------------------------------------------------
-  const factory EditorEvent.pointerPressed(
-    Offset point, {
-    @Default(false) bool shift,
-    @Default(false) bool alt,
-    @Default(0) int timeMs,
-  }) = PointerPressed;
+sealed class EditorEvent {
+  const EditorEvent();
+}
 
-  const factory EditorEvent.pointerMoved(
-    Offset point, {
-    @Default(false) bool shift,
-  }) = PointerMoved;
+class PointerPressed extends EditorEvent {
+  const PointerPressed(this.point, {this.shift = false, this.alt = false, this.timeMs = 0});
 
-  const factory EditorEvent.pointerReleased() = PointerReleased;
+  final Offset point;
+  final bool shift;
+  final bool alt;
+  final int timeMs;
+}
 
-  const factory EditorEvent.pointerHovered(Offset point) = PointerHovered;
+class PointerMoved extends EditorEvent {
+  const PointerMoved(this.point, {this.shift = false});
 
-  // ---- view -------------------------------------------------------------
-  const factory EditorEvent.viewPanned(Offset delta) = ViewPanned;
+  final Offset point;
+  final bool shift;
+}
 
-  const factory EditorEvent.viewZoomed(double factor, Offset focal) = ViewZoomed;
+class PointerReleased extends EditorEvent {
+  const PointerReleased();
+}
 
-  const factory EditorEvent.viewportChanged(Size size) = ViewportChanged;
+class PointerHovered extends EditorEvent {
+  const PointerHovered(this.point);
 
-  const factory EditorEvent.fitRequested() = FitRequested;
+  final Offset point;
+}
 
-  const factory EditorEvent.gridToggled() = GridToggled;
+class ViewPanned extends EditorEvent {
+  const ViewPanned(this.delta);
 
-  const factory EditorEvent.snapToggled() = SnapToggled;
+  final Offset delta;
+}
 
-  const factory EditorEvent.backgroundCycled() = BackgroundCycled;
+class ViewZoomed extends EditorEvent {
+  const ViewZoomed(this.factor, this.focal);
 
-  // ---- tools and drafts -------------------------------------------------
-  const factory EditorEvent.toolSelected(Tool tool) = ToolSelected;
+  final double factor;
+  final Offset focal;
+}
 
-  const factory EditorEvent.polygonFinished({
-    @Default(true) bool closed,
-  }) = PolygonFinished;
+class ViewportChanged extends EditorEvent {
+  const ViewportChanged(this.size);
 
-  const factory EditorEvent.draftCancelled() = DraftCancelled;
+  final Size size;
+}
 
-  // ---- history ----------------------------------------------------------
-  const factory EditorEvent.undoRequested() = UndoRequested;
+class FitRequested extends EditorEvent {
+  const FitRequested();
+}
 
-  const factory EditorEvent.redoRequested() = RedoRequested;
+class GridToggled extends EditorEvent {
+  const GridToggled();
+}
+
+class SnapToggled extends EditorEvent {
+  const SnapToggled();
+}
+
+class BackgroundCycled extends EditorEvent {
+  const BackgroundCycled();
+}
+
+class ToolSelected extends EditorEvent {
+  const ToolSelected(this.tool);
+
+  final Tool tool;
+}
+
+class PolygonFinished extends EditorEvent {
+  const PolygonFinished({this.closed = true});
+
+  final bool closed;
+}
+
+class DraftCancelled extends EditorEvent {
+  const DraftCancelled();
+}
+
+class UndoRequested extends EditorEvent {
+  const UndoRequested();
+}
+
+class RedoRequested extends EditorEvent {
+  const RedoRequested();
+}
 
   /// Pushes the current drawing to the undo history (end of a slider drag).
-  const factory EditorEvent.changesCommitted() = ChangesCommitted;
+class ChangesCommitted extends EditorEvent {
+  const ChangesCommitted();
+}
 
-  // ---- style ------------------------------------------------------------
-  const factory EditorEvent.styleTargetChanged(bool editFill) = StyleTargetChanged;
+class StyleTargetChanged extends EditorEvent {
+  const StyleTargetChanged(this.editFill);
 
-  const factory EditorEvent.colorPicked(int color) = ColorPicked;
+  final bool editFill;
+}
 
-  const factory EditorEvent.strokeColorPicked(int color) = StrokeColorPicked;
+class ColorPicked extends EditorEvent {
+  const ColorPicked(this.color);
 
-  const factory EditorEvent.fillToggled(bool on) = FillToggled;
+  final int color;
+}
 
-  const factory EditorEvent.strokeToggled(bool on) = StrokeToggled;
+class StrokeColorPicked extends EditorEvent {
+  const StrokeColorPicked(this.color);
 
-  const factory EditorEvent.strokeWidthChanged(double width) = StrokeWidthChanged;
+  final int color;
+}
 
-  const factory EditorEvent.radiusChanged(double radius) = RadiusChanged;
+class FillToggled extends EditorEvent {
+  const FillToggled(this.on);
 
-  // ---- selected shape ---------------------------------------------------
-  const factory EditorEvent.shapeDeleted() = ShapeDeleted;
+  final bool on;
+}
 
-  const factory EditorEvent.shapeDuplicated() = ShapeDuplicated;
+class StrokeToggled extends EditorEvent {
+  const StrokeToggled(this.on);
+
+  final bool on;
+}
+
+class StrokeWidthChanged extends EditorEvent {
+  const StrokeWidthChanged(this.width);
+
+  final double width;
+}
+
+class RadiusChanged extends EditorEvent {
+  const RadiusChanged(this.radius);
+
+  final double radius;
+}
+
+class ShapeDeleted extends EditorEvent {
+  const ShapeDeleted();
+}
+
+class ShapeDuplicated extends EditorEvent {
+  const ShapeDuplicated();
+}
 
   /// [direction] +1 draws the shape later (in front), -1 earlier (behind).
-  const factory EditorEvent.shapeReordered(int direction) = ShapeReordered;
+class ShapeReordered extends EditorEvent {
+  const ShapeReordered(this.direction);
 
-  const factory EditorEvent.shapeMovedToLayer(int layer) = ShapeMovedToLayer;
+  final int direction;
+}
 
-  const factory EditorEvent.shapeRenamed(String name) = ShapeRenamed;
+class ShapeMovedToLayer extends EditorEvent {
+  const ShapeMovedToLayer(this.layer);
 
-  const factory EditorEvent.closedToggled(bool closed) = ClosedToggled;
+  final int layer;
+}
 
-  // ---- layers -----------------------------------------------------------
-  const factory EditorEvent.layerAdded() = LayerAdded;
+class ShapeRenamed extends EditorEvent {
+  const ShapeRenamed(this.name);
 
-  const factory EditorEvent.layerDeleted(int index) = LayerDeleted;
+  final String name;
+}
 
-  const factory EditorEvent.layerRenamed(int index, String name) = LayerRenamed;
+class ClosedToggled extends EditorEvent {
+  const ClosedToggled(this.closed);
 
-  const factory EditorEvent.layerVisibilityToggled(int index) =
-      LayerVisibilityToggled;
+  final bool closed;
+}
+
+class LayerAdded extends EditorEvent {
+  const LayerAdded();
+}
+
+class LayerDeleted extends EditorEvent {
+  const LayerDeleted(this.index);
+
+  final int index;
+}
+
+class LayerRenamed extends EditorEvent {
+  const LayerRenamed(this.index, this.name);
+
+  final int index;
+  final String name;
+}
+
+class LayerVisibilityToggled extends EditorEvent {
+  const LayerVisibilityToggled(this.index);
+
+  final int index;
+}
 
   /// [direction] +1 moves the layer up (drawn later), -1 moves it down.
-  const factory EditorEvent.layerMoved(int index, int direction) = LayerMoved;
+class LayerMoved extends EditorEvent {
+  const LayerMoved(this.index, this.direction);
 
-  const factory EditorEvent.layerActivated(int index) = LayerActivated;
+  final int index;
+  final int direction;
+}
 
-  // ---- document ---------------------------------------------------------
-  const factory EditorEvent.drawingRenamed(String name) = DrawingRenamed;
+class LayerActivated extends EditorEvent {
+  const LayerActivated(this.index);
 
-  const factory EditorEvent.canvasResized(double width, double height) =
-      CanvasResized;
+  final int index;
+}
+
+class DrawingRenamed extends EditorEvent {
+  const DrawingRenamed(this.name);
+
+  final String name;
+}
+
+class CanvasResized extends EditorEvent {
+  const CanvasResized(this.width, this.height);
+
+  final double width;
+  final double height;
+}
 
   /// The project was written to [path]: remember it and mark the state clean.
-  const factory EditorEvent.documentSaved(String path) = DocumentSaved;
+class DocumentSaved extends EditorEvent {
+  const DocumentSaved(this.path);
 
-  // ---- background image -------------------------------------------------
-  const factory EditorEvent.referenceLoaded(Uint8List bytes) = ReferenceLoaded;
+  final String path;
+}
 
-  const factory EditorEvent.referenceRemoved() = ReferenceRemoved;
+class ReferenceLoaded extends EditorEvent {
+  const ReferenceLoaded(this.bytes);
 
-  const factory EditorEvent.referenceFitted() = ReferenceFitted;
+  final Uint8List bytes;
+}
 
-  const factory EditorEvent.referenceVisibilityChanged(bool visible) =
-      ReferenceVisibilityChanged;
+class ReferenceRemoved extends EditorEvent {
+  const ReferenceRemoved();
+}
 
-  const factory EditorEvent.referenceOpacityChanged(double opacity) =
-      ReferenceOpacityChanged;
+class ReferenceFitted extends EditorEvent {
+  const ReferenceFitted();
+}
 
-  const factory EditorEvent.referenceScaleChanged(double scale) =
-      ReferenceScaleChanged;
+class ReferenceVisibilityChanged extends EditorEvent {
+  const ReferenceVisibilityChanged(this.visible);
+
+  final bool visible;
+}
+
+class ReferenceOpacityChanged extends EditorEvent {
+  const ReferenceOpacityChanged(this.opacity);
+
+  final double opacity;
+}
+
+class ReferenceScaleChanged extends EditorEvent {
+  const ReferenceScaleChanged(this.scale);
+
+  final double scale;
+}
 
   /// Decode the drawing's reference pixels if they are not decoded yet.
-  const factory EditorEvent.referenceSyncRequested() = ReferenceSyncRequested;
+class ReferenceSyncRequested extends EditorEvent {
+  const ReferenceSyncRequested();
 }

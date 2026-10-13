@@ -14,11 +14,11 @@ import '../../common/constants/app_constants.dart';
 @lazySingleton
 class FileDialogs {
   static const _projectFiles = XTypeGroup(
-    label: 'Flutter Painter project',
+    label: 'Flutter Painter Project',
     extensions: [AppConstants.projectExtension, 'json'],
   );
   static const _flpOnly = XTypeGroup(
-    label: 'Flutter Painter project',
+    label: 'Flutter Painter Project',
     extensions: [AppConstants.projectExtension],
   );
   static const _imageFiles = XTypeGroup(

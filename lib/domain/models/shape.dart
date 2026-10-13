@@ -3,12 +3,11 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Package imports:
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 
 // Project imports:
+import '../../core/utils/copy_with_util.dart';
 import 'shape_kind.dart';
-
-part 'shape.freezed.dart';
 
 /// One drawable thing. Colours are 0xAARRGGBB ints (null = not painted).
 ///
@@ -17,19 +16,47 @@ part 'shape.freezed.dart';
 /// - freehand: `points` are sampled along the stroke and drawn smoothed.
 ///
 /// Immutable: edits make a new [Shape] with `copyWith`.
-@freezed
-abstract class Shape with _$Shape {
-  const Shape._();
+class Shape extends Equatable {
+  const Shape({
+    required this.kind,
+    required this.points,
+    this.name = '',
+    this.fill,
+    this.stroke,
+    this.strokeWidth = 1.0,
+    this.radius = 0.0,
+  });
 
-  const factory Shape({
-    required ShapeKind kind,
-    required List<Offset> points,
-    @Default('') String name,
-    int? fill,
-    int? stroke,
-    @Default(1.0) double strokeWidth,
-    @Default(0.0) double radius,
-  }) = _Shape;
+  final ShapeKind kind;
+  final List<Offset> points;
+  final String name;
+  final int? fill;
+  final int? stroke;
+  final double strokeWidth;
+  final double radius;
+
+  Shape copyWith({
+    ShapeKind? kind,
+    List<Offset>? points,
+    String? name,
+    Object? fill = unset,
+    Object? stroke = unset,
+    double? strokeWidth,
+    double? radius,
+  }) =>
+      Shape(
+        kind: kind ?? this.kind,
+        points: points ?? this.points,
+        name: name ?? this.name,
+        fill: keep<int>(fill, this.fill),
+        stroke: keep<int>(stroke, this.stroke),
+        strokeWidth: strokeWidth ?? this.strokeWidth,
+        radius: radius ?? this.radius,
+      );
+
+  @override
+  List<Object?> get props =>
+      [kind, points, name, fill, stroke, strokeWidth, radius];
 
   bool get isClosed => kind != ShapeKind.line && kind != ShapeKind.freehand;
   bool get usesVertices => kind == ShapeKind.line || kind == ShapeKind.polygon;

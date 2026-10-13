@@ -23,8 +23,8 @@ class ProjectSaver {
   Future<void> save(EditorBloc bloc, String path, {String? name}) async {
     final drawing = bloc.state.drawing;
     await _projects.save(path, name == null ? drawing : drawing.copyWith(name: name));
-    if (name != null) bloc.add(EditorEvent.drawingRenamed(name));
-    bloc.add(EditorEvent.documentSaved(path));
+    if (name != null) bloc.add(DrawingRenamed(name));
+    bloc.add(DocumentSaved(path));
     await _settled(bloc, path);
     await _drafts.delete(bloc.state.tabId);
   }
