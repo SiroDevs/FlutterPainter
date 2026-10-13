@@ -1,8 +1,11 @@
+include: package:flutter_lints/flutter.yaml
+
 analyzer:
   exclude:
+    - "**/*.freezed.dart"
+    - "**/*.config.dart"
     - build/**
     - web/**
     - windows/**
     - macos/**
     - linux/**
-include: package:flutter_lints/flutter.yaml

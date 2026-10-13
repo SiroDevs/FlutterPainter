@@ -10,6 +10,10 @@ Everything is vector: shapes are stored as points, colours and stroke widths,
 never as pixels, so a drawing stays sharp at any zoom and exports to compact
 code.
 
+The code follows the same architecture as RoadBash: **bloc + Freezed**,
+**injectable / get_it** dependency injection, a **data / domain / feature**
+split, and `go_router`. See [Architecture](#architecture).
+
 - [Getting started](#getting-started)
 - [A tour of the window](#a-tour-of-the-window)
 - [Drawing](#drawing)
@@ -20,25 +24,35 @@ code.
 - [Exporting to Dart](#exporting-to-dart)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Opening .flp files from the desktop](#opening-flp-files-from-the-desktop)
-- [Project layout](#project-layout)
+- [Architecture](#architecture)
 - [Tests](#tests)
 - [Known limits](#known-limits)
 
 ## Getting started
 
-Requires Flutter 3.22 or newer (Dart 3.3+) with desktop support enabled.
+Requires Flutter with desktop support enabled (Dart `^3.13.5`, as in RoadBash).
 
 ```
 flutter create --platforms=windows,macos,linux .
 flutter pub get
+dart run build_runner build --delete-conflicting-outputs
 flutter run -d windows          # or macos / linux
 flutter build windows           # release build
 ```
 
 `flutter create .` only adds the platform folders; it does not overwrite the
-files in this project. Packages used: `file_selector` (open/save dialogs),
+files in this project.
+
+**`build_runner` is required.** This project uses Freezed and injectable, whose
+generated files (`*.freezed.dart` and `lib/core/di/injectable.config.dart`) are
+not checked in here. Run the command above once after `flutter pub get`, and
+again after you change a Freezed class, an event or state, or an `@injectable`
+class. While developing, `dart run build_runner watch -d` keeps them current.
+
+Packages: `flutter_bloc`, `freezed`, `injectable` + `get_it`, `go_router`,
+`shared_preferences` (settings), `file_selector` (open/save dialogs),
 `desktop_drop` (drag a file onto the window), `path_provider` (the folder for
-side copies and settings).
+side copies).
 
 ## A tour of the window
 
@@ -57,7 +71,8 @@ side copies and settings).
 ```
 
 - **Top bar:** file actions, the Auto-save switch, Export Dart, undo/redo, zoom,
-  grid and snap toggles, background colour, canvas size and the project name.
+  grid and snap toggles, background colour, canvas size, light/dark theme and the
+  project name.
 - **Project tabs:** one tab per open project, each with its name, a dot when it
   has unsaved changes, and a close button. The `+` opens a new blank project.
 - **Tool palette (left):** Select, Rectangle, Ellipse, Line, Polygon / line
@@ -159,13 +174,12 @@ it has unsaved changes, and a close button. Hover a tab to see its file path.
 - **New:** `+` on the tab strip, Ctrl+N, or the New menu (blank or template).
 - **Open:** Ctrl+O, or **drag one or more `.flp` files onto the window**. A file
   that is already open just switches to its tab.
-- **Several projects at once:** each tab keeps its own drawing, selection, view
-  and undo history.
+- **Several projects at once:** each tab has its own `EditorBloc`, so its drawing,
+  selection, view and undo history are independent.
 - **Closing the last tab** leaves a fresh blank one so the window is never empty.
 
 Projects are saved as **`.flp`** ("Flutter Painter project") files. The format is
-readable JSON, so it diffs well in git (comments below are for explanation only;
-real files have none):
+readable JSON, so it diffs well in git:
 
 ```json
 {
@@ -206,15 +220,16 @@ real files have none):
 - `fill` and `stroke` are `0xAARRGGBB` colours as integers, or `null` for none.
 - `reference` is present only when a background image is loaded.
 
-Plain `.json` files in this format also open.
+Plain `.json` files in this format also open. The mapping between this JSON and
+the domain models lives in `lib/data/mappers/drawing_mapper.dart`.
 
 ## Saving, auto-save and recovery
 
 The goal: you never lose work, and you never overwrite a file by accident.
 
 **Side copies.** As soon as a project has unsaved changes, Flutter Painter keeps
-a safe side copy of it in the app's support folder, rewritten about a second
-after each edit. Your real `.flp` file is not touched until you save.
+a safe side copy of it (a *draft*) in the app's support folder, rewritten about a
+second after each edit. Your real `.flp` file is not touched until you save.
 
 **Save (Ctrl+S).** Writes your latest state into the real file and deletes the
 side copy. The write goes to a temporary file that is then renamed over the
@@ -230,7 +245,8 @@ default): to the side copy until you press Save. On: straight into the project's
 own `.flp` file, a moment after each edit. Auto-save only writes to a file you
 have already confirmed (by saving it, or by choosing Overwrite once), so it can
 never silently overwrite a file you merely opened. Projects that have never been
-saved still use side copies until you save them.
+saved still use side copies until you save them. The switch is remembered
+between launches.
 
 **Closing.** Closing a tab with unsaved changes asks **Save / Don't save /
 Cancel**; for a project that was never saved, *Save* opens the Save As dialog
@@ -305,58 +321,140 @@ has the keyboard.
 
 Dragging a file onto the window works everywhere. Double-clicking a `.flp` in the
 file manager needs a one-time OS file association; the app opens any file path
-passed on its command line.
+passed on its command line (`main(List<String> args)`).
 
 - **Windows:** register the extension (adjust the path), for example:
 
   ```
   reg add HKCU\Software\Classes\.flp /ve /d FlutterPainter.Project /f
   reg add HKCU\Software\Classes\FlutterPainter.Project\shell\open\command /ve ^
-      /d "\"C:\Apps\FlutterPainter\FlutterPainter.exe\" \"%1\"" /f
+      /d "\"C:\Apps\flutter_painter\flutter_painter.exe\" \"%1\"" /f
   ```
-- **Linux:** add a `.desktop` file with `Exec=/path/to/FlutterPainter %f` and
+- **Linux:** add a `.desktop` file with `Exec=/path/to/flutter_painter %f` and
   `MimeType=application/x-flp;` plus a matching mime type for `*.flp`.
 - **macOS:** Finder passes documents to the app through an Apple event rather
   than the command line, which this project does not handle. Drag files onto the
   window or use Open instead.
 
-## Project layout
+## Architecture
+
+Flutter Painter follows RoadBash's structure. The rule is simple: **widgets send
+events, blocs turn events into states, repositories talk to the outside world.**
 
 ```
 lib/
-  main.dart                  entry point; opens files passed on the command line
-  model/                     plain data: Shape, Layer, Drawing, ReferenceImage, palette
-  editor/                    EditorController (one per tab) and its operations:
-                             draw_ops, vertex_ops, layer_ops, style_ops,
-                             view_ops, reference_ops, history (undo + saved marker)
-  canvas/                    CanvasView (raw pointer input), DrawingPainter,
-                             draw_gestures, select_gestures, snapping/constraint maths
-  workspace/                 Workspace (the tabs, drafts, auto-save) and
-                             tab_actions (save / overwrite / close / recover flows)
-  storage/                   .flp read/write, side copies (drafts), app settings
-  export/                    DartExporter and the export dialog
-  ui/                        top bar, tabs, panels, colour bar, dialogs, the page
-assets/templates/rider.json  the RoadBash rider starter
-test/                        unit and widget tests
+  main.dart, app.dart          entry point, MultiBlocProvider, MaterialApp.router
+  common/
+    app_router/                go_router: RouteNames, RoutePaths, AppRouter
+    constants/                 AppConstants, PrefConstants, palette
+    widgets/                   dialogs, labelled slider, snackbar
+  core/
+    di/                        injectable.dart (+ generated injectable.config.dart)
+    platform/                  FileDialogs: native open/save dialogs
+    theme/                     ThemeBloc (+ Freezed event), colours, ThemeData
+    utils/                     logger, path helpers, image decoding
+  data/                        talks to the disk
+    sources/                   ProjectFileSource, DraftFileSource, support folder
+    mappers/                   Drawing <-> .flp JSON, Draft <-> JSON
+  domain/                      no Flutter widgets, no IO
+    models/                    Freezed: Shape, PaintLayer, Drawing, ReferenceImage,
+                               EditHistory, Draft; enums ShapeKind, Tool
+    repos/                     ProjectRepo, DraftRepo, PrefsRepo
+    services/                  DartExporter, shape geometry, geometry utils
+  feature/
+    editor/                    one project (one tab)
+      bloc/                    EditorBloc + editor_event / editor_state parts
+      logic/                   pure functions: (state, event) -> state
+      models/                  StyleSettings, ViewSettings, GestureState, EditorSeed
+      widgets/                 canvas, toolbar, panels
+      flows/                   picking a background image
+      editor_screen.dart
+    workspace/                 the window: tabs, saving, recovery
+      cubit/                   WorkspaceCubit (+ Freezed state), ProjectSaver
+      flows/                   save / overwrite / close / recover dialogs
+      widgets/                 TopBar, ProjectTabs
+      workspace_screen.dart
+    export/                    ExportCubit + the export dialog
 ```
 
-Every source file is kept under about 220 lines; helpers are split into
-extensions and small files instead of growing one class.
+**State management.** Events and states are Freezed, in `part` files next to the
+bloc, exactly like RoadBash's `ThemeBloc`:
+
+- `EditorBloc` (one per tab) holds the whole project: the immutable `Drawing`,
+  its `EditHistory`, the tool, selection, style, view and any pointer gesture in
+  progress. Pointer events arrive in design units with the modifier keys, so the
+  canvas widget is a thin forwarder and every behaviour is testable without a
+  widget.
+- The bloc contains almost no logic. Each event is routed to a **pure function**
+  in `feature/editor/logic/` (`DrawLogic`, `SelectLogic`, `StyleLogic`,
+  `LayerLogic`, `VertexLogic`, `ViewLogic`, `ReferenceLogic`, ...) that maps the
+  old state to the new one. Files stay small and each rule has one home.
+- Because `Drawing` is immutable, undo history is just a list of snapshots that
+  share structure; "unsaved changes" is `history.index != history.savedIndex`.
+- `WorkspaceCubit` owns the tabs. It creates an `EditorBloc` per project (through
+  `EditorBlocFactory`, which asks get_it with an `@factoryParam` seed), watches
+  each one, and decides when to write a side copy or auto-save.
+- `ThemeBloc` and `WorkspaceCubit` are provided at the top of the app; the
+  `EditorBloc` for the active tab is provided by `WorkspaceScreen`, so every
+  editor widget just does `context.read<EditorBloc>()`.
+
+**Dependency injection.** `injectable` generates `initGetIt`. Repos, data
+sources, `FileDialogs`, `ProjectSaver`, `WorkspaceCubit` and `ThemeBloc` are
+singletons; `EditorBloc` and `ExportCubit` are factories. `PrefsRepo` uses
+RoadBash's abstract-class-plus-implementation pattern.
+
+**Data.** RoadBash stores its data in a Froom/SQLite database; Flutter Painter's
+data is files (the `.flp` projects and the side copies), so the `data` layer is
+file sources and JSON mappers instead of DAOs and entities. The shape is the
+same: the domain asks a repo, the repo uses a source, the source does the IO.
+
+### Adding a feature
+
+1. Model any new data as a Freezed class in `domain/models/`.
+2. Add an event to `editor_event.dart` (or a new bloc for a new feature), run
+   `build_runner`, and register it in `EditorBloc` with `_reduce<MyEvent>(...)`.
+3. Put the rule in a pure function under `feature/editor/logic/` and cover it with
+   a test in `test/feature/editor_bloc_test.dart`.
+4. Build the widget with `BlocBuilder<EditorBloc, EditorState>` (use `buildWhen`
+   so it only rebuilds on what it shows).
+
+### What moved where (from the first version)
+
+| Before | Now |
+|--------|-----|
+| `EditorController` (ChangeNotifier) | `EditorBloc` + `feature/editor/logic/*` |
+| `*_ops.dart` extensions | `*_logic.dart` pure classes |
+| `model/*` (mutable) | `domain/models/*` (Freezed, immutable) |
+| `Workspace`, `tab_actions` | `WorkspaceCubit`, `ProjectSaver`, `workspace/flows` |
+| `storage/*` | `data/sources`, `data/mappers`, `domain/repos` |
+| `AppSettings` (settings.json) | `PrefsRepo` (shared_preferences) |
+| `DartExporter` | `domain/services/dart_exporter.dart` |
+| Flutter `ChangeNotifier` listeners | `BlocBuilder` / `BlocProvider` |
 
 ## Tests
 
 ```
+dart run build_runner build --delete-conflicting-outputs
 flutter analyze
 flutter test
 ```
 
-The tests cover the exporter (names, number formatting, open vs closed paths,
-hidden layers, the rider template), the `.flp` round trip including the
-background image, undo history and the unsaved-changes marker, polygon / line
-path editing, and the workspace's save, auto-save, side-copy and tab behaviour.
+The tests cover:
+
+- `domain/` - the undo history and unsaved-changes marker, the Dart exporter.
+- `data/` - the `.flp` round trip including the background image, drafts, and
+  the rider template.
+- `feature/editor_bloc_test.dart` - drawing every tool, shapes from lines (open,
+  closed, double-click, first-point), selecting, moving, resizing, vertex insert
+  and delete, style edits, layers, undo/redo, dirty tracking, zoom and fit.
+- `feature/workspace_cubit_test.dart` - save, side copies, auto-save rules,
+  overwrite confirmation, tab lifecycle and recovery, with in-memory fakes.
+- `feature/workspace_screen_test.dart` - the window renders and tabs open.
 
 ## Known limits
 
+- **Localization:** UI strings are plain text; RoadBash's `l10n` setup is not
+  applied here.
 - **Static export:** poses and animation are applied in your game code, not stored.
 - **No curve handles:** shapes are made of straight edges plus smoothed freehand
   strokes; there are no Bezier control handles.
