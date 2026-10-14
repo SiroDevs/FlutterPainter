@@ -70,7 +70,14 @@ class LayersPanel extends StatelessWidget {
                     onPressed: () => bloc.add(LayerVisibilityToggled(i)),
                   ),
                   title: Text(l.name),
-                  trailing: Text('${l.shapes.length}'),
+                  trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                    if (l.image != null)
+                      const Padding(
+                        padding: EdgeInsets.only(right: 6),
+                        child: Icon(Icons.image_outlined, size: 14),
+                      ),
+                    Text('${l.shapes.length}'),
+                  ]),
                   onTap: () => bloc.add(LayerActivated(i)),
                 );
               },

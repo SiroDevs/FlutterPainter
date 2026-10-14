@@ -7,14 +7,16 @@ import 'package:flutter/rendering.dart';
 // Project imports:
 import '../../../../common/constants/palette_constants.dart';
 import '../../../../core/theme/theme_colors.dart';
+import '../../../../domain/models/reference_image.dart';
 import '../../../../domain/models/tool.dart';
 import '../../../../domain/services/geometry_utils.dart';
+import '../../../../domain/services/image_geometry.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/editor_ops.dart';
 import 'shape_painter.dart';
 
-/// Paints the workspace: canvas box, background image, grid, every visible
-/// layer, the shape being drawn, and the selection handles.
+/// Paints the workspace: canvas box, grid, every visible layer (its picture
+/// first, then its shapes), the shape being drawn, and the selection handles.
 class DrawingPainter extends CustomPainter {
   DrawingPainter(this.state);
 
@@ -32,12 +34,12 @@ class DrawingPainter extends CustomPainter {
     final box = Rect.fromLTWH(0, 0, d.width, d.height);
     final bg = kCanvasBackgrounds[v.background % kCanvasBackgrounds.length];
     canvas.drawRect(box, Paint()..color = Color(bg));
-    _reference(canvas);
     if (v.grid) _grid(canvas, box);
 
     final paint = Paint()..isAntiAlias = true;
     for (final layer in d.layers) {
       if (!layer.visible) continue;
+      _image(canvas, layer.image);
       for (final shape in layer.shapes) {
         paintShape(canvas, shape, paint);
       }
@@ -52,20 +54,21 @@ class DrawingPainter extends CustomPainter {
         ..color = ThemeColors.canvasEdge,
     );
     _selection(canvas);
+    _imageSelection(canvas);
     canvas.restore();
   }
 
-  /// The tracing image sits under the grid and shapes and may extend past the
+  /// A layer's picture sits under that layer's shapes. It may extend past the
   /// canvas box, so a large photo can be traced a piece at a time.
-  void _reference(Canvas canvas) {
-    final r = state.drawing.reference;
-    final image = state.refImage;
-    if (r == null || image == null || !r.visible) return;
+  void _image(Canvas canvas, ReferenceImage? r) {
+    if (r == null || !r.visible) return;
+    final pixels = state.images[r.id];
+    if (pixels == null) return;
     canvas.save();
     canvas.translate(r.x, r.y);
-    canvas.scale(r.scale);
+    canvas.scale(r.scaleX, r.scaleY);
     canvas.drawImage(
-      image,
+      pixels,
       Offset.zero,
       Paint()
         ..filterQuality = FilterQuality.high
@@ -123,6 +126,25 @@ class DrawingPainter extends CustomPainter {
     final h = 4 / state.view.zoom;
     final fill = Paint()..color = const Color(0xFFFFFFFF);
     for (final p in handlePoints(s)) {
+      final r = Rect.fromCenter(center: p, width: 2 * h, height: 2 * h);
+      canvas.drawRect(r, fill);
+      canvas.drawRect(r, line);
+    }
+  }
+
+  /// The outline and eight resize handles of the selected picture (corners
+  /// keep proportions, edges stretch one side).
+  void _imageSelection(Canvas canvas) {
+    final box = state.imageBounds;
+    if (box == null || !state.showImageHandles) return;
+    final line = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1 / state.view.zoom
+      ..color = ThemeColors.selection;
+    canvas.drawRect(box, line);
+    final h = 4 / state.view.zoom;
+    final fill = Paint()..color = const Color(0xFFFFFFFF);
+    for (final p in imageHandlePoints(box)) {
       final r = Rect.fromCenter(center: p, width: 2 * h, height: 2 * h);
       canvas.drawRect(r, fill);
       canvas.drawRect(r, line);

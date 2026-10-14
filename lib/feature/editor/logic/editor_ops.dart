@@ -4,10 +4,15 @@ import 'dart:ui';
 // Project imports:
 import '../../../domain/models/drawing.dart';
 import '../../../domain/models/paint_layer.dart';
+import '../../../domain/models/reference_image.dart';
 import '../../../domain/models/shape.dart';
+import '../../../domain/models/tool.dart';
 import '../../../domain/services/geometry_utils.dart';
 import '../bloc/editor_bloc.dart';
 import '../models/gesture_state.dart';
+
+/// Value of [EditorState.selected] that means "the active layer's picture".
+const int kImageSlot = -1;
 
 /// A copy of [list] with the item at [index] replaced.
 List<T> replacedAt<T>(List<T> list, int index, T value) =>
@@ -23,10 +28,42 @@ extension EditorStateOps on EditorState {
 
   Shape? get selectedShape {
     final i = selected;
-    if (i == null) return null;
+    if (i == null || i < 0) return null;
     final shapes = layer.shapes;
     return i < shapes.length ? shapes[i] : null;
   }
+
+  /// The picture on the active layer, if any.
+  ReferenceImage? get activeImage => layer.image;
+
+  /// Where the active layer's picture sits, in design units. Null when the
+  /// layer has no picture or its pixels are not decoded yet.
+  Rect? get imageBounds {
+    final r = layer.image;
+    if (r == null) return null;
+    final pixels = images[r.id];
+    if (pixels == null) return null;
+    return Rect.fromLTWH(
+      r.x,
+      r.y,
+      pixels.width * r.scaleX,
+      pixels.height * r.scaleY,
+    );
+  }
+
+  /// True when the active layer's picture is the selection.
+  bool get imageSelected => selected == kImageSlot && layer.image != null;
+
+  /// The picture gets resize handles when it is selected, or while the
+  /// "Move / resize layer image" tool is active.
+  bool get showImageHandles =>
+      layer.image != null && (imageSelected || tool == Tool.reference);
+
+  /// Replaces (or with null removes) the active layer's picture, with no
+  /// history entry.
+  EditorState withImage(ReferenceImage? image) => withLayers(
+        replacedAt(drawing.layers, layerIndex, layer.copyWith(image: image)),
+      );
 
   /// [p] rounded to the snap grid when snapping is on.
   Offset snapped(Offset p) =>
@@ -50,8 +87,9 @@ extension EditorStateOps on EditorState {
   /// A drawing that is not the history's current snapshot is mid-edit.
   bool get dirty => !identical(drawing, history.current) || !history.isAtSaved;
 
-  /// A project with no file, no edits and no shapes: nothing to lose.
-  bool get isPristine => filePath == null && !dirty && !drawing.hasShapes;
+  /// A project with no file, no edits and no shapes or pictures: nothing to
+  /// lose.
+  bool get isPristine => filePath == null && !dirty && !drawing.hasContent;
 
   /// Records the current drawing in the undo history. If nothing really changed
   /// the history stays as it was.

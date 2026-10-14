@@ -7,11 +7,13 @@ import '../../../domain/services/shape_geometry.dart';
 import '../bloc/editor_bloc.dart';
 import '../models/gesture_state.dart';
 import 'editor_ops.dart';
+import 'image_logic.dart';
 import 'style_logic.dart';
 import 'vertex_logic.dart';
 
-/// The Select tool: pick, move, resize by corner handles, drag vertices,
-/// double-click an edge to add a point, Alt-click a point to delete it.
+/// The Select tool: pick a shape or a layer's picture, move it, resize by its
+/// handles, drag vertices, double-click an edge to add a point, Alt-click a
+/// point to delete it.
 abstract class SelectLogic {
   SelectLogic._();
 
@@ -43,10 +45,18 @@ abstract class SelectLogic {
         if (inserted != null) return inserted;
       }
     }
+    if (base.imageSelected) {
+      final box = base.imageBounds;
+      if (box != null && ImageLogic.handleAt(base, p) != null) {
+        return ImageLogic.grab(base, p, box);
+      }
+    }
     return _pick(base, p);
   }
 
-  /// Selects the topmost visible shape under [p] and starts moving it.
+  /// Selects whatever is topmost under [p] and starts moving it. Layers are
+  /// tried top to bottom and, inside a layer, shapes come before its picture,
+  /// which is the order they are painted in.
   static EditorState _pick(EditorState s, Offset p) {
     final tol = 4 / s.view.zoom;
     final layers = s.drawing.layers;
@@ -67,6 +77,28 @@ abstract class SelectLogic {
             startBounds: shape.bounds,
           ),
         );
+      }
+      final r = layer.image;
+      final pixels = r == null ? null : s.images[r.id];
+      if (r != null && r.visible && pixels != null) {
+        final box = Rect.fromLTWH(
+          r.x,
+          r.y,
+          pixels.width * r.scaleX,
+          pixels.height * r.scaleY,
+        );
+        if (box.contains(p)) {
+          return s.copyWith(
+            layerIndex: li,
+            selected: kImageSlot,
+            gesture: s.gesture.copyWith(
+              mode: GestureMode.imageMove,
+              handle: -1,
+              origin: p,
+              startBounds: box,
+            ),
+          );
+        }
       }
     }
     return s.copyWith(selected: null);
@@ -95,7 +127,8 @@ abstract class SelectLogic {
         );
       case GestureMode.none:
       case GestureMode.draw:
-      case GestureMode.referenceDrag:
+      case GestureMode.imageMove:
+      case GestureMode.imageScale:
         return s;
     }
   }

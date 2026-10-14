@@ -19,9 +19,9 @@ import '../logic/document_logic.dart';
 import '../logic/draw_logic.dart';
 import '../logic/editor_ops.dart';
 import '../logic/history_logic.dart';
+import '../logic/image_logic.dart';
 import '../logic/layer_logic.dart';
 import '../logic/pointer_logic.dart';
-import '../logic/reference_logic.dart';
 import '../logic/shape_logic.dart';
 import '../logic/style_logic.dart';
 import '../logic/tool_logic.dart';
@@ -49,8 +49,10 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _registerShapes();
     _registerLayers();
     _registerDocument();
-    _registerReference();
-    if (seed.drawing.reference != null) add(const ReferenceSyncRequested());
+    _registerImages();
+    if (seed.drawing.layers.any((l) => l.image != null)) {
+      add(const ImageSyncRequested());
+    }
   }
 
   /// Registers a handler that maps (state, event) to the next state.
@@ -84,11 +86,11 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<ChangesCommitted>((s, e) => s.commit());
     on<UndoRequested>((event, emit) async {
       emit(HistoryLogic.undo(state));
-      await _syncImage(emit);
+      await _syncImages(emit);
     });
     on<RedoRequested>((event, emit) async {
       emit(HistoryLogic.redo(state));
-      await _syncImage(emit);
+      await _syncImages(emit);
     });
   }
 
@@ -126,51 +128,61 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<DocumentSaved>((s, e) => DocumentLogic.saved(s, e.path));
   }
 
-  void _registerReference() {
-    on<ReferenceLoaded>(_onReferenceLoaded);
-    on<ReferenceSyncRequested>((event, emit) => _syncImage(emit));
-    _reduce<ReferenceRemoved>((s, e) => ReferenceLogic.remove(s));
-    _reduce<ReferenceFitted>((s, e) => ReferenceLogic.fit(s));
-    _reduce<ReferenceVisibilityChanged>(
-      (s, e) => ReferenceLogic.visibility(s, e.visible),
+  void _registerImages() {
+    on<ImageLoaded>(_onImageLoaded);
+    on<ImageSyncRequested>((event, emit) => _syncImages(emit));
+    _reduce<ImageRemoved>((s, e) => ImageLogic.remove(s));
+    _reduce<ImageFitted>((s, e) => ImageLogic.fit(s));
+    _reduce<ImageSelected>((s, e) => ImageLogic.select(s));
+    _reduce<ImageVisibilityChanged>(
+      (s, e) => ImageLogic.visibility(s, e.visible),
     );
-    _reduce<ReferenceOpacityChanged>((s, e) => ReferenceLogic.opacity(s, e.opacity));
-    _reduce<ReferenceScaleChanged>((s, e) => ReferenceLogic.scale(s, e.scale));
+    _reduce<ImageOpacityChanged>((s, e) => ImageLogic.opacity(s, e.opacity));
+    _reduce<ImageScaleChanged>((s, e) => ImageLogic.scale(s, e.scale));
   }
 
-  Future<void> _onReferenceLoaded(
-    ReferenceLoaded event,
+  Future<void> _onImageLoaded(
+    ImageLoaded event,
     Emitter<EditorState> emit,
   ) async {
-    final image = await decodeImageBytes(event.bytes);
+    final ref = ReferenceImage.fromBytes(event.bytes);
+    // The same picture may already be decoded (another layer, or an undo step).
+    final cached = state.images[ref.id];
+    final pixels = cached ?? await decodeImageBytes(event.bytes);
     if (isClosed) {
-      image.dispose();
+      if (cached == null) pixels.dispose();
       return;
     }
-    emit(ReferenceLogic.loaded(state, ReferenceImage.fromBytes(event.bytes), image));
+    emit(ImageLogic.loaded(state, ref, pixels, onNewLayer: event.onNewLayer));
   }
 
-  /// Decodes the reference pixels after undo/redo or a file load, if needed.
-  Future<void> _syncImage(Emitter<EditorState> emit) async {
-    final ref = state.drawing.reference;
-    if (ref == null) {
-      if (state.refImage != null) {
-        emit(state.copyWith(refImage: null, refImageId: null));
+  /// Decodes the picture of every layer that has one not decoded yet, e.g.
+  /// after a file load or an undo that brought a picture back.
+  Future<void> _syncImages(Emitter<EditorState> emit) async {
+    final wanted = <ReferenceImage>[];
+    final seen = <String>{};
+    for (final layer in state.drawing.layers) {
+      final ref = layer.image;
+      if (ref != null && !state.images.containsKey(ref.id) && seen.add(ref.id)) {
+        wanted.add(ref);
       }
-      return;
     }
-    if (state.refImageId == ref.id && state.refImage != null) return;
-    final image = await decodeImageBytes(ref.bytes);
-    if (isClosed || state.drawing.reference?.id != ref.id) {
-      image.dispose();
-      return;
+    for (final ref in wanted) {
+      final pixels = await decodeImageBytes(ref.bytes);
+      if (isClosed || state.images.containsKey(ref.id)) {
+        pixels.dispose();
+        if (isClosed) return;
+        continue;
+      }
+      emit(state.copyWith(images: {...state.images, ref.id: pixels}));
     }
-    emit(state.copyWith(refImage: image, refImageId: ref.id));
   }
 
   @override
   Future<void> close() {
-    state.refImage?.dispose();
+    for (final pixels in state.images.values) {
+      pixels.dispose();
+    }
     return super.close();
   }
 }

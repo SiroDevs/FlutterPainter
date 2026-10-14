@@ -16,7 +16,7 @@ class ToolPalette extends StatelessWidget {
     (Tool.line, Icons.horizontal_rule, 'Line'),
     (Tool.polygon, Icons.change_history, 'Polygon / line path'),
     (Tool.freehand, Icons.brush, 'Freehand'),
-    (Tool.reference, Icons.image_outlined, 'Move background image'),
+    (Tool.reference, Icons.image_outlined, 'Move / resize layer image'),
   ];
 
   @override
