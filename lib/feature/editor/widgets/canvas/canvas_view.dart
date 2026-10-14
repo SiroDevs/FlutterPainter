@@ -14,11 +14,6 @@ import '../../../../domain/models/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import 'drawing_painter.dart';
 
-/// The drawing surface. A thin forwarder: it turns raw pointer events into
-/// [EditorEvent]s (positions in design units plus modifier keys) and paints the
-/// bloc state. Raw pointer events (no gesture arena) mean drawing starts
-/// instantly: the left button uses the tool, right or middle button pans, and
-/// the wheel zooms around the cursor.
 class CanvasView extends StatefulWidget {
   const CanvasView({super.key, required this.focus});
 
@@ -31,6 +26,7 @@ class CanvasView extends StatefulWidget {
 class _CanvasViewState extends State<CanvasView> {
   bool _panning = false;
   Size? _reportedSize;
+  double _lastScale = 1;
 
   EditorBloc get _bloc => context.read<EditorBloc>();
 
@@ -41,10 +37,10 @@ class _CanvasViewState extends State<CanvasView> {
   }
 
   MouseCursor _cursor(Tool tool) => switch (tool) {
-        Tool.select => SystemMouseCursors.basic,
-        Tool.reference => SystemMouseCursors.grab,
-        _ => SystemMouseCursors.precise,
-      };
+    Tool.select => SystemMouseCursors.basic,
+    Tool.reference => SystemMouseCursors.grab,
+    _ => SystemMouseCursors.precise,
+  };
 
   /// Tells the bloc how big the canvas area is (it fits the drawing to it).
   void _reportSize(Size size) {
@@ -57,30 +53,34 @@ class _CanvasViewState extends State<CanvasView> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, box) {
-      _reportSize(box.biggest);
-      return BlocBuilder<EditorBloc, EditorState>(
-        builder: (context, state) => MouseRegion(
-          cursor: _cursor(state.tool),
-          child: Listener(
-            behavior: HitTestBehavior.opaque,
-            onPointerDown: _down,
-            onPointerMove: _move,
-            onPointerUp: _up,
-            onPointerCancel: (_) => _panning = false,
-            onPointerHover: (e) =>
-                _bloc.add(PointerHovered(_design(e.localPosition))),
-            onPointerSignal: _signal,
-            child: ClipRect(
-              child: CustomPaint(
-                painter: DrawingPainter(state),
-                size: Size.infinite,
+    return LayoutBuilder(
+      builder: (context, box) {
+        _reportSize(box.biggest);
+        return BlocBuilder<EditorBloc, EditorState>(
+          builder: (context, state) => MouseRegion(
+            cursor: _cursor(state.tool),
+            child: Listener(
+              behavior: HitTestBehavior.opaque,
+              onPointerDown: _down,
+              onPointerMove: _move,
+              onPointerUp: _up,
+              onPointerCancel: (_) => _panning = false,
+              onPointerHover: (e) =>
+                  _bloc.add(PointerHovered(_design(e.localPosition))),
+              onPointerSignal: _signal,
+              onPointerPanZoomStart: (_) => _lastScale = 1,
+              onPointerPanZoomUpdate: _panZoom,
+              child: ClipRect(
+                child: CustomPaint(
+                  painter: DrawingPainter(state),
+                  size: Size.infinite,
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   void _down(PointerDownEvent e) {
@@ -90,12 +90,14 @@ class _CanvasViewState extends State<CanvasView> {
       return;
     }
     if ((e.buttons & kPrimaryButton) == 0) return;
-    _bloc.add(PointerPressed(
-      _design(e.localPosition),
-      shift: HardwareKeyboard.instance.isShiftPressed,
-      alt: HardwareKeyboard.instance.isAltPressed,
-      timeMs: DateTime.now().millisecondsSinceEpoch,
-    ));
+    _bloc.add(
+      PointerPressed(
+        _design(e.localPosition),
+        shift: HardwareKeyboard.instance.isShiftPressed,
+        alt: HardwareKeyboard.instance.isAltPressed,
+        timeMs: DateTime.now().millisecondsSinceEpoch,
+      ),
+    );
   }
 
   void _move(PointerMoveEvent e) {
@@ -103,10 +105,12 @@ class _CanvasViewState extends State<CanvasView> {
       _bloc.add(ViewPanned(e.delta));
       return;
     }
-    _bloc.add(PointerMoved(
-      _design(e.localPosition),
-      shift: HardwareKeyboard.instance.isShiftPressed,
-    ));
+    _bloc.add(
+      PointerMoved(
+        _design(e.localPosition),
+        shift: HardwareKeyboard.instance.isShiftPressed,
+      ),
+    );
   }
 
   void _up(PointerUpEvent e) {
@@ -114,12 +118,33 @@ class _CanvasViewState extends State<CanvasView> {
     _panning = false;
   }
 
+  void _panZoom(PointerPanZoomUpdateEvent e) {
+    if (e.panDelta != Offset.zero) _bloc.add(ViewPanned(e.panDelta));
+    final factor = e.scale / _lastScale;
+    _lastScale = e.scale;
+    if (factor != 1) _bloc.add(ViewZoomed(factor, e.localPosition));
+  }
+
   void _signal(PointerSignalEvent e) {
-    if (e is PointerScrollEvent) {
-      _bloc.add(ViewZoomed(
-        e.scrollDelta.dy < 0 ? 1.12 : 1 / 1.12,
-        e.localPosition,
-      ));
+    if (e is! PointerScrollEvent) return;
+
+    // if (e is PointerScrollEvent) {
+    //   _bloc.add(
+    //     ViewZoomed(e.scrollDelta.dy < 0 ? 1.12 : 1 / 1.12, e.localPosition),
+    //   );
+    // }
+
+    final kb = HardwareKeyboard.instance;
+    if (kb.isControlPressed || kb.isMetaPressed) {
+      _bloc.add(
+        ViewZoomed(e.scrollDelta.dy < 0 ? 1.12 : 1 / 1.12, e.localPosition),
+      );
+    } else {
+      // Shift + wheel scrolls sideways.
+      final d = kb.isShiftPressed
+          ? Offset(-e.scrollDelta.dy, 0)
+          : -e.scrollDelta;
+      _bloc.add(ViewPanned(d));
     }
   }
 }
