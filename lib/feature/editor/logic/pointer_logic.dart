@@ -6,7 +6,7 @@ import '../../../domain/models/tool.dart';
 import '../bloc/editor_bloc.dart';
 import '../models/gesture_state.dart';
 import 'draw_logic.dart';
-import 'reference_logic.dart';
+import 'image_logic.dart';
 import 'select_logic.dart';
 
 /// Routes raw pointer events to the active tool, or to the gesture in progress.
@@ -19,7 +19,7 @@ abstract class PointerLogic {
       case Tool.select:
         return SelectLogic.pressed(next, e.point, alt: e.alt, timeMs: e.timeMs);
       case Tool.reference:
-        return ReferenceLogic.pressed(next, e.point);
+        return ImageLogic.pressed(next, e.point);
       case Tool.rect:
       case Tool.ellipse:
       case Tool.line:
@@ -38,8 +38,9 @@ abstract class PointerLogic {
       case GestureMode.scale:
       case GestureMode.vertex:
         return SelectLogic.moved(next, e.point);
-      case GestureMode.referenceDrag:
-        return ReferenceLogic.dragged(next, e.point);
+      case GestureMode.imageMove:
+      case GestureMode.imageScale:
+        return ImageLogic.dragged(next, e.point, e.shift);
       case GestureMode.none:
         return next;
     }
@@ -53,8 +54,9 @@ abstract class PointerLogic {
       case GestureMode.scale:
       case GestureMode.vertex:
         return SelectLogic.released(s);
-      case GestureMode.referenceDrag:
-        return ReferenceLogic.released(s);
+      case GestureMode.imageMove:
+      case GestureMode.imageScale:
+        return ImageLogic.released(s);
       case GestureMode.none:
         return s;
     }

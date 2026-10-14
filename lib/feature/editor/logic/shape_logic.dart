@@ -4,12 +4,15 @@ import 'dart:ui';
 // Project imports:
 import '../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
+import 'image_logic.dart';
 
 /// Operations on the selected shape: delete, duplicate, order, layer, name.
 abstract class ShapeLogic {
   ShapeLogic._();
 
+  /// Deletes the selected shape, or the selected picture.
   static EditorState delete(EditorState s) {
+    if (s.imageSelected) return ImageLogic.remove(s);
     final i = s.selected;
     if (i == null || s.selectedShape == null) return s;
     return s.withShapes(removedAt(s.layer.shapes, i)).copyWith(selected: null).commit();

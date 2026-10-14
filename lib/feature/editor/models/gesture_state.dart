@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 
 /// What the pointer is currently doing.
-enum GestureMode { none, draw, move, scale, vertex, referenceDrag }
+enum GestureMode { none, draw, move, scale, vertex, imageMove, imageScale }
 
 /// The state of a pointer gesture in progress. It lives in the bloc state (not
 /// in the widget) so the whole interaction is deterministic and testable.
@@ -28,10 +28,12 @@ class GestureState extends Equatable {
   /// The previous pointer position, for relative drags.
   final Offset last;
 
-  /// The grabbed handle: a corner (0-3) or a vertex index.
+  /// The grabbed handle: a shape corner (0-3), a vertex index, or one of a
+  /// picture's eight handles.
   final int handle;
 
-  /// The grabbed shape's points and box when the drag began.
+  /// The grabbed shape's points and box (or the picture's box) when the drag
+  /// began.
   final List<Offset> startPoints;
   final Rect startBounds;
 

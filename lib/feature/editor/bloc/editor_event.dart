@@ -229,39 +229,50 @@ class DocumentSaved extends EditorEvent {
   final String path;
 }
 
-class ReferenceLoaded extends EditorEvent {
-  const ReferenceLoaded(this.bytes);
+/// Puts a picture on the active layer (replacing the one there), or on a brand
+/// new layer on top when [onNewLayer] is set.
+class ImageLoaded extends EditorEvent {
+  const ImageLoaded(this.bytes, {this.onNewLayer = false});
 
   final Uint8List bytes;
+  final bool onNewLayer;
 }
 
-class ReferenceRemoved extends EditorEvent {
-  const ReferenceRemoved();
+/// Removes the active layer's picture.
+class ImageRemoved extends EditorEvent {
+  const ImageRemoved();
 }
 
-class ReferenceFitted extends EditorEvent {
-  const ReferenceFitted();
+/// Fits the active layer's picture inside the canvas (undoing any stretch).
+class ImageFitted extends EditorEvent {
+  const ImageFitted();
 }
 
-class ReferenceVisibilityChanged extends EditorEvent {
-  const ReferenceVisibilityChanged(this.visible);
+/// Selects the active layer's picture so its handles show.
+class ImageSelected extends EditorEvent {
+  const ImageSelected();
+}
+
+class ImageVisibilityChanged extends EditorEvent {
+  const ImageVisibilityChanged(this.visible);
 
   final bool visible;
 }
 
-class ReferenceOpacityChanged extends EditorEvent {
-  const ReferenceOpacityChanged(this.opacity);
+class ImageOpacityChanged extends EditorEvent {
+  const ImageOpacityChanged(this.opacity);
 
   final double opacity;
 }
 
-class ReferenceScaleChanged extends EditorEvent {
-  const ReferenceScaleChanged(this.scale);
+/// Sets the picture's horizontal scale; any stretch is kept in proportion.
+class ImageScaleChanged extends EditorEvent {
+  const ImageScaleChanged(this.scale);
 
   final double scale;
 }
 
-  /// Decode the drawing's reference pixels if they are not decoded yet.
-class ReferenceSyncRequested extends EditorEvent {
-  const ReferenceSyncRequested();
+/// Decode the pixels of every layer picture that is not decoded yet.
+class ImageSyncRequested extends EditorEvent {
+  const ImageSyncRequested();
 }

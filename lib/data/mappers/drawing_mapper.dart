@@ -13,7 +13,7 @@ import '../../domain/models/shape_kind.dart';
 /// The .flp file format: JSON, with colours as 0xAARRGGBB integers and any
 /// background image embedded as base64. See the README for the full schema.
 const flpFormat = 'flp';
-const flpVersion = 1;
+const flpVersion = 2;
 
 Map<String, dynamic> shapeToJson(Shape s) => {
       'kind': s.kind.name,
@@ -44,6 +44,7 @@ Map<String, dynamic> layerToJson(PaintLayer l) => {
       'name': l.name,
       'visible': l.visible,
       'shapes': [for (final s in l.shapes) shapeToJson(s)],
+      if (l.image != null) 'image': referenceToJson(l.image!),
     };
 
 PaintLayer layerFromJson(Map<String, dynamic> j) => PaintLayer(
@@ -52,13 +53,18 @@ PaintLayer layerFromJson(Map<String, dynamic> j) => PaintLayer(
       shapes: [
         for (final s in j['shapes'] as List) shapeFromJson(s as Map<String, dynamic>),
       ],
+      image: j['image'] == null
+          ? null
+          : referenceFromJson(j['image'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> referenceToJson(ReferenceImage r) => {
       'id': r.id,
       'x': r.x,
       'y': r.y,
-      'scale': r.scale,
+      // `scale` is the horizontal scale, as in version 1 files.
+      'scale': r.scaleX,
+      'scaleY': r.scaleY,
       'opacity': r.opacity,
       'visible': r.visible,
       'data': base64Encode(r.bytes),
@@ -73,7 +79,9 @@ ReferenceImage? referenceFromJson(Map<String, dynamic> j) {
     id: (j['id'] as String?) ?? ReferenceImage.idOf(bytes),
     x: ((j['x'] as num?) ?? 0).toDouble(),
     y: ((j['y'] as num?) ?? 0).toDouble(),
-    scale: ((j['scale'] as num?) ?? 1).toDouble(),
+    scaleX: ((j['scale'] as num?) ?? 1).toDouble(),
+    // Files from before stretching have no `scaleY`: keep the proportions.
+    scaleY: ((j['scaleY'] as num?) ?? (j['scale'] as num?) ?? 1).toDouble(),
     opacity: ((j['opacity'] as num?) ?? 0.5).toDouble(),
     visible: (j['visible'] as bool?) ?? true,
   );
@@ -86,20 +94,28 @@ Map<String, dynamic> drawingToMap(Drawing d) => {
       'width': d.width,
       'height': d.height,
       'layers': [for (final l in d.layers) layerToJson(l)],
-      if (d.reference != null) 'reference': referenceToJson(d.reference!),
     };
 
-Drawing drawingFromMap(Map<String, dynamic> j) => Drawing(
-      name: (j['name'] as String?) ?? 'Untitled',
-      width: ((j['width'] as num?) ?? 120).toDouble(),
-      height: ((j['height'] as num?) ?? 170).toDouble(),
-      layers: [
-        for (final l in j['layers'] as List) layerFromJson(l as Map<String, dynamic>),
-      ],
-      reference: j['reference'] == null
-          ? null
-          : referenceFromJson(j['reference'] as Map<String, dynamic>),
-    );
+Drawing drawingFromMap(Map<String, dynamic> j) {
+  final layers = <PaintLayer>[
+    for (final l in j['layers'] as List) layerFromJson(l as Map<String, dynamic>),
+  ];
+  // Version 1 files kept one background picture on the drawing itself. It sat
+  // under everything, so it moves onto the bottom layer.
+  final legacy = j['reference'];
+  if (legacy is Map<String, dynamic> && layers.isNotEmpty) {
+    final image = referenceFromJson(legacy);
+    if (image != null && layers.first.image == null) {
+      layers[0] = layers.first.copyWith(image: image);
+    }
+  }
+  return Drawing(
+    name: (j['name'] as String?) ?? 'Untitled',
+    width: ((j['width'] as num?) ?? 120).toDouble(),
+    height: ((j['height'] as num?) ?? 170).toDouble(),
+    layers: layers,
+  );
+}
 
 String drawingToJson(Drawing d, {bool pretty = false}) {
   final map = drawingToMap(d);

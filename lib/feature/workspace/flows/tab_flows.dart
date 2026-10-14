@@ -35,12 +35,14 @@ Future<void> openProjectDialog(BuildContext context, WorkspaceCubit ws) async {
 }
 
 /// Opens a dropped or chosen file: a project opens in its own tab (or switches
-/// to the tab already showing it); an image becomes the background reference.
+/// to the tab already showing it); an image goes onto the active layer, or onto
+/// a new layer when the active layer already has a picture.
 Future<void> openPath(BuildContext context, WorkspaceCubit ws, String path) async {
   try {
     if (isImageFile(path)) {
       final bytes = await _dialogs.readBytes(path);
-      ws.current.add(ReferenceLoaded(bytes));
+      final bloc = ws.current;
+      bloc.add(ImageLoaded(bytes, onNewLayer: bloc.state.layer.image != null));
     } else if (isProjectFile(path)) {
       await ws.openProject(path);
     } else if (context.mounted) {

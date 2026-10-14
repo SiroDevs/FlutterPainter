@@ -19,8 +19,7 @@ class EditorState extends Equatable {
     this.style = const StyleSettings(),
     this.view = const ViewSettings(),
     this.gesture = const GestureState(),
-    this.refImage,
-    this.refImageId,
+    this.images = const <String, Image>{},
   });
 
   factory EditorState.fromSeed(EditorSeed seed) => EditorState(
@@ -46,6 +45,10 @@ class EditorState extends Equatable {
   final int revision;
   final Tool tool;
   final int layerIndex;
+
+  /// The selection in the active layer: a shape index, [kImageSlot] for the
+  /// layer's picture, or null for nothing. Every place that clears the
+  /// selection therefore clears the picture selection too.
   final int? selected;
 
   /// The shape being drawn right now, plus the rubber-band point for polygons.
@@ -58,12 +61,12 @@ class EditorState extends Equatable {
   final ViewSettings view;
   final GestureState gesture;
 
-  /// The decoded background image and the id of the pixels it came from.
-  final Image? refImage;
-  final String? refImageId;
+  /// Decoded pictures by [ReferenceImage.id], one entry per distinct picture
+  /// used by any layer (or any undo step).
+  final Map<String, Image> images;
 
-  /// Nullable fields ([filePath], [selected], [draft], [hover], [cursor],
-  /// [refImage], [refImageId]) can be cleared by passing `null` explicitly.
+  /// Nullable fields ([filePath], [selected], [draft], [hover], [cursor]) can
+  /// be cleared by passing `null` explicitly.
   EditorState copyWith({
     String? tabId,
     Drawing? drawing,
@@ -80,8 +83,7 @@ class EditorState extends Equatable {
     StyleSettings? style,
     ViewSettings? view,
     GestureState? gesture,
-    Object? refImage = unset,
-    Object? refImageId = unset,
+    Map<String, Image>? images,
   }) =>
       EditorState(
         tabId: tabId ?? this.tabId,
@@ -99,8 +101,7 @@ class EditorState extends Equatable {
         style: style ?? this.style,
         view: view ?? this.view,
         gesture: gesture ?? this.gesture,
-        refImage: keep<Image>(refImage, this.refImage),
-        refImageId: keep<String>(refImageId, this.refImageId),
+        images: images ?? this.images,
       );
 
   @override
@@ -120,7 +121,6 @@ class EditorState extends Equatable {
         style,
         view,
         gesture,
-        refImage,
-        refImageId,
+        images,
       ];
 }
