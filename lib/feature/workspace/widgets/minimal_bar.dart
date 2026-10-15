@@ -6,11 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/app_settings.dart';
 import '../../settings/cubit/settings_cubit.dart';
 import '../commands/commands_builder.dart';
+import '../commands/groups/exports.dart';
 import 'ribbon/ribbon_parts.dart';
 
-/// The slim bar of the minimal interface, standing in for the ribbon: the
-/// everyday actions and a way back to the advanced interface. Every other
-/// command is in the menus.
 class MinimalBar extends StatelessWidget {
   const MinimalBar({super.key});
 

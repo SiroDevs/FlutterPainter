@@ -37,7 +37,7 @@ class EditorTabs extends StatelessWidget {
                   active: path == state.activePath,
                   modified: state.isModified(path),
                   onSelect: () => cubit.select(path),
-                  onClose: () => cubit.close(path),
+                  onClose: () => cubit.closeTab(path),
                 ),
             ],
           );

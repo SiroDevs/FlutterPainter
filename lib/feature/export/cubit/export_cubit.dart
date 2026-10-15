@@ -71,7 +71,7 @@ class ExportCubit extends Cubit<ExportState> {
 
   /// Closes the tab for [path]. The file stays in the explorer; its edits are
   /// kept. The neighbour to the right (else left) becomes active.
-  void close(String path) {
+  void closeTab(String path) {
     final i = state.openPaths.indexOf(path);
     if (i < 0) return;
     final open = [...state.openPaths]..removeAt(i);

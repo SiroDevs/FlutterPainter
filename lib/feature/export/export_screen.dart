@@ -118,7 +118,7 @@ class _ExportScreenState extends State<ExportScreen> {
     both(LogicalKeyboardKey.keyS, () => saveArchive(context, _cubit), shift: true);
     both(LogicalKeyboardKey.keyW, () {
       final active = _cubit.state.activePath;
-      if (active != null) _cubit.close(active);
+      if (active != null) _cubit.closeTab(active);
     });
     map[const SingleActivator(LogicalKeyboardKey.keyF, shift: true, alt: true)] =
         _cubit.formatActive;
