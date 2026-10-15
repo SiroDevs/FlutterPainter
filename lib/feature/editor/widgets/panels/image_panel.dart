@@ -5,6 +5,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Package imports:
+import 'package:styled_widget/styled_widget.dart';
+
 // Project imports:
 import '../../../../common/widgets/inputs/labeled_slider.dart';
 import '../../../../domain/models/tool.dart';
@@ -31,17 +34,13 @@ class ImagePanel extends StatelessWidget {
       builder: (context, state) {
         final r = state.layer.image;
         final box = state.imageBounds;
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
-              Expanded(
-                child: Text(
-                  'Image on "${state.layer.name}"',
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ),
+              Text(
+                'Image on "${state.layer.name}"',
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleSmall,
+              ).expanded(),
               IconButton(
                 tooltip: 'Load an image onto a new layer',
                 iconSize: 18,
@@ -122,8 +121,7 @@ class ImagePanel extends StatelessWidget {
                 onChangeEnd: () => bloc.add(const ChangesCommitted()),
               ),
             ],
-          ]),
-        );
+          ]).padding(horizontal: 12, vertical: 8);
       },
     );
   }

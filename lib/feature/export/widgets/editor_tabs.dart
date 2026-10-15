@@ -4,6 +4,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Package imports:
+import 'package:styled_widget/styled_widget.dart';
+
 // Project imports:
 import '../cubit/export_cubit.dart';
 import 'vscode_colors.dart';
@@ -17,33 +20,29 @@ class EditorTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 35,
-      color: colors.tabBar,
-      child: BlocBuilder<ExportCubit, ExportState>(
-        buildWhen: (a, b) =>
-            a.activePath != b.activePath ||
-            !listEquals(a.openPaths, b.openPaths) ||
-            !setEquals(a.modifiedPaths, b.modifiedPaths),
-        builder: (context, state) {
-          final cubit = context.read<ExportCubit>();
-          return ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              for (final path in state.openPaths)
-                _Tab(
-                  colors: colors,
-                  name: state.fileAt(path)?.name ?? path,
-                  active: path == state.activePath,
-                  modified: state.isModified(path),
-                  onSelect: () => cubit.select(path),
-                  onClose: () => cubit.closeTab(path),
-                ),
-            ],
-          );
-        },
-      ),
-    );
+    return BlocBuilder<ExportCubit, ExportState>(
+      buildWhen: (a, b) =>
+          a.activePath != b.activePath ||
+          !listEquals(a.openPaths, b.openPaths) ||
+          !setEquals(a.modifiedPaths, b.modifiedPaths),
+      builder: (context, state) {
+        final cubit = context.read<ExportCubit>();
+        return ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            for (final path in state.openPaths)
+              _Tab(
+                colors: colors,
+                name: state.fileAt(path)?.name ?? path,
+                active: path == state.activePath,
+                modified: state.isModified(path),
+                onSelect: () => cubit.select(path),
+                onClose: () => cubit.closeTab(path),
+              ),
+          ],
+        );
+      },
+    ).backgroundColor(colors.tabBar).height(35);
   }
 }
 
@@ -74,47 +73,42 @@ class _Tab extends StatelessWidget {
       child: InkWell(
         onTap: onSelect,
         hoverColor: colors.hover,
-        child: Container(
-          padding: const EdgeInsets.only(left: 12, right: 4),
-          decoration: BoxDecoration(
-            color: active ? colors.editorBg : colors.tabInactive,
-            border: Border(
-              top: BorderSide(
-                color: active ? colors.accent : Colors.transparent,
-                width: 1,
-              ),
-              right: BorderSide(color: colors.border),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          const Icon(Icons.flutter_dash, size: 16, color: Color(0xFF42A5F5)),
+          const SizedBox(width: 6),
+          Text(
+            name,
+            style: TextStyle(
+              fontSize: 13,
+              color: fg,
+              fontStyle: modified ? FontStyle.italic : FontStyle.normal,
             ),
           ),
-          child: Row(mainAxisSize: MainAxisSize.min, children: [
-            const Icon(Icons.flutter_dash, size: 16, color: Color(0xFF42A5F5)),
+          if (modified) ...[
             const SizedBox(width: 6),
-            Text(
-              name,
-              style: TextStyle(
-                fontSize: 13,
-                color: fg,
-                fontStyle: modified ? FontStyle.italic : FontStyle.normal,
-              ),
+            const Icon(Icons.circle, size: 8, color: Color(0xFFE2C08D)),
+          ],
+          const SizedBox(width: 4),
+          Tooltip(
+            message: 'Close',
+            child: InkResponse(
+              onTap: onClose,
+              radius: 12,
+              child: Icon(Icons.close, size: 16, color: fg).padding(all: 4),
             ),
-            if (modified) ...[
-              const SizedBox(width: 6),
-              const Icon(Icons.circle, size: 8, color: Color(0xFFE2C08D)),
-            ],
-            const SizedBox(width: 4),
-            Tooltip(
-              message: 'Close',
-              child: InkResponse(
-                onTap: onClose,
-                radius: 12,
-                child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: Icon(Icons.close, size: 16, color: fg),
+          ),
+        ])
+            .padding(left: 12, right: 4)
+            .decorated(
+              color: active ? colors.editorBg : colors.tabInactive,
+              border: Border(
+                top: BorderSide(
+                  color: active ? colors.accent : Colors.transparent,
+                  width: 1,
                 ),
+                right: BorderSide(color: colors.border),
               ),
             ),
-          ]),
-        ),
       ),
     );
   }

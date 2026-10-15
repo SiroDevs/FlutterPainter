@@ -1,6 +1,9 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:styled_widget/styled_widget.dart';
+
 // Project imports:
 import 'vscode_colors.dart';
 
@@ -55,52 +58,47 @@ class ExportTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 36,
-      color: colors.titleBar,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Row(children: [
-        Icon(Icons.code, size: 18, color: colors.accent),
-        const SizedBox(width: 8),
-        Text(
-          title,
-          style: TextStyle(fontSize: 12.5, color: colors.titleText),
-        ),
-        const SizedBox(width: 12),
-        _button(
-          Icons.save_alt,
-          'Save locally',
-          onSaveLocally,
-          tooltip: 'Save all files into a folder ($modifier+S)',
-        ),
-        _button(
-          Icons.archive_outlined,
-          'Save as an archive',
-          onSaveArchive,
-          tooltip: 'Save all files as one .zip ($modifier+Shift+S)',
-        ),
-        _button(Icons.copy_all_outlined, 'Copy', onCopy,
-            tooltip: 'Copy the open file to the clipboard'),
-        _button(
-          Icons.format_align_left,
-          'Format document',
-          onFormat,
-          tooltip: 'Format the open file (Shift+Alt+F)',
-        ),
-        _button(
-          Icons.refresh,
-          'Regenerate',
-          onRegenerate,
-          tooltip: 'Build the files again from the drawing (drops your edits)',
-        ),
-        const Spacer(),
-        _button(
-          Icons.close,
-          'Close code editor',
-          onClose,
-          tooltip: 'Back to the drawing',
-        ),
-      ]),
-    );
+    return Row(children: [
+      Icon(Icons.code, size: 18, color: colors.accent),
+      const SizedBox(width: 8),
+      Text(
+        title,
+        style: TextStyle(fontSize: 12.5, color: colors.titleText),
+      ),
+      const SizedBox(width: 12),
+      _button(
+        Icons.save_alt,
+        'Save locally',
+        onSaveLocally,
+        tooltip: 'Save all files into a folder ($modifier+S)',
+      ),
+      _button(
+        Icons.archive_outlined,
+        'Save as an archive',
+        onSaveArchive,
+        tooltip: 'Save all files as one .zip ($modifier+Shift+S)',
+      ),
+      _button(Icons.copy_all_outlined, 'Copy', onCopy,
+          tooltip: 'Copy the open file to the clipboard'),
+      _button(
+        Icons.format_align_left,
+        'Format document',
+        onFormat,
+        tooltip: 'Format the open file (Shift+Alt+F)',
+      ),
+      _button(
+        Icons.refresh,
+        'Regenerate',
+        onRegenerate,
+        tooltip: 'Build the files again from the drawing (drops your edits)',
+      ),
+      const Spacer(),
+      _button(
+        Icons.close,
+        'Close code editor',
+        onClose,
+        tooltip: 'Back to the drawing',
+      ),
+    ]).padding(horizontal: 8).backgroundColor(colors.titleBar).height(36);
   }
 }
