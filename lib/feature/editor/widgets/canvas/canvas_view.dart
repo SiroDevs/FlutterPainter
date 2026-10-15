@@ -10,7 +10,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
+import '../../../../core/utils/color_preview.dart';
+import '../../../../domain/models/app_settings.dart';
 import '../../../../domain/models/tool.dart';
+import '../../../settings/cubit/settings_cubit.dart';
 import '../../bloc/editor_bloc.dart';
 import 'drawing_painter.dart';
 
@@ -53,6 +56,10 @@ class _CanvasViewState extends State<CanvasView> {
 
   @override
   Widget build(BuildContext context) {
+    // The colour-vision preview only changes how the canvas is shown.
+    final filter = colorFilterFor(
+      context.select<SettingsCubit, ColorPreview>((c) => c.state.colorPreview),
+    );
     return LayoutBuilder(
       builder: (context, box) {
         _reportSize(box.biggest);
@@ -71,9 +78,12 @@ class _CanvasViewState extends State<CanvasView> {
               onPointerPanZoomStart: (_) => _lastScale = 1,
               onPointerPanZoomUpdate: _panZoom,
               child: ClipRect(
-                child: CustomPaint(
-                  painter: DrawingPainter(state),
-                  size: Size.infinite,
+                child: _filtered(
+                  filter,
+                  CustomPaint(
+                    painter: DrawingPainter(state),
+                    size: Size.infinite,
+                  ),
                 ),
               ),
             ),
@@ -82,6 +92,9 @@ class _CanvasViewState extends State<CanvasView> {
       },
     );
   }
+
+  Widget _filtered(ColorFilter? filter, Widget child) =>
+      filter == null ? child : ColorFiltered(colorFilter: filter, child: child);
 
   void _down(PointerDownEvent e) {
     widget.focus.requestFocus();

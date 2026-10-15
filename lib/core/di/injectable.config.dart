@@ -23,8 +23,8 @@ import 'package:flutter_painter/feature/editor/bloc/editor_bloc_factory.dart'
     as _i133;
 import 'package:flutter_painter/feature/editor/models/editor_seed.dart'
     as _i594;
-import 'package:flutter_painter/feature/export/cubit/export_cubit.dart'
-    as _i146;
+import 'package:flutter_painter/feature/settings/cubit/settings_cubit.dart'
+    as _i337;
 import 'package:flutter_painter/feature/workspace/cubit/project_saver.dart'
     as _i1028;
 import 'package:flutter_painter/feature/workspace/cubit/workspace_cubit.dart'
@@ -58,14 +58,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i741.ProjectRepo>(
       () => _i741.ProjectRepo(gh<_i85.ProjectFileSource>()),
     );
-    gh.factory<_i146.ExportCubit>(
-      () => _i146.ExportCubit(gh<_i985.FileDialogs>()),
-    );
     gh.lazySingleton<_i760.DraftRepo>(
       () => _i760.DraftRepo(gh<_i691.DraftFileSource>()),
     );
     gh.lazySingleton<_i109.ThemeBloc>(
       () => _i109.ThemeBloc(gh<_i415.PrefsRepo>()),
+    );
+    gh.lazySingleton<_i337.SettingsCubit>(
+      () => _i337.SettingsCubit(gh<_i415.PrefsRepo>()),
     );
     gh.lazySingleton<_i1028.ProjectSaver>(
       () => _i1028.ProjectSaver(gh<_i741.ProjectRepo>(), gh<_i760.DraftRepo>()),
