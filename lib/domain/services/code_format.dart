@@ -19,3 +19,26 @@ String lowerFirst(String s) => s[0].toLowerCase() + s.substring(1);
 /// A Dart colour literal body, e.g. 0xFFC9222B.
 String colorLiteral(int argb) =>
     '0x${argb.toRadixString(16).padLeft(8, '0').toUpperCase()}';
+
+/// A double with at most [decimals] decimals and always a decimal point.
+String fmtN(double v, int decimals) {
+  var s = v.toStringAsFixed(decimals).replaceFirst(RegExp(r'0+$'), '');
+  if (s.endsWith('.')) s += '0';
+  return s;
+}
+
+/// "RiderBody" -> "rider_body", "Layer2" -> "layer2": a file-name fragment.
+String snakeCase(String pascal) {
+  final out = StringBuffer();
+  for (var i = 0; i < pascal.length; i++) {
+    final c = pascal[i];
+    final isUpper = c != c.toLowerCase();
+    if (isUpper && i > 0) {
+      final prev = pascal[i - 1];
+      final prevIsLowerOrDigit = prev == prev.toLowerCase();
+      if (prevIsLowerOrDigit) out.write('_');
+    }
+    out.write(c.toLowerCase());
+  }
+  return out.toString();
+}

@@ -5,9 +5,7 @@ import 'dart:ui';
 import '../../../domain/models/tool.dart';
 import '../bloc/editor_bloc.dart';
 import '../models/gesture_state.dart';
-import 'draw_logic.dart';
-import 'image_logic.dart';
-import 'select_logic.dart';
+import 'exports.dart';
 
 /// Routes raw pointer events to the active tool, or to the gesture in progress.
 abstract class PointerLogic {

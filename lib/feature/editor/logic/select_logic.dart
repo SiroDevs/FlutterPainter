@@ -6,10 +6,7 @@ import '../../../domain/services/geometry_utils.dart';
 import '../../../domain/services/shape_geometry.dart';
 import '../bloc/editor_bloc.dart';
 import '../models/gesture_state.dart';
-import 'editor_ops.dart';
-import 'image_logic.dart';
-import 'style_logic.dart';
-import 'vertex_logic.dart';
+import 'exports.dart';
 
 /// The Select tool: pick a shape or a layer's picture, move it, resize by its
 /// handles, drag vertices, double-click an edge to add a point, Alt-click a

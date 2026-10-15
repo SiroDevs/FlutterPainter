@@ -11,6 +11,7 @@ import 'common/constants/app_constants.dart';
 import 'core/di/injectable.dart';
 import 'core/theme/bloc/theme_bloc.dart';
 import 'core/theme/theme_data.dart';
+import 'feature/settings/cubit/settings_cubit.dart';
 import 'feature/workspace/cubit/workspace_cubit.dart';
 
 class MyApp extends StatelessWidget {
@@ -49,6 +50,7 @@ class AppViewState extends State<AppView> {
       providers: [
         BlocProvider.value(value: getIt<ThemeBloc>()),
         BlocProvider.value(value: getIt<WorkspaceCubit>()),
+        BlocProvider.value(value: getIt<SettingsCubit>()),
       ],
       child: BlocBuilder<ThemeBloc, ThemeMode>(
         builder: (context, themeMode) => MaterialApp.router(

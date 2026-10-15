@@ -8,18 +8,25 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 // Project imports:
+import '../../common/app_router/route_names.dart';
 import '../../domain/models/tool.dart';
 import '../editor/bloc/editor_bloc.dart';
 import '../editor/editor_screen.dart';
-import '../export/widgets/export_dialog.dart';
+import '../editor/widgets/toolbar/tool_info.dart';
+import '../export/export_args.dart';
+import '../settings/widgets/settings_dialog.dart';
 import 'cubit/workspace_cubit.dart';
 import 'flows/tab_flows.dart';
+import 'widgets/menus/app_menu_bar.dart';
 import 'widgets/project_tabs.dart';
-import 'widgets/top_bar.dart';
+import 'widgets/ribbon/ribbon.dart';
+import 'widgets/toolbar_area.dart';
 
-/// The whole window: top bar, project tabs, and the active tab's editor.
+/// The whole window: menu bar, ribbon, project tabs, and the active tab's
+/// editor.
 class WorkspaceScreen extends StatefulWidget {
   const WorkspaceScreen({super.key, this.initialPaths = const []});
 
@@ -34,6 +41,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   final FocusNode _focus = FocusNode(debugLabel: 'canvas');
   late final WorkspaceCubit _ws = context.read<WorkspaceCubit>();
   late final AppLifecycleListener _lifecycle;
+  final RibbonController _ribbon = RibbonController();
   bool _dragging = false;
 
   EditorBloc get _current => _ws.current;
@@ -49,6 +57,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   @override
   void dispose() {
     _lifecycle.dispose();
+    _ribbon.dispose();
     _focus.dispose();
     super.dispose();
   }
@@ -108,7 +117,20 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     both(LogicalKeyboardKey.keyO, () => openProjectDialog(context, _ws));
     both(LogicalKeyboardKey.keyN, _ws.addBlank);
     both(LogicalKeyboardKey.keyW, () => closeTab(context, _ws, _current));
-    both(LogicalKeyboardKey.keyE, () => showExportDialog(context, _current.state.drawing));
+    both(
+      LogicalKeyboardKey.keyE,
+      () => context.push(
+        RoutePaths.export,
+        extra: ExportArgs(_current.state.drawing),
+      ),
+    );
+    both(LogicalKeyboardKey.comma, () => showSettingsDialog(context));
+
+    // One letter per tool, like Photoshop (V select, R rectangle, ...).
+    for (final tool in Tool.values) {
+      map[SingleActivator(tool.shortcutKey)] =
+          () => _guarded(() => send(ToolSelected(tool)));
+    }
 
     map[const SingleActivator(LogicalKeyboardKey.delete)] =
         () => _guarded(() => send(const ShapeDeleted()));
@@ -142,17 +164,23 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
                 buildWhen: (a, b) => a.active != b.active || a.tabs.length != b.tabs.length,
                 builder: (context, _) {
                   final bloc = _ws.current;
-                  // One editor bloc per tab, keyed so switching tabs rebuilds
-                  // the whole editor against the right project.
+                  // One editor bloc per tab. The provider (and so the menu bar,
+                  // which on macOS must exist exactly once) stays put; only the
+                  // editor below is keyed, so switching tabs rebuilds it
+                  // against the right project.
                   return BlocProvider<EditorBloc>.value(
-                    key: ObjectKey(bloc),
                     value: bloc,
-                    child: Column(children: [
-                      const TopBar(),
-                      const ProjectTabs(),
-                      const Divider(height: 1),
-                      Expanded(child: EditorScreen(canvasFocus: _focus)),
-                    ]),
+                    child: AppMenuBar(
+                      child: KeyedSubtree(
+                        key: ObjectKey(bloc),
+                        child: Column(children: [
+                          ToolbarArea(ribbon: _ribbon),
+                          const ProjectTabs(),
+                          const Divider(height: 1),
+                          Expanded(child: EditorScreen(canvasFocus: _focus)),
+                        ]),
+                      ),
+                    ),
                   );
                 },
               ),
@@ -171,7 +199,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
             alignment: Alignment.center,
             child: const Text(
               'Drop a .flp project to open it in a new tab,\n'
-              'or an image to use as the background',
+              'or an image to put on the active layer',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20),
             ),
