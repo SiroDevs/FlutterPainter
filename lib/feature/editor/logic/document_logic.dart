@@ -1,4 +1,5 @@
 // Project imports:
+import '../../../domain/models/paint_layer.dart';
 import '../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 import 'view_logic.dart';
@@ -14,6 +15,19 @@ abstract class DocumentLogic {
     final d = s.drawing.copyWith(width: width, height: height);
     return s
         .copyWith(drawing: d, view: ViewLogic.fitted(s.view, d, force: true))
+        .commit();
+  }
+
+  /// Swaps in layers read from code. The selection goes, since the shapes it
+  /// pointed at may no longer exist.
+  static EditorState applyCode(EditorState s, List<PaintLayer> layers) {
+    if (layers.isEmpty) return s;
+    return s
+        .withLayers(layers)
+        .copyWith(
+          layerIndex: s.layerIndex.clamp(0, layers.length - 1).toInt(),
+          selected: null,
+        )
         .commit();
   }
 

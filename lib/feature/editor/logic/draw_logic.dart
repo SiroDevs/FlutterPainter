@@ -24,6 +24,7 @@ abstract class DrawLogic {
       points: points,
       name: '${kind.name[0].toUpperCase()}${kind.name.substring(1)} ${count + 1}',
       fill: open || !st.fillOn ? null : st.fillColor,
+      gradient: open || !st.fillOn ? null : st.fillGradient,
       stroke: (st.strokeOn || open) ? st.strokeColor : null,
       strokeWidth: st.strokeWidth,
       radius: kind == ShapeKind.rect ? st.radius : 0,

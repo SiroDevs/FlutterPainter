@@ -25,6 +25,7 @@ class Drawing extends Equatable {
     for (final l in layers) {
       for (final s in l.shapes) {
         if (s.fill != null) seen.add(s.fill!);
+        seen.addAll(s.gradient?.colors ?? const <int>[]);
         if (s.stroke != null) seen.add(s.stroke!);
       }
     }

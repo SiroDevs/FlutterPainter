@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../../common/constants/palette_constants.dart';
+import '../../../../core/utils/l10n_ext.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/style_settings.dart';
+import 'color_picker_dialog.dart';
 
 /// Paint-style colour strip: two overlapping swatches (fill in front, stroke
 /// behind), a hex field, the classic palette, and the colours already used.
@@ -48,19 +50,29 @@ class ColorBar extends StatelessWidget {
                       if (parsed != null) bloc.add(ColorPicked(parsed));
                     },
                   ),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
+                  Row(children: [
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        visualDensity: VisualDensity.compact,
+                        minimumSize: const Size(0, 28),
+                      ),
+                      onPressed: () => bloc.add(
+                        st.editFill
+                            ? FillToggled(!activeOn)
+                            : StrokeToggled(!activeOn),
+                      ),
+                      icon: Icon(activeOn ? Icons.block : Icons.check, size: 16),
+                      label: Text(activeOn ? 'None' : 'Use'),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      tooltip: context.l10n.colorMoreTooltip,
+                      iconSize: 18,
                       visualDensity: VisualDensity.compact,
-                      minimumSize: const Size(0, 28),
+                      icon: const Icon(Icons.palette_outlined),
+                      onPressed: () => _openPicker(context, st),
                     ),
-                    onPressed: () => bloc.add(
-                      st.editFill
-                          ? FillToggled(!activeOn)
-                          : StrokeToggled(!activeOn),
-                    ),
-                    icon: Icon(activeOn ? Icons.block : Icons.check, size: 16),
-                    label: Text(activeOn ? 'None' : 'Use'),
-                  ),
+                  ]),
                 ]),
               ),
               const SizedBox(width: 12),
@@ -86,6 +98,22 @@ class ColorBar extends StatelessWidget {
   }
 }
 
+// Opens the color picker for whichever swatch is active and applies the answer.
+Future<void> _openPicker(BuildContext context, StyleSettings style) async {
+  final bloc = context.read<EditorBloc>();
+  final result = await showDialog<ColorPickerResult>(
+    context: context,
+    builder: (_) => ColorPickerDialog(
+      initialColor: style.editFill ? style.fillColor : style.strokeColor,
+      initialGradient: style.editFill ? style.fillGradient : null,
+      allowGradient: style.editFill,
+    ),
+  );
+  if (result == null) return;
+  final gradient = result.gradient;
+  bloc.add(gradient == null ? ColorPicked(result.color) : GradientPicked(gradient));
+}
+
 class _Swatches extends StatelessWidget {
   const _Swatches({required this.style});
 
@@ -105,6 +133,12 @@ class _Swatches extends StatelessWidget {
               height: 38,
               decoration: BoxDecoration(
                 color: on ? Color(color) : const Color(0xFF2B2E34),
+                gradient: isFill && on && style.fillGradient != null
+                    ? LinearGradient(
+                        colors: [for (final c in style.fillGradient!.colors) Color(c)],
+                        stops: style.fillGradient!.stops,
+                      )
+                    : null,
                 border: Border.all(
                   color: style.editFill == isFill ? accent : Colors.white38,
                   width: style.editFill == isFill ? 3 : 1,

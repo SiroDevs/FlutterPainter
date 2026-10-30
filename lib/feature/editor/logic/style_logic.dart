@@ -1,5 +1,6 @@
 // Project imports:
 import '../../../domain/models/shape.dart';
+import '../../../domain/models/shape_gradient.dart';
 import '../../../domain/models/shape_kind.dart';
 import '../bloc/editor_bloc.dart';
 import '../models/style_settings.dart';
@@ -14,6 +15,7 @@ abstract class StyleLogic {
   static StyleSettings adopt(StyleSettings st, Shape s) => st.copyWith(
         fillOn: s.isClosed ? s.fill != null : st.fillOn,
         fillColor: s.isClosed && s.fill != null ? s.fill! : st.fillColor,
+        fillGradient: s.isClosed ? s.gradient : st.fillGradient,
         strokeOn: s.stroke != null,
         strokeColor: s.stroke ?? st.strokeColor,
         strokeWidth: s.strokeWidth,
@@ -28,9 +30,34 @@ abstract class StyleLogic {
       s.style.editFill ? pickFill(s, color) : pickStroke(s, color);
 
   static EditorState pickFill(EditorState s, int color) => s
-      .copyWith(style: s.style.copyWith(fillColor: color, fillOn: true))
-      .editSelected((sh) => sh.isClosed ? sh.copyWith(fill: color) : sh)
+      .copyWith(
+        style: s.style.copyWith(
+          fillColor: color,
+          fillOn: true,
+          fillGradient: null,
+        ),
+      )
+      .editSelected(
+        (sh) => sh.isClosed ? sh.copyWith(fill: color, gradient: null) : sh,
+      )
       .commit();
+
+  /// Paints the fill with [gradient]; null goes back to the flat fill colour.
+  static EditorState pickGradient(EditorState s, ShapeGradient? gradient) {
+    final color = gradient?.firstColor ?? s.style.fillColor;
+    return s
+        .copyWith(
+          style: s.style.copyWith(
+            fillColor: color,
+            fillOn: true,
+            fillGradient: gradient,
+          ),
+        )
+        .editSelected(
+          (sh) => sh.isClosed ? sh.copyWith(fill: color, gradient: gradient) : sh,
+        )
+        .commit();
+  }
 
   static EditorState pickStroke(EditorState s, int color) => s
       .copyWith(style: s.style.copyWith(strokeColor: color, strokeOn: true))
@@ -40,7 +67,12 @@ abstract class StyleLogic {
   static EditorState toggleFill(EditorState s, bool on) => s
       .copyWith(style: s.style.copyWith(fillOn: on))
       .editSelected(
-        (sh) => sh.isClosed ? sh.copyWith(fill: on ? s.style.fillColor : null) : sh,
+        (sh) => sh.isClosed
+            ? sh.copyWith(
+                fill: on ? s.style.fillColor : null,
+                gradient: on ? s.style.fillGradient : null,
+              )
+            : sh,
       )
       .commit();
 

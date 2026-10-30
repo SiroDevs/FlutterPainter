@@ -1,12 +1,40 @@
 {
-    "@@locale": "en",
-    "feedback": "Feedback",
-    "@feedback": {
-        "description": "Label for feedback section or button"
-    },
-
-    "appName": "Flutter Painter",
-    "@appName": {
-        "description": "The name of the application"
+  "@@locale": "en",
+  "newProject": "New Project",
+  "newProjectTooltip": "Start a new project (Ctrl+N)",
+  "inlineCode": "Inline Code",
+  "inlineCodeTooltip": "Show or hide the inline code view",
+  "openFullEditor": "Open the full code editor",
+  "undo": "Undo",
+  "removeFileTooltip": "Remove this file and its shapes",
+  "statusIdle": "Edit the code and the canvas follows",
+  "statusRendered": "Canvas updated from the code",
+  "statusUnreadable": "Cannot read this code yet; the canvas is unchanged",
+  "statusSkipped": "{count, plural, =1{1 statement was skipped} other{{count} statements were skipped}}",
+  "@statusSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
     }
+  },
+  "colorMoreTooltip": "Open the color picker",
+  "colorPickerTitle": "Color picker",
+  "colorSolid": "Solid",
+  "colorGradient": "Gradient",
+  "colorWheel": "Wheel",
+  "colorSquare": "Square",
+  "colorHexCode": "Hex code",
+  "colorBrightness": "Brightness",
+  "colorOpacity": "Opacity",
+  "gradientLinear": "Linear",
+  "gradientRadial": "Radial",
+  "gradientSweep": "Sweep",
+  "gradientAngle": "Angle",
+  "gradientRadius": "Radius",
+  "gradientAddStop": "Add stop",
+  "gradientRemoveStop": "Remove stop",
+  "gradientStopPosition": "Position",
+  "apply": "Apply",
+  "cancel": "Cancel"
 }

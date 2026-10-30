@@ -6,13 +6,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
+import '../../../core/utils/l10n_ext.dart';
 import '../cubit/workspace_cubit.dart';
 import '../flows/tab_flows.dart';
 
 /// One tab per open project: its name, an unsaved-changes dot, and a close
-/// button. A "+" at the end starts a new blank project.
+/// button. At the end sit a "New Project" button and an "Inline Code" toggle
+/// that shows or hides the inline code view.
 class ProjectTabs extends StatelessWidget {
-  const ProjectTabs({super.key});
+  const ProjectTabs({super.key, required this.inlineCode});
+
+  final ValueNotifier<bool> inlineCode;
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +35,15 @@ class ProjectTabs extends StatelessWidget {
               ),
           ],
         ).expanded(),
-        IconButton(
-          tooltip: 'New project (Ctrl+N)',
-          iconSize: 20,
-          icon: const Icon(Icons.add),
-          onPressed: ws.addBlank,
+        Tooltip(
+          message: context.l10n.newProjectTooltip,
+          child: TextButton.icon(
+            onPressed: ws.addBlank,
+            icon: const Icon(Icons.add, size: 18),
+            label: Text(context.l10n.newProject),
+          ),
         ),
+        _InlineCodeToggle(open: inlineCode),
       ]).height(38),
     );
   }
@@ -88,6 +95,33 @@ class _Tab extends StatelessWidget {
               ),
             )
             .constrained(minWidth: 120, maxWidth: 240),
+      ),
+    );
+  }
+}
+
+class _InlineCodeToggle extends StatelessWidget {
+  const _InlineCodeToggle({required this.open});
+
+  final ValueNotifier<bool> open;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return ValueListenableBuilder<bool>(
+      valueListenable: open,
+      builder: (context, isOpen, _) => Tooltip(
+        message: context.l10n.inlineCodeTooltip,
+        child: TextButton.icon(
+          style: TextButton.styleFrom(
+            backgroundColor: isOpen ? scheme.primaryContainer : null,
+            foregroundColor: isOpen ? scheme.onPrimaryContainer : null,
+            shape: const RoundedRectangleBorder(),
+          ),
+          onPressed: () => open.value = !isOpen,
+          icon: const Icon(Icons.code, size: 18),
+          label: Text(context.l10n.inlineCode),
+        ),
       ),
     );
   }

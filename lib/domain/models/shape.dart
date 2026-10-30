@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 
 // Project imports:
 import '../../core/utils/copy_with_util.dart';
+import 'shape_gradient.dart';
 import 'shape_kind.dart';
 
 /// One drawable thing. Colours are 0xAARRGGBB ints (null = not painted).
@@ -14,6 +15,8 @@ import 'shape_kind.dart';
 /// - rect / ellipse: `points` holds two opposite corners.
 /// - line / polygon: `points` are the vertices (polygon is closed).
 /// - freehand: `points` are sampled along the stroke and drawn smoothed.
+/// - gradient: paints the fill instead of the flat colour; `fill` then holds
+///   the first stop so a shape with a gradient always has a fill.
 ///
 /// Immutable: edits make a new [Shape] with `copyWith`.
 class Shape extends Equatable {
@@ -22,6 +25,7 @@ class Shape extends Equatable {
     required this.points,
     this.name = '',
     this.fill,
+    this.gradient,
     this.stroke,
     this.strokeWidth = 1.0,
     this.radius = 0.0,
@@ -31,6 +35,7 @@ class Shape extends Equatable {
   final List<Offset> points;
   final String name;
   final int? fill;
+  final ShapeGradient? gradient;
   final int? stroke;
   final double strokeWidth;
   final double radius;
@@ -40,6 +45,7 @@ class Shape extends Equatable {
     List<Offset>? points,
     String? name,
     Object? fill = unset,
+    Object? gradient = unset,
     Object? stroke = unset,
     double? strokeWidth,
     double? radius,
@@ -49,6 +55,7 @@ class Shape extends Equatable {
         points: points ?? this.points,
         name: name ?? this.name,
         fill: keep<int>(fill, this.fill),
+        gradient: keep<ShapeGradient>(gradient, this.gradient),
         stroke: keep<int>(stroke, this.stroke),
         strokeWidth: strokeWidth ?? this.strokeWidth,
         radius: radius ?? this.radius,
@@ -56,7 +63,7 @@ class Shape extends Equatable {
 
   @override
   List<Object?> get props =>
-      [kind, points, name, fill, stroke, strokeWidth, radius];
+      [kind, points, name, fill, gradient, stroke, strokeWidth, radius];
 
   bool get isClosed => kind != ShapeKind.line && kind != ShapeKind.freehand;
   bool get usesVertices => kind == ShapeKind.line || kind == ShapeKind.polygon;
