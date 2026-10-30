@@ -1,24 +1,37 @@
 display_name: FlutterPainter
 package_name: flutterpainter
+
 maintainer:
-  name: Your Name
-  email: you@example.com
+  name: Siro Devs
+  email: sirodevske@gmail.com
+
 priority: optional
+
 section: x11
+
 installed_size: 40000
-essential: false
-icon: snap/gui/flutterpainter.png
 
 dependencies:
   - libgtk-3-0
   - libblkid1
   - liblzma5
 
-keywords:
-  - Painter
-  - Drawing
+essential: false
 
-generic_name: Painter
+icon: snap/gui/flutterpainter.png
+
+postuninstall_scripts:
+  - echo "We are sad to see you go. Please check back soon."
+
+keywords:
+  - FlutterPainter
+  - Flutter
+  - Painter
+  - MS Paint
+
+generic_name: FlutterPainter
+
 categories:
   - Graphics
-startup_notify: true
+
+startup_notify: false

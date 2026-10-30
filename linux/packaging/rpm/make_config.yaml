@@ -1,0 +1,23 @@
+icon: snap/gui/flutterpainter.png
+summary: Your songbook and Bible, together, on the go
+group: Application/Education
+vendor: Siro Devs
+packager: Siro Devs
+packagerEmail: sirodevske@gmail.com
+license: GPLv3
+url: https://github.com/SiroDevs/FlutterPainter
+
+display_name: FlutterPainter
+
+keywords:
+  - FlutterPainter
+  - Flutter
+  - Painter
+  - MS Paint
+
+generic_name: FlutterPainter
+
+categories:
+  - Graphics
+
+startup_notify: false
