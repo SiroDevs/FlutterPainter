@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=FlutterPainter
+Comment=A paint studio for your Flutter App
+Exec=flutterpainter
+Icon=${SNAP}/meta/gui/flutterpainter.png
+Terminal=false
+Type=Application
+Categories=Education;
+Keywords=FlutterPainter;Flutter;MSPaint;Paint;Painter;
