@@ -1,0 +1,24 @@
+display_name: FlutterPainter
+package_name: flutterpainter
+maintainer:
+  name: Your Name
+  email: you@example.com
+priority: optional
+section: x11
+installed_size: 40000
+essential: false
+icon: snap/gui/flutterpainter.png
+
+dependencies:
+  - libgtk-3-0
+  - libblkid1
+  - liblzma5
+
+keywords:
+  - Painter
+  - Drawing
+
+generic_name: Painter
+categories:
+  - Graphics
+startup_notify: true
