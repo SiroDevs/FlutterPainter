@@ -1,7 +1,7 @@
 name: flutter_painter
 description: A paint studio for your Flutter App
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.2
 
 environment:
   sdk: ^3.13.5
@@ -34,5 +34,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/templates/
+  

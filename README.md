@@ -29,7 +29,7 @@ split, and `go_router`. See [Architecture](#architecture).
 
 ## Getting started
 
-Requires Flutter with desktop support enabled (Dart `^3.13.5`, as in RoadBash).
+Requires Flutter with desktop support enabled (Dart `^3.13.5`).
 
 ```
 flutter create --platforms=windows,macos,linux .
@@ -144,10 +144,6 @@ receives new shapes). Use the buttons to add, rename, reorder and delete layers;
 the eye hides a layer (hidden layers are not exported). In Properties you can
 change a shape's order within its layer (Forward / Back), duplicate or delete it,
 or move it to another layer.
-
-**New > RoadBash rider (template)** opens the current game rider in its neutral
-pose as 47 editable shapes, already split into Shadow, Bike, Body, Handlebars
-and Helmet layers.
 
 ## Projects, tabs and the .flp format
 
@@ -328,7 +324,7 @@ passed on its command line (`main(List<String> args)`).
 
 ## Architecture
 
-Flutter Painter follows RoadBash's structure. The rule is simple: **widgets send
+The rule is simple: **widgets send
 events, blocs turn events into states, repositories talk to the outside world.**
 
 ```
@@ -368,7 +364,7 @@ lib/
 ```
 
 **State management.** Events and states are Freezed, in `part` files next to the
-bloc, exactly like RoadBash's `ThemeBloc`:
+bloc:
 
 - `EditorBloc` (one per tab) holds the whole project: the immutable `Drawing`,
   its `EditHistory`, the tool, selection, style, view and any pointer gesture in
@@ -390,10 +386,9 @@ bloc, exactly like RoadBash's `ThemeBloc`:
 
 **Dependency injection.** `injectable` generates `initGetIt`. Repos, data
 sources, `FileDialogs`, `ProjectSaver`, `WorkspaceCubit` and `ThemeBloc` are
-singletons; `EditorBloc` and `ExportCubit` are factories. `PrefsRepo` uses
-RoadBash's abstract-class-plus-implementation pattern.
+singletons; `EditorBloc` and `ExportCubit` are factories. `PrefsRepo` uses an abstract-class-plus-implementation pattern.
 
-**Data.** RoadBash stores its data in a Froom/SQLite database; Flutter Painter's
+**Data.** Flutter Painter's
 data is files (the `.flp` projects and the side copies), so the `data` layer is
 file sources and JSON mappers instead of DAOs and entities. The shape is the
 same: the domain asks a repo, the repo uses a source, the source does the IO.
@@ -443,7 +438,7 @@ The tests cover:
 
 ## Known limits
 
-- **Localization:** UI strings are plain text; RoadBash's `l10n` setup is not
+- **Localization:** UI strings are plain text; `l10n` setup is not
   applied here.
 - **Static export:** poses and animation are applied in your game code, not stored.
 - **No curve handles:** shapes are made of straight edges plus smoothed freehand

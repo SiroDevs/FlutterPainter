@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 // Project imports:
 import '../../../common/widgets/dialogs/app_dialogs.dart';
@@ -8,8 +7,6 @@ import '../../../common/widgets/progress/custom_snackbar.dart';
 import '../../../core/di/injectable.dart';
 import '../../../core/platform/file_dialogs.dart';
 import '../../../core/utils/path_util.dart';
-import '../../../domain/models/drawing.dart';
-import '../../../data/mappers/drawing_mapper.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../editor/logic/editor_ops.dart';
 import '../cubit/workspace_cubit.dart';
@@ -18,13 +15,6 @@ import '../cubit/workspace_cubit.dart';
 /// because they show dialogs and need a [BuildContext].
 
 FileDialogs get _dialogs => getIt<FileDialogs>();
-
-/// Starts a new project from the current RoadBash rider in its neutral pose.
-Future<void> newRiderTab(WorkspaceCubit ws) async {
-  final text = await rootBundle.loadString('assets/templates/rider.json');
-  final Drawing drawing = drawingFromJson(text);
-  ws.addDrawing(drawing);
-}
 
 Future<void> openProjectDialog(BuildContext context, WorkspaceCubit ws) async {
   final paths = await _dialogs.pickProjectPaths();
