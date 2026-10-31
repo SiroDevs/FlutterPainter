@@ -36,7 +36,6 @@ List<Widget> _file(WorkspaceCommands c) => [
     label: 'New',
     children: [
       RibbonButton.large(c.newBlank, label: 'Blank canvas'),
-      RibbonButton.large(c.newRider),
     ],
   ),
   RibbonGroup(

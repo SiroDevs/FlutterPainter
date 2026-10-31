@@ -34,7 +34,6 @@ const _sep = _Separator();
 List<_Menu> _menus(WorkspaceCommands c, {required bool mac}) => [
       _Menu('File', [
         _Item(c.newBlank),
-        _Item(c.newRider),
         _sep,
         _Item(c.open),
         _sep,

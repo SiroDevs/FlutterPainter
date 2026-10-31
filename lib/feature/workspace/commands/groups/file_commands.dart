@@ -25,13 +25,6 @@ extension FileCommands on WorkspaceCommands {
     onPressed: ws.addBlank,
   );
 
-  AppCommand get newRider => AppCommand(
-    label: 'RoadBash rider',
-    icon: Icons.two_wheeler,
-    tooltip: 'New project from the RoadBash rider template',
-    onPressed: () => newRiderTab(ws),
-  );
-
   AppCommand get open => AppCommand(
     label: 'Open…',
     icon: Icons.folder_open,
