@@ -1,0 +1,12 @@
+{
+    "@@locale": "sw",
+    "feedback": "Feedback",
+    "@feedback": {
+        "description": "Label for feedback section or button"
+    },
+
+    "appName": "Flutter Painter",
+    "@appName": {
+        "description": "The name of the application"
+    }
+}
