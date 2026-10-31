@@ -1,0 +1,24 @@
+name: flutterpainter
+title: FlutterPainter
+summary: a paint studio for your flutter app
+description: |
+  A paint studio for your Flutter App.
+version: git          # replaced by CI with the pubspec version
+base: core24
+grade: stable
+confinement: strict
+license: GPL-3.0
+
+apps:
+  flutterpainter:
+    command: FlutterPainter
+    extensions: [gnome]
+    plugs: [network, home, removable-media]
+
+parts:
+  flutterpainter:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart
+    build-packages: [libsqlite3-dev]
+    stage-packages: [libsqlite3-0]
