@@ -41,23 +41,27 @@ class Ribbon extends StatelessWidget {
           detailed: true,
           builder: (context, c) {
             final collapsed = controller.collapsed.value;
-            return Column(mainAxisSize: MainAxisSize.min, children: [
-              _TabRow(controller: controller, commands: c),
-              const Divider(height: 1),
-              if (!collapsed)
-                SizedBox(
-                  height: _panelHeight,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: ribbonGroups(controller.tab.value, c),
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _TabRow(controller: controller, commands: c),
+                const Divider(height: 1),
+                if (!collapsed)
+                  SizedBox(
+                    height: _panelHeight,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: ribbonGroups(controller.tab.value, c),
+                      ),
                     ),
                   ),
-                ),
-              if (!collapsed) const Divider(height: 1),
-            ]);
+                if (!collapsed) const Divider(height: 1),
+              ],
+            );
           },
         ),
       ),
