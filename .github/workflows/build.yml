@@ -1,0 +1,513 @@
+name: Build & Release FlutterPainter
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_VERSION: "3.47.6" 
+  FLUTTER_CHANNEL: stable
+  ENTRY: lib/main.dart
+  APP_NAME: FlutterPainter
+
+jobs:
+
+# ============================================================
+# VERSION GATE
+# ============================================================
+
+  check-version:
+    name: Check version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      should_release: ${{ steps.compare.outputs.should_release }}
+      version: ${{ steps.compare.outputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compare pubspec version with latest release
+        id: compare
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          # 1.0.3+4 -> 1.0.3
+          VERSION=$(awk '/^version:/ {print $2; exit}' pubspec.yaml | tr -d "\"'\r")
+          VERSION="${VERSION%%+*}"
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Could not parse a x.y.z version from pubspec.yaml (got '$VERSION')"
+            exit 1
+          fi
+
+          # Highest version among all published (non-draft) releases, "v" prefix stripped
+          LATEST=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --exclude-drafts \
+                     --json tagName --jq '.[].tagName' | sed 's/^v//' | sort -V | tail -n1)
+
+          SHOULD_RELEASE=false
+          if [ -z "$LATEST" ]; then
+            SHOULD_RELEASE=true
+          elif [ "$VERSION" != "$LATEST" ] && \
+               [ "$(printf '%s\n%s\n' "$LATEST" "$VERSION" | sort -V | tail -n1)" = "$VERSION" ]; then
+            SHOULD_RELEASE=true
+          fi
+
+          echo "version=$VERSION"                 >> "$GITHUB_OUTPUT"
+          echo "should_release=$SHOULD_RELEASE"   >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### Version check"
+            echo "- pubspec.yaml: \`$VERSION\`"
+            echo "- Latest release: \`${LATEST:-none}\`"
+            if [ "$SHOULD_RELEASE" = true ]; then
+              echo "- Result: ✅ newer, building and releasing **v$VERSION**"
+            else
+              echo "- Result: ⏭️ not newer, skipping build and release"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+# ============================================================
+# WINDOWS
+# ============================================================
+# Signing uses SignPath Foundation (free for open-source projects).
+# It stays OFF until you add the repository variable SIGNPATH_ORGANIZATION_ID
+# (and the secret SIGNPATH_API_TOKEN), so the build keeps working unsigned
+# while your SignPath application is pending.
+
+  windows-x64:
+    name: Windows x64
+    needs: check-version
+    if: needs.check-version.outputs.should_release == 'true'
+    runs-on: windows-latest
+    env:
+      CL: /D_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS
+      VERSION: ${{ needs.check-version.outputs.version }}
+      RELEASE_DIR: build/windows/x64/runner/Release
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          architecture: x64
+          cache: true
+
+      - name: Flutter diagnostics
+        shell: pwsh
+        run: |
+          flutter --version
+          flutter doctor -v
+
+      - name: Prepare
+        shell: pwsh
+        run: |
+          flutter config --enable-windows-desktop
+          flutter pub get
+          flutter gen-l10n
+
+      - name: Generate code (build_runner)
+        shell: pwsh
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build
+        shell: pwsh
+        run: |
+          flutter build windows --release -t $env:ENTRY --no-tree-shake-icons
+
+      - name: Verify build
+        shell: pwsh
+        run: |
+          if (-not (Test-Path $env:RELEASE_DIR)) {
+            Get-ChildItem build/windows -Recurse -Directory
+            throw "Windows x64 Release directory not found"
+          }
+          Get-ChildItem $env:RELEASE_DIR
+
+      - name: Bundle Visual C++ runtime
+        shell: pwsh
+        run: |
+          $dlls = 'msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll'
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vsPath = & $vswhere -latest -products * -property installationPath
+          $found = @()
+          if ($vsPath) {
+            $found = Get-ChildItem "$vsPath\VC\Redist\MSVC" -Recurse -File -Include $dlls |
+              Where-Object { $_.FullName -match '\\x64\\Microsoft\.VC\d+\.CRT\\' } |
+              Sort-Object FullName -Descending
+          }
+          foreach ($dll in $dlls) {
+            $src = $found | Where-Object { $_.Name -eq $dll } | Select-Object -First 1
+            if (-not $src) { $src = Get-Item "$env:SystemRoot\System32\$dll" }
+            Copy-Item $src.FullName $env:RELEASE_DIR -Force
+            Write-Host "Bundled $($src.FullName)"
+          }
+          foreach ($dll in $dlls) {
+            if (-not (Test-Path "$env:RELEASE_DIR/$dll")) { throw "$dll missing from release folder" }
+          }
+
+      # ---- sign FlutterPainter.exe before it is packed into the installer / zip ----
+      - name: Upload unsigned app exe
+        id: unsigned-app
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-app-exe
+          path: ${{ env.RELEASE_DIR }}/${{ env.APP_NAME }}.exe
+          retention-days: 1
+
+      - name: Sign app exe (SignPath)
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: FlutterPainter
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: app-exe
+          github-artifact-id: ${{ steps.unsigned-app.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed/app
+
+      - name: Use signed app exe
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        shell: pwsh
+        run: |
+          $signed = "signed/app/$env:APP_NAME.exe"
+          if (-not (Test-Path $signed)) { Get-ChildItem signed -Recurse; throw "Signed exe missing" }
+          Copy-Item $signed "$env:RELEASE_DIR/$env:APP_NAME.exe" -Force
+          Get-AuthenticodeSignature "$env:RELEASE_DIR/$env:APP_NAME.exe" | Format-List
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress }
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          $source = "$env:GITHUB_WORKSPACE\build\windows\x64\runner\Release"
+          $output = "$env:GITHUB_WORKSPACE\dist"
+          New-Item -ItemType Directory -Force $output | Out-Null
+
+          & $iscc `
+            "/DMyAppVersion=$env:VERSION" `
+            "/DSourceDir=$source" `
+            "/DRepoRoot=$env:GITHUB_WORKSPACE" `
+            "/DOutputDir=$output" `
+            "/DArch=x64" `
+            "$env:GITHUB_WORKSPACE\windows\packaging\FlutterPainter.iss"
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed" }
+          Get-ChildItem $output
+
+      # ---- sign the installer ----
+      - name: Upload unsigned installer
+        id: unsigned-installer
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-installer
+          path: dist/${{ env.APP_NAME }}_${{ env.VERSION }}_x64.exe
+          retention-days: 1
+
+      - name: Sign installer (SignPath)
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: FlutterPainter
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: installer
+          github-artifact-id: ${{ steps.unsigned-installer.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed/installer
+
+      - name: Use signed installer
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        shell: pwsh
+        run: |
+          $name = "$($env:APP_NAME)_$($env:VERSION)_x64.exe"
+          if (-not (Test-Path "signed/installer/$name")) { Get-ChildItem signed -Recurse; throw "Signed installer missing" }
+          Copy-Item "signed/installer/$name" "dist/$name" -Force
+          Get-AuthenticodeSignature "dist/$name" | Format-List
+
+      - name: Build ZIP
+        shell: pwsh
+        run: |
+          Compress-Archive `
+            -Path "$env:RELEASE_DIR/*" `
+            -DestinationPath "dist/$($env:APP_NAME)_$($env:VERSION)_x64.zip"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-windows-x64
+          path: dist/*
+          if-no-files-found: error
+
+# ============================================================
+# LINUX
+# ============================================================
+
+  linux:
+    name: Linux ${{ matrix.arch }}
+    needs: check-version
+    if: needs.check-version.outputs.should_release == 'true'
+    runs-on: ${{ matrix.runner }}
+    env:
+      VERSION: ${{ needs.check-version.outputs.version }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev \
+            libsqlite3-dev libstdc++-12-dev rpm patchelf fakeroot dpkg-dev
+
+      - name: Setup Flutter
+        uses: ./.github/actions/setup-flutter
+        with:
+          version: ${{ env.FLUTTER_VERSION }}
+          arch: ${{ matrix.arch }}
+
+      - name: Flutter diagnostics
+        run: |
+          flutter --version
+          flutter doctor -v
+
+      - name: Prepare
+        run: |
+          flutter config --enable-linux-desktop
+          flutter pub get
+          flutter gen-l10n
+          dart pub global activate flutter_distributor
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build Linux application
+        run: |
+          flutter build linux --release -t "$ENTRY" --no-tree-shake-icons
+
+      - name: Verify Linux build
+        run: |
+          BUNDLE="build/linux/${{ matrix.arch }}/release/bundle"
+          if [ ! -d "$BUNDLE" ]; then
+            find build/linux -maxdepth 5 -type d || true
+            echo "Expected: $BUNDLE"
+            exit 1
+          fi
+          ls -lah "$BUNDLE"
+
+      - name: Build DEB
+        run: |
+          flutter_distributor package --platform linux --targets deb \
+            --build-target "$ENTRY" --flutter-build-args=no-tree-shake-icons
+
+      - name: Build RPM
+        run: |
+          flutter_distributor package --platform linux --targets rpm \
+            --build-target "$ENTRY" --flutter-build-args=no-tree-shake-icons
+
+      - name: Collect packages
+        run: |
+          mkdir -p out
+          DEB=$(find dist -type f -name "*.deb" | head -1)
+          RPM=$(find dist -type f -name "*.rpm" | head -1)
+          [ -n "$DEB" ] || { echo "DEB not produced"; find dist -type f || true; exit 1; }
+          [ -n "$RPM" ] || { echo "RPM not produced"; find dist -type f || true; exit 1; }
+          cp "$DEB" "out/${APP_NAME}_${VERSION}_${{ matrix.arch }}.deb"
+          cp "$RPM" "out/${APP_NAME}_${VERSION}_${{ matrix.arch }}.rpm"
+
+      - name: Build tar.gz
+        run: |
+          BUNDLE="build/linux/${{ matrix.arch }}/release/bundle"
+          mkdir -p stage
+          cp -r "$BUNDLE" "stage/${APP_NAME}"
+          tar -czf "out/${APP_NAME}_${VERSION}_${{ matrix.arch }}.tar.gz" -C stage "${APP_NAME}"
+          ls -lh out
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-linux-${{ matrix.arch }}
+          path: out/*
+          if-no-files-found: error
+
+# ============================================================
+# MACOS (signed with Developer ID, notarized, stapled)
+# ============================================================
+
+  macos:
+    name: macOS ${{ matrix.arch }}
+    needs: check-version
+    if: needs.check-version.outputs.should_release == 'true'
+    runs-on: ${{ matrix.runner }}
+    env:
+      VERSION: ${{ needs.check-version.outputs.version }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            runner: macos-15          # Apple Silicon
+          - arch: x64
+            runner: macos-15-intel    # Intel
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: ./.github/actions/setup-flutter
+        with:
+          version: ${{ env.FLUTTER_VERSION }}
+          arch: ${{ matrix.arch }}
+
+      - name: Flutter diagnostics
+        run: |
+          flutter --version
+          flutter doctor -v
+
+      - name: Prepare
+        run: |
+          flutter config --enable-macos-desktop
+          flutter pub get
+          flutter gen-l10n
+
+      - name: Generate code (build_runner)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build macOS application
+        run: |
+          flutter build macos --release -t "$ENTRY" --no-tree-shake-icons
+
+      - name: Sign, notarize and package
+        uses: ./.github/actions/macos-package
+        with:
+          arch: ${{ matrix.arch }}
+          version: ${{ env.VERSION }}
+          app-name: ${{ env.APP_NAME }}
+          certificate-base64: ${{ secrets.MACOS_CERTIFICATE }}
+          certificate-password: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          apple-id: ${{ secrets.APPLE_ID }}
+          apple-app-password: ${{ secrets.APPLE_APP_PASSWORD }}
+          apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-macos-${{ matrix.arch }}
+          path: dist/*.dmg
+          if-no-files-found: error
+
+# ============================================================
+# GITHUB RELEASE
+# ============================================================
+
+  release:
+    name: Publish GitHub Release
+    needs:
+      - check-version
+      - windows-x64
+      - linux
+      - macos
+    if: >
+      !cancelled() &&
+      github.ref == 'refs/heads/main' &&
+      needs.check-version.outputs.should_release == 'true' &&
+      needs.windows-x64.result == 'success' &&
+      needs.linux.result == 'success' &&
+      needs.macos.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: release-*      # skips the temporary unsigned-* artifacts
+          merge-multiple: true
+
+      - name: Generate checksums
+        run: |
+          cd artifacts
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Build release notes from the last merged PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.check-version.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          # 1) PR merged by the commit being released
+          PR=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" \
+                 --jq '[.[] | select(.merged_at != null)] | sort_by(.merged_at) | last | .number // empty' || true)
+
+          # 2) fallback: most recently merged PR into main
+          if [ -z "${PR:-}" ]; then
+            PR=$(gh pr list --repo "$GITHUB_REPOSITORY" --state merged --base main \
+                   --limit 1 --json number --jq '.[0].number // empty' || true)
+          fi
+
+          {
+            echo "## v$VERSION"
+            echo
+            if [ -n "${PR:-}" ]; then
+              gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json title,body,url \
+                --jq '"### " + .title + "\n\n" + (.body // "") + "\n\n" + .url'
+            else
+              echo "Release v$VERSION"
+            fi
+          } > release-notes.md
+
+          cat release-notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.check-version.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: v${{ needs.check-version.outputs.version }}
+          body_path: release-notes.md
+          files: artifacts/*

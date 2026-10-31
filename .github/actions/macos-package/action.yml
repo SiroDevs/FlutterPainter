@@ -1,0 +1,223 @@
+name: Sign, notarize and package macOS app
+description: >
+  Takes the Flutter-built .app, signs it with a Developer ID Application
+  certificate (hardened runtime), notarizes + staples it, then builds a DMG
+  named <app>_<version>_<arch>.dmg that is also signed, notarized and stapled.
+
+inputs:
+  arch:
+    description: x64 or arm64
+    required: true
+  version:
+    description: Version without a leading "v", e.g. 1.0.150
+    required: true
+  app-name:
+    description: Product name, e.g. FlutterPainter
+    required: true
+  certificate-base64:
+    description: Base64 of the Developer ID Application .p12
+    required: true
+  certificate-password:
+    description: Password of the .p12
+    required: true
+  apple-id:
+    description: Apple ID e-mail used for notarization
+    required: true
+  apple-app-password:
+    description: App-specific password for that Apple ID
+    required: true
+  apple-team-id:
+    description: 10-character Apple Developer Team ID
+    required: true
+  entitlements:
+    description: Entitlements file used when signing the app
+    default: macos/Runner/Release.entitlements
+
+outputs:
+  dmg:
+    description: Path of the finished DMG
+    value: ${{ steps.dmg.outputs.dmg }}
+
+runs:
+  using: composite
+  steps:
+    - name: Check signing secrets
+      shell: bash
+      env:
+        CERT: ${{ inputs.certificate-base64 }}
+        CERT_PW: ${{ inputs.certificate-password }}
+        AID: ${{ inputs.apple-id }}
+        APW: ${{ inputs.apple-app-password }}
+        TID: ${{ inputs.apple-team-id }}
+      run: |
+        missing=""
+        [ -n "$CERT" ]    || missing="$missing MACOS_CERTIFICATE"
+        [ -n "$CERT_PW" ] || missing="$missing MACOS_CERTIFICATE_PASSWORD"
+        [ -n "$AID" ]     || missing="$missing APPLE_ID"
+        [ -n "$APW" ]     || missing="$missing APPLE_APP_PASSWORD"
+        [ -n "$TID" ]     || missing="$missing APPLE_TEAM_ID"
+        if [ -n "$missing" ]; then
+          echo "::error::Missing repository secrets:$missing. Refusing to publish an unsigned macOS build."
+          exit 1
+        fi
+
+    - name: Locate app
+      shell: bash
+      run: |
+        APP=$(find build/macos/Build/Products/Release -maxdepth 1 -name "*.app" -type d | head -1)
+        if [ -z "$APP" ]; then
+          echo "::error::No .app found"; find build/macos/Build/Products/Release -maxdepth 2; exit 1
+        fi
+        echo "APP=$APP" >> "$GITHUB_ENV"
+        BIN="$APP/Contents/MacOS/$(basename "$APP" .app)"
+        file "$BIN"; lipo -info "$BIN"
+
+    - name: Import signing certificate
+      shell: bash
+      env:
+        CERT: ${{ inputs.certificate-base64 }}
+        CERT_PW: ${{ inputs.certificate-password }}
+      run: |
+        set -euo pipefail
+        KEYCHAIN="$RUNNER_TEMP/signing.keychain-db"
+        KEYCHAIN_PW="$(uuidgen)"
+        P12="$RUNNER_TEMP/cert.p12"
+
+        # Secrets pasted into GitHub often carry stray newlines / spaces / CRs.
+        printf '%s' "$CERT" | tr -d '[:space:]' | base64 --decode > "$P12"
+        export CERT_PW="$(printf '%s' "$CERT_PW" | tr -d '\r\n')"
+        echo "p12: $(wc -c < "$P12" | tr -d ' ') bytes, password: ${#CERT_PW} chars"
+
+        security create-keychain -p "$KEYCHAIN_PW" "$KEYCHAIN"
+        security set-keychain-settings -lut 21600 "$KEYCHAIN"
+        security unlock-keychain -p "$KEYCHAIN_PW" "$KEYCHAIN"
+
+        import_p12() {
+          security import "$1" -P "$CERT_PW" -A -t cert -f pkcs12 -k "$KEYCHAIN"
+        }
+
+        if ! import_p12 "$P12"; then
+          # Typical cause: the .p12 was made with OpenSSL 3 (AES encryption), which macOS
+          # `security` cannot read, and it reports that as a wrong passphrase.
+          # Re-encode it with the legacy algorithms and try again.
+          echo "::warning::security could not read the .p12; re-encoding it with OpenSSL 3 (-legacy) and retrying"
+          OSSL="$(brew --prefix openssl@3 2>/dev/null)/bin/openssl"
+          [ -x "$OSSL" ] || { brew install openssl@3 >/dev/null; OSSL="$(brew --prefix openssl@3)/bin/openssl"; }
+
+          if ! "$OSSL" pkcs12 -in "$P12" -passin env:CERT_PW -nodes -out "$RUNNER_TEMP/cert.pem" 2>/dev/null; then
+            echo "::error::The .p12 cannot be opened with MACOS_CERTIFICATE_PASSWORD. Either the password secret is wrong, or MACOS_CERTIFICATE is not the base64 of the .p12 file (re-export it from Keychain Access and re-encode with: base64 -i cert.p12 | pbcopy)."
+            exit 1
+          fi
+          "$OSSL" pkcs12 -export -legacy -in "$RUNNER_TEMP/cert.pem" \
+            -out "$RUNNER_TEMP/cert-legacy.p12" -passout env:CERT_PW
+          import_p12 "$RUNNER_TEMP/cert-legacy.p12"
+          rm -f "$RUNNER_TEMP/cert.pem" "$RUNNER_TEMP/cert-legacy.p12"
+        fi
+        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PW" "$KEYCHAIN" >/dev/null
+        # keep existing keychains in the search list
+        security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+        rm -f "$RUNNER_TEMP/cert.p12"
+
+        IDENTITY=$(security find-identity -v -p codesigning "$KEYCHAIN" \
+                   | grep "Developer ID Application" | head -1 | sed -E 's/.*"(.+)".*/\1/')
+        if [ -z "$IDENTITY" ]; then
+          echo "::error::No 'Developer ID Application' identity found in the .p12 (is it a Developer ID Application cert, with private key?)"
+          security find-identity -v "$KEYCHAIN"
+          exit 1
+        fi
+        echo "Signing as: $IDENTITY"
+        echo "KEYCHAIN=$KEYCHAIN"       >> "$GITHUB_ENV"
+        echo "SIGN_IDENTITY=$IDENTITY"  >> "$GITHUB_ENV"
+
+    - name: Sign app (hardened runtime)
+      shell: bash
+      env:
+        ENTITLEMENTS: ${{ inputs.entitlements }}
+      run: |
+        set -euo pipefail
+        sign() {
+          codesign --force --timestamp --options runtime \
+            --sign "$SIGN_IDENTITY" --keychain "$KEYCHAIN" "$@"
+        }
+
+        MAIN="$APP/Contents/MacOS/$(basename "$APP" .app)"
+
+        # Everything nested that needs its own signature, deepest first:
+        # bundles (frameworks, XPC services, helper apps, plugins) + loose Mach-O files.
+        {
+          find "$APP/Contents" -type d \( -name "*.framework" -o -name "*.xpc" -o -name "*.app" -o -name "*.bundle" -o -name "*.appex" \)
+          find "$APP/Contents" -type f ! -path "$MAIN" | while IFS= read -r f; do
+            # `if`, not `&&`: a non-Mach-O last file must not make the loop exit non-zero
+            if [[ "$(file -b "$f")" == *Mach-O* ]]; then echo "$f"; fi
+          done
+        } | awk '{ n=gsub("/","/"); print n " " $0 }' | sort -rn | cut -d' ' -f2- \
+          | while IFS= read -r item; do
+              echo "signing: $item"
+              sign "$item"
+            done
+
+        # The app itself, with its entitlements, last.
+        sign --entitlements "$ENTITLEMENTS" "$APP"
+
+        codesign --verify --deep --strict --verbose=2 "$APP"
+        codesign -dvv --entitlements - "$APP" 2>&1 | head -40
+
+    - name: Notarize and staple app
+      shell: bash
+      env:
+        APPLE_ID: ${{ inputs.apple-id }}
+        APPLE_APP_PASSWORD: ${{ inputs.apple-app-password }}
+        APPLE_TEAM_ID: ${{ inputs.apple-team-id }}
+      run: |
+        set -euo pipefail
+        ditto -c -k --keepParent "$APP" "$RUNNER_TEMP/notarize-app.zip"
+        bash "${{ github.action_path }}/notarize.sh" "$RUNNER_TEMP/notarize-app.zip"
+        bash "${{ github.action_path }}/staple.sh" "$APP"
+        spctl --assess --type execute --verbose=4 "$APP"
+
+    - name: Create DMG
+      id: dmg
+      shell: bash
+      env:
+        ARCH: ${{ inputs.arch }}
+        VERSION: ${{ inputs.version }}
+        APP_NAME: ${{ inputs.app-name }}
+      run: |
+        set -euo pipefail
+        brew list create-dmg >/dev/null 2>&1 || brew install create-dmg
+        mkdir -p dist
+        DMG="dist/${APP_NAME}_${VERSION}_${ARCH}.dmg"
+        create-dmg \
+          --volname "${APP_NAME}" \
+          --window-pos 200 120 \
+          --window-size 800 400 \
+          --icon-size 100 \
+          --icon "$(basename "$APP")" 200 190 \
+          --hide-extension "$(basename "$APP")" \
+          --app-drop-link 600 185 \
+          "$DMG" \
+          "$APP"
+        echo "dmg=$DMG" >> "$GITHUB_OUTPUT"
+        echo "DMG=$DMG" >> "$GITHUB_ENV"
+
+    - name: Sign, notarize and staple DMG
+      shell: bash
+      env:
+        APPLE_ID: ${{ inputs.apple-id }}
+        APPLE_APP_PASSWORD: ${{ inputs.apple-app-password }}
+        APPLE_TEAM_ID: ${{ inputs.apple-team-id }}
+      run: |
+        set -euo pipefail
+        codesign --force --timestamp --sign "$SIGN_IDENTITY" --keychain "$KEYCHAIN" "$DMG"
+        codesign --verify --verbose=2 "$DMG"
+        bash "${{ github.action_path }}/notarize.sh" "$DMG"
+        bash "${{ github.action_path }}/staple.sh" "$DMG"
+        spctl --assess --type open --context context:primary-signature --verbose=4 "$DMG"
+        ls -lh dist
+
+    - name: Remove temporary keychain
+      if: always()
+      shell: bash
+      run: |
+        [ -n "${KEYCHAIN:-}" ] && security delete-keychain "$KEYCHAIN" || true
+        rm -f "$RUNNER_TEMP/cert.p12" "$RUNNER_TEMP/notarize-app.zip"
