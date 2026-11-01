@@ -3,6 +3,7 @@ import 'dart:ui';
 
 // Project imports:
 import '../../../../domain/models/shape.dart';
+import '../../../../domain/services/gradient_shader.dart';
 import '../../../../domain/services/shape_geometry.dart';
 
 /// Draws one [Shape] on a canvas: fill first, then stroke.
@@ -10,10 +11,13 @@ void paintShape(Canvas canvas, Shape shape, Paint paint) {
   final path = shape.buildPath();
   final fill = shape.fill;
   if (shape.isClosed && fill != null) {
+    final gradient = shape.gradient;
     paint
       ..style = PaintingStyle.fill
-      ..color = Color(fill);
+      ..color = Color(fill)
+      ..shader = gradient == null ? null : gradientShader(gradient, shape.bounds);
     canvas.drawPath(path, paint);
+    paint.shader = null;
   }
   final stroke = shape.stroke;
   if (stroke != null) {

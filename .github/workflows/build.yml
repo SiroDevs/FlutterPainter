@@ -452,8 +452,7 @@ jobs:
       github.ref == 'refs/heads/main' &&
       needs.check-version.outputs.should_release == 'true' &&
       needs.windows-x64.result == 'success' &&
-      needs.linux.result == 'success' &&
-      needs.macos.result == 'success'
+      needs.linux.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: write

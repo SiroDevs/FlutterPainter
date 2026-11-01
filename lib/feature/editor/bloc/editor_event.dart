@@ -109,6 +109,20 @@ class ColorPicked extends EditorEvent {
   final int color;
 }
 
+/// Paints the fill with a gradient, or with null goes back to a flat colour.
+class GradientPicked extends EditorEvent {
+  const GradientPicked(this.gradient);
+
+  final ShapeGradient? gradient;
+}
+
+/// Replaces the layers with ones read from code, as one undoable step.
+class CodeApplied extends EditorEvent {
+  const CodeApplied(this.layers);
+
+  final List<PaintLayer> layers;
+}
+
 class StrokeColorPicked extends EditorEvent {
   const StrokeColorPicked(this.color);
 

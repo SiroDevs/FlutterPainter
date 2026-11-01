@@ -12,8 +12,10 @@ import '../../../core/utils/copy_with_util.dart';
 import '../../../core/utils/image_util.dart';
 import '../../../domain/models/drawing.dart';
 import '../../../domain/models/edit_history.dart';
+import '../../../domain/models/paint_layer.dart';
 import '../../../domain/models/reference_image.dart';
 import '../../../domain/models/shape.dart';
+import '../../../domain/models/shape_gradient.dart';
 import '../../../domain/models/tool.dart';
 import '../logic/exports.dart';
 import '../models/editor_seed.dart';
@@ -87,6 +89,7 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<StyleTargetChanged>((s, e) => StyleLogic.target(s, e.editFill));
     _reduce<ColorPicked>((s, e) => StyleLogic.pick(s, e.color));
     _reduce<StrokeColorPicked>((s, e) => StyleLogic.pickStroke(s, e.color));
+    _reduce<GradientPicked>((s, e) => StyleLogic.pickGradient(s, e.gradient));
     _reduce<FillToggled>((s, e) => StyleLogic.toggleFill(s, e.on));
     _reduce<StrokeToggled>((s, e) => StyleLogic.toggleStroke(s, e.on));
     _reduce<StrokeWidthChanged>((s, e) => StyleLogic.strokeWidth(s, e.width));
@@ -115,6 +118,7 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<DrawingRenamed>((s, e) => DocumentLogic.rename(s, e.name));
     _reduce<CanvasResized>((s, e) => DocumentLogic.resizeCanvas(s, e.width, e.height));
     _reduce<DocumentSaved>((s, e) => DocumentLogic.saved(s, e.path));
+    _reduce<CodeApplied>((s, e) => DocumentLogic.applyCode(s, e.layers));
   }
 
   void _registerImages() {

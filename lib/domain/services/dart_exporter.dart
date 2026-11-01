@@ -7,6 +7,7 @@ import '../models/paint_layer.dart';
 import '../models/shape.dart';
 import '../models/shape_kind.dart';
 import 'code_format.dart';
+import 'gradient_code.dart';
 
 /// Turns a [Drawing] into plain Dart that paints it on a `dart:ui` [Canvas].
 /// The output depends on nothing but `dart:ui`, so it can be dropped straight
@@ -29,15 +30,22 @@ class DartExporter {
     ..strokeCap = StrokeCap.round
     ..strokeJoin = StrokeJoin.round;''';
 
+  late final List<int> _layerIndexes = [
+    for (var i = 0; i < drawing.layers.length; i++)
+      if (drawing.layers[i].visible && drawing.layers[i].shapes.isNotEmpty) i,
+  ];
   late final List<PaintLayer> _layers = [
-    for (final l in drawing.layers)
-      if (l.visible && l.shapes.isNotEmpty) l,
+    for (final i in _layerIndexes) drawing.layers[i],
   ];
   late final List<String> _names = _uniqueNames();
   late final String _root = pascalCase(drawing.name);
 
   /// Colours the generated code uses, in order of first use.
   final Set<int> _usedColors = <int>{};
+
+  /// Set while writing a layer that has gradients: its solid paints then clear
+  /// the shared paint's shader first.
+  bool _resetShader = false;
 
   /// The project folder name, e.g. `rider`.
   String get folderName => snakeCase(_root);
@@ -48,6 +56,11 @@ class DartExporter {
   String get _paletteFile => '${folderName}_palette.dart';
   String _layerClass(int i) => '$_root${_names[i]}Layer';
   String _layerFile(int i) => 'layers/${snakeCase(_names[i])}_layer.dart';
+
+  /// Which drawing layer each layer file shows (refactored layout only).
+  Map<String, int> get layerIndexByPath => {
+        for (var i = 0; i < _layers.length; i++) _layerFile(i): _layerIndexes[i],
+      };
 
   List<ExportFile> generate() {
     _usedColors.clear();
@@ -205,6 +218,7 @@ class DartExporter {
 
   /// One layer as a method, with its shapes written out one after another.
   List<String> _layerMethod(String name, PaintLayer layer) {
+    _resetShader = _hasGradient(layer);
     final body = <String>[
       for (final s in layer.shapes) ..._shape(s, comment: true),
     ];
@@ -219,6 +233,7 @@ class DartExporter {
 
   /// One function per visible shape, named after the shape (or its kind).
   List<_ShapeFunction> _shapeFunctions(PaintLayer layer) {
+    _resetShader = _hasGradient(layer);
     final taken = <String>{};
     final perKind = <ShapeKind, int>{};
     final out = <_ShapeFunction>[];
@@ -258,6 +273,9 @@ class DartExporter {
 
   // ---- shapes -------------------------------------------------------------
 
+  bool _hasGradient(PaintLayer layer) =>
+      layer.shapes.any((s) => s.gradient != null);
+
   bool _needsPath(PaintLayer l) =>
       l.shapes.any((s) => _usesPath(s) && _shape(s, comment: false).isNotEmpty);
 
@@ -275,8 +293,13 @@ class DartExporter {
     if (_usesPath(s)) out.addAll(_pathLines(s));
     final call = _drawCall(s);
     if (s.isClosed && s.fill != null) {
+      final gradient = s.gradient;
       out
-        ..addAll(_style('fill', s.fill!))
+        ..addAll(
+          gradient == null
+              ? _style('fill', s.fill!)
+              : gradientFillLines(gradient, s.bounds, _color),
+        )
         ..add(call);
     }
     if (s.stroke != null) {
@@ -290,6 +313,7 @@ class DartExporter {
   List<String> _style(String mode, int argb, {double? width}) => [
         '_paint',
         '  ..style = PaintingStyle.$mode',
+        if (_resetShader) '  ..shader = null',
         if (width != null) '  ..strokeWidth = ${fmt(width)}',
         '  ..color = ${_color(argb)};',
       ];

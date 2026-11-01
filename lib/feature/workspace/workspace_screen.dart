@@ -17,6 +17,7 @@ import '../editor/bloc/editor_bloc.dart';
 import '../editor/editor_screen.dart';
 import '../editor/widgets/toolbar/tool_info.dart';
 import '../export/export_args.dart';
+import '../inline_code/widgets/inline_code_host.dart';
 import '../settings/widgets/settings_dialog.dart';
 import 'cubit/workspace_cubit.dart';
 import 'flows/tab_flows.dart';
@@ -42,6 +43,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   late final WorkspaceCubit _ws = context.read<WorkspaceCubit>();
   late final AppLifecycleListener _lifecycle;
   final RibbonController _ribbon = RibbonController();
+  final ValueNotifier<bool> _inlineCode = ValueNotifier(false);
   bool _dragging = false;
 
   EditorBloc get _current => _ws.current;
@@ -58,6 +60,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   void dispose() {
     _lifecycle.dispose();
     _ribbon.dispose();
+    _inlineCode.dispose();
     _focus.dispose();
     super.dispose();
   }
@@ -175,9 +178,14 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
                         key: ObjectKey(bloc),
                         child: Column(children: [
                           ToolbarArea(ribbon: _ribbon),
-                          const ProjectTabs(),
+                          ProjectTabs(inlineCode: _inlineCode),
                           const Divider(height: 1),
-                          Expanded(child: EditorScreen(canvasFocus: _focus)),
+                          Expanded(
+                            child: InlineCodeHost(
+                              open: _inlineCode,
+                              child: EditorScreen(canvasFocus: _focus),
+                            ),
+                          ),
                         ]),
                       ),
                     ),

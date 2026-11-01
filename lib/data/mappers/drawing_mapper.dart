@@ -9,6 +9,7 @@ import '../../domain/models/paint_layer.dart';
 import '../../domain/models/reference_image.dart';
 import '../../domain/models/shape.dart';
 import '../../domain/models/shape_kind.dart';
+import 'gradient_mapper.dart';
 
 /// The .flp file format: JSON, with colours as 0xAARRGGBB integers and any
 /// background image embedded as base64. See the README for the full schema.
@@ -22,6 +23,7 @@ Map<String, dynamic> shapeToJson(Shape s) => {
         for (final p in s.points) [p.dx, p.dy],
       ],
       'fill': s.fill,
+      if (s.gradient != null) 'gradient': gradientToJson(s.gradient!),
       'stroke': s.stroke,
       'strokeWidth': s.strokeWidth,
       'radius': s.radius,
@@ -35,6 +37,7 @@ Shape shapeFromJson(Map<String, dynamic> j) => Shape(
           Offset((p[0] as num).toDouble(), (p[1] as num).toDouble()),
       ],
       fill: j['fill'] as int?,
+      gradient: gradientFromJson(j['gradient']),
       stroke: j['stroke'] as int?,
       strokeWidth: ((j['strokeWidth'] as num?) ?? 1).toDouble(),
       radius: ((j['radius'] as num?) ?? 0).toDouble(),

@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'common/constants/app_constants.dart';
 import 'core/di/injectable.dart';
 import 'core/theme/bloc/theme_bloc.dart';
 import 'core/theme/theme_data.dart';
+import 'l10n/app_localizations.dart';
 import 'feature/settings/cubit/settings_cubit.dart';
 import 'feature/workspace/cubit/workspace_cubit.dart';
 
@@ -59,6 +61,13 @@ class AppViewState extends State<AppView> {
           themeMode: themeMode,
           theme: AppTheme.lightTheme(),
           darkTheme: AppTheme.darkTheme(),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
           debugShowCheckedModeBanner: false,
         ),
       ),

@@ -20,6 +20,7 @@ abstract class VertexLogic {
           .withSelectedShape(shape.copyWith(
             kind: ShapeKind.polygon,
             fill: s.style.fillOn ? s.style.fillColor : null,
+            gradient: s.style.fillOn ? s.style.fillGradient : null,
           ))
           .commit();
     }
@@ -28,6 +29,7 @@ abstract class VertexLogic {
           .withSelectedShape(shape.copyWith(
             kind: ShapeKind.line,
             fill: null,
+            gradient: null,
             stroke: shape.stroke ?? s.style.strokeColor,
           ))
           .commit();
