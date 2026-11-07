@@ -99,6 +99,11 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
   void _registerShapes() {
     _reduce<ShapeDeleted>((s, e) => ShapeLogic.delete(s));
     _reduce<ShapeDuplicated>((s, e) => ShapeLogic.duplicate(s));
+    _reduce<SelectAllRequested>((s, e) => ShapeLogic.selectAll(s));
+    _reduce<ShapesGrouped>((s, e) => ShapeLogic.group(s));
+    _reduce<ShapesUngrouped>((s, e) => ShapeLogic.ungroup(s));
+    _reduce<VertexPointDeleted>((s, e) => VertexLogic.remove(s, e.index));
+    _reduce<VertexSegmentSplit>((s, e) => VertexLogic.split(s, e.index));
     _reduce<ShapeReordered>((s, e) => ShapeLogic.reorder(s, e.direction));
     _reduce<ShapeMovedToLayer>((s, e) => ShapeLogic.moveToLayer(s, e.layer));
     _reduce<ShapeRenamed>((s, e) => ShapeLogic.rename(s, e.name));

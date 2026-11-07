@@ -33,6 +33,36 @@ extension EditorStateOps on EditorState {
     return i < shapes.length ? shapes[i] : null;
   }
 
+  List<int> get validSelectedIndices => [
+        for (final i in selectedIndices)
+          if (i >= 0 && i < layer.shapes.length) i,
+      ];
+
+  List<Shape> get selectedShapes => [
+        for (final i in validSelectedIndices) layer.shapes[i],
+      ];
+
+  Rect? get selectedBounds {
+    final shapes = selectedShapes;
+    if (shapes.isEmpty) return null;
+    var bounds = shapes.first.bounds;
+    for (final shape in shapes.skip(1)) {
+      bounds = bounds.expandToInclude(shape.bounds);
+    }
+    return bounds;
+  }
+
+  EditorState selectIndices(List<int> indices, {int? primary}) {
+    final sorted = indices.toSet().toList()..sort();
+    final valid = [for (final i in sorted) if (i >= 0 && i < layer.shapes.length) i];
+    final chosen = primary != null && valid.contains(primary)
+        ? primary
+        : valid.isEmpty
+            ? null
+            : valid.last;
+    return copyWith(selected: chosen, selectedIndices: valid);
+  }
+
   /// The picture on the active layer, if any.
   ReferenceImage? get activeImage => layer.image;
 
@@ -114,6 +144,17 @@ extension EditorStateOps on EditorState {
     final i = selected;
     if (i == null || selectedShape == null) return this;
     return withShapes(replacedAt(layer.shapes, i, shape));
+  }
+
+  EditorState withShapeChanges(Map<int, Shape> changes) {
+    if (changes.isEmpty) return this;
+    final shapes = [...layer.shapes];
+    for (final entry in changes.entries) {
+      if (entry.key >= 0 && entry.key < shapes.length) {
+        shapes[entry.key] = entry.value;
+      }
+    }
+    return withShapes(shapes);
   }
 
   /// Applies [change] to the selected shape, if there is one (no history entry).

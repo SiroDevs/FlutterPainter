@@ -27,6 +27,7 @@ Map<String, dynamic> shapeToJson(Shape s) => {
       'stroke': s.stroke,
       'strokeWidth': s.strokeWidth,
       'radius': s.radius,
+      if (s.groupId != null) 'groupId': s.groupId,
     };
 
 Shape shapeFromJson(Map<String, dynamic> j) => Shape(
@@ -41,6 +42,7 @@ Shape shapeFromJson(Map<String, dynamic> j) => Shape(
       stroke: j['stroke'] as int?,
       strokeWidth: ((j['strokeWidth'] as num?) ?? 1).toDouble(),
       radius: ((j['radius'] as num?) ?? 0).toDouble(),
+      groupId: j['groupId'] as String?,
     );
 
 Map<String, dynamic> layerToJson(PaintLayer l) => {

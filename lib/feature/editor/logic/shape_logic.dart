@@ -13,20 +13,66 @@ abstract class ShapeLogic {
   /// Deletes the selected shape, or the selected picture.
   static EditorState delete(EditorState s) {
     if (s.imageSelected) return ImageLogic.remove(s);
-    final i = s.selected;
-    if (i == null || s.selectedShape == null) return s;
-    return s.withShapes(removedAt(s.layer.shapes, i)).copyWith(selected: null).commit();
+    final indices = s.validSelectedIndices;
+    if (indices.isEmpty) return s;
+    final deleted = indices.toSet();
+    final shapes = [
+      for (var i = 0; i < s.layer.shapes.length; i++)
+        if (!deleted.contains(i)) s.layer.shapes[i],
+    ];
+    return s.withShapes(shapes).selectIndices(const []).commit();
   }
 
   static EditorState duplicate(EditorState s) {
-    final shape = s.selectedShape;
-    if (shape == null) return s;
-    final copy = shape.copyWith(
-      points: [for (final p in shape.points) p + const Offset(3, 3)],
-      name: '${shape.name} copy',
-    );
-    final shapes = [...s.layer.shapes, copy];
-    return s.withShapes(shapes).copyWith(selected: shapes.length - 1).commit();
+    final indices = s.validSelectedIndices;
+    if (indices.isEmpty) return s;
+    final shapes = [...s.layer.shapes];
+    final copies = <int>[];
+    for (final i in indices) {
+      final shape = shapes[i];
+      shapes.add(shape.copyWith(
+        points: [for (final p in shape.points) p + const Offset(3, 3)],
+        name: '${shape.name} copy',
+        groupId: null,
+      ));
+      copies.add(shapes.length - 1);
+    }
+    return s.withShapes(shapes).selectIndices(copies).commit();
+  }
+
+  static EditorState selectAll(EditorState s) =>
+      s.selectIndices(List.generate(s.layer.shapes.length, (i) => i));
+
+  static EditorState group(EditorState s) {
+    final indices = s.validSelectedIndices;
+    if (indices.length < 2) return s;
+    final used = s.layer.shapes.map((shape) => shape.groupId).whereType<String>().toSet();
+    var suffix = s.revision + 1;
+    var id = 'group-$suffix';
+    while (used.contains(id)) {
+      suffix++;
+      id = 'group-$suffix';
+    }
+    final changes = <int, Shape>{
+      for (final i in indices) i: s.layer.shapes[i].copyWith(groupId: id),
+    };
+    return s.withShapeChanges(changes).selectIndices(indices).commit();
+  }
+
+  static EditorState ungroup(EditorState s) {
+    final indices = s.validSelectedIndices;
+    if (indices.isEmpty) return s;
+    final ids = {
+      for (final i in indices)
+        if (s.layer.shapes[i].groupId != null) s.layer.shapes[i].groupId,
+    };
+    if (ids.isEmpty) return s;
+    final changes = <int, Shape>{
+      for (var i = 0; i < s.layer.shapes.length; i++)
+        if (ids.contains(s.layer.shapes[i].groupId))
+          i: s.layer.shapes[i].copyWith(groupId: null),
+    };
+    return s.withShapeChanges(changes).selectIndices(indices).commit();
   }
 
   /// [direction] +1 draws the shape later (in front), -1 earlier (behind).

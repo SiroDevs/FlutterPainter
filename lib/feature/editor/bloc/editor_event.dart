@@ -161,6 +161,30 @@ class ShapeDuplicated extends EditorEvent {
   const ShapeDuplicated();
 }
 
+class SelectAllRequested extends EditorEvent {
+  const SelectAllRequested();
+}
+
+class ShapesGrouped extends EditorEvent {
+  const ShapesGrouped();
+}
+
+class ShapesUngrouped extends EditorEvent {
+  const ShapesUngrouped();
+}
+
+class VertexPointDeleted extends EditorEvent {
+  const VertexPointDeleted(this.index);
+
+  final int index;
+}
+
+class VertexSegmentSplit extends EditorEvent {
+  const VertexSegmentSplit(this.index);
+
+  final int index;
+}
+
   /// [direction] +1 draws the shape later (in front), -1 earlier (behind).
 class ShapeReordered extends EditorEvent {
   const ShapeReordered(this.direction);

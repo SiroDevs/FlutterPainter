@@ -29,6 +29,7 @@ class Shape extends Equatable {
     this.stroke,
     this.strokeWidth = 1.0,
     this.radius = 0.0,
+    this.groupId,
   });
 
   final ShapeKind kind;
@@ -40,6 +41,9 @@ class Shape extends Equatable {
   final double strokeWidth;
   final double radius;
 
+  /// Shapes with the same non-null id move and select together.
+  final String? groupId;
+
   Shape copyWith({
     ShapeKind? kind,
     List<Offset>? points,
@@ -49,6 +53,7 @@ class Shape extends Equatable {
     Object? stroke = unset,
     double? strokeWidth,
     double? radius,
+    Object? groupId = unset,
   }) =>
       Shape(
         kind: kind ?? this.kind,
@@ -59,11 +64,12 @@ class Shape extends Equatable {
         stroke: keep<int>(stroke, this.stroke),
         strokeWidth: strokeWidth ?? this.strokeWidth,
         radius: radius ?? this.radius,
+        groupId: keep<String>(groupId, this.groupId),
       );
 
   @override
   List<Object?> get props =>
-      [kind, points, name, fill, gradient, stroke, strokeWidth, radius];
+      [kind, points, name, fill, gradient, stroke, strokeWidth, radius, groupId];
 
   bool get isClosed => kind != ShapeKind.line && kind != ShapeKind.freehand;
   bool get usesVertices => kind == ShapeKind.line || kind == ShapeKind.polygon;

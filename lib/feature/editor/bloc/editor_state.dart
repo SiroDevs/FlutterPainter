@@ -13,6 +13,7 @@ class EditorState extends Equatable {
     this.tool = Tool.select,
     this.layerIndex = 0,
     this.selected,
+    this.selectedIndices = const <int>[],
     this.draft,
     this.hover,
     this.cursor,
@@ -51,6 +52,10 @@ class EditorState extends Equatable {
   /// selection therefore clears the picture selection too.
   final int? selected;
 
+  /// Selected shape indices in the active layer. [selected] remains the
+  /// primary item for single-shape property controls.
+  final List<int> selectedIndices;
+
   /// The shape being drawn right now, plus the rubber-band point for polygons.
   final Shape? draft;
   final Offset? hover;
@@ -77,6 +82,7 @@ class EditorState extends Equatable {
     Tool? tool,
     int? layerIndex,
     Object? selected = unset,
+    Object? selectedIndices = unset,
     Object? draft = unset,
     Object? hover = unset,
     Object? cursor = unset,
@@ -84,8 +90,18 @@ class EditorState extends Equatable {
     ViewSettings? view,
     GestureState? gesture,
     Map<String, Image>? images,
-  }) =>
-      EditorState(
+  }) {
+    final nextSelected = keep<int>(selected, this.selected);
+    final nextSelectedIndices = selectedIndices == unset
+        ? (selected == unset
+            ? this.selectedIndices
+            : nextSelected == null
+                ? const <int>[]
+                : nextSelected < 0
+                    ? const <int>[]
+                : <int>[nextSelected])
+        : selectedIndices as List<int>;
+    return EditorState(
         tabId: tabId ?? this.tabId,
         drawing: drawing ?? this.drawing,
         history: history ?? this.history,
@@ -94,7 +110,8 @@ class EditorState extends Equatable {
         revision: revision ?? this.revision,
         tool: tool ?? this.tool,
         layerIndex: layerIndex ?? this.layerIndex,
-        selected: keep<int>(selected, this.selected),
+        selected: nextSelected,
+        selectedIndices: nextSelectedIndices,
         draft: keep<Shape>(draft, this.draft),
         hover: keep<Offset>(hover, this.hover),
         cursor: keep<Offset>(cursor, this.cursor),
@@ -103,6 +120,7 @@ class EditorState extends Equatable {
         gesture: gesture ?? this.gesture,
         images: images ?? this.images,
       );
+  }
 
   @override
   List<Object?> get props => [
@@ -115,6 +133,7 @@ class EditorState extends Equatable {
         tool,
         layerIndex,
         selected,
+        selectedIndices,
         draft,
         hover,
         cursor,

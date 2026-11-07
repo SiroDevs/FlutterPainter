@@ -53,7 +53,30 @@ abstract class VertexLogic {
   static EditorState remove(EditorState s, int i) {
     final shape = s.selectedShape;
     if (shape == null || !shape.usesVertices) return s;
+    if (i < 0 || i >= shape.points.length) return s;
     if (shape.points.length <= (shape.kind == ShapeKind.polygon ? 3 : 2)) return s;
     return s.withSelectedShape(shape.copyWith(points: removedAt(shape.points, i))).commit();
+  }
+
+  /// Splits the segment adjacent to point [i] by inserting its midpoint.
+  static EditorState split(EditorState s, int i) {
+    final shape = s.selectedShape;
+    if (shape == null || !shape.usesVertices || shape.points.length < 2) return s;
+    final points = shape.points;
+    if (i < 0 || i >= points.length) return s;
+    final next = shape.kind == ShapeKind.polygon
+        ? (i + 1) % points.length
+        : (i == points.length - 1 ? i - 1 : i + 1);
+    final midpoint = Offset(
+      (points[i].dx + points[next].dx) / 2,
+      (points[i].dy + points[next].dy) / 2,
+    );
+    final insertion = i == points.length - 1 ? i : i + 1;
+    final updated = [
+      ...points.sublist(0, insertion),
+      midpoint,
+      ...points.sublist(insertion),
+    ];
+    return s.withSelectedShape(shape.copyWith(points: updated)).commit();
   }
 }

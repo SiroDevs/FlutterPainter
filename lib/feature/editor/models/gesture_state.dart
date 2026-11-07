@@ -4,8 +4,21 @@ import 'dart:ui';
 // Package imports:
 import 'package:equatable/equatable.dart';
 
+// Project imports:
+import '../../../domain/models/shape.dart';
+
 /// What the pointer is currently doing.
-enum GestureMode { none, draw, move, scale, vertex, imageMove, imageScale }
+enum GestureMode {
+  none,
+  draw,
+  move,
+  scale,
+  rotate,
+  vertex,
+  marquee,
+  imageMove,
+  imageScale,
+}
 
 /// The state of a pointer gesture in progress. It lives in the bloc state (not
 /// in the widget) so the whole interaction is deterministic and testable.
@@ -18,6 +31,10 @@ class GestureState extends Equatable {
     this.startPoints = const <Offset>[],
     this.startBounds = Rect.zero,
     this.lastClickMs = 0,
+    this.startShapes = const <Shape>[],
+    this.startIndices = const <int>[],
+    this.selectionAtStart = const <int>[],
+    this.additiveSelection = false,
   });
 
   final GestureMode mode;
@@ -40,6 +57,14 @@ class GestureState extends Equatable {
   /// Time of the previous click, to detect double-clicks.
   final int lastClickMs;
 
+  /// Selected shapes and their indices when a move or rotation began.
+  final List<Shape> startShapes;
+  final List<int> startIndices;
+
+  /// Existing selection retained when a shift-drag marquee is started.
+  final List<int> selectionAtStart;
+  final bool additiveSelection;
+
   GestureState copyWith({
     GestureMode? mode,
     Offset? origin,
@@ -48,6 +73,10 @@ class GestureState extends Equatable {
     List<Offset>? startPoints,
     Rect? startBounds,
     int? lastClickMs,
+    List<Shape>? startShapes,
+    List<int>? startIndices,
+    List<int>? selectionAtStart,
+    bool? additiveSelection,
   }) =>
       GestureState(
         mode: mode ?? this.mode,
@@ -57,9 +86,25 @@ class GestureState extends Equatable {
         startPoints: startPoints ?? this.startPoints,
         startBounds: startBounds ?? this.startBounds,
         lastClickMs: lastClickMs ?? this.lastClickMs,
+        startShapes: startShapes ?? this.startShapes,
+        startIndices: startIndices ?? this.startIndices,
+        selectionAtStart: selectionAtStart ?? this.selectionAtStart,
+        additiveSelection: additiveSelection ?? this.additiveSelection,
       );
 
   @override
   List<Object?> get props =>
-      [mode, origin, last, handle, startPoints, startBounds, lastClickMs];
+      [
+        mode,
+        origin,
+        last,
+        handle,
+        startPoints,
+        startBounds,
+        lastClickMs,
+        startShapes,
+        startIndices,
+        selectionAtStart,
+        additiveSelection,
+      ];
 }

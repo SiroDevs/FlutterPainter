@@ -19,6 +19,8 @@ migrate_working_dir/
 .idea/
 
 *.zip
+*.gz
+.env
 .wakatime-project
 
 # The .vscode folder contains launch configuration and tasks you configure in
