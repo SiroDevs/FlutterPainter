@@ -137,8 +137,9 @@ abstract class SelectionTransformLogic {
 
     final area = gesture.startBounds;
     final selected = <int>{};
-    if (area.width >= 2 / state.view.zoom ||
-        area.height >= 2 / state.view.zoom) {
+    if (state.layer.visible &&
+        (area.width >= 2 / state.view.zoom ||
+            area.height >= 2 / state.view.zoom)) {
       for (var index = 0; index < state.layer.shapes.length; index++) {
         final bounds = state.layer.shapes[index].bounds;
         if (bounds.overlaps(area) || area.contains(bounds.center))

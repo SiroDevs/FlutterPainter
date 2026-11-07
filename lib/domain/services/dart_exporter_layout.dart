@@ -1,6 +1,8 @@
 part of 'dart_exporter.dart';
 
 mixin _DartExporterLayoutWriter on _DartExporterBase {
+  bool get _hasPalette => options.colorConstants && _usedColors.isNotEmpty;
+
   List<ExportFile> _refactored() {
     final layerFiles = [
       for (var index = 0; index < _layers.length; index++)

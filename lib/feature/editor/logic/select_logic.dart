@@ -18,14 +18,14 @@ abstract class SelectLogic {
   SelectLogic._();
 
   static EditorState pressed(
-    EditorState s,
-    Offset p, {
+    EditorState state,
+    Offset point, {
     required bool alt,
     required bool shift,
     required int timeMs,
   }) {
-    final doubleClick = timeMs - s.gesture.lastClickMs < 320;
-    final base = s.copyWith(gesture: s.gesture.copyWith(lastClickMs: timeMs));
+    final doubleClick = timeMs - state.gesture.lastClickMs < 320;
+    final base = state.copyWith(gesture: state.gesture.copyWith(lastClickMs: timeMs));
     final shape = base.selectedShape;
     final bounds = base.selectedBounds;
 
@@ -34,12 +34,12 @@ abstract class SelectLogic {
         bounds,
         base.view.zoom,
       );
-      if ((rotateHandle - p).distance <= 9 / base.view.zoom) {
+      if ((rotateHandle - point).distance <= 9 / base.view.zoom) {
         final indices = base.validSelectedIndices;
         return base.copyWith(
           gesture: base.gesture.copyWith(
             mode: GestureMode.rotate,
-            origin: p,
+            origin: point,
             startBounds: bounds,
             startIndices: indices,
             startShapes: [for (final i in indices) base.layer.shapes[i]],
@@ -49,52 +49,52 @@ abstract class SelectLogic {
     }
 
     if (shape != null && base.validSelectedIndices.length == 1) {
-      final handle = hitHandle(shape, p, 8 / base.view.zoom);
+      final handle = hitHandle(shape, point, 8 / base.view.zoom);
       if (handle != null) {
         if (shape.usesVertices && alt) return VertexLogic.remove(base, handle);
         return base.copyWith(
           gesture: base.gesture.copyWith(
             mode: shape.usesVertices ? GestureMode.vertex : GestureMode.scale,
             handle: handle,
-            origin: p,
+            origin: point,
             startPoints: shape.points,
             startBounds: shape.unrotatedBounds,
           ),
         );
       }
       if (doubleClick && shape.usesVertices) {
-        final inserted = VertexLogic.insert(base, p, 6 / base.view.zoom);
+        final inserted = VertexLogic.insert(base, point, 6 / base.view.zoom);
         if (inserted != null) return inserted;
       }
     }
 
     if (base.imageSelected) {
       final box = base.imageBounds;
-      if (box != null && ImageLogic.handleAt(base, p) != null) {
-        return ImageLogic.grab(base, p, box);
+      if (box != null && ImageLogic.handleAt(base, point) != null) {
+        return ImageLogic.grab(base, point, box);
       }
     }
 
     if (shift) {
-      final hit = _hitInActiveLayer(base, p);
+      final hit = _hitInActiveLayer(base, point);
       if (hit != null) return _toggle(base, hit);
-      return _startMarquee(base, p, additive: true);
+      return _startMarquee(base, point, additive: true);
     }
-    return _pick(base, p);
+    return _pick(base, point);
   }
 
   static EditorState _startMarquee(
-    EditorState s,
-    Offset p, {
+    EditorState state,
+    Offset point, {
     required bool additive,
   }) {
-    final oldSelection = additive ? s.validSelectedIndices : const <int>[];
-    final next = additive ? s : s.selectIndices(const []);
+    final oldSelection = additive ? state.validSelectedIndices : const <int>[];
+    final next = additive ? state : state.selectIndices(const []);
     return next.copyWith(
       gesture: next.gesture.copyWith(
         mode: GestureMode.marquee,
-        origin: p,
-        startBounds: Rect.fromPoints(p, p),
+        origin: point,
+        startBounds: Rect.fromPoints(point, point),
         selectionAtStart: oldSelection,
         additiveSelection: additive,
       ),
@@ -103,23 +103,23 @@ abstract class SelectLogic {
 
   /// Selects topmost shape or picture and starts moving it. A grouped shape
   /// selects all its peers in the active layer.
-  static EditorState _pick(EditorState s, Offset p) {
-    final tol = 4 / s.view.zoom;
-    final layers = s.drawing.layers;
+  static EditorState _pick(EditorState state, Offset point) {
+    final tol = 4 / state.view.zoom;
+    final layers = state.drawing.layers;
     for (var li = layers.length - 1; li >= 0; li--) {
       final layer = layers[li];
       if (!layer.visible) continue;
       for (var si = layer.shapes.length - 1; si >= 0; si--) {
         final shape = layer.shapes[si];
-        if (!shape.hitTest(p, tol)) continue;
-        final switchedLayer = li != s.layerIndex;
+        if (!shape.hitTest(point, tol)) continue;
+        final switchedLayer = li != state.layerIndex;
         final base = switchedLayer
-            ? s.copyWith(
+            ? state.copyWith(
                 layerIndex: li,
                 selected: null,
                 selectedIndices: const [],
               )
-            : s;
+            : state;
         final selected = base.validSelectedIndices.contains(si)
             ? base
             : base.selectIndices(_groupIndices(layer.shapes, si), primary: si);
@@ -128,37 +128,37 @@ abstract class SelectLogic {
           style: StyleLogic.adopt(selected.style, shape),
           gesture: selected.gesture.copyWith(
             mode: GestureMode.move,
-            origin: p,
+            origin: point,
             startIndices: indices,
             startShapes: [for (final i in indices) selected.layer.shapes[i]],
           ),
         );
       }
-      final r = layer.image;
-      final pixels = r == null ? null : s.images[r.id];
-      if (r != null && r.visible && pixels != null) {
+      final reference = layer.image;
+      final pixels = reference == null ? null : state.images[reference.id];
+      if (reference != null && reference.visible && pixels != null) {
         final box = Rect.fromLTWH(
-          r.x,
-          r.y,
-          pixels.width * r.scaleX,
-          pixels.height * r.scaleY,
+          reference.x,
+          reference.y,
+          pixels.width * reference.scaleX,
+          pixels.height * reference.scaleY,
         );
-        if (box.contains(p)) {
-          return s.copyWith(
+        if (box.contains(point)) {
+          return state.copyWith(
             layerIndex: li,
             selected: kImageSlot,
             selectedIndices: const [],
-            gesture: s.gesture.copyWith(
+            gesture: state.gesture.copyWith(
               mode: GestureMode.imageMove,
               handle: -1,
-              origin: p,
+              origin: point,
               startBounds: box,
             ),
           );
         }
       }
     }
-    return _startMarquee(s, p, additive: false);
+    return _startMarquee(state, point, additive: false);
   }
 
   static List<int> _groupIndices(List<Shape> shapes, int index) {
@@ -170,22 +170,23 @@ abstract class SelectLogic {
     ];
   }
 
-  static int? _hitInActiveLayer(EditorState s, Offset p) {
-    final shapes = s.layer.shapes;
-    final tol = 4 / s.view.zoom;
+  static int? _hitInActiveLayer(EditorState state, Offset point) {
+    if (!state.layer.visible) return null;
+    final shapes = state.layer.shapes;
+    final tol = 4 / state.view.zoom;
     for (var i = shapes.length - 1; i >= 0; i--) {
-      if (shapes[i].hitTest(p, tol)) return i;
+      if (shapes[i].hitTest(point, tol)) return i;
     }
     return null;
   }
 
-  static EditorState _toggle(EditorState s, int index) {
-    final toggled = _groupIndices(s.layer.shapes, index).toSet();
-    final old = s.validSelectedIndices.toSet();
+  static EditorState _toggle(EditorState state, int index) {
+    final toggled = _groupIndices(state.layer.shapes, index).toSet();
+    final old = state.validSelectedIndices.toSet();
     final next = old.contains(index)
         ? old.difference(toggled)
         : old.union(toggled);
-    return s.selectIndices(
+    return state.selectIndices(
       next.toList(),
       primary: next.contains(index) ? index : null,
     );

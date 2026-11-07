@@ -7,92 +7,90 @@ import '../../../domain/services/shape_geometry.dart';
 import '../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 
-/// Editing the points of a line path or polygon.
+/// Edits points on line paths and polygons.
 abstract class VertexLogic {
   VertexLogic._();
 
-  /// Closes an open path into a fillable polygon, or opens a polygon again.
-  static EditorState setClosed(EditorState s, bool closed) {
-    final shape = s.selectedShape;
-    if (shape == null || !shape.usesVertices) return s;
+  static EditorState setClosed(EditorState state, bool closed) {
+    final shape = state.selectedShape;
+    if (shape == null || !shape.usesVertices) return state;
     if (closed && shape.kind == ShapeKind.line && shape.points.length >= 3) {
-      return s
+      return state
           .withSelectedShape(
             shape.copyWith(
               kind: ShapeKind.polygon,
-              fill: s.style.fillOn ? s.style.fillColor : null,
-              gradient: s.style.fillOn ? s.style.fillGradient : null,
+              fill: state.style.fillOn ? state.style.fillColor : null,
+              gradient: state.style.fillOn ? state.style.fillGradient : null,
             ),
           )
           .commit();
     }
     if (!closed && shape.kind == ShapeKind.polygon) {
-      return s
+      return state
           .withSelectedShape(
             shape.copyWith(
               kind: ShapeKind.line,
               fill: null,
               gradient: null,
-              stroke: shape.stroke ?? s.style.strokeColor,
+              stroke: shape.stroke ?? state.style.strokeColor,
             ),
           )
           .commit();
     }
-    return s;
+    return state;
   }
 
-  /// Adds a point on the selected shape's edge nearest [p], or null if none is
-  /// close enough.
-  static EditorState? insert(EditorState s, Offset p, double tol) {
-    final shape = s.selectedShape;
+  static EditorState? insert(
+    EditorState state,
+    Offset point,
+    double tolerance,
+  ) {
+    final shape = state.selectedShape;
     if (shape == null || !shape.usesVertices) return null;
-    final hit = shape.nearestSegment(p, tol);
+    final hit = shape.nearestSegment(point, tolerance);
     if (hit == null) return null;
-    final pts = shape.points;
-    final next = [
-      ...pts.sublist(0, hit.index + 1),
-      hit.point,
-      ...pts.sublist(hit.index + 1),
-    ];
-    return s.withSelectedShape(shape.copyWith(points: next)).commit();
-  }
-
-  /// Removes point [i]; lines keep at least 2 points and polygons 3.
-  static EditorState remove(EditorState s, int i) {
-    final shape = s.selectedShape;
-    if (shape == null || !shape.usesVertices) return s;
-    if (i < 0 || i >= shape.points.length) return s;
-    if (shape.points.length <= (shape.kind == ShapeKind.polygon ? 3 : 2))
-      return s;
-    return s
-        .withSelectedShape(shape.copyWith(points: removedAt(shape.points, i)))
-        .commit();
-  }
-
-  /// Splits the segment adjacent to point [i] by inserting its midpoint.
-  static EditorState split(EditorState s, int i) {
-    final shape = s.selectedShape;
-    if (shape == null || !shape.usesVertices || shape.points.length < 2)
-      return s;
     final points = shape.points;
-    if (i < 0 || i >= points.length) return s;
-    final next = shape.kind == ShapeKind.polygon
-        ? (i + 1) % points.length
-        : (i == points.length - 1 ? i - 1 : i + 1);
-    final midpoint = Offset(
-      (points[i].dx + points[next].dx) / 2,
-      (points[i].dy + points[next].dy) / 2,
-    );
-    final insertion = shape.kind == ShapeKind.polygon
-        ? i + 1
-        : i == points.length - 1
-        ? i
-        : i + 1;
     final updated = [
-      ...points.sublist(0, insertion),
-      midpoint,
-      ...points.sublist(insertion),
+      ...points.sublist(0, hit.index + 1),
+      hit.point,
+      ...points.sublist(hit.index + 1),
     ];
-    return s.withSelectedShape(shape.copyWith(points: updated)).commit();
+    return state.withSelectedShape(shape.copyWith(points: updated)).commit();
+  }
+
+  static EditorState remove(EditorState state, int pointIndex) {
+    final shape = state.selectedShape;
+    if (shape == null || !shape.usesVertices) return state;
+    if (pointIndex < 0 || pointIndex >= shape.points.length) return state;
+    final minimumPoints = shape.kind == ShapeKind.polygon ? 3 : 2;
+    if (shape.points.length <= minimumPoints) return state;
+    final updated = removedAt(shape.points, pointIndex);
+    return state.withSelectedShape(shape.copyWith(points: updated)).commit();
+  }
+
+  static EditorState split(EditorState state, int pointIndex) {
+    final shape = state.selectedShape;
+    if (shape == null || !shape.usesVertices || shape.points.length < 2) {
+      return state;
+    }
+    final points = shape.points;
+    if (pointIndex < 0 || pointIndex >= points.length) return state;
+    final nextIndex = shape.kind == ShapeKind.polygon
+        ? (pointIndex + 1) % points.length
+        : pointIndex == points.length - 1
+        ? pointIndex - 1
+        : pointIndex + 1;
+    final midpoint = (points[pointIndex] + points[nextIndex]) / 2;
+    final insertionIndex = shape.kind == ShapeKind.polygon
+        ? pointIndex + 1
+        : pointIndex == points.length - 1
+        ? pointIndex
+        : pointIndex + 1;
+    final updated = [
+      ...points.sublist(0, insertionIndex),
+      midpoint,
+      ...points.sublist(insertionIndex),
+    ];
+    return state.withSelectedShape(shape.copyWith(points: updated)).commit();
   }
 }

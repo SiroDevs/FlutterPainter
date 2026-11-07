@@ -15,8 +15,7 @@ part 'dart_exporter_shapes.dart';
 /// Exports a drawing as standalone Dart painter code.
 class DartExporter extends _DartExporterBase
     with _DartExporterShapeWriter, _DartExporterLayoutWriter {
-  DartExporter(Drawing drawing, {ExportOptions options = const ExportOptions()})
-    : super(drawing, options: options);
+  DartExporter(super.drawing, {super.options});
 
   List<ExportFile> generate() {
     _usedColors.clear();
@@ -97,10 +96,6 @@ abstract class _DartExporterBase {
   bool _needsPath(PaintLayer layer);
   bool _usesPath(Shape shape);
   List<String> _shape(Shape shape, {required bool comment});
-  List<String> _layerMethod(String name, PaintLayer layer);
-  List<_ShapeFunction> _shapeFunctions(PaintLayer layer);
-  String _kindLabel(ShapeKind kind);
-  String _color(int argb);
   String _colorName(int argb);
   String _colorLiteral(int argb);
 }

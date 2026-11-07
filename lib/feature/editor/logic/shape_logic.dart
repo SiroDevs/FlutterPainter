@@ -59,12 +59,18 @@ abstract class ShapeLogic {
   }
 
   static EditorState selectAll(EditorState state) => state.selectIndices(
-    List.generate(state.layer.shapes.length, (index) => index),
+    state.layer.visible
+        ? List.generate(state.layer.shapes.length, (index) => index)
+        : const [],
   );
 
   static EditorState group(EditorState state) {
     final indices = state.validSelectedIndices;
     if (indices.length < 2) return state;
+    final currentGroups = {
+      for (final index in indices) state.layer.shapes[index].groupId,
+    };
+    if (currentGroups.length == 1 && currentGroups.single != null) return state;
     final used = state.layer.shapes
         .map((shape) => shape.groupId)
         .whereType<String>()

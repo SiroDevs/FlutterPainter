@@ -17,7 +17,11 @@ class ShapeActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<EditorBloc>();
     final selectionCount = state.validSelectedIndices.length;
-    final grouped = state.selectedShapes.any((shape) => shape.groupId != null);
+    final selectedShapes = state.selectedShapes;
+    final groups = selectedShapes.map((shape) => shape.groupId).toSet();
+    final canGroup =
+        selectedShapes.length > 1 && (groups.length > 1 || groups.single == null);
+    final grouped = selectedShapes.any((shape) => shape.groupId != null);
     return Wrap(
       spacing: 6,
       runSpacing: 6,
@@ -45,7 +49,7 @@ class ShapeActions extends StatelessWidget {
           ),
           _moveToLayer(context, bloc),
         ],
-        if (selectionCount > 1)
+        if (canGroup)
           _action(
             Icons.group_work_outlined,
             context.l10n.shapeGroup,

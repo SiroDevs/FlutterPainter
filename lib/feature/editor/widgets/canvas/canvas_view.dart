@@ -73,7 +73,10 @@ class _CanvasViewState extends State<CanvasView> {
               onPointerDown: _down,
               onPointerMove: _move,
               onPointerUp: _up,
-              onPointerCancel: (_) => _panning = false,
+              onPointerCancel: (_) {
+                _panning = false;
+                _ignoreRelease = false;
+              },
               onPointerHover: (e) =>
                   _bloc.add(PointerHovered(_design(e.localPosition))),
               onPointerSignal: _signal,
