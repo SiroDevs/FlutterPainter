@@ -2,6 +2,7 @@
 import 'package:flutter/widgets.dart';
 
 // Project imports:
+import '../../../../../core/utils/l10n_ext.dart';
 import '../../../commands/workspace_commands.dart';
 import '../ribbon_parts.dart';
 
@@ -26,13 +27,29 @@ List<Widget> homeTabGroups(WorkspaceCommands c) => [
   RibbonGroup(
     label: 'Arrange',
     children: [
-      RibbonStack(
-        children: [
-          RibbonButton.small(c.bringForward),
-          RibbonButton.small(c.sendBackward),
-          RibbonButton.small(c.group),
-          RibbonButton.small(c.ungroup),
-        ],
+      SizedBox(
+        width: 200,
+        height: 68,
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 2,
+          mainAxisSpacing: 2,
+          childAspectRatio: 3,
+          padding: EdgeInsets.zero,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            RibbonButton.small(
+              c.bringForward,
+              label: c.context.l10n.shapeForward,
+            ),
+            RibbonButton.small(
+              c.sendBackward,
+              label: c.context.l10n.shapeBack,
+            ),
+            RibbonButton.small(c.group),
+            RibbonButton.small(c.ungroup),
+          ],
+        ),
       ),
     ],
   ),

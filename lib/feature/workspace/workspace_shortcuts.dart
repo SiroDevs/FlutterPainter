@@ -37,6 +37,16 @@ class WorkspaceShortcuts {
     }
 
     void send(EditorEvent event) => editor.add(event);
+    void zoom(double factor) {
+      final viewport = editor.state.view.viewport;
+      send(
+        ViewZoomed(
+          factor,
+          Offset(viewport.width / 2, viewport.height / 2),
+        ),
+      );
+    }
+
     void guarded(VoidCallback action) {
       if (!isTyping()) action();
     }
@@ -46,6 +56,9 @@ class WorkspaceShortcuts {
     both(LogicalKeyboardKey.keyY, () => guarded(() => send(const RedoRequested())));
     both(LogicalKeyboardKey.keyD, () => guarded(() => send(const ShapeDuplicated())));
     both(LogicalKeyboardKey.keyA, () => guarded(() => send(const SelectAllRequested())));
+    both(LogicalKeyboardKey.minus, () => guarded(() => zoom(1 / 1.25)));
+    both(LogicalKeyboardKey.equal, () => guarded(() => zoom(1.25)));
+    both(LogicalKeyboardKey.digit0, () => guarded(() => send(const FitRequested())));
     both(LogicalKeyboardKey.keyS, () => guarded(() => saveTab(context, workspace, editor)));
     both(
       LogicalKeyboardKey.keyS,
