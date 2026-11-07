@@ -4,6 +4,7 @@ mixin _DartExporterShapeWriter on _DartExporterBase {
   bool _hasGradient(PaintLayer layer) =>
       layer.shapes.any((shape) => shape.gradient != null);
 
+  // ignore: unused_element
   bool _needsPath(PaintLayer layer) => layer.shapes.any(
     (shape) => _usesPath(shape) && _shape(shape, comment: false).isNotEmpty,
   );

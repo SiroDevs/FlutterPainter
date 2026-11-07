@@ -2,14 +2,14 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../domain/models/drawing.dart';
-import '../../../domain/models/paint_layer.dart';
-import '../../../domain/models/reference_image.dart';
-import '../../../domain/models/shape.dart';
-import '../../../domain/models/tool.dart';
-import '../../../domain/services/geometry_utils.dart';
-import '../bloc/editor_bloc.dart';
-import '../models/gesture_state.dart';
+import '../../../../domain/models/drawing.dart';
+import '../../../../domain/models/paint_layer.dart';
+import '../../../../domain/models/reference_image.dart';
+import '../../../../domain/models/shape.dart';
+import '../../../../domain/models/tool.dart';
+import '../../../../domain/services/geometry_utils.dart';
+import '../../bloc/editor_bloc.dart';
+import '../../models/gesture_state.dart';
 
 /// Value of [EditorState.selected] that means "the active layer's picture".
 const int kImageSlot = -1;

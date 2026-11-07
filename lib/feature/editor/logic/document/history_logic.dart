@@ -1,7 +1,7 @@
 // Project imports:
-import '../../../domain/models/edit_history.dart';
-import '../bloc/editor_bloc.dart';
-import '../models/gesture_state.dart';
+import '../../../../domain/models/edit_history.dart';
+import '../../bloc/editor_bloc.dart';
+import '../../models/gesture_state.dart';
 
 abstract class HistoryLogic {
   HistoryLogic._();

@@ -12,8 +12,8 @@ import '../../../../domain/models/tool.dart';
 import '../../../../domain/services/geometry_utils.dart';
 import '../../../../domain/services/image_geometry.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/editor_ops.dart';
-import '../../logic/selection_transform_logic.dart';
+import '../../logic/drawing/editor_ops.dart';
+import '../../logic/interaction/selection_transform_logic.dart';
 import '../../models/gesture_state.dart';
 import 'shape_painter.dart';
 

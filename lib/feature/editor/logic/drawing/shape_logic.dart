@@ -2,10 +2,10 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../domain/services/geometry_utils.dart';
-import '../bloc/editor_bloc.dart';
+import '../../../../domain/services/geometry_utils.dart';
+import '../../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
-import 'image_logic.dart';
+import '../canvas/image_logic.dart';
 import 'style_logic.dart';
 
 /// Operations on the selected shape: delete, duplicate, order, layer, name.

@@ -2,9 +2,9 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../domain/models/shape_kind.dart';
-import '../../../domain/services/shape_geometry.dart';
-import '../bloc/editor_bloc.dart';
+import '../../../../domain/models/shape_kind.dart';
+import '../../../../domain/services/shape_geometry.dart';
+import '../../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 
 /// Edits points on line paths and polygons.

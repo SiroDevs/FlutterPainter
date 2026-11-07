@@ -11,7 +11,7 @@ import '../../../../domain/models/paint_layer.dart';
 import '../../../../domain/models/shape.dart';
 import '../../../../domain/models/shape_kind.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/editor_ops.dart';
+import '../../logic/drawing/editor_ops.dart';
 
 /// Shows the shapes and picture nested under one layer.
 class LayerItemTree extends StatelessWidget {

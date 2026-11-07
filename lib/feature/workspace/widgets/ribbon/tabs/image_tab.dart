@@ -2,7 +2,7 @@
 import 'package:flutter/widgets.dart';
 
 // Project imports:
-import '../../../../editor/logic/editor_ops.dart';
+import '../../../../editor/logic/drawing/editor_ops.dart';
 import '../../../commands/workspace_commands.dart';
 import '../ribbon_parts.dart';
 

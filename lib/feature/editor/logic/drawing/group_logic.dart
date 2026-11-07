@@ -1,6 +1,6 @@
 // Project imports:
-import '../../../domain/models/shape.dart';
-import '../bloc/editor_bloc.dart';
+import '../../../../domain/models/shape.dart';
+import '../../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 
 /// Creates, removes and renames shape groups.

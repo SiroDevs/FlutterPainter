@@ -1,9 +1,9 @@
 // Project imports:
-import '../../../domain/models/shape.dart';
-import '../../../domain/models/shape_gradient.dart';
-import '../../../domain/models/shape_kind.dart';
-import '../bloc/editor_bloc.dart';
-import '../models/style_settings.dart';
+import '../../../../domain/models/shape.dart';
+import '../../../../domain/models/shape_gradient.dart';
+import '../../../../domain/models/shape_kind.dart';
+import '../../bloc/editor_bloc.dart';
+import '../../models/style_settings.dart';
 import 'editor_ops.dart';
 
 /// Colours and stroke. They update the current style and, when a shape is

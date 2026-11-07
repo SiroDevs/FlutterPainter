@@ -12,7 +12,7 @@ import '../../../../domain/models/shape.dart';
 import '../../../../domain/models/shape_kind.dart';
 import '../../../../domain/models/tool.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/editor_ops.dart';
+import '../../logic/drawing/editor_ops.dart';
 import 'shape_actions.dart';
 
 /// Style controls. They edit the selected shape, or set the style used for the

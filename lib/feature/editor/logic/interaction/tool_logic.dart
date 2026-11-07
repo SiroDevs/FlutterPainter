@@ -1,7 +1,7 @@
 // Project imports:
-import '../../../domain/models/tool.dart';
-import '../bloc/editor_bloc.dart';
-import '../models/gesture_state.dart';
+import '../../../../domain/models/tool.dart';
+import '../../bloc/editor_bloc.dart';
+import '../../models/gesture_state.dart';
 
 abstract class ToolLogic {
   ToolLogic._();

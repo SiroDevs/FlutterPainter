@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/editor_ops.dart';
+import '../../logic/drawing/editor_ops.dart';
 
 /// Actions that apply to the current shape selection.
 class ShapeActions extends StatelessWidget {

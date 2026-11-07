@@ -3,14 +3,14 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../../domain/models/drawing.dart';
-import '../../../domain/models/paint_layer.dart';
-import '../../../domain/models/reference_image.dart';
-import '../../../domain/models/tool.dart';
-import '../../../domain/services/image_geometry.dart';
-import '../bloc/editor_bloc.dart';
-import '../models/gesture_state.dart';
-import 'editor_ops.dart';
+import '../../../../domain/models/drawing.dart';
+import '../../../../domain/models/paint_layer.dart';
+import '../../../../domain/models/reference_image.dart';
+import '../../../../domain/models/tool.dart';
+import '../../../../domain/services/image_geometry.dart';
+import '../../bloc/editor_bloc.dart';
+import '../../models/gesture_state.dart';
+import '../drawing/editor_ops.dart';
 
 /// The picture that sits under a layer's shapes (for tracing or as a
 /// background): load it, move it, resize or stretch it, fade it.

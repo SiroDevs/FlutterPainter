@@ -2,12 +2,12 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../domain/models/shape.dart';
-import '../../../domain/models/shape_kind.dart';
-import '../../../domain/models/tool.dart';
-import '../../../domain/services/geometry_utils.dart';
-import '../bloc/editor_bloc.dart';
-import '../models/gesture_state.dart';
+import '../../../../domain/models/shape.dart';
+import '../../../../domain/models/shape_kind.dart';
+import '../../../../domain/models/tool.dart';
+import '../../../../domain/services/geometry_utils.dart';
+import '../../bloc/editor_bloc.dart';
+import '../../models/gesture_state.dart';
 import 'editor_ops.dart';
 
 /// The drawing tools: rectangle, ellipse, line and freehand are drag-driven,

@@ -8,7 +8,7 @@ import '../../../core/di/injectable.dart';
 import '../../../core/platform/file_dialogs.dart';
 import '../../../core/utils/path_util.dart';
 import '../../editor/bloc/editor_bloc.dart';
-import '../../editor/logic/editor_ops.dart';
+import '../../editor/logic/drawing/editor_ops.dart';
 import '../cubit/workspace_cubit.dart';
 
 /// The user-facing flows around tabs and files. They live apart from the cubit

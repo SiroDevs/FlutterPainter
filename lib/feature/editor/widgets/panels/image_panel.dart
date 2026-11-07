@@ -13,7 +13,7 @@ import '../../../../common/widgets/inputs/labeled_slider.dart';
 import '../../../../domain/models/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../flows/image_flow.dart';
-import '../../logic/editor_ops.dart';
+import '../../logic/drawing/editor_ops.dart';
 
 /// The picture on the active layer, for tracing or as a backdrop. Every layer
 /// can hold its own, so switching layers switches pictures; drag one on the

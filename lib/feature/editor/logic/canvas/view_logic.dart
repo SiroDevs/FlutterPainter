@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../../domain/models/drawing.dart';
-import '../bloc/editor_bloc.dart';
-import '../models/view_settings.dart';
+import '../../../../domain/models/drawing.dart';
+import '../../bloc/editor_bloc.dart';
+import '../../models/view_settings.dart';
 
 /// Zoom, pan, fit-to-window and the view toggles.
 abstract class ViewLogic {
