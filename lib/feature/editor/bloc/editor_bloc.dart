@@ -107,6 +107,7 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<ShapeReordered>((s, e) => ShapeLogic.reorder(s, e.direction));
     _reduce<ShapeMovedToLayer>((s, e) => ShapeLogic.moveToLayer(s, e.layer));
     _reduce<ShapeRenamed>((s, e) => ShapeLogic.rename(s, e.name));
+    _reduce<ShapeSelectionRequested>((s, e) => ShapeLogic.select(s, e.layer, e.index));
     _reduce<ClosedToggled>((s, e) => VertexLogic.setClosed(s, e.closed));
   }
 

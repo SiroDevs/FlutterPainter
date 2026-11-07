@@ -3,8 +3,8 @@ import 'dart:ui';
 
 // Flutter imports:
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +28,7 @@ class CanvasView extends StatefulWidget {
 
 class _CanvasViewState extends State<CanvasView> {
   bool _panning = false;
+  bool _ignoreRelease = false;
   Size? _reportedSize;
   double _lastScale = 1;
 
@@ -99,6 +100,10 @@ class _CanvasViewState extends State<CanvasView> {
   void _down(PointerDownEvent e) {
     widget.focus.requestFocus();
     if ((e.buttons & (kSecondaryButton | kMiddleMouseButton)) != 0) {
+      if ((e.buttons & kSecondaryButton) != 0 && _showVertexMenu(e)) {
+        _ignoreRelease = true;
+        return;
+      }
       _panning = true;
       return;
     }
@@ -127,8 +132,56 @@ class _CanvasViewState extends State<CanvasView> {
   }
 
   void _up(PointerUpEvent e) {
+    if (_ignoreRelease) {
+      _ignoreRelease = false;
+      return;
+    }
     if (!_panning) _bloc.add(const PointerReleased());
     _panning = false;
+  }
+
+  bool _showVertexMenu(PointerDownEvent event) {
+    final state = _bloc.state;
+    final point = _design(event.localPosition);
+    final tolerance = 10 / state.view.zoom;
+    for (var li = state.drawing.layers.length - 1; li >= 0; li--) {
+      final layer = state.drawing.layers[li];
+      if (!layer.visible) continue;
+      for (var si = layer.shapes.length - 1; si >= 0; si--) {
+        final shape = layer.shapes[si];
+        if (!shape.usesVertices) continue;
+        for (var vi = 0; vi < shape.points.length; vi++) {
+          if ((shape.points[vi] - point).distance > tolerance) continue;
+          _bloc.add(ShapeSelectionRequested(li, si));
+          _openVertexMenu(event.position, vi);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  Future<void> _openVertexMenu(Offset global, int index) async {
+    final size = MediaQuery.sizeOf(context);
+    final action = await showMenu<int>(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        global.dx,
+        global.dy,
+        size.width - global.dx,
+        size.height - global.dy,
+      ),
+      items: const [
+        PopupMenuItem(value: 0, child: Text('Delete this point')),
+        PopupMenuItem(value: 1, child: Text('Split this point')),
+      ],
+    );
+    if (!mounted || action == null) return;
+    if (action == 0) {
+      _bloc.add(VertexPointDeleted(index));
+    } else {
+      _bloc.add(VertexSegmentSplit(index));
+    }
   }
 
   void _panZoom(PointerPanZoomUpdateEvent e) {

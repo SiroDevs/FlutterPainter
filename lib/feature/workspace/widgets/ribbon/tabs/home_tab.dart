@@ -30,6 +30,8 @@ List<Widget> homeTabGroups(WorkspaceCommands c) => [
         children: [
           RibbonButton.small(c.bringForward),
           RibbonButton.small(c.sendBackward),
+          RibbonButton.small(c.group),
+          RibbonButton.small(c.ungroup),
         ],
       ),
     ],

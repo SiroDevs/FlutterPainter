@@ -114,6 +114,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
         shift: true);
     both(LogicalKeyboardKey.keyY, () => _guarded(() => send(const RedoRequested())));
     both(LogicalKeyboardKey.keyD, () => _guarded(() => send(const ShapeDuplicated())));
+    both(LogicalKeyboardKey.keyA, () => _guarded(() => send(const SelectAllRequested())));
     both(LogicalKeyboardKey.keyS, () => saveTab(context, _ws, _current));
     both(LogicalKeyboardKey.keyS, () => saveTab(context, _ws, _current, saveAs: true),
         shift: true);

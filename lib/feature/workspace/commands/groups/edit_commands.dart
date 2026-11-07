@@ -54,6 +54,20 @@ extension EditCommands on WorkspaceCommands {
         onPressed: hasShape ? () => send(const ShapeReordered(-1)) : null,
       );
 
+  AppCommand get group => AppCommand(
+        label: 'Group',
+        icon: Icons.group_work_outlined,
+        tooltip: 'Group selected shapes so they move together',
+        onPressed: canGroup ? () => send(const ShapesGrouped()) : null,
+      );
+
+  AppCommand get ungroup => AppCommand(
+        label: 'Ungroup',
+        icon: Icons.workspaces_outline,
+        tooltip: 'Ungroup selected shapes',
+        onPressed: hasGroupedSelection ? () => send(const ShapesUngrouped()) : null,
+      );
+
   AppCommand get closedPath {
     final shape = state.selectedShape;
     return AppCommand(

@@ -204,6 +204,13 @@ class ShapeRenamed extends EditorEvent {
   final String name;
 }
 
+class ShapeSelectionRequested extends EditorEvent {
+  const ShapeSelectionRequested(this.layer, this.index);
+
+  final int layer;
+  final int index;
+}
+
 class ClosedToggled extends EditorEvent {
   const ClosedToggled(this.closed);
 

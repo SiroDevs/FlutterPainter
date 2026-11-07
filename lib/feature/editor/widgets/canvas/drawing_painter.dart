@@ -13,6 +13,8 @@ import '../../../../domain/services/geometry_utils.dart';
 import '../../../../domain/services/image_geometry.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/editor_ops.dart';
+import '../../logic/select_logic.dart';
+import '../../models/gesture_state.dart';
 import 'shape_painter.dart';
 
 /// Paints the workspace: canvas box, grid, every visible layer (its picture
@@ -55,6 +57,7 @@ class DrawingPainter extends CustomPainter {
     );
     _selection(canvas);
     _imageSelection(canvas);
+    _marquee(canvas);
     canvas.restore();
   }
 
@@ -116,20 +119,49 @@ class DrawingPainter extends CustomPainter {
   }
 
   void _selection(Canvas canvas) {
-    final s = state.selectedShape;
-    if (s == null) return;
+    final indices = state.validSelectedIndices;
+    final bounds = state.selectedBounds;
+    if (indices.isEmpty || bounds == null) return;
     final line = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1 / state.view.zoom
       ..color = ThemeColors.selection;
-    canvas.drawRect(s.bounds, line);
+    for (final i in indices) {
+      canvas.drawRect(state.layer.shapes[i].bounds, line);
+    }
+    canvas.drawRect(bounds, line);
     final h = 4 / state.view.zoom;
     final fill = Paint()..color = const Color(0xFFFFFFFF);
-    for (final p in handlePoints(s)) {
-      final r = Rect.fromCenter(center: p, width: 2 * h, height: 2 * h);
-      canvas.drawRect(r, fill);
-      canvas.drawRect(r, line);
+    if (indices.length == 1) {
+      for (final p in handlePoints(state.layer.shapes[indices.single])) {
+        final r = Rect.fromCenter(center: p, width: 2 * h, height: 2 * h);
+        canvas.drawRect(r, fill);
+        canvas.drawRect(r, line);
+      }
     }
+
+    final rotate = SelectLogic.rotationHandle(bounds, state.view.zoom);
+    canvas.drawLine(Offset(bounds.center.dx, bounds.top), rotate, line);
+    canvas.drawCircle(rotate, 5 / state.view.zoom, fill);
+    canvas.drawCircle(rotate, 5 / state.view.zoom, line);
+  }
+
+  void _marquee(Canvas canvas) {
+    if (state.gesture.mode != GestureMode.marquee) return;
+    final area = state.gesture.startBounds;
+    canvas.drawRect(
+      area,
+      Paint()
+        ..color = ThemeColors.selection.withOpacity(0.16)
+        ..style = PaintingStyle.fill,
+    );
+    canvas.drawRect(
+      area,
+      Paint()
+        ..color = ThemeColors.selection
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1 / state.view.zoom,
+    );
   }
 
   /// The outline and eight resize handles of the selected picture (corners

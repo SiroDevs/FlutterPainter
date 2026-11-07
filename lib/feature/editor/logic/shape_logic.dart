@@ -5,10 +5,20 @@ import 'dart:ui';
 import '../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 import 'image_logic.dart';
+import 'style_logic.dart';
 
 /// Operations on the selected shape: delete, duplicate, order, layer, name.
 abstract class ShapeLogic {
   ShapeLogic._();
+
+  static EditorState select(EditorState s, int layer, int index) {
+    if (layer < 0 || layer >= s.drawing.layers.length) return s;
+    final shapes = s.drawing.layers[layer].shapes;
+    if (index < 0 || index >= shapes.length) return s;
+    final next = s.copyWith(layerIndex: layer, selected: null, selectedIndices: const []);
+    return next.selectIndices([index], primary: index)
+        .copyWith(style: StyleLogic.adopt(s.style, shapes[index]));
+  }
 
   /// Deletes the selected shape, or the selected picture.
   static EditorState delete(EditorState s) {

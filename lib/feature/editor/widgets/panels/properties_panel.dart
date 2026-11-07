@@ -28,6 +28,7 @@ class PropertiesPanel extends StatelessWidget {
     return BlocBuilder<EditorBloc, EditorState>(
       builder: (context, state) {
         final s = state.selectedShape;
+        final selectionCount = state.validSelectedIndices.length;
         final st = state.style;
         final showRadius = state.tool == Tool.rect || s?.kind == ShapeKind.rect;
         return SingleChildScrollView(
@@ -35,7 +36,12 @@ class PropertiesPanel extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text('Properties', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 4),
-            if (s == null)
+            if (selectionCount > 1)
+              Text(
+                '$selectionCount shapes selected',
+                style: Theme.of(context).textTheme.bodySmall,
+              )
+            else if (s == null)
               Text(
                 'No shape selected. These settings apply to the next shape you draw.',
                 style: Theme.of(context).textTheme.bodySmall,
@@ -61,44 +67,54 @@ class PropertiesPanel extends StatelessWidget {
                   onChanged: (v) => bloc.add(ClosedToggled(v ?? false)),
                 ),
             ],
-            const SizedBox(height: 8),
-            _toggle('Fill', st.fillOn, st.fillColor,
-                (v) => bloc.add(FillToggled(v)),
-                () => bloc.add(const StyleTargetChanged(true))),
-            _toggle('Stroke', st.strokeOn, st.strokeColor,
-                (v) => bloc.add(StrokeToggled(v)),
-                () => bloc.add(const StyleTargetChanged(false))),
-            LabeledSlider(
-              label: 'Stroke width: ${st.strokeWidth.toStringAsFixed(2)}',
-              value: st.strokeWidth,
-              min: 0.25,
-              max: 20,
-              onChanged: (v) =>
-                  bloc.add(StrokeWidthChanged((v * 4).round() / 4)),
-              onChangeEnd: () => bloc.add(const ChangesCommitted()),
-            ),
-            if (showRadius)
+            if (selectionCount <= 1) ...[
+              const SizedBox(height: 8),
+              _toggle('Fill', st.fillOn, st.fillColor,
+                  (v) => bloc.add(FillToggled(v)),
+                  () => bloc.add(const StyleTargetChanged(true))),
+              _toggle('Stroke', st.strokeOn, st.strokeColor,
+                  (v) => bloc.add(StrokeToggled(v)),
+                  () => bloc.add(const StyleTargetChanged(false))),
               LabeledSlider(
-                label: 'Corner radius: ${st.radius.toStringAsFixed(2)}',
-                value: st.radius,
-                min: 0,
-                max: 40,
+                label: 'Stroke width: ${st.strokeWidth.toStringAsFixed(2)}',
+                value: st.strokeWidth,
+                min: 0.25,
+                max: 20,
                 onChanged: (v) =>
-                    bloc.add(RadiusChanged((v * 4).round() / 4)),
+                    bloc.add(StrokeWidthChanged((v * 4).round() / 4)),
                 onChangeEnd: () => bloc.add(const ChangesCommitted()),
               ),
-            if (s != null) ...[
+              if (showRadius)
+                LabeledSlider(
+                  label: 'Corner radius: ${st.radius.toStringAsFixed(2)}',
+                  value: st.radius,
+                  min: 0,
+                  max: 40,
+                  onChanged: (v) =>
+                      bloc.add(RadiusChanged((v * 4).round() / 4)),
+                  onChangeEnd: () => bloc.add(const ChangesCommitted()),
+                ),
+            ],
+            if (selectionCount > 0) ...[
               const SizedBox(height: 8),
               Wrap(spacing: 6, runSpacing: 6, children: [
                 _action(Icons.copy, 'Duplicate',
                     () => bloc.add(const ShapeDuplicated())),
                 _action(Icons.delete_outline, 'Delete',
                     () => bloc.add(const ShapeDeleted())),
-                _action(Icons.flip_to_front, 'Forward',
-                    () => bloc.add(const ShapeReordered(1))),
-                _action(Icons.flip_to_back, 'Back',
-                    () => bloc.add(const ShapeReordered(-1))),
-                PopupMenuButton<int>(
+                if (selectionCount == 1) ...[
+                  _action(Icons.flip_to_front, 'Forward',
+                      () => bloc.add(const ShapeReordered(1))),
+                  _action(Icons.flip_to_back, 'Back',
+                      () => bloc.add(const ShapeReordered(-1))),
+                ],
+                if (selectionCount > 1)
+                  _action(Icons.group_work_outlined, 'Group',
+                      () => bloc.add(const ShapesGrouped())),
+                if (state.selectedShapes.any((shape) => shape.groupId != null))
+                  _action(Icons.workspaces_outline, 'Ungroup',
+                      () => bloc.add(const ShapesUngrouped())),
+                if (selectionCount == 1) PopupMenuButton<int>(
                   tooltip: 'Move to layer',
                   onSelected: (i) => bloc.add(ShapeMovedToLayer(i)),
                   itemBuilder: (_) => [
