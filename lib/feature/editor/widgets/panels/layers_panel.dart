@@ -1,8 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
@@ -67,13 +67,18 @@ class LayersPanel extends StatelessWidget {
               final l = layers[i];
               final layerIsActive = i == active;
               final itemCountKey = layerIsActive ? l.shapes.length : 0;
+              final hasActiveImage = layerIsActive && l.image != null;
+              final expansionKey = 'layer-$i-$itemCountKey-$hasActiveImage';
+              final activeTileColor = layerIsActive
+                  ? Theme.of(context).colorScheme.primaryContainer.withAlpha(90)
+                  : null;
               return ExpansionTile(
-                key: PageStorageKey(
-                  'layer-$i-$itemCountKey-${layerIsActive && l.image != null}',
-                ),
+                key: PageStorageKey(expansionKey),
                 initiallyExpanded: layerIsActive,
                 dense: true,
                 tilePadding: const EdgeInsets.only(left: 8, right: 16),
+                backgroundColor: activeTileColor,
+                collapsedBackgroundColor: activeTileColor,
                 onExpansionChanged: (expanded) {
                   if (expanded && i != bloc.state.layerIndex) {
                     bloc.add(LayerActivated(i));

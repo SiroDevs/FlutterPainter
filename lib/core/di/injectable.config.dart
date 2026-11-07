@@ -10,6 +10,12 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
+// Package imports:
+import 'package:get_it/get_it.dart' as _i174;
+import 'package:injectable/injectable.dart' as _i526;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
+
+// Project imports:
 import 'package:flutter_painter/core/di/injectable.dart' as _i135;
 import 'package:flutter_painter/core/platform/file_dialogs.dart' as _i985;
 import 'package:flutter_painter/core/theme/bloc/theme_bloc.dart' as _i109;
@@ -19,6 +25,7 @@ import 'package:flutter_painter/domain/repos/draft_repo.dart' as _i760;
 import 'package:flutter_painter/domain/repos/prefs_repo.dart' as _i415;
 import 'package:flutter_painter/domain/repos/project_repo.dart' as _i741;
 import 'package:flutter_painter/feature/editor/bloc/editor_bloc.dart' as _i1017;
+
 import 'package:flutter_painter/feature/editor/bloc/editor_bloc_factory.dart'
     as _i133;
 import 'package:flutter_painter/feature/editor/models/editor_seed.dart'
@@ -29,9 +36,6 @@ import 'package:flutter_painter/feature/workspace/cubit/project_saver.dart'
     as _i1028;
 import 'package:flutter_painter/feature/workspace/cubit/workspace_cubit.dart'
     as _i753;
-import 'package:get_it/get_it.dart' as _i174;
-import 'package:injectable/injectable.dart' as _i526;
-import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt

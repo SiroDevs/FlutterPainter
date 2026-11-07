@@ -1,5 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
@@ -67,6 +69,7 @@ class LayerItemTree extends StatelessWidget {
     return ExpansionTile(
       key: PageStorageKey('group-$layerIndex-${entry.groupId}'),
       dense: true,
+      initiallyExpanded: true,
       tilePadding: const EdgeInsets.only(left: 24, right: 16),
       childrenPadding: EdgeInsets.zero,
       leading: const Icon(Icons.folder_outlined, size: 18),

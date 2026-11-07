@@ -1,8 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
@@ -10,7 +10,7 @@ import '../../../domain/models/app_settings.dart';
 import '../../settings/cubit/settings_cubit.dart';
 import '../commands/commands_builder.dart';
 import '../commands/groups/exports.dart';
-import 'ribbon/ribbon_parts.dart';
+import 'ribbon/command_icon_button.dart';
 
 class MinimalBar extends StatelessWidget {
   const MinimalBar({super.key});
