@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../commands/commands_builder.dart';
 import '../../commands/workspace_commands.dart';
+import 'command_icon_button.dart';
 import 'ribbon_parts.dart';
 import 'ribbon_tabs.dart';
 

@@ -11,9 +11,13 @@ List<Widget> insertTabGroups(WorkspaceCommands c) => [
   RibbonGroup(
     label: 'Shapes',
     children: [
-      RibbonButton.large(c.tool(Tool.rect)),
-      RibbonButton.large(c.tool(Tool.ellipse)),
-      RibbonButton.large(c.tool(Tool.line)),
+      RibbonStack(
+        children: [
+          RibbonButton.small(c.tool(Tool.rect)),
+          RibbonButton.small(c.tool(Tool.ellipse)),
+          RibbonButton.small(c.tool(Tool.line)),
+        ],
+      ),
     ],
   ),
   RibbonGroup(
