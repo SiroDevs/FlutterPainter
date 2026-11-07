@@ -30,5 +30,20 @@
     "shapeForward": "Peleka mbele",
     "shapeBack": "Rudisha nyuma",
     "shapeMoveToLayer": "Hamisha kwenye tabaka",
-    "shapeToLayer": "Kwa tabaka"
+    "shapeToLayer": "Kwa tabaka",
+    "layersTitle": "Tabaka",
+    "layerAdd": "Ongeza tabaka",
+    "layerRename": "Badilisha jina la tabaka",
+    "layerMoveUp": "Peleka tabaka juu",
+    "layerMoveDown": "Peleka tabaka chini",
+    "layerDelete": "Futa tabaka",
+    "layerHide": "Ficha",
+    "layerShow": "Onyesha",
+    "layerGroup": "Kikundi",
+    "layerPicture": "Picha",
+    "layerItemRectangle": "Mstatili",
+    "layerItemEllipse": "Duara bapa",
+    "layerItemLine": "Mstari",
+    "layerItemPolygon": "Poligoni",
+    "layerItemFreehand": "Mchoro huru"
 }

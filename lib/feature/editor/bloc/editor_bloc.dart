@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 // Package imports:
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 // Project imports:

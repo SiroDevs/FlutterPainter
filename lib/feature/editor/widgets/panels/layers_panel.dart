@@ -1,14 +1,16 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Package imports:
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
 import '../../../../common/widgets/dialogs/app_dialogs.dart';
+import '../../../../core/utils/l10n_ext.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/editor_ops.dart';
+import 'layer_item_tree.dart';
 
 /// Layer list, top layer first. The active layer receives new shapes; each
 /// layer exports as its own method or class.
@@ -20,7 +22,7 @@ class LayersPanel extends StatelessWidget {
     final state = bloc.state;
     final name = await promptText(
       context,
-      title: 'Rename layer',
+      title: context.l10n.layerRename,
       initial: state.layer.name,
     );
     if (name != null && name.isNotEmpty) {
@@ -33,21 +35,29 @@ class LayersPanel extends StatelessWidget {
     final bloc = context.read<EditorBloc>();
     return BlocBuilder<EditorBloc, EditorState>(
       buildWhen: (a, b) =>
-          a.layerIndex != b.layerIndex || a.drawing.layers != b.drawing.layers,
+          a.layerIndex != b.layerIndex ||
+          a.selected != b.selected ||
+          a.selectedIndices != b.selectedIndices ||
+          a.drawing.layers != b.drawing.layers,
       builder: (context, state) {
         final layers = state.drawing.layers;
         final active = state.layerIndex;
         return Column(children: [
           Row(children: [
-            Text('Layers', style: Theme.of(context).textTheme.titleSmall),
+            Text(
+              context.l10n.layersTitle,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
             const Spacer(),
-            _btn(Icons.add, 'Add layer', () => bloc.add(const LayerAdded())),
-            _btn(Icons.edit_outlined, 'Rename layer', () => _rename(context)),
-            _btn(Icons.arrow_upward, 'Move layer up',
+            _btn(Icons.add, context.l10n.layerAdd,
+                () => bloc.add(const LayerAdded())),
+            _btn(Icons.edit_outlined, context.l10n.layerRename,
+                () => _rename(context)),
+            _btn(Icons.arrow_upward, context.l10n.layerMoveUp,
                 () => bloc.add(LayerMoved(active, 1))),
-            _btn(Icons.arrow_downward, 'Move layer down',
+            _btn(Icons.arrow_downward, context.l10n.layerMoveDown,
                 () => bloc.add(LayerMoved(active, -1))),
-            _btn(Icons.delete_outline, 'Delete layer',
+            _btn(Icons.delete_outline, context.l10n.layerDelete,
                 () => bloc.add(LayerDeleted(active))),
           ]).padding(left: 12),
           ListView.builder(
@@ -55,27 +65,52 @@ class LayersPanel extends StatelessWidget {
             itemBuilder: (context, row) {
               final i = layers.length - 1 - row;
               final l = layers[i];
-              return ListTile(
+              final layerIsActive = i == active;
+              final itemCountKey = layerIsActive ? l.shapes.length : 0;
+              final hasActiveImage = layerIsActive && l.image != null;
+              final expansionKey = 'layer-$i-$itemCountKey-$hasActiveImage';
+              final activeTileColor = layerIsActive
+                  ? Theme.of(context).colorScheme.primaryContainer.withAlpha(90)
+                  : null;
+              return ExpansionTile(
+                key: PageStorageKey(expansionKey),
+                initiallyExpanded: layerIsActive,
                 dense: true,
-                selected: i == active,
-                selectedTileColor:
-                    Theme.of(context).colorScheme.primaryContainer.withAlpha(90),
+                tilePadding: const EdgeInsets.only(left: 8, right: 16),
+                backgroundColor: activeTileColor,
+                collapsedBackgroundColor: activeTileColor,
+                onExpansionChanged: (expanded) {
+                  if (expanded && i != bloc.state.layerIndex) {
+                    bloc.add(LayerActivated(i));
+                  }
+                },
                 leading: IconButton(
-                  tooltip: l.visible ? 'Hide' : 'Show',
+                  tooltip: l.visible
+                      ? context.l10n.layerHide
+                      : context.l10n.layerShow,
                   icon: Icon(
                     l.visible ? Icons.visibility : Icons.visibility_off,
                     size: 18,
                   ),
                   onPressed: () => bloc.add(LayerVisibilityToggled(i)),
                 ),
-                title: Text(l.name),
-                trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                title: Text(
+                  l.name,
+                  style: TextStyle(
+                    color: layerIsActive
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
+                  ),
+                ),
+                subtitle: Row(mainAxisSize: MainAxisSize.min, children: [
                   if (l.image != null)
                     const Icon(Icons.image_outlined, size: 14)
                         .padding(right: 6),
                   Text('${l.shapes.length}'),
                 ]),
-                onTap: () => bloc.add(LayerActivated(i)),
+                children: [
+                  LayerItemTree(layer: l, layerIndex: i, state: state),
+                ],
               );
             },
           ).expanded(),

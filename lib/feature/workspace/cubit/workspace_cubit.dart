@@ -1,16 +1,18 @@
 // Dart imports:
 import 'dart:async';
 
-// Package imports:
+// Flutter imports:
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Package imports:
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 // Project imports:
-import '../../../core/utils/copy_with_util.dart';
 import '../../../common/constants/pref_constants.dart';
 import '../../../core/utils/app_util.dart';
+import '../../../core/utils/copy_with_util.dart';
 import '../../../domain/models/draft.dart';
 import '../../../domain/models/drawing.dart';
 import '../../../domain/repos/draft_repo.dart';

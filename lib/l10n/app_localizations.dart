@@ -361,6 +361,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To layer'**
   String get shapeToLayer;
+
+  /// No description provided for @layersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Layers'**
+  String get layersTitle;
+
+  /// No description provided for @layerAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add layer'**
+  String get layerAdd;
+
+  /// No description provided for @layerRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename layer'**
+  String get layerRename;
+
+  /// No description provided for @layerMoveUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Move layer up'**
+  String get layerMoveUp;
+
+  /// No description provided for @layerMoveDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Move layer down'**
+  String get layerMoveDown;
+
+  /// No description provided for @layerDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete layer'**
+  String get layerDelete;
+
+  /// No description provided for @layerHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide'**
+  String get layerHide;
+
+  /// No description provided for @layerShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show'**
+  String get layerShow;
+
+  /// No description provided for @layerGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get layerGroup;
+
+  /// No description provided for @layerPicture.
+  ///
+  /// In en, this message translates to:
+  /// **'Picture'**
+  String get layerPicture;
+
+  /// No description provided for @layerItemRectangle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rectangle'**
+  String get layerItemRectangle;
+
+  /// No description provided for @layerItemEllipse.
+  ///
+  /// In en, this message translates to:
+  /// **'Ellipse'**
+  String get layerItemEllipse;
+
+  /// No description provided for @layerItemLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Line'**
+  String get layerItemLine;
+
+  /// No description provided for @layerItemPolygon.
+  ///
+  /// In en, this message translates to:
+  /// **'Polygon'**
+  String get layerItemPolygon;
+
+  /// No description provided for @layerItemFreehand.
+  ///
+  /// In en, this message translates to:
+  /// **'Freehand'**
+  String get layerItemFreehand;
 }
 
 class _AppLocalizationsDelegate

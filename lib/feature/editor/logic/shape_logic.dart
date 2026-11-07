@@ -22,7 +22,7 @@ abstract class ShapeLogic {
       selectedIndices: const [],
     );
     return next
-        .selectIndices([index], primary: index)
+        .selectIndices(groupedShapeIndices(shapes, index), primary: index)
         .copyWith(style: StyleLogic.adopt(state.style, shapes[index]));
   }
 

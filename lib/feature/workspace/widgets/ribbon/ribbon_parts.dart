@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import '../../commands/app_command.dart';
+import 'ribbon_columns.dart';
 
 /// A labelled cluster of buttons in the ribbon, with the name underneath and a
 /// divider on its right, like "Clipboard" or "Font" in Word.
@@ -20,11 +21,13 @@ class RibbonGroup extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(6, 6, 6, 2),
         child: Column(children: [
           Expanded(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: children,
-            ),
+            child: children.length > 2
+                ? RibbonColumns(children: children)
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: children,
+                  ),
           ),
           Text(
             label,
@@ -44,7 +47,6 @@ class RibbonGroup extends StatelessWidget {
     ]);
   }
 }
-
 /// A ribbon button for an [AppCommand]: large (icon above the name) or small
 /// (icon beside the name, for stacking three high).
 class RibbonButton extends StatelessWidget {
@@ -119,7 +121,7 @@ class RibbonButton extends StatelessWidget {
   }
 }
 
-/// Up to three small controls stacked in one column.
+/// Stacks up to two controls per column.
 class RibbonStack extends StatelessWidget {
   const RibbonStack({super.key, required this.children});
 
@@ -128,12 +130,14 @@ class RibbonStack extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: children,
-        ),
+        child: children.length > 2
+            ? RibbonColumns(children: children)
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: children,
+              ),
       );
 }
 
@@ -206,21 +210,4 @@ class RibbonSlider extends StatelessWidget {
       ]),
     );
   }
-}
-
-/// A compact icon-only button for an [AppCommand] (used in the ribbon's tab row
-/// and the minimal bar).
-class CommandIconButton extends StatelessWidget {
-  const CommandIconButton(this.command, {super.key});
-
-  final AppCommand command;
-
-  @override
-  Widget build(BuildContext context) => IconButton(
-        tooltip: command.tip,
-        iconSize: 18,
-        visualDensity: VisualDensity.compact,
-        icon: Icon(command.icon),
-        onPressed: command.onPressed,
-      );
 }
