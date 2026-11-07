@@ -25,7 +25,7 @@ class CommandsBuilder extends StatelessWidget {
   });
 
   final Widget Function(BuildContext context, WorkspaceCommands commands)
-      builder;
+  builder;
   final bool detailed;
 
   bool _changed(EditorState a, EditorState b) {
@@ -34,6 +34,7 @@ class CommandsBuilder extends StatelessWidget {
     return a.canUndo != b.canUndo ||
         a.canRedo != b.canRedo ||
         a.selected != b.selected ||
+        a.selectedIndices != b.selectedIndices ||
         a.layerIndex != b.layerIndex ||
         a.tool != b.tool ||
         a.style != b.style ||
@@ -47,6 +48,7 @@ class CommandsBuilder extends StatelessWidget {
         (ai == null) != (bi == null) ||
         ai?.visible != bi?.visible ||
         a.selectedShape?.isClosed != b.selectedShape?.isClosed ||
+        a.selectedShape?.groupId != b.selectedShape?.groupId ||
         (detailed && ai != bi);
   }
 

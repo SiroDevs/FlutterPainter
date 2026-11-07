@@ -15,7 +15,13 @@ abstract class PointerLogic {
     final next = s.copyWith(cursor: e.point);
     switch (s.tool) {
       case Tool.select:
-        return SelectLogic.pressed(next, e.point, alt: e.alt, timeMs: e.timeMs);
+        return SelectLogic.pressed(
+          next,
+          e.point,
+          alt: e.alt,
+          shift: e.shift,
+          timeMs: e.timeMs,
+        );
       case Tool.reference:
         return ImageLogic.pressed(next, e.point);
       case Tool.rect:
@@ -34,8 +40,10 @@ abstract class PointerLogic {
         return DrawLogic.moved(next, e.point, e.shift);
       case GestureMode.move:
       case GestureMode.scale:
+      case GestureMode.rotate:
       case GestureMode.vertex:
-        return SelectLogic.moved(next, e.point);
+      case GestureMode.marquee:
+        return SelectLogic.moved(next, e.point, shift: e.shift);
       case GestureMode.imageMove:
       case GestureMode.imageScale:
         return ImageLogic.dragged(next, e.point, e.shift);
@@ -50,7 +58,9 @@ abstract class PointerLogic {
         return DrawLogic.released(s);
       case GestureMode.move:
       case GestureMode.scale:
+      case GestureMode.rotate:
       case GestureMode.vertex:
+      case GestureMode.marquee:
         return SelectLogic.released(s);
       case GestureMode.imageMove:
       case GestureMode.imageScale:

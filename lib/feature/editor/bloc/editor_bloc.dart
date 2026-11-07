@@ -23,16 +23,19 @@ import '../models/gesture_state.dart';
 import '../models/style_settings.dart';
 import '../models/view_settings.dart';
 
+part 'editor_document_events.dart';
 part 'editor_event.dart';
+part 'editor_shape_events.dart';
 part 'editor_state.dart';
-
+part 'editor_style_events.dart';
 
 /// One bloc per open project (tab). It holds no business logic itself: every
 /// event is routed to a pure function in `logic/` that maps the old state to
 /// the new one, which keeps the behaviour easy to test without any widgets.
 @injectable
 class EditorBloc extends Bloc<EditorEvent, EditorState> {
-  EditorBloc(@factoryParam EditorSeed seed) : super(EditorState.fromSeed(seed)) {
+  EditorBloc(@factoryParam EditorSeed seed)
+    : super(EditorState.fromSeed(seed)) {
     _registerPointer();
     _registerView();
     _registerTools();
@@ -72,7 +75,9 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
 
   void _registerTools() {
     _reduce<ToolSelected>((s, e) => ToolLogic.select(s, e.tool));
-    _reduce<PolygonFinished>((s, e) => DrawLogic.finishPolygon(s, closed: e.closed));
+    _reduce<PolygonFinished>(
+      (s, e) => DrawLogic.finishPolygon(s, closed: e.closed),
+    );
     _reduce<DraftCancelled>((s, e) => DrawLogic.cancelDraft(s));
     _reduce<ChangesCommitted>((s, e) => s.commit());
     on<UndoRequested>((event, emit) async {
@@ -99,9 +104,17 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
   void _registerShapes() {
     _reduce<ShapeDeleted>((s, e) => ShapeLogic.delete(s));
     _reduce<ShapeDuplicated>((s, e) => ShapeLogic.duplicate(s));
+    _reduce<SelectAllRequested>((s, e) => ShapeLogic.selectAll(s));
+    _reduce<ShapesGrouped>((s, e) => ShapeLogic.group(s));
+    _reduce<ShapesUngrouped>((s, e) => ShapeLogic.ungroup(s));
+    _reduce<VertexPointDeleted>((s, e) => VertexLogic.remove(s, e.index));
+    _reduce<VertexSegmentSplit>((s, e) => VertexLogic.split(s, e.index));
     _reduce<ShapeReordered>((s, e) => ShapeLogic.reorder(s, e.direction));
     _reduce<ShapeMovedToLayer>((s, e) => ShapeLogic.moveToLayer(s, e.layer));
     _reduce<ShapeRenamed>((s, e) => ShapeLogic.rename(s, e.name));
+    _reduce<ShapeSelectionRequested>(
+      (s, e) => ShapeLogic.select(s, e.layer, e.index),
+    );
     _reduce<ClosedToggled>((s, e) => VertexLogic.setClosed(s, e.closed));
   }
 
@@ -109,14 +122,18 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<LayerAdded>((s, e) => LayerLogic.add(s));
     _reduce<LayerDeleted>((s, e) => LayerLogic.delete(s, e.index));
     _reduce<LayerRenamed>((s, e) => LayerLogic.rename(s, e.index, e.name));
-    _reduce<LayerVisibilityToggled>((s, e) => LayerLogic.toggleVisible(s, e.index));
+    _reduce<LayerVisibilityToggled>(
+      (s, e) => LayerLogic.toggleVisible(s, e.index),
+    );
     _reduce<LayerMoved>((s, e) => LayerLogic.move(s, e.index, e.direction));
     _reduce<LayerActivated>((s, e) => LayerLogic.activate(s, e.index));
   }
 
   void _registerDocument() {
     _reduce<DrawingRenamed>((s, e) => DocumentLogic.rename(s, e.name));
-    _reduce<CanvasResized>((s, e) => DocumentLogic.resizeCanvas(s, e.width, e.height));
+    _reduce<CanvasResized>(
+      (s, e) => DocumentLogic.resizeCanvas(s, e.width, e.height),
+    );
     _reduce<DocumentSaved>((s, e) => DocumentLogic.saved(s, e.path));
     _reduce<CodeApplied>((s, e) => DocumentLogic.applyCode(s, e.layers));
   }
@@ -156,7 +173,9 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     final seen = <String>{};
     for (final layer in state.drawing.layers) {
       final ref = layer.image;
-      if (ref != null && !state.images.containsKey(ref.id) && seen.add(ref.id)) {
+      if (ref != null &&
+          !state.images.containsKey(ref.id) &&
+          seen.add(ref.id)) {
         wanted.add(ref);
       }
     }

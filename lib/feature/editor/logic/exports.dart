@@ -6,6 +6,7 @@ export 'image_logic.dart';
 export 'layer_logic.dart';
 export 'pointer_logic.dart';
 export 'select_logic.dart';
+export 'selection_transform_logic.dart';
 export 'shape_logic.dart';
 export 'style_logic.dart';
 export 'tool_logic.dart';

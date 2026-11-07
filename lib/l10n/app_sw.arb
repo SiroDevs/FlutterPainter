@@ -7,6 +7,28 @@
 
     "appName": "Flutter Painter",
     "@appName": {
-        "description": "The name of the application"
-    }
+    "description": "The name of the application"
+    },
+
+    "shapeGroup": "Unganisha",
+    "shapeUngroup": "Tenganisha",
+    "shapeGroupTooltip": "Unganisha maumbo yaliyochaguliwa ili yahame pamoja",
+    "shapeUngroupTooltip": "Tenganisha maumbo yaliyochaguliwa",
+    "shapeSelectionCount": "{count, plural, =1{Umbo 1 limechaguliwa} other{Maumbo {count} yamechaguliwa}}",
+    "@shapeSelectionCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "shapeRotateHint": "Buruta kishikio cha duara ili kuzungusha. Shikilia Shift ili kuruka kwa kila 15°.",
+    "vertexDelete": "Futa nukta hii",
+    "vertexSplit": "Gawa nukta hii",
+    "shapeDuplicate": "Nakili",
+    "shapeDelete": "Futa",
+    "shapeForward": "Peleka mbele",
+    "shapeBack": "Rudisha nyuma",
+    "shapeMoveToLayer": "Hamisha kwenye tabaka",
+    "shapeToLayer": "Kwa tabaka"
 }

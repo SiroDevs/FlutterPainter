@@ -277,6 +277,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @shapeGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get shapeGroup;
+
+  /// No description provided for @shapeUngroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Ungroup'**
+  String get shapeUngroup;
+
+  /// No description provided for @shapeGroupTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Group selected shapes so they move together'**
+  String get shapeGroupTooltip;
+
+  /// No description provided for @shapeUngroupTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Ungroup selected shapes'**
+  String get shapeUngroupTooltip;
+
+  /// No description provided for @shapeSelectionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 shape selected} other{{count} shapes selected}}'**
+  String shapeSelectionCount(int count);
+
+  /// No description provided for @shapeRotateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag the round handle to rotate. Hold Shift to snap every 15°.'**
+  String get shapeRotateHint;
+
+  /// No description provided for @vertexDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this point'**
+  String get vertexDelete;
+
+  /// No description provided for @vertexSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Split this point'**
+  String get vertexSplit;
+
+  /// No description provided for @shapeDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get shapeDuplicate;
+
+  /// No description provided for @shapeDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get shapeDelete;
+
+  /// No description provided for @shapeForward.
+  ///
+  /// In en, this message translates to:
+  /// **'Forward'**
+  String get shapeForward;
+
+  /// No description provided for @shapeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get shapeBack;
+
+  /// No description provided for @shapeMoveToLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to layer'**
+  String get shapeMoveToLayer;
+
+  /// No description provided for @shapeToLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'To layer'**
+  String get shapeToLayer;
 }
 
 class _AppLocalizationsDelegate
