@@ -20,6 +20,20 @@ class ShapesUngrouped extends EditorEvent {
   const ShapesUngrouped();
 }
 
+class SelectionScaled extends EditorEvent {
+  const SelectionScaled(this.factor);
+
+  final double factor;
+}
+
+class GroupRenamed extends EditorEvent {
+  const GroupRenamed(this.layer, this.groupId, this.name);
+
+  final int layer;
+  final String groupId;
+  final String name;
+}
+
 class VertexPointDeleted extends EditorEvent {
   const VertexPointDeleted(this.index);
 
@@ -45,9 +59,11 @@ class ShapeMovedToLayer extends EditorEvent {
 }
 
 class ShapeRenamed extends EditorEvent {
-  const ShapeRenamed(this.name);
+  const ShapeRenamed(this.name, {this.layer, this.index});
 
   final String name;
+  final int? layer;
+  final int? index;
 }
 
 class ShapeSelectionRequested extends EditorEvent {

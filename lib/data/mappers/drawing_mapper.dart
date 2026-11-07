@@ -28,6 +28,7 @@ Map<String, dynamic> shapeToJson(Shape s) => {
   'strokeWidth': s.strokeWidth,
   'radius': s.radius,
   if (s.groupId != null) 'groupId': s.groupId,
+  if (s.groupId != null && s.groupName != null) 'groupName': s.groupName,
   if (s.rotation != 0) 'rotation': s.rotation,
 };
 
@@ -44,6 +45,7 @@ Shape shapeFromJson(Map<String, dynamic> j) => Shape(
   strokeWidth: ((j['strokeWidth'] as num?) ?? 1).toDouble(),
   radius: ((j['radius'] as num?) ?? 0).toDouble(),
   groupId: j['groupId'] as String?,
+  groupName: j['groupName'] as String?,
   rotation: ((j['rotation'] as num?) ?? 0).toDouble(),
 );
 

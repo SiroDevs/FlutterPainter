@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
+import '../../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/paint_layer.dart';
 import '../../../../domain/models/shape.dart';
@@ -44,18 +45,24 @@ class LayerItemTree extends StatelessWidget {
   List<_TreeEntry> _entries(List<Shape> shapes) {
     final seenGroups = <String>{};
     final entries = <_TreeEntry>[];
+    var groupNumber = 0;
     for (var index = shapes.length - 1; index >= 0; index--) {
       final groupId = shapes[index].groupId;
       if (groupId == null) {
         entries.add(_TreeEntry.item([index]));
       } else if (seenGroups.add(groupId)) {
+        groupNumber++;
         entries.add(
-          _TreeEntry.group(groupId, [
-            for (var memberIndex = shapes.length - 1;
-                memberIndex >= 0;
-                memberIndex--)
-              if (shapes[memberIndex].groupId == groupId) memberIndex,
-          ]),
+          _TreeEntry.group(
+            groupId,
+            shapes[index].groupName ?? 'Group $groupNumber',
+            [
+              for (var memberIndex = shapes.length - 1;
+                  memberIndex >= 0;
+                  memberIndex--)
+                if (shapes[memberIndex].groupId == groupId) memberIndex,
+            ],
+          ),
         );
       }
     }
@@ -73,14 +80,53 @@ class LayerItemTree extends StatelessWidget {
       tilePadding: const EdgeInsets.only(left: 24, right: 16),
       childrenPadding: EdgeInsets.zero,
       leading: const Icon(Icons.folder_outlined, size: 18),
-      title: Text(
-        context.l10n.layerGroup,
-        style: selected ? TextStyle(color: color) : null,
-      ),
+      title: Row(children: [
+        Expanded(
+          child: Text(
+            entry.name,
+            style: selected ? TextStyle(color: color) : null,
+          ),
+        ),
+        IconButton(
+          tooltip: context.l10n.layerEditGroup,
+          iconSize: 16,
+          visualDensity: VisualDensity.compact,
+          icon: const Icon(Icons.edit_outlined),
+          onPressed: () => _renameGroup(context, entry),
+        ),
+      ]),
       children: [
         for (final index in entry.indices)
           _shapeTile(context, index, leftPadding: 48),
       ],
+    );
+  }
+
+  Future<void> _renameGroup(BuildContext context, _TreeEntry entry) async {
+    final name = await promptText(
+      context,
+      title: context.l10n.layerEditGroup,
+      initial: entry.name,
+    );
+    if (name == null || name.trim().isEmpty || !context.mounted) return;
+    context
+        .read<EditorBloc>()
+        .add(GroupRenamed(layerIndex, entry.groupId!, name.trim()));
+  }
+
+  Future<void> _renameShape(BuildContext context, int index) async {
+    final shape = layer.shapes[index];
+    final currentName = shape.name.isEmpty
+        ? _shapeLabel(context, shape.kind)
+        : shape.name;
+    final name = await promptText(
+      context,
+      title: context.l10n.layerEditItem,
+      initial: currentName,
+    );
+    if (name == null || !context.mounted) return;
+    context.read<EditorBloc>().add(
+      ShapeRenamed(name, layer: layerIndex, index: index),
     );
   }
 
@@ -102,6 +148,13 @@ class LayerItemTree extends StatelessWidget {
         style: Theme.of(context).textTheme.bodySmall,
       ),
       selected: selected,
+      trailing: IconButton(
+        tooltip: context.l10n.layerEditItem,
+        iconSize: 16,
+        visualDensity: VisualDensity.compact,
+        icon: const Icon(Icons.edit_outlined),
+        onPressed: () => _renameShape(context, index),
+      ),
       onTap: () => context
           .read<EditorBloc>()
           .add(ShapeSelectionRequested(layerIndex, index)),
@@ -139,10 +192,11 @@ class LayerItemTree extends StatelessWidget {
 }
 
 class _TreeEntry {
-  const _TreeEntry.item(this.indices) : groupId = null;
+  const _TreeEntry.item(this.indices) : groupId = null, name = '';
 
-  const _TreeEntry.group(this.groupId, this.indices);
+  const _TreeEntry.group(this.groupId, this.name, this.indices);
 
   final String? groupId;
+  final String name;
   final List<int> indices;
 }

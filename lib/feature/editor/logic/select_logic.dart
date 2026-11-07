@@ -47,6 +47,23 @@ abstract class SelectLogic {
       }
     }
 
+    if (bounds != null && base.validSelectedIndices.length > 1) {
+      final indices = base.validSelectedIndices;
+      final handle = hitBoundsHandle(bounds, point, 8 / base.view.zoom);
+      if (handle != null) {
+        return base.copyWith(
+          gesture: base.gesture.copyWith(
+            mode: GestureMode.scale,
+            handle: handle,
+            origin: point,
+            startBounds: bounds,
+            startIndices: indices,
+            startShapes: [for (final index in indices) base.layer.shapes[index]],
+          ),
+        );
+      }
+    }
+
     if (shape != null && base.validSelectedIndices.length == 1) {
       final handle = hitHandle(shape, point, 8 / base.view.zoom);
       if (handle != null) {

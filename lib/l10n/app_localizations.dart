@@ -451,6 +451,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Freehand'**
   String get layerItemFreehand;
+
+  /// No description provided for @layerEditItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit item name'**
+  String get layerEditItem;
+
+  /// No description provided for @layerEditGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit group name'**
+  String get layerEditGroup;
+
+  /// No description provided for @shapeScaleDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale down 10%'**
+  String get shapeScaleDown;
 }
 
 class _AppLocalizationsDelegate

@@ -30,6 +30,7 @@ class Shape extends Equatable {
     this.strokeWidth = 1.0,
     this.radius = 0.0,
     this.groupId,
+    this.groupName,
     this.rotation = 0,
   });
 
@@ -44,6 +45,7 @@ class Shape extends Equatable {
 
   /// Shapes with the same non-null id move and select together.
   final String? groupId;
+  final String? groupName;
   final double rotation;
 
   Shape copyWith({
@@ -56,6 +58,7 @@ class Shape extends Equatable {
     double? strokeWidth,
     double? radius,
     Object? groupId = unset,
+    Object? groupName = unset,
     double? rotation,
   }) => Shape(
     kind: kind ?? this.kind,
@@ -67,6 +70,7 @@ class Shape extends Equatable {
     strokeWidth: strokeWidth ?? this.strokeWidth,
     radius: radius ?? this.radius,
     groupId: keep<String>(groupId, this.groupId),
+    groupName: keep<String>(groupName, this.groupName),
     rotation: rotation ?? this.rotation,
   );
 
@@ -81,6 +85,7 @@ class Shape extends Equatable {
     strokeWidth,
     radius,
     groupId,
+    groupName,
     rotation,
   ];
 

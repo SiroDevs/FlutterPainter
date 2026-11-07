@@ -37,6 +37,24 @@ abstract class SelectionTransformLogic {
         });
       case GestureMode.scale:
         if (selected == null) return state;
+        if (gesture.startIndices.length > 1) {
+          final target = uniformlyResizedBox(
+            gesture.startBounds,
+            gesture.handle,
+            state.snapped(point),
+          );
+          if (target.width < 0.5 || target.height < 0.5) return state;
+          return state.withShapeChanges({
+            for (var index = 0; index < gesture.startIndices.length; index++)
+              gesture.startIndices[index]: gesture.startShapes[index].copyWith(
+                points: remapPoints(
+                  gesture.startShapes[index].points,
+                  gesture.startBounds,
+                  target,
+                ),
+              ),
+          });
+        }
         final target = resizedBox(
           gesture.startBounds,
           gesture.handle,

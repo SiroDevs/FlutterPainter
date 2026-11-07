@@ -1,6 +1,7 @@
 export 'document_logic.dart';
 export 'draw_logic.dart';
 export 'editor_ops.dart';
+export 'group_logic.dart';
 export 'history_logic.dart';
 export 'image_logic.dart';
 export 'layer_logic.dart';

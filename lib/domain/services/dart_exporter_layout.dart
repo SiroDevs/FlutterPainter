@@ -11,21 +11,38 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
           content: _layerSource(index),
         ),
     ];
+    final groupFiles = [
+      for (final group in _paintedGroups)
+        ExportFile(path: _groupFile(group), content: _groupSource(group)),
+    ];
     return [
       ExportFile(path: _painterFile, content: _painterSource()),
       if (_hasPalette)
         ExportFile(path: _paletteFile, content: _paletteSource()),
+      ...groupFiles,
       ...layerFiles,
     ];
   }
 
   List<ExportFile> _monolithic() {
-    final needsPath = _layers.any(_needsPath);
+    final needsPath = [
+      for (var index = 0; index < _layers.length; index++)
+        ..._shapeFunctions(_layers[index]).where((function) {
+          final shape = _layers[index].shapes[function.index];
+          return _groupForShape(index, shape) == null && function.usesPath;
+        }),
+    ].isNotEmpty;
+    final groupClasses = [
+      for (final group in _paintedGroups)
+        ..._groupClassLines(group, _groupFunctions(group)),
+    ];
     final body = [
       'class $_painterClass {',
       ..._sizeConstants(),
       '',
       _paintField,
+      for (final group in _paintedGroups)
+        '  final ${group.className} ${_groupField(group)} = ${group.className}();',
       if (needsPath) '  final Path _path = Path();',
       '',
       '  void paint(Canvas canvas) {',
@@ -35,10 +52,11 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
       '  }',
       for (var index = 0; index < _layers.length; index++) ...[
         '',
-        ..._layerMethod('paint${_names[index]}', _layers[index]),
+        ..._layerMethod('paint${_names[index]}', _layers[index], index),
       ],
       '}',
       '',
+      ...groupClasses,
     ];
     final lines = [
       ..._header(),
@@ -77,26 +95,49 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
   String _layerSource(int index) {
     final layer = _layers[index];
     final functions = _shapeFunctions(layer);
-    final needsPath = functions.any((function) => function.usesPath);
+    final localFunctions = [
+      for (final function in functions)
+        if (_groupForShape(index, layer.shapes[function.index]) == null)
+          function,
+    ];
+    final groups = [
+      for (final group in _groupsInLayer(index))
+        if (functions.any(
+          (function) =>
+              layer.shapes[function.index].groupId == group.id,
+        ))
+          group,
+    ];
+    final needsPath = localFunctions.any((function) => function.usesPath);
     final lines = [
       _generatedLine(),
       "import 'dart:ui';",
-      if (options.colorConstants && functions.isNotEmpty) ...[
+      if ((options.colorConstants && localFunctions.isNotEmpty) ||
+          groups.isNotEmpty) ...[
         '',
-        "import '../$_paletteFile';",
       ],
+      if (options.colorConstants && localFunctions.isNotEmpty)
+        "import '../$_paletteFile';",
+      for (final group in groups)
+        "import '../${_groupFile(group)}';",
       '',
       '/// Layer "${_oneLine(layer.name)}".',
       'class ${_layerClass(index)} {',
-      _paintField,
+      if (localFunctions.isNotEmpty) _paintField,
+      for (final group in groups)
+        '  final ${group.className} ${_groupField(group)} = ${group.className}();',
       if (needsPath) '  final Path _path = Path();',
       '',
       '  void paint(Canvas canvas) {',
-      for (final function in functions)
-        '    _draw${function.name}(canvas);',
+      for (final function in functions) ...[
+        if (_groupForShape(index, layer.shapes[function.index]) case final group?)
+          '    ${_groupField(group)}.paint${function.name}(canvas);'
+        else
+          '    _draw${function.name}(canvas);',
+      ],
       if (functions.isEmpty) '    // Nothing visible on this layer.',
       '  }',
-      for (final function in functions) ...[
+      for (final function in localFunctions) ...[
         '',
         if (function.doc != null) '  /// ${function.doc}',
         '  void _draw${function.name}(Canvas canvas) {',
@@ -125,26 +166,13 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
     '',
   ];
 
-  List<String> _layerMethod(String name, PaintLayer layer) {
-    _resetShader = _hasGradient(layer);
-    final body = <String>[
-      for (final shape in layer.shapes) ..._shape(shape, comment: true),
-    ];
-    if (body.isEmpty) body.add('// Nothing visible on this layer.');
-    return [
-      '  /// Layer "${_oneLine(layer.name)}".',
-      '  void $name(Canvas canvas) {',
-      for (final line in body) '    $line',
-      '  }',
-    ];
-  }
-
   List<_ShapeFunction> _shapeFunctions(PaintLayer layer) {
     _resetShader = _hasGradient(layer);
     final taken = <String>{};
     final perKind = <ShapeKind, int>{};
     final functions = <_ShapeFunction>[];
-    for (final shape in layer.shapes) {
+    for (var shapeIndex = 0; shapeIndex < layer.shapes.length; shapeIndex++) {
+      final shape = layer.shapes[shapeIndex];
       final body = _shape(shape, comment: false);
       if (body.isEmpty) continue;
       final usableName = RegExp(r'[A-Za-z0-9]').hasMatch(shape.name);
@@ -158,6 +186,7 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
       }
       functions.add(
         _ShapeFunction(
+          index: shapeIndex,
           name: name,
           doc: shape.name.trim().isNotEmpty
               ? 'Shape "${_oneLine(shape.name.trim())}".'

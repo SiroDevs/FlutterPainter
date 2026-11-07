@@ -105,13 +105,24 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<ShapeDeleted>((s, e) => ShapeLogic.delete(s));
     _reduce<ShapeDuplicated>((s, e) => ShapeLogic.duplicate(s));
     _reduce<SelectAllRequested>((s, e) => ShapeLogic.selectAll(s));
-    _reduce<ShapesGrouped>((s, e) => ShapeLogic.group(s));
-    _reduce<ShapesUngrouped>((s, e) => ShapeLogic.ungroup(s));
+    _reduce<ShapesGrouped>((s, e) => GroupLogic.group(s));
+    _reduce<ShapesUngrouped>((s, e) => GroupLogic.ungroup(s));
+    _reduce<SelectionScaled>((s, e) => ShapeLogic.scale(s, e.factor));
+    _reduce<GroupRenamed>(
+      (s, e) => GroupLogic.rename(s, e.layer, e.groupId, e.name),
+    );
     _reduce<VertexPointDeleted>((s, e) => VertexLogic.remove(s, e.index));
     _reduce<VertexSegmentSplit>((s, e) => VertexLogic.split(s, e.index));
     _reduce<ShapeReordered>((s, e) => ShapeLogic.reorder(s, e.direction));
     _reduce<ShapeMovedToLayer>((s, e) => ShapeLogic.moveToLayer(s, e.layer));
-    _reduce<ShapeRenamed>((s, e) => ShapeLogic.rename(s, e.name));
+    _reduce<ShapeRenamed>(
+      (s, e) => ShapeLogic.rename(
+        s,
+        e.name,
+        layer: e.layer,
+        index: e.index,
+      ),
+    );
     _reduce<ShapeSelectionRequested>(
       (s, e) => ShapeLogic.select(s, e.layer, e.index),
     );

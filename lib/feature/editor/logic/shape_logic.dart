@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../domain/models/shape.dart';
+import '../../../domain/services/geometry_utils.dart';
 import '../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 import 'image_logic.dart';
@@ -51,6 +51,7 @@ abstract class ShapeLogic {
           points: [for (final p in shape.points) p + const Offset(3, 3)],
           name: '${shape.name} copy',
           groupId: null,
+          groupName: null,
         ),
       );
       copies.add(shapes.length - 1);
@@ -64,43 +65,27 @@ abstract class ShapeLogic {
         : const [],
   );
 
-  static EditorState group(EditorState state) {
+  static EditorState scale(EditorState state, double factor) {
     final indices = state.validSelectedIndices;
-    if (indices.length < 2) return state;
-    final currentGroups = {
-      for (final index in indices) state.layer.shapes[index].groupId,
-    };
-    if (currentGroups.length == 1 && currentGroups.single != null) return state;
-    final used = state.layer.shapes
-        .map((shape) => shape.groupId)
-        .whereType<String>()
-        .toSet();
-    var suffix = state.revision + 1;
-    var id = 'group-$suffix';
-    while (used.contains(id)) {
-      suffix++;
-      id = 'group-$suffix';
-    }
-    final changes = <int, Shape>{
-      for (final i in indices) i: state.layer.shapes[i].copyWith(groupId: id),
-    };
-    return state.withShapeChanges(changes).selectIndices(indices).commit();
-  }
-
-  static EditorState ungroup(EditorState state) {
-    final indices = state.validSelectedIndices;
-    if (indices.isEmpty) return state;
-    final ids = {
-      for (final i in indices)
-        if (state.layer.shapes[i].groupId != null) state.layer.shapes[i].groupId,
-    };
-    if (ids.isEmpty) return state;
-    final changes = <int, Shape>{
-      for (var i = 0; i < state.layer.shapes.length; i++)
-        if (ids.contains(state.layer.shapes[i].groupId))
-          i: state.layer.shapes[i].copyWith(groupId: null),
-    };
-    return state.withShapeChanges(changes).selectIndices(indices).commit();
+    final bounds = state.selectedBounds;
+    if (indices.isEmpty || bounds == null || factor <= 0) return state;
+    final target = Rect.fromCenter(
+      center: bounds.center,
+      width: bounds.width * factor,
+      height: bounds.height * factor,
+    );
+    return state
+        .withShapeChanges({
+          for (final index in indices)
+            index: state.layer.shapes[index].copyWith(
+              points: remapPoints(
+                state.layer.shapes[index].points,
+                bounds,
+                target,
+              ),
+            ),
+        })
+        .commit();
   }
 
   /// [direction] +1 draws the shape later (in front), -1 earlier (behind).
@@ -137,6 +122,23 @@ abstract class ShapeLogic {
         .commit();
   }
 
-  static EditorState rename(EditorState state, String name) =>
-      state.editSelected((shape) => shape.copyWith(name: name)).commit();
+  static EditorState rename(
+    EditorState state,
+    String name, {
+    int? layer,
+    int? index,
+  }) {
+    if (layer == null || index == null) {
+      return state.editSelected((shape) => shape.copyWith(name: name)).commit();
+    }
+    if (layer < 0 || layer >= state.drawing.layers.length) return state;
+    final target = state.drawing.layers[layer];
+    if (index < 0 || index >= target.shapes.length) return state;
+    final shapes = [...target.shapes];
+    shapes[index] = shapes[index].copyWith(name: name);
+    final updatedLayer = target.copyWith(shapes: shapes);
+    return state
+        .withLayers(replacedAt(state.drawing.layers, layer, updatedLayer))
+        .commit();
+  }
 }

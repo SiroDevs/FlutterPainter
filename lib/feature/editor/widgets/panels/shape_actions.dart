@@ -38,6 +38,11 @@ class ShapeActions extends StatelessWidget {
           context.l10n.shapeDelete,
           () => bloc.add(const ShapeDeleted()),
         ),
+        _action(
+          Icons.zoom_out_map,
+          context.l10n.shapeScaleDown,
+          () => bloc.add(const SelectionScaled(0.9)),
+        ),
         if (selectionCount == 1) ...[
           _action(
             Icons.flip_to_front,

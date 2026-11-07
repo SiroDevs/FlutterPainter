@@ -40,6 +40,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   final ValueNotifier<bool> _inlineCode = ValueNotifier(false);
   bool _dragging = false;
 
+  // ignore: unused_element
   EditorBloc get _current => _ws.current;
 
   @override
@@ -93,16 +94,17 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final shortcuts = WorkspaceShortcuts(
+      context: context,
+      workspace: _ws,
+      isTyping: _isTyping,
+    );
     return CallbackShortcuts(
-      bindings: WorkspaceShortcuts(
-        context: context,
-        workspace: _ws,
-        editor: _current,
-        isTyping: _isTyping,
-      ).bindings(),
+      bindings: shortcuts.bindings(),
       child: Focus(
         focusNode: _focus,
         autofocus: true,
+        onKeyEvent: shortcuts.handleEscape,
         child: DropTarget(
           onDragDone: _onDrop,
           onDragEntered: (_) => setState(() => _dragging = true),

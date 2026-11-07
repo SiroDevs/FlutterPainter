@@ -11,10 +11,14 @@ import 'gradient_code.dart';
 
 part 'dart_exporter_layout.dart';
 part 'dart_exporter_shapes.dart';
+part 'dart_exporter_groups.dart';
 
 /// Exports a drawing as standalone Dart painter code.
 class DartExporter extends _DartExporterBase
-    with _DartExporterShapeWriter, _DartExporterLayoutWriter {
+    with
+        _DartExporterShapeWriter,
+        _DartExporterGroupWriter,
+        _DartExporterLayoutWriter {
   DartExporter(super.drawing, {super.options});
 
   List<ExportFile> generate() {
@@ -59,6 +63,8 @@ abstract class _DartExporterBase {
   String get _paletteFile => '${folderName}_palette.dart';
   String _layerClass(int index) => '$_root${_names[index]}Layer';
   String _layerFile(int index) => 'layers/${snakeCase(_names[index])}_layer.dart';
+  List<_ShapeFunction> _shapeFunctions(PaintLayer layer);
+  List<String> _layerMethod(String name, PaintLayer layer, int layerIndex);
 
   Map<String, int> get layerIndexByPath => {
     for (var index = 0; index < _layers.length; index++)
@@ -98,18 +104,47 @@ abstract class _DartExporterBase {
   List<String> _shape(Shape shape, {required bool comment});
   String _colorName(int argb);
   String _colorLiteral(int argb);
+
+  List<_ExportGroup> get _groups;
+  List<_ExportGroup> get _paintedGroups;
+  List<_ExportGroup> _groupsInLayer(int layerIndex);
+  _ExportGroup? _groupForShape(int layerIndex, Shape shape);
+  String _groupField(_ExportGroup group);
+  String _groupFile(_ExportGroup group);
+  List<_ShapeFunction> _groupFunctions(_ExportGroup group);
+  List<String> _groupClassLines(
+    _ExportGroup group,
+    List<_ShapeFunction> functions,
+  );
+  String _groupSource(_ExportGroup group);
 }
 
 class _ShapeFunction {
   const _ShapeFunction({
+    required this.index,
     required this.name,
     required this.doc,
     required this.body,
     required this.usesPath,
   });
 
+  final int index;
   final String name;
   final String? doc;
   final List<String> body;
   final bool usesPath;
+}
+
+class _ExportGroup {
+  const _ExportGroup({
+    required this.layerIndex,
+    required this.id,
+    required this.name,
+    required this.className,
+  });
+
+  final int layerIndex;
+  final String id;
+  final String name;
+  final String className;
 }

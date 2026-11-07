@@ -146,12 +146,13 @@ class DrawingPainter extends CustomPainter {
     if (indices.length > 1) canvas.drawRect(bounds, line);
     final h = 4 / state.view.zoom;
     final fill = Paint()..color = const Color(0xFFFFFFFF);
-    if (indices.length == 1) {
-      for (final point in handlePoints(state.layer.shapes[indices.single])) {
-        final r = Rect.fromCenter(center: point, width: 2 * h, height: 2 * h);
-        canvas.drawRect(r, fill);
-        canvas.drawRect(r, line);
-      }
+    final handles = indices.length == 1
+        ? handlePoints(state.layer.shapes[indices.single])
+        : boundsHandlePoints(bounds);
+    for (final point in handles) {
+      final r = Rect.fromCenter(center: point, width: 2 * h, height: 2 * h);
+      canvas.drawRect(r, fill);
+      canvas.drawRect(r, line);
     }
 
     final rotate = SelectionTransformLogic.rotationHandle(

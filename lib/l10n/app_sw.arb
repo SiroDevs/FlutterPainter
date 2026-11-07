@@ -45,5 +45,8 @@
     "layerItemEllipse": "Duara bapa",
     "layerItemLine": "Mstari",
     "layerItemPolygon": "Poligoni",
-    "layerItemFreehand": "Mchoro huru"
+    "layerItemFreehand": "Mchoro huru",
+    "layerEditItem": "Hariri jina la kitu",
+    "layerEditGroup": "Hariri jina la kikundi",
+    "shapeScaleDown": "Punguza ukubwa kwa 10%"
 }

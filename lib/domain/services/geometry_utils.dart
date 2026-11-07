@@ -42,6 +42,41 @@ Rect resizedBox(Rect start, int handle, Offset to) {
   return Rect.fromPoints(corners[(handle + 2) % 4], to);
 }
 
+/// The four resize handles around a rectangular selection box.
+List<Offset> boundsHandlePoints(Rect bounds) => [
+  bounds.topLeft,
+  bounds.topRight,
+  bounds.bottomRight,
+  bounds.bottomLeft,
+];
+
+/// Finds a corner handle on a rectangular selection box.
+int? hitBoundsHandle(Rect bounds, Offset point, double tolerance) {
+  final handles = boundsHandlePoints(bounds);
+  for (var index = 0; index < handles.length; index++) {
+    if ((handles[index] - point).distance <= tolerance) return index;
+  }
+  return null;
+}
+
+/// Resizes a selection uniformly around the corner opposite [handle].
+Rect uniformlyResizedBox(Rect start, int handle, Offset to) {
+  final handles = boundsHandlePoints(start);
+  final corner = handles[handle];
+  final anchor = handles[(handle + 2) % 4];
+  final diagonal = corner - anchor;
+  final drag = to - anchor;
+  if (diagonal.distanceSquared == 0) {
+    return resizedBox(start, handle, to);
+  }
+  final factor = math.max(
+    0.005,
+    (diagonal.dx * drag.dx + diagonal.dy * drag.dy) /
+        diagonal.distanceSquared,
+  ).toDouble();
+  return Rect.fromPoints(anchor, anchor + diagonal * factor);
+}
+
 /// Maps [pts] from the box [from] into the box [to] (used for resizing).
 List<Offset> remapPoints(List<Offset> pts, Rect from, Rect to) {
   final sx = from.width == 0 ? 1.0 : to.width / from.width;

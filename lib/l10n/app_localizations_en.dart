@@ -203,4 +203,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get layerItemFreehand => 'Freehand';
+
+  @override
+  String get layerEditItem => 'Edit item name';
+
+  @override
+  String get layerEditGroup => 'Edit group name';
+
+  @override
+  String get shapeScaleDown => 'Scale down 10%';
 }
