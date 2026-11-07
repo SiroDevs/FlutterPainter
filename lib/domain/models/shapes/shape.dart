@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 
 // Project imports:
-import '../../core/utils/copy_with_util.dart';
+import '../../../core/utils/copy_with_util.dart';
 import 'shape_gradient.dart';
 import 'shape_kind.dart';
 

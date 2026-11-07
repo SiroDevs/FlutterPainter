@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../../domain/models/tool.dart';
+import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../canvas/image_logic.dart';

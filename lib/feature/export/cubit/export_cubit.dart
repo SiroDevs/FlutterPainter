@@ -6,11 +6,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
-import '../../../domain/models/drawing.dart';
-import '../../../domain/models/export_file.dart';
-import '../../../domain/models/export_options.dart';
-import '../../../domain/services/dart_exporter.dart';
-import '../../../domain/services/dart_formatter.dart';
+import '../../../domain/models/drawing/drawing.dart';
+import '../../../domain/models/export/export_file.dart';
+import '../../../domain/models/export/export_options.dart';
+import '../../../domain/services/code_export/dart_exporter.dart';
+import '../../../domain/services/code_export/dart_formatter.dart';
 
 part 'export_state.dart';
 

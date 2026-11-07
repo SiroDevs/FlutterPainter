@@ -2,9 +2,9 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../../domain/models/shape.dart';
-import '../../../../domain/services/gradient_shader.dart';
-import '../../../../domain/services/shape_geometry.dart';
+import '../../../../domain/models/shapes/shape.dart';
+import '../../../../domain/services/rendering/gradient_shader.dart';
+import '../../../../domain/services/geometry/shape_geometry.dart';
 
 /// Draws one [Shape] on a canvas: fill first, then stroke.
 void paintShape(Canvas canvas, Shape shape, Paint paint) {

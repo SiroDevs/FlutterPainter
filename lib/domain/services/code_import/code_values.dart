@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../models/shape_gradient.dart';
+import '../../models/shapes/shape_gradient.dart';
 
 // A statement or expression the importer cannot read.
 class CodeUnsupported implements Exception {

@@ -10,7 +10,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
 import '../../../../common/widgets/inputs/labeled_slider.dart';
-import '../../../../domain/models/tool.dart';
+import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../flows/image_flow.dart';
 import '../../logic/drawing/editor_ops.dart';

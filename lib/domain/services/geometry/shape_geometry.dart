@@ -2,8 +2,8 @@
 import 'dart:ui';
 
 // Project imports:
-import '../models/shape.dart';
-import '../models/shape_kind.dart';
+import '../../models/shapes/shape.dart';
+import '../../models/shapes/shape_kind.dart';
 
 /// Quadratic smoothing through segment midpoints. The Dart exporter emits the
 /// same maths, so what you see in the editor is what the game draws.

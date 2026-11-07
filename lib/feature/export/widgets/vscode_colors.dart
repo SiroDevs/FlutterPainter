@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import '../../../domain/services/dart_tokenizer.dart';
+import '../../../domain/services/code_import/dart_tokenizer.dart';
 
 /// The colours of the code editor, taken from VS Code's "Dark+" and "Light+"
 /// themes so it feels like the editor people already know.

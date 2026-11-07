@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 // Project imports:
 import '../../../core/utils/copy_with_util.dart';
-import '../../../domain/models/drawing.dart';
+import '../../../domain/models/drawing/drawing.dart';
 
 /// What a new editor (one tab) starts from. Passed to the bloc as its
 /// injectable factory parameter.

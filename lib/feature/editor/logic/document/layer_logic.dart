@@ -1,5 +1,5 @@
 // Project imports:
-import '../../../../domain/models/paint_layer.dart';
+import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../bloc/editor_bloc.dart';
 import '../drawing/editor_ops.dart';
 

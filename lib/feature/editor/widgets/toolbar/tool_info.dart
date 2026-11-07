@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Project imports:
-import '../../../../domain/models/tool.dart';
+import '../../../../domain/models/editor/tool.dart';
 
 /// Name, icon and single-key shortcut of each tool, shared by the toolbox, the
 /// ribbon, the menus and the keyboard shortcuts so they never disagree.

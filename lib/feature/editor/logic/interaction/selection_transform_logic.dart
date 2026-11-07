@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../../../domain/models/shape.dart';
-import '../../../../domain/models/shape_kind.dart';
-import '../../../../domain/services/geometry_utils.dart';
+import '../../../../domain/models/shapes/shape.dart';
+import '../../../../domain/models/shapes/shape_kind.dart';
+import '../../../../domain/services/geometry/geometry_utils.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../drawing/editor_ops.dart';

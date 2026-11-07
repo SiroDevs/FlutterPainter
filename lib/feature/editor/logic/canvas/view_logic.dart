@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../../../domain/models/drawing.dart';
+import '../../../../domain/models/drawing/drawing.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/view_settings.dart';
 

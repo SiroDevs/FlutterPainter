@@ -2,12 +2,12 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../../domain/models/drawing.dart';
-import '../../../../domain/models/paint_layer.dart';
-import '../../../../domain/models/reference_image.dart';
-import '../../../../domain/models/shape.dart';
-import '../../../../domain/models/tool.dart';
-import '../../../../domain/services/geometry_utils.dart';
+import '../../../../domain/models/drawing/drawing.dart';
+import '../../../../domain/models/drawing/paint_layer.dart';
+import '../../../../domain/models/drawing/reference_image.dart';
+import '../../../../domain/models/shapes/shape.dart';
+import '../../../../domain/models/editor/tool.dart';
+import '../../../../domain/services/geometry/geometry_utils.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 

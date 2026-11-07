@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../models/shape.dart';
+import '../../models/shapes/shape.dart';
 import 'canvas_interpreter.dart';
 import 'class_scanner.dart';
 import 'code_text.dart';

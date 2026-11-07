@@ -2,7 +2,7 @@
 import 'package:injectable/injectable.dart';
 
 // Project imports:
-import '../../../domain/models/draft.dart';
+import '../../../domain/models/drawing/draft.dart';
 import '../../../domain/repos/draft_repo.dart';
 import '../../../domain/repos/project_repo.dart';
 import '../../editor/bloc/editor_bloc.dart';

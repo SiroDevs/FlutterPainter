@@ -2,8 +2,8 @@
 import 'package:equatable/equatable.dart';
 
 // Project imports:
-import '../../core/utils/copy_with_util.dart';
-import '../../core/utils/path_util.dart';
+import '../../../core/utils/copy_with_util.dart';
+import '../../../core/utils/path_util.dart';
 import 'drawing.dart';
 
 /// A side copy of a project with unsaved changes, kept so a crash loses nothing.

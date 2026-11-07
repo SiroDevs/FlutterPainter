@@ -4,11 +4,11 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 // Project imports:
-import '../../domain/models/drawing.dart';
-import '../../domain/models/paint_layer.dart';
-import '../../domain/models/reference_image.dart';
-import '../../domain/models/shape.dart';
-import '../../domain/models/shape_kind.dart';
+import '../../domain/models/drawing/drawing.dart';
+import '../../domain/models/drawing/paint_layer.dart';
+import '../../domain/models/drawing/reference_image.dart';
+import '../../domain/models/shapes/shape.dart';
+import '../../domain/models/shapes/shape_kind.dart';
 import 'gradient_mapper.dart';
 
 /// The .flp file format: JSON, with colours as 0xAARRGGBB integers and any

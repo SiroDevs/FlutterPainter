@@ -1,7 +1,7 @@
 // Project imports:
-import '../../../../domain/models/shape.dart';
-import '../../../../domain/models/shape_gradient.dart';
-import '../../../../domain/models/shape_kind.dart';
+import '../../../../domain/models/shapes/shape.dart';
+import '../../../../domain/models/shapes/shape_gradient.dart';
+import '../../../../domain/models/shapes/shape_kind.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/style_settings.dart';
 import 'editor_ops.dart';

@@ -7,7 +7,7 @@ import '../../../../common/widgets/color/color_wheel.dart';
 import '../../../../common/widgets/color/gradient_editor.dart';
 import '../../../../common/widgets/color/hex_code_field.dart';
 import '../../../../core/utils/l10n_ext.dart';
-import '../../../../domain/models/shape_gradient.dart';
+import '../../../../domain/models/shapes/shape_gradient.dart';
 
 // What the color picker hands back: a flat color, or a gradient when one is set
 // (then [color] is its first stop).

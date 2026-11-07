@@ -2,7 +2,7 @@
 import 'package:equatable/equatable.dart';
 
 // Project imports:
-import '../../common/constants/app_constants.dart';
+import '../../../common/constants/app_constants.dart';
 import 'paint_layer.dart';
 
 /// The whole document: a design box (in logical units) plus its layers.

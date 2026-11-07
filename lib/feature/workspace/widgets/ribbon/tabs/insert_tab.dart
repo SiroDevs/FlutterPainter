@@ -2,7 +2,7 @@
 import 'package:flutter/widgets.dart';
 
 // Project imports:
-import '../../../../../domain/models/tool.dart';
+import '../../../../../domain/models/editor/tool.dart';
 import '../../../commands/workspace_commands.dart';
 import '../ribbon_parts.dart';
 

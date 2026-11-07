@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../../domain/services/geometry_utils.dart';
+import '../../../../domain/services/geometry/geometry_utils.dart';
 import '../../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 import '../canvas/image_logic.dart';

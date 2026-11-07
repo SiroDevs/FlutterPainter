@@ -1,11 +1,11 @@
 // Project imports:
-import '../models/app_settings.dart';
-import '../models/drawing.dart';
-import '../models/export_file.dart';
-import '../models/export_options.dart';
-import '../models/paint_layer.dart';
-import '../models/shape.dart';
-import '../models/shape_kind.dart';
+import '../../models/editor/app_settings.dart';
+import '../../models/drawing/drawing.dart';
+import '../../models/export/export_file.dart';
+import '../../models/export/export_options.dart';
+import '../../models/drawing/paint_layer.dart';
+import '../../models/shapes/shape.dart';
+import '../../models/shapes/shape_kind.dart';
 import 'code_format.dart';
 import 'gradient_code.dart';
 
@@ -99,12 +99,14 @@ abstract class _DartExporterBase {
   }
 
   bool _hasGradient(PaintLayer layer);
+  // ignore: unused_element
   bool _needsPath(PaintLayer layer);
   bool _usesPath(Shape shape);
   List<String> _shape(Shape shape, {required bool comment});
   String _colorName(int argb);
   String _colorLiteral(int argb);
 
+  // ignore: unused_element
   List<_ExportGroup> get _groups;
   List<_ExportGroup> get _paintedGroups;
   List<_ExportGroup> _groupsInLayer(int layerIndex);

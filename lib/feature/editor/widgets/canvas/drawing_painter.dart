@@ -7,10 +7,10 @@ import 'package:flutter/rendering.dart';
 // Project imports:
 import '../../../../common/constants/palette_constants.dart';
 import '../../../../core/theme/theme_colors.dart';
-import '../../../../domain/models/reference_image.dart';
-import '../../../../domain/models/tool.dart';
-import '../../../../domain/services/geometry_utils.dart';
-import '../../../../domain/services/image_geometry.dart';
+import '../../../../domain/models/drawing/reference_image.dart';
+import '../../../../domain/models/editor/tool.dart';
+import '../../../../domain/services/geometry/geometry_utils.dart';
+import '../../../../domain/services/geometry/image_geometry.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/drawing/editor_ops.dart';
 import '../../logic/interaction/selection_transform_logic.dart';

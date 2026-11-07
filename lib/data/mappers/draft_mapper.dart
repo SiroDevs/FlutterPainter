@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 // Project imports:
-import '../../domain/models/draft.dart';
+import '../../domain/models/drawing/draft.dart';
 import 'drawing_mapper.dart';
 
 String draftToJson(Draft d) => jsonEncode({

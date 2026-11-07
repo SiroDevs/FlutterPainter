@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../models/shape.dart';
-import '../models/shape_kind.dart';
+import '../../models/shapes/shape.dart';
+import '../../models/shapes/shape_kind.dart';
 
 /// Rounds [p] to the snap grid: whole units, or half units when zoomed in far.
 Offset snapPoint(Offset p, {required bool enabled, required double zoom}) {

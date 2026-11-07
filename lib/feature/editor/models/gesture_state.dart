@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 
 // Project imports:
-import '../../../domain/models/shape.dart';
+import '../../../domain/models/shapes/shape.dart';
 
 /// What the pointer is currently doing.
 enum GestureMode {

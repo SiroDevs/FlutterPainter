@@ -2,8 +2,8 @@
 import 'dart:ui';
 
 // Project imports:
-import '../models/shape_gradient.dart';
-import 'gradient_geometry.dart';
+import '../../models/shapes/shape_gradient.dart';
+import '../geometry/gradient_geometry.dart';
 
 // Builds the shader that paints [gradient] over a shape with [bounds].
 Shader gradientShader(ShapeGradient gradient, Rect bounds) {

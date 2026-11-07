@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import '../../../domain/services/dart_tokenizer.dart';
+import '../../../domain/services/code_import/dart_tokenizer.dart';
 import 'vscode_colors.dart';
 
 /// A text controller whose text is drawn with Dart syntax colours. The spans

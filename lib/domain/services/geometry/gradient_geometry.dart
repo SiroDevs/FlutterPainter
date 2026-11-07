@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../models/shape_gradient.dart';
+import '../../models/shapes/shape_gradient.dart';
 
 // Turns a gradient's fractions into points on a shape's [bounds].
 Offset gradientPoint(Offset fraction, Rect bounds) => Offset(

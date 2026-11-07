@@ -2,9 +2,9 @@
 import 'package:equatable/equatable.dart';
 
 // Project imports:
-import '../../core/utils/copy_with_util.dart';
+import '../../../core/utils/copy_with_util.dart';
 import 'reference_image.dart';
-import 'shape.dart';
+import '../shapes/shape.dart';
 
 /// A named group of shapes, optionally with one picture underneath them.
 /// Layers draw bottom to top (the picture first, then the shapes) and export as

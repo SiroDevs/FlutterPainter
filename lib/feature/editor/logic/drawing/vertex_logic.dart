@@ -2,8 +2,8 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../../../domain/models/shape_kind.dart';
-import '../../../../domain/services/shape_geometry.dart';
+import '../../../../domain/models/shapes/shape_kind.dart';
+import '../../../../domain/services/geometry/shape_geometry.dart';
 import '../../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 

@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 
 // Project imports:
 import '../../../core/utils/copy_with_util.dart';
-import '../../../domain/models/shape_gradient.dart';
+import '../../../domain/models/shapes/shape_gradient.dart';
 
 /// The colours and stroke used for the next shape drawn. With a shape selected
 /// these mirror that shape, so edits apply to it.

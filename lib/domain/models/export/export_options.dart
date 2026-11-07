@@ -2,7 +2,7 @@
 import 'package:equatable/equatable.dart';
 
 // Project imports:
-import 'app_settings.dart';
+import '../editor/app_settings.dart';
 
 /// What the exporter needs to know about how to lay the code out.
 class ExportOptions extends Equatable {

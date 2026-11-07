@@ -1,5 +1,5 @@
 // Project imports:
-import '../../../../domain/models/shape.dart';
+import '../../../../domain/models/shapes/shape.dart';
 import '../../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
-import '../../../../domain/models/tool.dart';
+import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import 'tool_info.dart';
 

@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import '../../common/app_router/route_names.dart';
-import '../../domain/models/tool.dart';
+import '../../domain/models/editor/tool.dart';
 import '../editor/bloc/editor_bloc.dart';
 import '../editor/widgets/toolbar/tool_info.dart';
 import '../export/export_args.dart';

@@ -12,8 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../core/utils/color_preview.dart';
 import '../../../../core/utils/l10n_ext.dart';
-import '../../../../domain/models/app_settings.dart';
-import '../../../../domain/models/tool.dart';
+import '../../../../domain/models/editor/app_settings.dart';
+import '../../../../domain/models/editor/tool.dart';
 import '../../../settings/cubit/settings_cubit.dart';
 import '../../bloc/editor_bloc.dart';
 import 'drawing_painter.dart';
