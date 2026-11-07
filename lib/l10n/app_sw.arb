@@ -24,5 +24,11 @@
     },
     "shapeRotateHint": "Buruta kishikio cha duara ili kuzungusha. Shikilia Shift ili kuruka kwa kila 15°.",
     "vertexDelete": "Futa nukta hii",
-    "vertexSplit": "Gawa nukta hii"
+    "vertexSplit": "Gawa nukta hii",
+    "shapeDuplicate": "Nakili",
+    "shapeDelete": "Futa",
+    "shapeForward": "Peleka mbele",
+    "shapeBack": "Rudisha nyuma",
+    "shapeMoveToLayer": "Hamisha kwenye tabaka",
+    "shapeToLayer": "Kwa tabaka"
 }

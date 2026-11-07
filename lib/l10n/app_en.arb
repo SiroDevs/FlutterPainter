@@ -51,5 +51,11 @@
   },
   "shapeRotateHint": "Drag the round handle to rotate. Hold Shift to snap every 15°.",
   "vertexDelete": "Delete this point",
-  "vertexSplit": "Split this point"
+  "vertexSplit": "Split this point",
+  "shapeDuplicate": "Duplicate",
+  "shapeDelete": "Delete",
+  "shapeForward": "Forward",
+  "shapeBack": "Back",
+  "shapeMoveToLayer": "Move to layer",
+  "shapeToLayer": "To layer"
 }

@@ -325,6 +325,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Split this point'**
   String get vertexSplit;
+
+  /// No description provided for @shapeDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get shapeDuplicate;
+
+  /// No description provided for @shapeDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get shapeDelete;
+
+  /// No description provided for @shapeForward.
+  ///
+  /// In en, this message translates to:
+  /// **'Forward'**
+  String get shapeForward;
+
+  /// No description provided for @shapeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get shapeBack;
+
+  /// No description provided for @shapeMoveToLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to layer'**
+  String get shapeMoveToLayer;
+
+  /// No description provided for @shapeToLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'To layer'**
+  String get shapeToLayer;
 }
 
 class _AppLocalizationsDelegate

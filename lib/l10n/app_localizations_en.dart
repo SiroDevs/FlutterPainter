@@ -140,4 +140,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vertexSplit => 'Split this point';
+
+  @override
+  String get shapeDuplicate => 'Duplicate';
+
+  @override
+  String get shapeDelete => 'Delete';
+
+  @override
+  String get shapeForward => 'Forward';
+
+  @override
+  String get shapeBack => 'Back';
+
+  @override
+  String get shapeMoveToLayer => 'Move to layer';
+
+  @override
+  String get shapeToLayer => 'To layer';
 }

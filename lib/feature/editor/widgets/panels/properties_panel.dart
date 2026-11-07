@@ -11,6 +11,7 @@ import '../../../../domain/models/shape_kind.dart';
 import '../../../../domain/models/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/editor_ops.dart';
+import 'shape_actions.dart';
 
 /// Style controls. They edit the selected shape, or set the style used for the
 /// next shapes when nothing is selected.
@@ -121,68 +122,7 @@ class PropertiesPanel extends StatelessWidget {
               ],
               if (selectionCount > 0) ...[
                 const SizedBox(height: 8),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: [
-                    _action(
-                      Icons.copy,
-                      'Duplicate',
-                      () => bloc.add(const ShapeDuplicated()),
-                    ),
-                    _action(
-                      Icons.delete_outline,
-                      'Delete',
-                      () => bloc.add(const ShapeDeleted()),
-                    ),
-                    if (selectionCount == 1) ...[
-                      _action(
-                        Icons.flip_to_front,
-                        'Forward',
-                        () => bloc.add(const ShapeReordered(1)),
-                      ),
-                      _action(
-                        Icons.flip_to_back,
-                        'Back',
-                        () => bloc.add(const ShapeReordered(-1)),
-                      ),
-                    ],
-                    if (selectionCount > 1)
-                      _action(
-                        Icons.group_work_outlined,
-                        context.l10n.shapeGroup,
-                        () => bloc.add(const ShapesGrouped()),
-                      ),
-                    if (state.selectedShapes.any(
-                      (shape) => shape.groupId != null,
-                    ))
-                      _action(
-                        Icons.workspaces_outline,
-                        context.l10n.shapeUngroup,
-                        () => bloc.add(const ShapesUngrouped()),
-                      ),
-                    if (selectionCount == 1)
-                      PopupMenuButton<int>(
-                        tooltip: 'Move to layer',
-                        onSelected: (i) => bloc.add(ShapeMovedToLayer(i)),
-                        itemBuilder: (_) => [
-                          for (
-                            var i = state.drawing.layers.length - 1;
-                            i >= 0;
-                            i--
-                          )
-                            PopupMenuItem(
-                              value: i,
-                              child: Text(state.drawing.layers[i].name),
-                            ),
-                        ],
-                        child: const Chip(
-                          avatar: Icon(Icons.layers, size: 16),
-                          label: Text('To layer'),
-                        ),
-                      ),
-                  ],
-                ),
+                ShapeActions(state: state),
               ],
             ],
           ),
@@ -224,10 +164,4 @@ class PropertiesPanel extends StatelessWidget {
     );
   }
 
-  Widget _action(IconData icon, String label, VoidCallback onPressed) =>
-      OutlinedButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon, size: 16),
-        label: Text(label),
-      );
 }

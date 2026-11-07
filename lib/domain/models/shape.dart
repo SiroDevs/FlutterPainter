@@ -107,6 +107,23 @@ class Shape extends Equatable {
     final local = unrotatedBounds;
     if (rotation == 0) return local;
     final center = local.center;
+    if (kind == ShapeKind.ellipse) {
+      final radiusX = local.width / 2;
+      final radiusY = local.height / 2;
+      final cosAngle = math.cos(rotation);
+      final sinAngle = math.sin(rotation);
+      final extentX = math.sqrt(
+        math.pow(radiusX * cosAngle, 2) + math.pow(radiusY * sinAngle, 2),
+      );
+      final extentY = math.sqrt(
+        math.pow(radiusX * sinAngle, 2) + math.pow(radiusY * cosAngle, 2),
+      );
+      return Rect.fromCenter(
+        center: center,
+        width: extentX * 2,
+        height: extentY * 2,
+      );
+    }
     final corners = [
       local.topLeft,
       local.topRight,
@@ -124,9 +141,6 @@ class Shape extends Equatable {
     }
     return result;
   }
-
-  Offset toLocal(Offset point) =>
-      rotatePoint(point, -rotation, unrotatedBounds.center);
 
   static Offset rotatePoint(Offset point, double angle, Offset center) {
     final relative = point - center;

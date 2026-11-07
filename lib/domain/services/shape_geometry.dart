@@ -53,7 +53,9 @@ extension ShapeGeometry on Shape {
   }
 
   bool hitTest(Offset p, double tol) {
-    final localPoint = rotation == 0 ? p : toLocal(p);
+    final localPoint = rotation == 0
+        ? p
+        : Shape.rotatePoint(p, -rotation, unrotatedBounds.center);
     final reach = tol + (stroke != null ? strokeWidth / 2 : 0);
     if (!isClosed) return _nearPolyline(localPoint, reach, closed: false);
     if (buildPath().contains(localPoint)) return true;

@@ -141,4 +141,22 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get vertexSplit => 'Gawa nukta hii';
+
+  @override
+  String get shapeDuplicate => 'Nakili';
+
+  @override
+  String get shapeDelete => 'Futa';
+
+  @override
+  String get shapeForward => 'Peleka mbele';
+
+  @override
+  String get shapeBack => 'Rudisha nyuma';
+
+  @override
+  String get shapeMoveToLayer => 'Hamisha kwenye tabaka';
+
+  @override
+  String get shapeToLayer => 'Kwa tabaka';
 }

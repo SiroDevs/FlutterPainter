@@ -40,7 +40,11 @@ abstract class SelectionTransformLogic {
         final target = resizedBox(
           gesture.startBounds,
           gesture.handle,
-          selected.toLocal(state.snapped(point)),
+          Shape.rotatePoint(
+            state.snapped(point),
+            -selected.rotation,
+            gesture.startBounds.center,
+          ),
         );
         if (target.width < 0.5 || target.height < 0.5) return state;
         return state.withSelectedShape(
