@@ -96,37 +96,6 @@ Future<SaveChoice> askSaveChanges(BuildContext context, String name) async {
   return choice ?? SaveChoice.cancel;
 }
 
-enum OverwriteChoice { overwrite, saveNew, cancel }
-
-/// Shown the first time an opened project is saved.
-Future<OverwriteChoice> askOverwrite(BuildContext context, String path) async {
-  final choice = await showDialog<OverwriteChoice>(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      title: const Text('Overwrite the original file?'),
-      content: Text(
-        '$path\n\nOverwrite it with your changes, or save them as a new file '
-        'and leave the original untouched?',
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx, OverwriteChoice.cancel),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.pop(ctx, OverwriteChoice.saveNew),
-          child: const Text('Save as new file'),
-        ),
-        FilledButton(
-          onPressed: () => Navigator.pop(ctx, OverwriteChoice.overwrite),
-          child: const Text('Overwrite'),
-        ),
-      ],
-    ),
-  );
-  return choice ?? OverwriteChoice.cancel;
-}
-
 /// Offered at startup when unsaved work was left behind. True = restore it.
 Future<bool> askRecover(BuildContext context, List<String> titles) async {
   final restore = await showDialog<bool>(

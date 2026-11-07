@@ -157,7 +157,13 @@ class LayerItemTree extends StatelessWidget {
       ),
       onTap: () => context
           .read<EditorBloc>()
-          .add(ShapeSelectionRequested(layerIndex, index)),
+          .add(
+            ShapeSelectionRequested(
+              layerIndex,
+              index,
+              includeGroup: false,
+            ),
+          ),
     );
   }
 

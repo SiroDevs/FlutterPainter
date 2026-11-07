@@ -12,7 +12,12 @@ import 'style_logic.dart';
 abstract class ShapeLogic {
   ShapeLogic._();
 
-  static EditorState select(EditorState state, int layer, int index) {
+  static EditorState select(
+    EditorState state,
+    int layer,
+    int index, {
+    bool includeGroup = true,
+  }) {
     if (layer < 0 || layer >= state.drawing.layers.length) return state;
     final shapes = state.drawing.layers[layer].shapes;
     if (index < 0 || index >= shapes.length) return state;
@@ -22,7 +27,10 @@ abstract class ShapeLogic {
       selectedIndices: const [],
     );
     return next
-        .selectIndices(groupedShapeIndices(shapes, index), primary: index)
+        .selectIndices(
+          includeGroup ? groupedShapeIndices(shapes, index) : [index],
+          primary: index,
+        )
         .copyWith(style: StyleLogic.adopt(state.style, shapes[index]));
   }
 

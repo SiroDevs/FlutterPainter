@@ -124,7 +124,12 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
       ),
     );
     _reduce<ShapeSelectionRequested>(
-      (s, e) => ShapeLogic.select(s, e.layer, e.index),
+      (s, e) => ShapeLogic.select(
+        s,
+        e.layer,
+        e.index,
+        includeGroup: e.includeGroup,
+      ),
     );
     _reduce<ClosedToggled>((s, e) => VertexLogic.setClosed(s, e.closed));
   }
