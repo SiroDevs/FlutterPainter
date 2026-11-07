@@ -122,7 +122,10 @@ abstract class SelectLogic {
             : state;
         final selected = base.validSelectedIndices.contains(si)
             ? base
-            : base.selectIndices(_groupIndices(layer.shapes, si), primary: si);
+            : base.selectIndices(
+                groupedShapeIndices(layer.shapes, si),
+                primary: si,
+              );
         final indices = selected.validSelectedIndices;
         return selected.copyWith(
           style: StyleLogic.adopt(selected.style, shape),
@@ -161,15 +164,6 @@ abstract class SelectLogic {
     return _startMarquee(state, point, additive: false);
   }
 
-  static List<int> _groupIndices(List<Shape> shapes, int index) {
-    final id = shapes[index].groupId;
-    if (id == null) return [index];
-    return [
-      for (var i = 0; i < shapes.length; i++)
-        if (shapes[i].groupId == id) i,
-    ];
-  }
-
   static int? _hitInActiveLayer(EditorState state, Offset point) {
     if (!state.layer.visible) return null;
     final shapes = state.layer.shapes;
@@ -181,7 +175,7 @@ abstract class SelectLogic {
   }
 
   static EditorState _toggle(EditorState state, int index) {
-    final toggled = _groupIndices(state.layer.shapes, index).toSet();
+    final toggled = groupedShapeIndices(state.layer.shapes, index).toSet();
     final old = state.validSelectedIndices.toSet();
     final next = old.contains(index)
         ? old.difference(toggled)

@@ -27,6 +27,16 @@ List<T> removedAt<T>(List<T> list, int index) => [
   ...list.sublist(index + 1),
 ];
 
+/// Returns the shape indices that belong to [index]'s group.
+List<int> groupedShapeIndices(List<Shape> shapes, int index) {
+  final groupId = shapes[index].groupId;
+  if (groupId == null) return [index];
+  return [
+    for (var shapeIndex = 0; shapeIndex < shapes.length; shapeIndex++)
+      if (shapes[shapeIndex].groupId == groupId) shapeIndex,
+  ];
+}
+
 /// Small helpers shared by every logic class.
 extension EditorStateOps on EditorState {
   PaintLayer get layer => drawing.layers[layerIndex];

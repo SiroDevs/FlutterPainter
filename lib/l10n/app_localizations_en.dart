@@ -158,4 +158,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shapeToLayer => 'To layer';
+
+  @override
+  String get layersTitle => 'Layers';
+
+  @override
+  String get layerAdd => 'Add layer';
+
+  @override
+  String get layerRename => 'Rename layer';
+
+  @override
+  String get layerMoveUp => 'Move layer up';
+
+  @override
+  String get layerMoveDown => 'Move layer down';
+
+  @override
+  String get layerDelete => 'Delete layer';
+
+  @override
+  String get layerHide => 'Hide';
+
+  @override
+  String get layerShow => 'Show';
+
+  @override
+  String get layerGroup => 'Group';
+
+  @override
+  String get layerPicture => 'Picture';
+
+  @override
+  String get layerItemRectangle => 'Rectangle';
+
+  @override
+  String get layerItemEllipse => 'Ellipse';
+
+  @override
+  String get layerItemLine => 'Line';
+
+  @override
+  String get layerItemPolygon => 'Polygon';
+
+  @override
+  String get layerItemFreehand => 'Freehand';
 }

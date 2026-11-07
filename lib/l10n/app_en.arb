@@ -57,5 +57,20 @@
   "shapeForward": "Forward",
   "shapeBack": "Back",
   "shapeMoveToLayer": "Move to layer",
-  "shapeToLayer": "To layer"
+  "shapeToLayer": "To layer",
+  "layersTitle": "Layers",
+  "layerAdd": "Add layer",
+  "layerRename": "Rename layer",
+  "layerMoveUp": "Move layer up",
+  "layerMoveDown": "Move layer down",
+  "layerDelete": "Delete layer",
+  "layerHide": "Hide",
+  "layerShow": "Show",
+  "layerGroup": "Group",
+  "layerPicture": "Picture",
+  "layerItemRectangle": "Rectangle",
+  "layerItemEllipse": "Ellipse",
+  "layerItemLine": "Line",
+  "layerItemPolygon": "Polygon",
+  "layerItemFreehand": "Freehand"
 }

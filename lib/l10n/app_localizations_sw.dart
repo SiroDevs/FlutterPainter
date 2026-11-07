@@ -159,4 +159,49 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get shapeToLayer => 'Kwa tabaka';
+
+  @override
+  String get layersTitle => 'Tabaka';
+
+  @override
+  String get layerAdd => 'Ongeza tabaka';
+
+  @override
+  String get layerRename => 'Badilisha jina la tabaka';
+
+  @override
+  String get layerMoveUp => 'Peleka tabaka juu';
+
+  @override
+  String get layerMoveDown => 'Peleka tabaka chini';
+
+  @override
+  String get layerDelete => 'Futa tabaka';
+
+  @override
+  String get layerHide => 'Ficha';
+
+  @override
+  String get layerShow => 'Onyesha';
+
+  @override
+  String get layerGroup => 'Kikundi';
+
+  @override
+  String get layerPicture => 'Picha';
+
+  @override
+  String get layerItemRectangle => 'Mstatili';
+
+  @override
+  String get layerItemEllipse => 'Duara bapa';
+
+  @override
+  String get layerItemLine => 'Mstari';
+
+  @override
+  String get layerItemPolygon => 'Poligoni';
+
+  @override
+  String get layerItemFreehand => 'Mchoro huru';
 }
