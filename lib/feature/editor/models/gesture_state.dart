@@ -77,34 +77,32 @@ class GestureState extends Equatable {
     List<int>? startIndices,
     List<int>? selectionAtStart,
     bool? additiveSelection,
-  }) =>
-      GestureState(
-        mode: mode ?? this.mode,
-        origin: origin ?? this.origin,
-        last: last ?? this.last,
-        handle: handle ?? this.handle,
-        startPoints: startPoints ?? this.startPoints,
-        startBounds: startBounds ?? this.startBounds,
-        lastClickMs: lastClickMs ?? this.lastClickMs,
-        startShapes: startShapes ?? this.startShapes,
-        startIndices: startIndices ?? this.startIndices,
-        selectionAtStart: selectionAtStart ?? this.selectionAtStart,
-        additiveSelection: additiveSelection ?? this.additiveSelection,
-      );
+  }) => GestureState(
+    mode: mode ?? this.mode,
+    origin: origin ?? this.origin,
+    last: last ?? this.last,
+    handle: handle ?? this.handle,
+    startPoints: startPoints ?? this.startPoints,
+    startBounds: startBounds ?? this.startBounds,
+    lastClickMs: lastClickMs ?? this.lastClickMs,
+    startShapes: startShapes ?? this.startShapes,
+    startIndices: startIndices ?? this.startIndices,
+    selectionAtStart: selectionAtStart ?? this.selectionAtStart,
+    additiveSelection: additiveSelection ?? this.additiveSelection,
+  );
 
   @override
-  List<Object?> get props =>
-      [
-        mode,
-        origin,
-        last,
-        handle,
-        startPoints,
-        startBounds,
-        lastClickMs,
-        startShapes,
-        startIndices,
-        selectionAtStart,
-        additiveSelection,
-      ];
+  List<Object?> get props => [
+    mode,
+    origin,
+    last,
+    handle,
+    startPoints,
+    startBounds,
+    lastClickMs,
+    startShapes,
+    startIndices,
+    selectionAtStart,
+    additiveSelection,
+  ];
 }

@@ -79,7 +79,9 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   /// Closing the window asks about each project with unsaved changes.
   Future<AppExitResponse> _onExitRequested() async {
     if (!mounted) return AppExitResponse.exit;
-    return await confirmExit(context, _ws) ? AppExitResponse.exit : AppExitResponse.cancel;
+    return await confirmExit(context, _ws)
+        ? AppExitResponse.exit
+        : AppExitResponse.cancel;
   }
 
   Future<void> _onDrop(DropDoneDetails details) async {
@@ -109,15 +111,33 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
 
     void send(EditorEvent e) => _current.add(e);
 
-    both(LogicalKeyboardKey.keyZ, () => _guarded(() => send(const UndoRequested())));
-    both(LogicalKeyboardKey.keyZ, () => _guarded(() => send(const RedoRequested())),
-        shift: true);
-    both(LogicalKeyboardKey.keyY, () => _guarded(() => send(const RedoRequested())));
-    both(LogicalKeyboardKey.keyD, () => _guarded(() => send(const ShapeDuplicated())));
-    both(LogicalKeyboardKey.keyA, () => _guarded(() => send(const SelectAllRequested())));
+    both(
+      LogicalKeyboardKey.keyZ,
+      () => _guarded(() => send(const UndoRequested())),
+    );
+    both(
+      LogicalKeyboardKey.keyZ,
+      () => _guarded(() => send(const RedoRequested())),
+      shift: true,
+    );
+    both(
+      LogicalKeyboardKey.keyY,
+      () => _guarded(() => send(const RedoRequested())),
+    );
+    both(
+      LogicalKeyboardKey.keyD,
+      () => _guarded(() => send(const ShapeDuplicated())),
+    );
+    both(
+      LogicalKeyboardKey.keyA,
+      () => _guarded(() => send(const SelectAllRequested())),
+    );
     both(LogicalKeyboardKey.keyS, () => saveTab(context, _ws, _current));
-    both(LogicalKeyboardKey.keyS, () => saveTab(context, _ws, _current, saveAs: true),
-        shift: true);
+    both(
+      LogicalKeyboardKey.keyS,
+      () => saveTab(context, _ws, _current, saveAs: true),
+      shift: true,
+    );
     both(LogicalKeyboardKey.keyO, () => openProjectDialog(context, _ws));
     both(LogicalKeyboardKey.keyN, _ws.addBlank);
     both(LogicalKeyboardKey.keyW, () => closeTab(context, _ws, _current));
@@ -132,22 +152,22 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
 
     // One letter per tool, like Photoshop (V select, R rectangle, ...).
     for (final tool in Tool.values) {
-      map[SingleActivator(tool.shortcutKey)] =
-          () => _guarded(() => send(ToolSelected(tool)));
+      map[SingleActivator(tool.shortcutKey)] = () =>
+          _guarded(() => send(ToolSelected(tool)));
     }
 
-    map[const SingleActivator(LogicalKeyboardKey.delete)] =
-        () => _guarded(() => send(const ShapeDeleted()));
-    map[const SingleActivator(LogicalKeyboardKey.backspace)] =
-        () => _guarded(() => send(const ShapeDeleted()));
-    map[const SingleActivator(LogicalKeyboardKey.enter)] =
-        () => _guarded(() => send(const PolygonFinished(closed: false)));
-    map[const SingleActivator(LogicalKeyboardKey.enter, shift: true)] =
-        () => _guarded(() => send(const PolygonFinished()));
+    map[const SingleActivator(LogicalKeyboardKey.delete)] = () =>
+        _guarded(() => send(const ShapeDeleted()));
+    map[const SingleActivator(LogicalKeyboardKey.backspace)] = () =>
+        _guarded(() => send(const ShapeDeleted()));
+    map[const SingleActivator(LogicalKeyboardKey.enter)] = () =>
+        _guarded(() => send(const PolygonFinished(closed: false)));
+    map[const SingleActivator(LogicalKeyboardKey.enter, shift: true)] = () =>
+        _guarded(() => send(const PolygonFinished()));
     map[const SingleActivator(LogicalKeyboardKey.escape)] = () => _guarded(() {
-          send(const DraftCancelled());
-          send(const ToolSelected(Tool.select));
-        });
+      send(const DraftCancelled());
+      send(const ToolSelected(Tool.select));
+    });
     return map;
   }
 
@@ -163,38 +183,44 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
           onDragEntered: (_) => setState(() => _dragging = true),
           onDragExited: (_) => setState(() => _dragging = false),
           child: Scaffold(
-            body: Stack(fit: StackFit.expand, children: [
-              BlocBuilder<WorkspaceCubit, WorkspaceState>(
-                buildWhen: (a, b) => a.active != b.active || a.tabs.length != b.tabs.length,
-                builder: (context, _) {
-                  final bloc = _ws.current;
-                  // One editor bloc per tab. The provider (and so the menu bar,
-                  // which on macOS must exist exactly once) stays put; only the
-                  // editor below is keyed, so switching tabs rebuilds it
-                  // against the right project.
-                  return BlocProvider<EditorBloc>.value(
-                    value: bloc,
-                    child: AppMenuBar(
-                      child: KeyedSubtree(
-                        key: ObjectKey(bloc),
-                        child: Column(children: [
-                          ToolbarArea(ribbon: _ribbon),
-                          ProjectTabs(inlineCode: _inlineCode),
-                          const Divider(height: 1),
-                          Expanded(
-                            child: InlineCodeHost(
-                              open: _inlineCode,
-                              child: EditorScreen(canvasFocus: _focus),
-                            ),
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                BlocBuilder<WorkspaceCubit, WorkspaceState>(
+                  buildWhen: (a, b) =>
+                      a.active != b.active || a.tabs.length != b.tabs.length,
+                  builder: (context, _) {
+                    final bloc = _ws.current;
+                    // One editor bloc per tab. The provider (and so the menu bar,
+                    // which on macOS must exist exactly once) stays put; only the
+                    // editor below is keyed, so switching tabs rebuilds it
+                    // against the right project.
+                    return BlocProvider<EditorBloc>.value(
+                      value: bloc,
+                      child: AppMenuBar(
+                        child: KeyedSubtree(
+                          key: ObjectKey(bloc),
+                          child: Column(
+                            children: [
+                              ToolbarArea(ribbon: _ribbon),
+                              ProjectTabs(inlineCode: _inlineCode),
+                              const Divider(height: 1),
+                              Expanded(
+                                child: InlineCodeHost(
+                                  open: _inlineCode,
+                                  child: EditorScreen(canvasFocus: _focus),
+                                ),
+                              ),
+                            ],
                           ),
-                        ]),
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              if (_dragging) _dropOverlay(),
-            ]),
+                    );
+                  },
+                ),
+                if (_dragging) _dropOverlay(),
+              ],
+            ),
           ),
         ),
       ),
@@ -202,17 +228,17 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   }
 
   Widget _dropOverlay() => Positioned.fill(
-        child: IgnorePointer(
-          child: Container(
-            color: const Color(0x99000000),
-            alignment: Alignment.center,
-            child: const Text(
-              'Drop a .flp project to open it in a new tab,\n'
-              'or an image to put on the active layer',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
+    child: IgnorePointer(
+      child: Container(
+        color: const Color(0x99000000),
+        alignment: Alignment.center,
+        child: const Text(
+          'Drop a .flp project to open it in a new tab,\n'
+          'or an image to put on the active layer',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
         ),
-      );
+      ),
+    ),
+  );
 }

@@ -17,21 +17,25 @@ abstract class VertexLogic {
     if (shape == null || !shape.usesVertices) return s;
     if (closed && shape.kind == ShapeKind.line && shape.points.length >= 3) {
       return s
-          .withSelectedShape(shape.copyWith(
-            kind: ShapeKind.polygon,
-            fill: s.style.fillOn ? s.style.fillColor : null,
-            gradient: s.style.fillOn ? s.style.fillGradient : null,
-          ))
+          .withSelectedShape(
+            shape.copyWith(
+              kind: ShapeKind.polygon,
+              fill: s.style.fillOn ? s.style.fillColor : null,
+              gradient: s.style.fillOn ? s.style.fillGradient : null,
+            ),
+          )
           .commit();
     }
     if (!closed && shape.kind == ShapeKind.polygon) {
       return s
-          .withSelectedShape(shape.copyWith(
-            kind: ShapeKind.line,
-            fill: null,
-            gradient: null,
-            stroke: shape.stroke ?? s.style.strokeColor,
-          ))
+          .withSelectedShape(
+            shape.copyWith(
+              kind: ShapeKind.line,
+              fill: null,
+              gradient: null,
+              stroke: shape.stroke ?? s.style.strokeColor,
+            ),
+          )
           .commit();
     }
     return s;
@@ -45,7 +49,11 @@ abstract class VertexLogic {
     final hit = shape.nearestSegment(p, tol);
     if (hit == null) return null;
     final pts = shape.points;
-    final next = [...pts.sublist(0, hit.index + 1), hit.point, ...pts.sublist(hit.index + 1)];
+    final next = [
+      ...pts.sublist(0, hit.index + 1),
+      hit.point,
+      ...pts.sublist(hit.index + 1),
+    ];
     return s.withSelectedShape(shape.copyWith(points: next)).commit();
   }
 
@@ -54,14 +62,18 @@ abstract class VertexLogic {
     final shape = s.selectedShape;
     if (shape == null || !shape.usesVertices) return s;
     if (i < 0 || i >= shape.points.length) return s;
-    if (shape.points.length <= (shape.kind == ShapeKind.polygon ? 3 : 2)) return s;
-    return s.withSelectedShape(shape.copyWith(points: removedAt(shape.points, i))).commit();
+    if (shape.points.length <= (shape.kind == ShapeKind.polygon ? 3 : 2))
+      return s;
+    return s
+        .withSelectedShape(shape.copyWith(points: removedAt(shape.points, i)))
+        .commit();
   }
 
   /// Splits the segment adjacent to point [i] by inserting its midpoint.
   static EditorState split(EditorState s, int i) {
     final shape = s.selectedShape;
-    if (shape == null || !shape.usesVertices || shape.points.length < 2) return s;
+    if (shape == null || !shape.usesVertices || shape.points.length < 2)
+      return s;
     final points = shape.points;
     if (i < 0 || i >= points.length) return s;
     final next = shape.kind == ShapeKind.polygon
@@ -71,7 +83,11 @@ abstract class VertexLogic {
       (points[i].dx + points[next].dx) / 2,
       (points[i].dy + points[next].dy) / 2,
     );
-    final insertion = i == points.length - 1 ? i : i + 1;
+    final insertion = shape.kind == ShapeKind.polygon
+        ? i + 1
+        : i == points.length - 1
+        ? i
+        : i + 1;
     final updated = [
       ...points.sublist(0, insertion),
       midpoint,

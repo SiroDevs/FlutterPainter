@@ -107,4 +107,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get shapeGroup => 'Group';
+
+  @override
+  String get shapeUngroup => 'Ungroup';
+
+  @override
+  String get shapeGroupTooltip => 'Group selected shapes so they move together';
+
+  @override
+  String get shapeUngroupTooltip => 'Ungroup selected shapes';
+
+  @override
+  String shapeSelectionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count shapes selected',
+      one: '1 shape selected',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shapeRotateHint =>
+      'Drag the round handle to rotate. Hold Shift to snap every 15°.';
+
+  @override
+  String get vertexDelete => 'Delete this point';
+
+  @override
+  String get vertexSplit => 'Split this point';
 }

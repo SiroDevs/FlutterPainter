@@ -13,7 +13,7 @@ import '../../../../domain/services/geometry_utils.dart';
 import '../../../../domain/services/image_geometry.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/editor_ops.dart';
-import '../../logic/select_logic.dart';
+import '../../logic/selection_transform_logic.dart';
 import '../../models/gesture_state.dart';
 import 'shape_painter.dart';
 
@@ -87,13 +87,21 @@ class DrawingPainter extends CustomPainter {
       final major = x % 10 == 0;
       if (!major && !fine) continue;
       line.color = major ? const Color(0x44808080) : const Color(0x1A808080);
-      canvas.drawLine(Offset(x.toDouble(), 0), Offset(x.toDouble(), box.height), line);
+      canvas.drawLine(
+        Offset(x.toDouble(), 0),
+        Offset(x.toDouble(), box.height),
+        line,
+      );
     }
     for (var y = 0; y <= box.height; y++) {
       final major = y % 10 == 0;
       if (!major && !fine) continue;
       line.color = major ? const Color(0x44808080) : const Color(0x1A808080);
-      canvas.drawLine(Offset(0, y.toDouble()), Offset(box.width, y.toDouble()), line);
+      canvas.drawLine(
+        Offset(0, y.toDouble()),
+        Offset(box.width, y.toDouble()),
+        line,
+      );
     }
   }
 
@@ -126,21 +134,30 @@ class DrawingPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1 / state.view.zoom
       ..color = ThemeColors.selection;
-    for (final i in indices) {
-      canvas.drawRect(state.layer.shapes[i].bounds, line);
+    for (final index in indices) {
+      final shape = state.layer.shapes[index];
+      if (shape.rotation != 0 && !shape.usesVertices) {
+        final corners = handlePoints(shape);
+        canvas.drawPoints(PointMode.polygon, [...corners, corners.first], line);
+      } else {
+        canvas.drawRect(shape.bounds, line);
+      }
     }
-    canvas.drawRect(bounds, line);
+    if (indices.length > 1) canvas.drawRect(bounds, line);
     final h = 4 / state.view.zoom;
     final fill = Paint()..color = const Color(0xFFFFFFFF);
     if (indices.length == 1) {
-      for (final p in handlePoints(state.layer.shapes[indices.single])) {
-        final r = Rect.fromCenter(center: p, width: 2 * h, height: 2 * h);
+      for (final point in handlePoints(state.layer.shapes[indices.single])) {
+        final r = Rect.fromCenter(center: point, width: 2 * h, height: 2 * h);
         canvas.drawRect(r, fill);
         canvas.drawRect(r, line);
       }
     }
 
-    final rotate = SelectLogic.rotationHandle(bounds, state.view.zoom);
+    final rotate = SelectionTransformLogic.rotationHandle(
+      bounds,
+      state.view.zoom,
+    );
     canvas.drawLine(Offset(bounds.center.dx, bounds.top), rotate, line);
     canvas.drawCircle(rotate, 5 / state.view.zoom, fill);
     canvas.drawCircle(rotate, 5 / state.view.zoom, line);

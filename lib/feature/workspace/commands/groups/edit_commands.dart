@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Project imports:
+import '../../../../core/utils/l10n_ext.dart';
 import '../../../editor/bloc/editor_bloc.dart';
 import '../../../editor/logic/exports.dart';
 import '../app_command.dart';
@@ -10,63 +11,67 @@ import '../workspace_commands.dart';
 
 extension EditCommands on WorkspaceCommands {
   AppCommand get undo => AppCommand(
-        label: 'Undo',
-        icon: Icons.undo,
-        shortcut: primaryShortcut(LogicalKeyboardKey.keyZ),
-        onPressed: state.canUndo ? () => send(const UndoRequested()) : null,
-      );
+    label: 'Undo',
+    icon: Icons.undo,
+    shortcut: primaryShortcut(LogicalKeyboardKey.keyZ),
+    onPressed: state.canUndo ? () => send(const UndoRequested()) : null,
+  );
 
   AppCommand get redo => AppCommand(
-        label: 'Redo',
-        icon: Icons.redo,
-        shortcut: isMacOS
-            ? primaryShortcut(LogicalKeyboardKey.keyZ, shift: true)
-            : primaryShortcut(LogicalKeyboardKey.keyY),
-        onPressed: state.canRedo ? () => send(const RedoRequested()) : null,
-      );
+    label: 'Redo',
+    icon: Icons.redo,
+    shortcut: isMacOS
+        ? primaryShortcut(LogicalKeyboardKey.keyZ, shift: true)
+        : primaryShortcut(LogicalKeyboardKey.keyY),
+    onPressed: state.canRedo ? () => send(const RedoRequested()) : null,
+  );
 
   AppCommand get duplicate => AppCommand(
-        label: 'Duplicate',
-        icon: Icons.content_copy,
-        shortcut: primaryShortcut(LogicalKeyboardKey.keyD),
-        onPressed: hasShape ? () => send(const ShapeDuplicated()) : null,
-      );
+    label: 'Duplicate',
+    icon: Icons.content_copy,
+    shortcut: primaryShortcut(LogicalKeyboardKey.keyD),
+    onPressed: hasShape ? () => send(const ShapeDuplicated()) : null,
+  );
 
   AppCommand get delete => AppCommand(
-        label: 'Delete',
-        icon: Icons.delete_outline,
-        tooltip: 'Delete the selected shape or image',
-        keys: 'Del',
-        onPressed: (hasShape || state.imageSelected)
-            ? () => send(const ShapeDeleted())
-            : null,
-      );
+    label: 'Delete',
+    icon: Icons.delete_outline,
+    tooltip: 'Delete the selected shape or image',
+    keys: 'Del',
+    onPressed: (hasShape || state.imageSelected)
+        ? () => send(const ShapeDeleted())
+        : null,
+  );
 
   AppCommand get bringForward => AppCommand(
-        label: 'Bring forward',
-        icon: Icons.flip_to_front,
-        onPressed: hasShape ? () => send(const ShapeReordered(1)) : null,
-      );
+    label: 'Bring forward',
+    icon: Icons.flip_to_front,
+    onPressed: state.validSelectedIndices.length == 1
+        ? () => send(const ShapeReordered(1))
+        : null,
+  );
 
   AppCommand get sendBackward => AppCommand(
-        label: 'Send backward',
-        icon: Icons.flip_to_back,
-        onPressed: hasShape ? () => send(const ShapeReordered(-1)) : null,
-      );
+    label: 'Send backward',
+    icon: Icons.flip_to_back,
+    onPressed: state.validSelectedIndices.length == 1
+        ? () => send(const ShapeReordered(-1))
+        : null,
+  );
 
   AppCommand get group => AppCommand(
-        label: 'Group',
-        icon: Icons.group_work_outlined,
-        tooltip: 'Group selected shapes so they move together',
-        onPressed: canGroup ? () => send(const ShapesGrouped()) : null,
-      );
+    label: context.l10n.shapeGroup,
+    icon: Icons.group_work_outlined,
+    tooltip: context.l10n.shapeGroupTooltip,
+    onPressed: canGroup ? () => send(const ShapesGrouped()) : null,
+  );
 
   AppCommand get ungroup => AppCommand(
-        label: 'Ungroup',
-        icon: Icons.workspaces_outline,
-        tooltip: 'Ungroup selected shapes',
-        onPressed: hasGroupedSelection ? () => send(const ShapesUngrouped()) : null,
-      );
+    label: context.l10n.shapeUngroup,
+    icon: Icons.workspaces_outline,
+    tooltip: context.l10n.shapeUngroupTooltip,
+    onPressed: hasGroupedSelection ? () => send(const ShapesUngrouped()) : null,
+  );
 
   AppCommand get closedPath {
     final shape = state.selectedShape;
@@ -75,24 +80,26 @@ extension EditCommands on WorkspaceCommands {
       icon: Icons.polyline_outlined,
       tooltip: 'Close or open the selected polygon / line path',
       checked: shape?.isClosed ?? false,
-      onPressed: (shape != null && shape.usesVertices)
+      onPressed: (shape != null &&
+              shape.usesVertices &&
+              state.validSelectedIndices.length == 1)
           ? () => send(ClosedToggled(!shape.isClosed))
           : null,
     );
   }
 
   AppCommand get fillOn => AppCommand(
-        label: 'Fill',
-        icon: Icons.format_color_fill,
-        checked: state.style.fillOn,
-        onPressed: () => send(FillToggled(!state.style.fillOn)),
-      );
+    label: 'Fill',
+    icon: Icons.format_color_fill,
+    checked: state.style.fillOn,
+    onPressed: () => send(FillToggled(!state.style.fillOn)),
+  );
 
   AppCommand get strokeOn => AppCommand(
-        label: 'Outline',
-        icon: Icons.border_color,
-        tooltip: 'Stroke (outline)',
-        checked: state.style.strokeOn,
-        onPressed: () => send(StrokeToggled(!state.style.strokeOn)),
-      );
+    label: 'Outline',
+    icon: Icons.border_color,
+    tooltip: 'Stroke (outline)',
+    checked: state.style.strokeOn,
+    onPressed: () => send(StrokeToggled(!state.style.strokeOn)),
+  );
 }

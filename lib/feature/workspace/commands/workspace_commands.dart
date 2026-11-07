@@ -33,7 +33,8 @@ class WorkspaceCommands {
 
   bool get hasShape => state.selectedShape != null;
   bool get canGroup => state.validSelectedIndices.length > 1;
-  bool get hasGroupedSelection => state.selectedShapes.any((shape) => shape.groupId != null);
+  bool get hasGroupedSelection =>
+      state.selectedShapes.any((shape) => shape.groupId != null);
   bool get hasImage => state.layer.image != null;
 
   void send(EditorEvent e) => bloc.add(e);

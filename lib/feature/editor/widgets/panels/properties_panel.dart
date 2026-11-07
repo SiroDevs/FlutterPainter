@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../../common/widgets/inputs/labeled_slider.dart';
+import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/shape.dart';
 import '../../../../domain/models/shape_kind.dart';
 import '../../../../domain/models/tool.dart';
@@ -18,7 +19,11 @@ class PropertiesPanel extends StatelessWidget {
 
   Future<void> _rename(BuildContext context, Shape s) async {
     final bloc = context.read<EditorBloc>();
-    final name = await promptText(context, title: 'Rename shape', initial: s.name);
+    final name = await promptText(
+      context,
+      title: 'Rename shape',
+      initial: s.name,
+    );
     if (name != null) bloc.add(ShapeRenamed(name));
   }
 
@@ -33,102 +38,154 @@ class PropertiesPanel extends StatelessWidget {
         final showRadius = state.tool == Tool.rect || s?.kind == ShapeKind.rect;
         return SingleChildScrollView(
           padding: const EdgeInsets.all(12),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Properties', style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 4),
-            if (selectionCount > 1)
-              Text(
-                '$selectionCount shapes selected',
-                style: Theme.of(context).textTheme.bodySmall,
-              )
-            else if (s == null)
-              Text(
-                'No shape selected. These settings apply to the next shape you draw.',
-                style: Theme.of(context).textTheme.bodySmall,
-              )
-            else ...[
-              Row(children: [
-                Expanded(child: Text(s.name.isEmpty ? s.kind.name : s.name)),
-                IconButton(
-                  tooltip: 'Rename shape',
-                  iconSize: 18,
-                  icon: const Icon(Icons.edit_outlined),
-                  onPressed: () => _rename(context, s),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Properties', style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 4),
+              if (selectionCount > 1)
+                Text(
+                  context.l10n.shapeSelectionCount(selectionCount),
+                  style: Theme.of(context).textTheme.bodySmall,
+                )
+              else if (s == null)
+                Text(
+                  'No shape selected. These settings apply to the next shape you draw.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                )
+              else ...[
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(s.name.isEmpty ? s.kind.name : s.name),
+                    ),
+                    IconButton(
+                      tooltip: 'Rename shape',
+                      iconSize: 18,
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () => _rename(context, s),
+                    ),
+                  ],
                 ),
-              ]),
-              Text(_bounds(s), style: Theme.of(context).textTheme.bodySmall),
-              if (s.usesVertices && s.points.length >= 3)
-                CheckboxListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                  controlAffinity: ListTileControlAffinity.leading,
-                  title: const Text('Closed shape (can be filled)'),
-                  value: s.kind == ShapeKind.polygon,
-                  onChanged: (v) => bloc.add(ClosedToggled(v ?? false)),
+                Text(_bounds(s), style: Theme.of(context).textTheme.bodySmall),
+                if (s.usesVertices && s.points.length >= 3)
+                  CheckboxListTile(
+                    dense: true,
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: const Text('Closed shape (can be filled)'),
+                    value: s.kind == ShapeKind.polygon,
+                    onChanged: (v) => bloc.add(ClosedToggled(v ?? false)),
+                  ),
+              ],
+              if (selectionCount > 0)
+                Text(
+                  context.l10n.shapeRotateHint,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
-            ],
-            if (selectionCount <= 1) ...[
-              const SizedBox(height: 8),
-              _toggle('Fill', st.fillOn, st.fillColor,
+              if (selectionCount <= 1) ...[
+                const SizedBox(height: 8),
+                _toggle(
+                  'Fill',
+                  st.fillOn,
+                  st.fillColor,
                   (v) => bloc.add(FillToggled(v)),
-                  () => bloc.add(const StyleTargetChanged(true))),
-              _toggle('Stroke', st.strokeOn, st.strokeColor,
+                  () => bloc.add(const StyleTargetChanged(true)),
+                ),
+                _toggle(
+                  'Stroke',
+                  st.strokeOn,
+                  st.strokeColor,
                   (v) => bloc.add(StrokeToggled(v)),
-                  () => bloc.add(const StyleTargetChanged(false))),
-              LabeledSlider(
-                label: 'Stroke width: ${st.strokeWidth.toStringAsFixed(2)}',
-                value: st.strokeWidth,
-                min: 0.25,
-                max: 20,
-                onChanged: (v) =>
-                    bloc.add(StrokeWidthChanged((v * 4).round() / 4)),
-                onChangeEnd: () => bloc.add(const ChangesCommitted()),
-              ),
-              if (showRadius)
+                  () => bloc.add(const StyleTargetChanged(false)),
+                ),
                 LabeledSlider(
-                  label: 'Corner radius: ${st.radius.toStringAsFixed(2)}',
-                  value: st.radius,
-                  min: 0,
-                  max: 40,
+                  label: 'Stroke width: ${st.strokeWidth.toStringAsFixed(2)}',
+                  value: st.strokeWidth,
+                  min: 0.25,
+                  max: 20,
                   onChanged: (v) =>
-                      bloc.add(RadiusChanged((v * 4).round() / 4)),
+                      bloc.add(StrokeWidthChanged((v * 4).round() / 4)),
                   onChangeEnd: () => bloc.add(const ChangesCommitted()),
                 ),
-            ],
-            if (selectionCount > 0) ...[
-              const SizedBox(height: 8),
-              Wrap(spacing: 6, runSpacing: 6, children: [
-                _action(Icons.copy, 'Duplicate',
-                    () => bloc.add(const ShapeDuplicated())),
-                _action(Icons.delete_outline, 'Delete',
-                    () => bloc.add(const ShapeDeleted())),
-                if (selectionCount == 1) ...[
-                  _action(Icons.flip_to_front, 'Forward',
-                      () => bloc.add(const ShapeReordered(1))),
-                  _action(Icons.flip_to_back, 'Back',
-                      () => bloc.add(const ShapeReordered(-1))),
-                ],
-                if (selectionCount > 1)
-                  _action(Icons.group_work_outlined, 'Group',
-                      () => bloc.add(const ShapesGrouped())),
-                if (state.selectedShapes.any((shape) => shape.groupId != null))
-                  _action(Icons.workspaces_outline, 'Ungroup',
-                      () => bloc.add(const ShapesUngrouped())),
-                if (selectionCount == 1) PopupMenuButton<int>(
-                  tooltip: 'Move to layer',
-                  onSelected: (i) => bloc.add(ShapeMovedToLayer(i)),
-                  itemBuilder: (_) => [
-                    for (var i = state.drawing.layers.length - 1; i >= 0; i--)
-                      PopupMenuItem(value: i, child: Text(state.drawing.layers[i].name)),
-                  ],
-                  child: const Chip(
-                    avatar: Icon(Icons.layers, size: 16),
-                    label: Text('To layer'),
+                if (showRadius)
+                  LabeledSlider(
+                    label: 'Corner radius: ${st.radius.toStringAsFixed(2)}',
+                    value: st.radius,
+                    min: 0,
+                    max: 40,
+                    onChanged: (v) =>
+                        bloc.add(RadiusChanged((v * 4).round() / 4)),
+                    onChangeEnd: () => bloc.add(const ChangesCommitted()),
                   ),
+              ],
+              if (selectionCount > 0) ...[
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    _action(
+                      Icons.copy,
+                      'Duplicate',
+                      () => bloc.add(const ShapeDuplicated()),
+                    ),
+                    _action(
+                      Icons.delete_outline,
+                      'Delete',
+                      () => bloc.add(const ShapeDeleted()),
+                    ),
+                    if (selectionCount == 1) ...[
+                      _action(
+                        Icons.flip_to_front,
+                        'Forward',
+                        () => bloc.add(const ShapeReordered(1)),
+                      ),
+                      _action(
+                        Icons.flip_to_back,
+                        'Back',
+                        () => bloc.add(const ShapeReordered(-1)),
+                      ),
+                    ],
+                    if (selectionCount > 1)
+                      _action(
+                        Icons.group_work_outlined,
+                        context.l10n.shapeGroup,
+                        () => bloc.add(const ShapesGrouped()),
+                      ),
+                    if (state.selectedShapes.any(
+                      (shape) => shape.groupId != null,
+                    ))
+                      _action(
+                        Icons.workspaces_outline,
+                        context.l10n.shapeUngroup,
+                        () => bloc.add(const ShapesUngrouped()),
+                      ),
+                    if (selectionCount == 1)
+                      PopupMenuButton<int>(
+                        tooltip: 'Move to layer',
+                        onSelected: (i) => bloc.add(ShapeMovedToLayer(i)),
+                        itemBuilder: (_) => [
+                          for (
+                            var i = state.drawing.layers.length - 1;
+                            i >= 0;
+                            i--
+                          )
+                            PopupMenuItem(
+                              value: i,
+                              child: Text(state.drawing.layers[i].name),
+                            ),
+                        ],
+                        child: const Chip(
+                          avatar: Icon(Icons.layers, size: 16),
+                          label: Text('To layer'),
+                        ),
+                      ),
+                  ],
                 ),
-              ]),
+              ],
             ],
-          ]),
+          ),
         );
       },
     );
@@ -147,22 +204,24 @@ class PropertiesPanel extends StatelessWidget {
     ValueChanged<bool> set,
     VoidCallback pick,
   ) {
-    return Row(children: [
-      Checkbox(value: on, onChanged: (v) => set(v ?? false)),
-      Text(label),
-      const Spacer(),
-      GestureDetector(
-        onTap: pick,
-        child: Container(
-          width: 28,
-          height: 20,
-          decoration: BoxDecoration(
-            color: Color(color),
-            border: Border.all(color: Colors.white54),
+    return Row(
+      children: [
+        Checkbox(value: on, onChanged: (v) => set(v ?? false)),
+        Text(label),
+        const Spacer(),
+        GestureDetector(
+          onTap: pick,
+          child: Container(
+            width: 28,
+            height: 20,
+            decoration: BoxDecoration(
+              color: Color(color),
+              border: Border.all(color: Colors.white54),
+            ),
           ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 
   Widget _action(IconData icon, String label, VoidCallback onPressed) =>

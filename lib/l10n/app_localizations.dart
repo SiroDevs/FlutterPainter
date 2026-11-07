@@ -277,6 +277,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @shapeGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Group'**
+  String get shapeGroup;
+
+  /// No description provided for @shapeUngroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Ungroup'**
+  String get shapeUngroup;
+
+  /// No description provided for @shapeGroupTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Group selected shapes so they move together'**
+  String get shapeGroupTooltip;
+
+  /// No description provided for @shapeUngroupTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Ungroup selected shapes'**
+  String get shapeUngroupTooltip;
+
+  /// No description provided for @shapeSelectionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 shape selected} other{{count} shapes selected}}'**
+  String shapeSelectionCount(int count);
+
+  /// No description provided for @shapeRotateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag the round handle to rotate. Hold Shift to snap every 15°.'**
+  String get shapeRotateHint;
+
+  /// No description provided for @vertexDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this point'**
+  String get vertexDelete;
+
+  /// No description provided for @vertexSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Split this point'**
+  String get vertexSplit;
 }
 
 class _AppLocalizationsDelegate

@@ -1,13 +1,17 @@
 // Dart imports:
-import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
+import '../../../domain/models/shape.dart';
 import '../../../domain/services/geometry_utils.dart';
 import '../../../domain/services/shape_geometry.dart';
 import '../bloc/editor_bloc.dart';
 import '../models/gesture_state.dart';
-import 'exports.dart';
+import 'editor_ops.dart';
+import 'image_logic.dart';
+import 'selection_transform_logic.dart';
+import 'style_logic.dart';
+import 'vertex_logic.dart';
 
 /// Selection, marquee, move, resize, rotate, and vertex editing.
 abstract class SelectLogic {
@@ -26,7 +30,10 @@ abstract class SelectLogic {
     final bounds = base.selectedBounds;
 
     if (bounds != null && base.validSelectedIndices.isNotEmpty) {
-      final rotateHandle = rotationHandle(bounds, base.view.zoom);
+      final rotateHandle = SelectionTransformLogic.rotationHandle(
+        bounds,
+        base.view.zoom,
+      );
       if ((rotateHandle - p).distance <= 9 / base.view.zoom) {
         final indices = base.validSelectedIndices;
         return base.copyWith(
@@ -51,7 +58,7 @@ abstract class SelectLogic {
             handle: handle,
             origin: p,
             startPoints: shape.points,
-            startBounds: shape.bounds,
+            startBounds: shape.unrotatedBounds,
           ),
         );
       }
@@ -76,7 +83,11 @@ abstract class SelectLogic {
     return _pick(base, p);
   }
 
-  static EditorState _startMarquee(EditorState s, Offset p, {required bool additive}) {
+  static EditorState _startMarquee(
+    EditorState s,
+    Offset p, {
+    required bool additive,
+  }) {
     final oldSelection = additive ? s.validSelectedIndices : const <int>[];
     final next = additive ? s : s.selectIndices(const []);
     return next.copyWith(
@@ -103,7 +114,11 @@ abstract class SelectLogic {
         if (!shape.hitTest(p, tol)) continue;
         final switchedLayer = li != s.layerIndex;
         final base = switchedLayer
-            ? s.copyWith(layerIndex: li, selected: null, selectedIndices: const [])
+            ? s.copyWith(
+                layerIndex: li,
+                selected: null,
+                selectedIndices: const [],
+              )
             : s;
         final selected = base.validSelectedIndices.contains(si)
             ? base
@@ -149,7 +164,10 @@ abstract class SelectLogic {
   static List<int> _groupIndices(List<Shape> shapes, int index) {
     final id = shapes[index].groupId;
     if (id == null) return [index];
-    return [for (var i = 0; i < shapes.length; i++) if (shapes[i].groupId == id) i];
+    return [
+      for (var i = 0; i < shapes.length; i++)
+        if (shapes[i].groupId == id) i,
+    ];
   }
 
   static int? _hitInActiveLayer(EditorState s, Offset p) {
@@ -164,99 +182,21 @@ abstract class SelectLogic {
   static EditorState _toggle(EditorState s, int index) {
     final toggled = _groupIndices(s.layer.shapes, index).toSet();
     final old = s.validSelectedIndices.toSet();
-    final next = old.contains(index) ? old.difference(toggled) : old.union(toggled);
-    return s.selectIndices(next.toList(), primary: next.contains(index) ? index : null);
+    final next = old.contains(index)
+        ? old.difference(toggled)
+        : old.union(toggled);
+    return s.selectIndices(
+      next.toList(),
+      primary: next.contains(index) ? index : null,
+    );
   }
 
-  static EditorState moved(EditorState s, Offset p, {required bool shift}) {
-    final g = s.gesture;
-    final shape = s.selectedShape;
-    switch (g.mode) {
-      case GestureMode.move:
-        if (g.startIndices.isEmpty) return s;
-        var delta = p - g.origin;
-        if (s.view.snap) delta = s.snapped(delta);
-        final changes = <int, Shape>{};
-        for (var i = 0; i < g.startIndices.length; i++) {
-          final original = g.startShapes[i];
-          changes[g.startIndices[i]] = original.copyWith(
-            points: [for (final q in original.points) q + delta],
-          );
-        }
-        return s.withShapeChanges(changes);
-      case GestureMode.scale:
-        if (shape == null) return s;
-        final to = resizedBox(g.startBounds, g.handle, s.snapped(p));
-        if (to.width < 0.5 || to.height < 0.5) return s;
-        return s.withSelectedShape(
-          shape.copyWith(points: remapPoints(g.startPoints, g.startBounds, to)),
-        );
-      case GestureMode.rotate:
-        if (g.startShapes.isEmpty) return s;
-        final pivot = g.startBounds.center;
-        final from = g.origin - pivot;
-        final to = p - pivot;
-        if (from.distance < 0.001 || to.distance < 0.001) return s;
-        var angle = math.atan2(to.dy, to.dx) - math.atan2(from.dy, from.dx);
-        if (shift) {
-          const increment = math.pi / 12;
-          angle = (angle / increment).round() * increment;
-        }
-        final cosA = math.cos(angle);
-        final sinA = math.sin(angle);
-        final changes = <int, Shape>{};
-        for (var i = 0; i < g.startIndices.length; i++) {
-          final original = g.startShapes[i];
-          changes[g.startIndices[i]] = original.copyWith(points: [
-            for (final point in original.points)
-              Offset(
-                pivot.dx + (point.dx - pivot.dx) * cosA - (point.dy - pivot.dy) * sinA,
-                pivot.dy + (point.dx - pivot.dx) * sinA + (point.dy - pivot.dy) * cosA,
-              ),
-          ]);
-        }
-        return s.withShapeChanges(changes);
-      case GestureMode.vertex:
-        if (shape == null) return s;
-        return s.withSelectedShape(
-          shape.copyWith(points: replacedAt(shape.points, g.handle, s.snapped(p))),
-        );
-      case GestureMode.marquee:
-        return s.copyWith(
-          gesture: g.copyWith(startBounds: Rect.fromPoints(g.origin, p)),
-        );
-      case GestureMode.none:
-      case GestureMode.draw:
-      case GestureMode.imageMove:
-      case GestureMode.imageScale:
-        return s;
-    }
-  }
+  static EditorState moved(
+    EditorState state,
+    Offset point, {
+    required bool shift,
+  }) => SelectionTransformLogic.moved(state, point, shift: shift);
 
-  static EditorState released(EditorState s) {
-    final g = s.gesture;
-    if (g.mode == GestureMode.marquee) {
-      final area = g.startBounds;
-      final hits = <int>{
-        if (area.width >= 2 / s.view.zoom || area.height >= 2 / s.view.zoom)
-          for (var i = 0; i < s.layer.shapes.length; i++)
-            if (s.layer.shapes[i].bounds.overlaps(area) || area.contains(s.layer.shapes[i].bounds.center)) i,
-      };
-      for (final i in [...hits]) {
-        final id = s.layer.shapes[i].groupId;
-        if (id != null) {
-          for (var j = 0; j < s.layer.shapes.length; j++) {
-            if (s.layer.shapes[j].groupId == id) hits.add(j);
-          }
-        }
-      }
-      if (g.additiveSelection) hits.addAll(g.selectionAtStart);
-      return s.selectIndices(hits.toList()).endGesture();
-    }
-    return s.endGesture().commit();
-  }
-
-  /// The circular rotation handle sits above the center of the selection box.
-  static Offset rotationHandle(Rect bounds, double zoom) =>
-      Offset(bounds.center.dx, bounds.top - 22 / zoom);
+  static EditorState released(EditorState state) =>
+      SelectionTransformLogic.released(state);
 }

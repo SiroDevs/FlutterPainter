@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 // Project imports:
+import '../../../domain/models/shape.dart';
 import '../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 import 'image_logic.dart';
@@ -15,8 +16,13 @@ abstract class ShapeLogic {
     if (layer < 0 || layer >= s.drawing.layers.length) return s;
     final shapes = s.drawing.layers[layer].shapes;
     if (index < 0 || index >= shapes.length) return s;
-    final next = s.copyWith(layerIndex: layer, selected: null, selectedIndices: const []);
-    return next.selectIndices([index], primary: index)
+    final next = s.copyWith(
+      layerIndex: layer,
+      selected: null,
+      selectedIndices: const [],
+    );
+    return next
+        .selectIndices([index], primary: index)
         .copyWith(style: StyleLogic.adopt(s.style, shapes[index]));
   }
 
@@ -40,11 +46,13 @@ abstract class ShapeLogic {
     final copies = <int>[];
     for (final i in indices) {
       final shape = shapes[i];
-      shapes.add(shape.copyWith(
-        points: [for (final p in shape.points) p + const Offset(3, 3)],
-        name: '${shape.name} copy',
-        groupId: null,
-      ));
+      shapes.add(
+        shape.copyWith(
+          points: [for (final p in shape.points) p + const Offset(3, 3)],
+          name: '${shape.name} copy',
+          groupId: null,
+        ),
+      );
       copies.add(shapes.length - 1);
     }
     return s.withShapes(shapes).selectIndices(copies).commit();
@@ -56,7 +64,10 @@ abstract class ShapeLogic {
   static EditorState group(EditorState s) {
     final indices = s.validSelectedIndices;
     if (indices.length < 2) return s;
-    final used = s.layer.shapes.map((shape) => shape.groupId).whereType<String>().toSet();
+    final used = s.layer.shapes
+        .map((shape) => shape.groupId)
+        .whereType<String>()
+        .toSet();
     var suffix = s.revision + 1;
     var id = 'group-$suffix';
     while (used.contains(id)) {
@@ -101,7 +112,8 @@ abstract class ShapeLogic {
     final shape = s.selectedShape;
     final layers = s.drawing.layers;
     if (i == null || shape == null) return s;
-    if (target == s.layerIndex || target < 0 || target >= layers.length) return s;
+    if (target == s.layerIndex || target < 0 || target >= layers.length)
+      return s;
     final next = [...layers];
     next[s.layerIndex] = s.layer.copyWith(shapes: removedAt(s.layer.shapes, i));
     final to = next[target];

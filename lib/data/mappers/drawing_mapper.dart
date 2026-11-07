@@ -17,63 +17,66 @@ const flpFormat = 'flp';
 const flpVersion = 2;
 
 Map<String, dynamic> shapeToJson(Shape s) => {
-      'kind': s.kind.name,
-      'name': s.name,
-      'points': [
-        for (final p in s.points) [p.dx, p.dy],
-      ],
-      'fill': s.fill,
-      if (s.gradient != null) 'gradient': gradientToJson(s.gradient!),
-      'stroke': s.stroke,
-      'strokeWidth': s.strokeWidth,
-      'radius': s.radius,
-      if (s.groupId != null) 'groupId': s.groupId,
-    };
+  'kind': s.kind.name,
+  'name': s.name,
+  'points': [
+    for (final p in s.points) [p.dx, p.dy],
+  ],
+  'fill': s.fill,
+  if (s.gradient != null) 'gradient': gradientToJson(s.gradient!),
+  'stroke': s.stroke,
+  'strokeWidth': s.strokeWidth,
+  'radius': s.radius,
+  if (s.groupId != null) 'groupId': s.groupId,
+  if (s.rotation != 0) 'rotation': s.rotation,
+};
 
 Shape shapeFromJson(Map<String, dynamic> j) => Shape(
-      kind: ShapeKind.values.byName(j['kind'] as String),
-      name: (j['name'] as String?) ?? '',
-      points: [
-        for (final p in j['points'] as List)
-          Offset((p[0] as num).toDouble(), (p[1] as num).toDouble()),
-      ],
-      fill: j['fill'] as int?,
-      gradient: gradientFromJson(j['gradient']),
-      stroke: j['stroke'] as int?,
-      strokeWidth: ((j['strokeWidth'] as num?) ?? 1).toDouble(),
-      radius: ((j['radius'] as num?) ?? 0).toDouble(),
-      groupId: j['groupId'] as String?,
-    );
+  kind: ShapeKind.values.byName(j['kind'] as String),
+  name: (j['name'] as String?) ?? '',
+  points: [
+    for (final p in j['points'] as List)
+      Offset((p[0] as num).toDouble(), (p[1] as num).toDouble()),
+  ],
+  fill: j['fill'] as int?,
+  gradient: gradientFromJson(j['gradient']),
+  stroke: j['stroke'] as int?,
+  strokeWidth: ((j['strokeWidth'] as num?) ?? 1).toDouble(),
+  radius: ((j['radius'] as num?) ?? 0).toDouble(),
+  groupId: j['groupId'] as String?,
+  rotation: ((j['rotation'] as num?) ?? 0).toDouble(),
+);
 
 Map<String, dynamic> layerToJson(PaintLayer l) => {
-      'name': l.name,
-      'visible': l.visible,
-      'shapes': [for (final s in l.shapes) shapeToJson(s)],
-      if (l.image != null) 'image': referenceToJson(l.image!),
-    };
+  'name': l.name,
+  'visible': l.visible,
+  'shapes': [for (final s in l.shapes) shapeToJson(s)],
+  if (l.image != null) 'image': referenceToJson(l.image!),
+};
 
 PaintLayer layerFromJson(Map<String, dynamic> j) => PaintLayer(
-      name: j['name'] as String,
-      visible: (j['visible'] as bool?) ?? true,
-      shapes: [
-        for (final s in j['shapes'] as List) shapeFromJson(s as Map<String, dynamic>),
-      ],
-      image: j['image'] == null
-          ? null
-          : referenceFromJson(j['image'] as Map<String, dynamic>),
-    );
+  name: j['name'] as String,
+  visible: (j['visible'] as bool?) ?? true,
+  shapes: [
+    for (final s in j['shapes'] as List)
+      shapeFromJson(s as Map<String, dynamic>),
+  ],
+  image: j['image'] == null
+      ? null
+      : referenceFromJson(j['image'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> referenceToJson(ReferenceImage r) => {
-      'id': r.id,
-      'x': r.x,
-      'y': r.y,
-      // `scale` is the horizontal scale, as in version 1 files.
-      'scale': r.scaleX,
-      'scaleY': r.scaleY,
-      'opacity': r.opacity,
-      'visible': r.visible,
-      'data': base64Encode(r.bytes),
-    };
+  'id': r.id,
+  'x': r.x,
+  'y': r.y,
+  // `scale` is the horizontal scale, as in version 1 files.
+  'scale': r.scaleX,
+  'scaleY': r.scaleY,
+  'opacity': r.opacity,
+  'visible': r.visible,
+  'data': base64Encode(r.bytes),
+};
 
 ReferenceImage? referenceFromJson(Map<String, dynamic> j) {
   final data = j['data'] as String?;
@@ -93,17 +96,18 @@ ReferenceImage? referenceFromJson(Map<String, dynamic> j) {
 }
 
 Map<String, dynamic> drawingToMap(Drawing d) => {
-      'format': flpFormat,
-      'version': flpVersion,
-      'name': d.name,
-      'width': d.width,
-      'height': d.height,
-      'layers': [for (final l in d.layers) layerToJson(l)],
-    };
+  'format': flpFormat,
+  'version': flpVersion,
+  'name': d.name,
+  'width': d.width,
+  'height': d.height,
+  'layers': [for (final l in d.layers) layerToJson(l)],
+};
 
 Drawing drawingFromMap(Map<String, dynamic> j) {
   final layers = <PaintLayer>[
-    for (final l in j['layers'] as List) layerFromJson(l as Map<String, dynamic>),
+    for (final l in j['layers'] as List)
+      layerFromJson(l as Map<String, dynamic>),
   ];
   // Version 1 files kept one background picture on the drawing itself. It sat
   // under everything, so it moves onto the bottom layer.
@@ -124,9 +128,7 @@ Drawing drawingFromMap(Map<String, dynamic> j) {
 
 String drawingToJson(Drawing d, {bool pretty = false}) {
   final map = drawingToMap(d);
-  return pretty
-      ? JsonEncoder.withIndent('  ').convert(map)
-      : jsonEncode(map);
+  return pretty ? JsonEncoder.withIndent('  ').convert(map) : jsonEncode(map);
 }
 
 Drawing drawingFromJson(String text) =>

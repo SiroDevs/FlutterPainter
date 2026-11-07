@@ -15,12 +15,17 @@ import '../models/gesture_state.dart';
 const int kImageSlot = -1;
 
 /// A copy of [list] with the item at [index] replaced.
-List<T> replacedAt<T>(List<T> list, int index, T value) =>
-    [...list.sublist(0, index), value, ...list.sublist(index + 1)];
+List<T> replacedAt<T>(List<T> list, int index, T value) => [
+  ...list.sublist(0, index),
+  value,
+  ...list.sublist(index + 1),
+];
 
 /// A copy of [list] without the item at [index].
-List<T> removedAt<T>(List<T> list, int index) =>
-    [...list.sublist(0, index), ...list.sublist(index + 1)];
+List<T> removedAt<T>(List<T> list, int index) => [
+  ...list.sublist(0, index),
+  ...list.sublist(index + 1),
+];
 
 /// Small helpers shared by every logic class.
 extension EditorStateOps on EditorState {
@@ -34,13 +39,13 @@ extension EditorStateOps on EditorState {
   }
 
   List<int> get validSelectedIndices => [
-        for (final i in selectedIndices)
-          if (i >= 0 && i < layer.shapes.length) i,
-      ];
+    for (final i in selectedIndices)
+      if (i >= 0 && i < layer.shapes.length) i,
+  ];
 
   List<Shape> get selectedShapes => [
-        for (final i in validSelectedIndices) layer.shapes[i],
-      ];
+    for (final i in validSelectedIndices) layer.shapes[i],
+  ];
 
   Rect? get selectedBounds {
     final shapes = selectedShapes;
@@ -54,12 +59,15 @@ extension EditorStateOps on EditorState {
 
   EditorState selectIndices(List<int> indices, {int? primary}) {
     final sorted = indices.toSet().toList()..sort();
-    final valid = [for (final i in sorted) if (i >= 0 && i < layer.shapes.length) i];
+    final valid = [
+      for (final i in sorted)
+        if (i >= 0 && i < layer.shapes.length) i,
+    ];
     final chosen = primary != null && valid.contains(primary)
         ? primary
         : valid.isEmpty
-            ? null
-            : valid.last;
+        ? null
+        : valid.last;
     return copyWith(selected: chosen, selectedIndices: valid);
   }
 
@@ -92,23 +100,26 @@ extension EditorStateOps on EditorState {
   /// Replaces (or with null removes) the active layer's picture, with no
   /// history entry.
   EditorState withImage(ReferenceImage? image) => withLayers(
-        replacedAt(drawing.layers, layerIndex, layer.copyWith(image: image)),
-      );
+    replacedAt(drawing.layers, layerIndex, layer.copyWith(image: image)),
+  );
 
   /// [p] rounded to the snap grid when snapping is on.
-  Offset snapped(Offset p) =>
-      snapPoint(p, enabled: view.snap, zoom: view.zoom);
+  Offset snapped(Offset p) => snapPoint(p, enabled: view.snap, zoom: view.zoom);
 
   /// Ends the current pointer gesture but keeps the last-click time, so a
   /// double-click is still recognised on the next press.
   EditorState endGesture() => copyWith(
-        gesture: gesture.copyWith(
-          mode: GestureMode.none,
-          handle: -1,
-          startPoints: const <Offset>[],
-          startBounds: Rect.zero,
-        ),
-      );
+    gesture: gesture.copyWith(
+      mode: GestureMode.none,
+      handle: -1,
+      startPoints: const <Offset>[],
+      startBounds: Rect.zero,
+      startShapes: const <Shape>[],
+      startIndices: const <int>[],
+      selectionAtStart: const <int>[],
+      additiveSelection: false,
+    ),
+  );
 
   bool get canUndo => history.canUndo;
   bool get canRedo => history.canRedo;
@@ -136,8 +147,8 @@ extension EditorStateOps on EditorState {
 
   /// Replaces the shapes of the active layer.
   EditorState withShapes(List<Shape> shapes) => withLayers(
-        replacedAt(drawing.layers, layerIndex, layer.copyWith(shapes: shapes)),
-      );
+    replacedAt(drawing.layers, layerIndex, layer.copyWith(shapes: shapes)),
+  );
 
   /// Replaces the selected shape (no history entry).
   EditorState withSelectedShape(Shape shape) {

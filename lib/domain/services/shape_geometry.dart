@@ -39,9 +39,9 @@ extension ShapeGeometry on Shape {
     switch (kind) {
       case ShapeKind.rect:
         final r = effectiveRadius;
-        path.addRRect(RRect.fromRectXY(bounds, r, r));
+        path.addRRect(RRect.fromRectXY(unrotatedBounds, r, r));
       case ShapeKind.ellipse:
-        path.addOval(bounds);
+        path.addOval(unrotatedBounds);
       case ShapeKind.polygon:
         path.addPolygon(points, true);
       case ShapeKind.line:
@@ -53,15 +53,18 @@ extension ShapeGeometry on Shape {
   }
 
   bool hitTest(Offset p, double tol) {
+    final localPoint = rotation == 0 ? p : toLocal(p);
     final reach = tol + (stroke != null ? strokeWidth / 2 : 0);
-    if (!isClosed) return _nearPolyline(p, reach, closed: false);
-    if (buildPath().contains(p)) return true;
-    final b = bounds;
-    if (b.width < 2 * tol || b.height < 2 * tol) return b.inflate(tol).contains(p);
+    if (!isClosed) return _nearPolyline(localPoint, reach, closed: false);
+    if (buildPath().contains(localPoint)) return true;
+    final b = unrotatedBounds;
+    if (b.width < 2 * tol || b.height < 2 * tol)
+      return b.inflate(tol).contains(localPoint);
     if (stroke == null) return false;
     return kind == ShapeKind.polygon
-        ? _nearPolyline(p, reach, closed: true)
-        : b.inflate(reach).contains(p) && !b.deflate(reach).contains(p);
+        ? _nearPolyline(localPoint, reach, closed: true)
+        : b.inflate(reach).contains(localPoint) &&
+              !b.deflate(reach).contains(localPoint);
   }
 
   bool _nearPolyline(Offset p, double reach, {required bool closed}) {

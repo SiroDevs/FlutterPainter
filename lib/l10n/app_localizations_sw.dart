@@ -107,4 +107,38 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get shapeGroup => 'Unganisha';
+
+  @override
+  String get shapeUngroup => 'Tenganisha';
+
+  @override
+  String get shapeGroupTooltip =>
+      'Unganisha maumbo yaliyochaguliwa ili yahame pamoja';
+
+  @override
+  String get shapeUngroupTooltip => 'Tenganisha maumbo yaliyochaguliwa';
+
+  @override
+  String shapeSelectionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Maumbo $count yamechaguliwa',
+      one: 'Umbo 1 limechaguliwa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shapeRotateHint =>
+      'Buruta kishikio cha duara ili kuzungusha. Shikilia Shift ili kuruka kwa kila 15°.';
+
+  @override
+  String get vertexDelete => 'Futa nukta hii';
+
+  @override
+  String get vertexSplit => 'Gawa nukta hii';
 }

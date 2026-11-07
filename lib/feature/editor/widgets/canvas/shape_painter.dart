@@ -8,6 +8,11 @@ import '../../../../domain/services/shape_geometry.dart';
 
 /// Draws one [Shape] on a canvas: fill first, then stroke.
 void paintShape(Canvas canvas, Shape shape, Paint paint) {
+  final center = shape.unrotatedBounds.center;
+  canvas.save();
+  canvas.translate(center.dx, center.dy);
+  canvas.rotate(shape.rotation);
+  canvas.translate(-center.dx, -center.dy);
   final path = shape.buildPath();
   final fill = shape.fill;
   if (shape.isClosed && fill != null) {
@@ -15,7 +20,9 @@ void paintShape(Canvas canvas, Shape shape, Paint paint) {
     paint
       ..style = PaintingStyle.fill
       ..color = Color(fill)
-      ..shader = gradient == null ? null : gradientShader(gradient, shape.bounds);
+      ..shader = gradient == null
+          ? null
+          : gradientShader(gradient, shape.unrotatedBounds);
     canvas.drawPath(path, paint);
     paint.shader = null;
   }
@@ -29,4 +36,5 @@ void paintShape(Canvas canvas, Shape shape, Paint paint) {
       ..color = Color(stroke);
     canvas.drawPath(path, paint);
   }
+  canvas.restore();
 }

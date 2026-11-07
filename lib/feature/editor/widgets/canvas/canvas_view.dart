@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../../core/utils/color_preview.dart';
+import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/app_settings.dart';
 import '../../../../domain/models/tool.dart';
 import '../../../settings/cubit/settings_cubit.dart';
@@ -171,9 +172,9 @@ class _CanvasViewState extends State<CanvasView> {
         size.width - global.dx,
         size.height - global.dy,
       ),
-      items: const [
-        PopupMenuItem(value: 0, child: Text('Delete this point')),
-        PopupMenuItem(value: 1, child: Text('Split this point')),
+      items: [
+        PopupMenuItem(value: 0, child: Text(context.l10n.vertexDelete)),
+        PopupMenuItem(value: 1, child: Text(context.l10n.vertexSplit)),
       ],
     );
     if (!mounted || action == null) return;

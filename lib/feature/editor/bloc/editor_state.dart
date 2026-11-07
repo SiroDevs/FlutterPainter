@@ -24,11 +24,11 @@ class EditorState extends Equatable {
   });
 
   factory EditorState.fromSeed(EditorSeed seed) => EditorState(
-        tabId: seed.tabId,
-        drawing: seed.drawing,
-        history: EditHistory.initial(seed.drawing, saved: !seed.recovered),
-        filePath: seed.filePath,
-      );
+    tabId: seed.tabId,
+    drawing: seed.drawing,
+    history: EditHistory.initial(seed.drawing, saved: !seed.recovered),
+    filePath: seed.filePath,
+  );
 
   final String tabId;
 
@@ -82,7 +82,7 @@ class EditorState extends Equatable {
     Tool? tool,
     int? layerIndex,
     Object? selected = unset,
-    Object? selectedIndices = unset,
+    List<int>? selectedIndices,
     Object? draft = unset,
     Object? hover = unset,
     Object? cursor = unset,
@@ -92,54 +92,51 @@ class EditorState extends Equatable {
     Map<String, Image>? images,
   }) {
     final nextSelected = keep<int>(selected, this.selected);
-    final nextSelectedIndices = selectedIndices == unset
-        ? (selected == unset
+    final nextSelectedIndices = selectedIndices ??
+        (selected == unset
             ? this.selectedIndices
-            : nextSelected == null
-                ? const <int>[]
-                : nextSelected < 0
-                    ? const <int>[]
-                : <int>[nextSelected])
-        : selectedIndices as List<int>;
+            : nextSelected == null || nextSelected < 0
+            ? const <int>[]
+            : <int>[nextSelected]);
     return EditorState(
-        tabId: tabId ?? this.tabId,
-        drawing: drawing ?? this.drawing,
-        history: history ?? this.history,
-        filePath: keep<String>(filePath, this.filePath),
-        overwriteConfirmed: overwriteConfirmed ?? this.overwriteConfirmed,
-        revision: revision ?? this.revision,
-        tool: tool ?? this.tool,
-        layerIndex: layerIndex ?? this.layerIndex,
-        selected: nextSelected,
-        selectedIndices: nextSelectedIndices,
-        draft: keep<Shape>(draft, this.draft),
-        hover: keep<Offset>(hover, this.hover),
-        cursor: keep<Offset>(cursor, this.cursor),
-        style: style ?? this.style,
-        view: view ?? this.view,
-        gesture: gesture ?? this.gesture,
-        images: images ?? this.images,
-      );
+      tabId: tabId ?? this.tabId,
+      drawing: drawing ?? this.drawing,
+      history: history ?? this.history,
+      filePath: keep<String>(filePath, this.filePath),
+      overwriteConfirmed: overwriteConfirmed ?? this.overwriteConfirmed,
+      revision: revision ?? this.revision,
+      tool: tool ?? this.tool,
+      layerIndex: layerIndex ?? this.layerIndex,
+      selected: nextSelected,
+      selectedIndices: nextSelectedIndices,
+      draft: keep<Shape>(draft, this.draft),
+      hover: keep<Offset>(hover, this.hover),
+      cursor: keep<Offset>(cursor, this.cursor),
+      style: style ?? this.style,
+      view: view ?? this.view,
+      gesture: gesture ?? this.gesture,
+      images: images ?? this.images,
+    );
   }
 
   @override
   List<Object?> get props => [
-        tabId,
-        drawing,
-        history,
-        filePath,
-        overwriteConfirmed,
-        revision,
-        tool,
-        layerIndex,
-        selected,
-        selectedIndices,
-        draft,
-        hover,
-        cursor,
-        style,
-        view,
-        gesture,
-        images,
-      ];
+    tabId,
+    drawing,
+    history,
+    filePath,
+    overwriteConfirmed,
+    revision,
+    tool,
+    layerIndex,
+    selected,
+    selectedIndices,
+    draft,
+    hover,
+    cursor,
+    style,
+    view,
+    gesture,
+    images,
+  ];
 }
