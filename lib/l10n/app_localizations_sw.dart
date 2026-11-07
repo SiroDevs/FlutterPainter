@@ -204,4 +204,13 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get layerItemFreehand => 'Mchoro huru';
+
+  @override
+  String get layerEditItem => 'Hariri jina la kitu';
+
+  @override
+  String get layerEditGroup => 'Hariri jina la kikundi';
+
+  @override
+  String get shapeScaleDown => 'Punguza ukubwa kwa 10%';
 }

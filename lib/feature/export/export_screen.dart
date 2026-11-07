@@ -8,8 +8,8 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import '../../common/app_router/route_names.dart';
-import '../../domain/models/app_settings.dart';
-import '../../domain/models/export_options.dart';
+import '../../domain/models/editor/app_settings.dart';
+import '../../domain/models/export/export_options.dart';
 import '../settings/cubit/settings_cubit.dart';
 import 'cubit/export_cubit.dart';
 import 'export_args.dart';

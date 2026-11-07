@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../core/theme/bloc/theme_bloc.dart';
-import '../../../domain/models/app_settings.dart';
+import '../../../domain/models/editor/app_settings.dart';
 import '../cubit/settings_cubit.dart';
 
 /// Opens the settings window. Every change applies and is saved at once.

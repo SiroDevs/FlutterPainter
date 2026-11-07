@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../models/shape_gradient.dart';
+import '../../models/shapes/shape_gradient.dart';
 import 'code_values.dart';
 
 double asDouble(Object? value) {

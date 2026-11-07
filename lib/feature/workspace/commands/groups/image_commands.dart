@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import '../../../../domain/models/tool.dart';
+import '../../../../domain/models/editor/tool.dart';
 import '../../../editor/bloc/editor_bloc.dart';
 import '../../../editor/flows/image_flow.dart';
 import '../../../editor/logic/exports.dart';

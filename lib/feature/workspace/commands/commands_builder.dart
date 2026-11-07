@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../core/theme/bloc/theme_bloc.dart';
 import '../../editor/bloc/editor_bloc.dart';
-import '../../editor/logic/editor_ops.dart';
+import '../../editor/logic/drawing/editor_ops.dart';
 import '../cubit/workspace_cubit.dart';
 import 'workspace_commands.dart';
 

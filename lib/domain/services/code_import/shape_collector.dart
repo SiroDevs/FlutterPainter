@@ -2,10 +2,10 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../models/shape.dart';
-import '../../models/shape_gradient.dart';
-import '../../models/shape_kind.dart';
-import '../gradient_geometry.dart';
+import '../../models/shapes/shape.dart';
+import '../../models/shapes/shape_gradient.dart';
+import '../../models/shapes/shape_kind.dart';
+import '../geometry/gradient_geometry.dart';
 import 'code_transform.dart';
 import 'code_values.dart';
 import 'path_outline.dart';

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
-import '../../../domain/models/app_settings.dart';
+import '../../../domain/models/editor/app_settings.dart';
 import '../../settings/cubit/settings_cubit.dart';
 import 'minimal_bar.dart';
 import 'ribbon/ribbon.dart';

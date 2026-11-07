@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import '../../common/app_router/route_names.dart';
-import '../../domain/models/tool.dart';
+import '../../domain/models/editor/tool.dart';
 import '../editor/bloc/editor_bloc.dart';
 import '../editor/widgets/toolbar/tool_info.dart';
 import '../export/export_args.dart';
@@ -20,13 +20,11 @@ class WorkspaceShortcuts {
   const WorkspaceShortcuts({
     required this.context,
     required this.workspace,
-    required this.editor,
     required this.isTyping,
   });
 
   final BuildContext context;
   final WorkspaceCubit workspace;
-  final EditorBloc editor;
   final bool Function() isTyping;
 
   Map<ShortcutActivator, VoidCallback> bindings() {
@@ -36,9 +34,9 @@ class WorkspaceShortcuts {
       shortcuts[SingleActivator(key, meta: true, shift: shift)] = action;
     }
 
-    void send(EditorEvent event) => editor.add(event);
+    void send(EditorEvent event) => workspace.current.add(event);
     void zoom(double factor) {
-      final viewport = editor.state.view.viewport;
+      final viewport = workspace.current.state.view.viewport;
       send(
         ViewZoomed(
           factor,
@@ -51,31 +49,64 @@ class WorkspaceShortcuts {
       if (!isTyping()) action();
     }
 
-    both(LogicalKeyboardKey.keyZ, () => guarded(() => send(const UndoRequested())));
-    both(LogicalKeyboardKey.keyZ, () => guarded(() => send(const RedoRequested())), shift: true);
-    both(LogicalKeyboardKey.keyY, () => guarded(() => send(const RedoRequested())));
-    both(LogicalKeyboardKey.keyD, () => guarded(() => send(const ShapeDuplicated())));
-    both(LogicalKeyboardKey.keyA, () => guarded(() => send(const SelectAllRequested())));
-    both(LogicalKeyboardKey.minus, () => guarded(() => zoom(1 / 1.25)));
-    both(LogicalKeyboardKey.equal, () => guarded(() => zoom(1.25)));
-    both(LogicalKeyboardKey.digit0, () => guarded(() => send(const FitRequested())));
-    both(LogicalKeyboardKey.keyS, () => guarded(() => saveTab(context, workspace, editor)));
     both(
-      LogicalKeyboardKey.keyS,
-      () => guarded(() => saveTab(context, workspace, editor, saveAs: true)),
+      LogicalKeyboardKey.keyZ,
+      () => guarded(() => send(const UndoRequested())),
+    );
+    both(
+      LogicalKeyboardKey.keyZ,
+      () => guarded(() => send(const RedoRequested())),
       shift: true,
     );
-    both(LogicalKeyboardKey.keyO, () => guarded(() => openProjectDialog(context, workspace)));
+    both(
+      LogicalKeyboardKey.keyY,
+      () => guarded(() => send(const RedoRequested())),
+    );
+    both(
+      LogicalKeyboardKey.keyD,
+      () => guarded(() => send(const ShapeDuplicated())),
+    );
+    both(
+      LogicalKeyboardKey.keyA,
+      () => guarded(() => send(const SelectAllRequested())),
+    );
+    both(LogicalKeyboardKey.minus, () => guarded(() => zoom(1 / 1.25)));
+    both(LogicalKeyboardKey.equal, () => guarded(() => zoom(1.25)));
+    both(
+      LogicalKeyboardKey.digit0,
+      () => guarded(() => send(const FitRequested())),
+    );
+    both(
+      LogicalKeyboardKey.keyS,
+      () => guarded(() => saveTab(context, workspace, workspace.current)),
+    );
+    both(
+      LogicalKeyboardKey.keyS,
+      () => guarded(
+        () => saveTab(context, workspace, workspace.current, saveAs: true),
+      ),
+      shift: true,
+    );
+    both(
+      LogicalKeyboardKey.keyO,
+      () => guarded(() => openProjectDialog(context, workspace)),
+    );
     both(LogicalKeyboardKey.keyN, () => guarded(workspace.addBlank));
-    both(LogicalKeyboardKey.keyW, () => guarded(() => closeTab(context, workspace, editor)));
+    both(
+      LogicalKeyboardKey.keyW,
+      () => guarded(() => closeTab(context, workspace, workspace.current)),
+    );
     both(
       LogicalKeyboardKey.keyE,
       () => guarded(() => context.push(
         RoutePaths.export,
-        extra: ExportArgs(editor.state.drawing),
+        extra: ExportArgs(workspace.current.state.drawing),
       )),
     );
-    both(LogicalKeyboardKey.comma, () => guarded(() => showSettingsDialog(context)));
+    both(
+      LogicalKeyboardKey.comma,
+      () => guarded(() => showSettingsDialog(context)),
+    );
 
     for (final tool in Tool.values) {
       shortcuts[SingleActivator(tool.shortcutKey)] =
@@ -89,10 +120,17 @@ class WorkspaceShortcuts {
         () => guarded(() => send(const PolygonFinished(closed: false)));
     shortcuts[const SingleActivator(LogicalKeyboardKey.enter, shift: true)] =
         () => guarded(() => send(const PolygonFinished()));
-    shortcuts[const SingleActivator(LogicalKeyboardKey.escape)] = () => guarded(() {
-      send(const DraftCancelled());
-      send(const ToolSelected(Tool.select));
-    });
     return shortcuts;
+  }
+
+  KeyEventResult handleEscape(FocusNode _, KeyEvent event) {
+    if (event is! KeyDownEvent ||
+        event.logicalKey != LogicalKeyboardKey.escape ||
+        isTyping() ||
+        ModalRoute.of(context)?.isCurrent == false) {
+      return KeyEventResult.ignored;
+    }
+    workspace.current.add(const ToolSelected(Tool.select));
+    return KeyEventResult.handled;
   }
 }

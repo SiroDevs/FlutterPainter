@@ -2,7 +2,7 @@
 import 'package:flutter/painting.dart';
 
 // Project imports:
-import '../../domain/models/app_settings.dart';
+import '../../domain/models/editor/app_settings.dart';
 
 /// The filter that makes the canvas look like [preview], or null for true
 /// colours. The colour-blindness matrices are the widely used approximations;

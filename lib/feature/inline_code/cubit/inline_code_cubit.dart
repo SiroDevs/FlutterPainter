@@ -8,14 +8,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../core/utils/copy_with_util.dart';
-import '../../../domain/models/app_settings.dart';
-import '../../../domain/models/drawing.dart';
-import '../../../domain/models/export_file.dart';
-import '../../../domain/models/export_options.dart';
-import '../../../domain/models/paint_layer.dart';
-import '../../../domain/models/shape.dart';
+import '../../../domain/models/editor/app_settings.dart';
+import '../../../domain/models/drawing/drawing.dart';
+import '../../../domain/models/export/export_file.dart';
+import '../../../domain/models/export/export_options.dart';
+import '../../../domain/models/drawing/paint_layer.dart';
+import '../../../domain/models/shapes/shape.dart';
 import '../../../domain/services/code_import/code_importer.dart';
-import '../../../domain/services/dart_exporter.dart';
+import '../../../domain/services/code_export/dart_exporter.dart';
 import '../../editor/bloc/editor_bloc.dart';
 
 part 'inline_code_state.dart';

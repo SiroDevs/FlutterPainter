@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Project imports:
-import '../../../domain/models/export_file.dart';
+import '../../../domain/models/export/export_file.dart';
 import 'syntax_controller.dart';
 import 'vscode_colors.dart';
 

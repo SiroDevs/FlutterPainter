@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 // Project imports:
-import '../../domain/models/shape_gradient.dart';
+import '../../domain/models/shapes/shape_gradient.dart';
 
 Map<String, dynamic> gradientToJson(ShapeGradient g) => {
       'kind': g.kind.name,

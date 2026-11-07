@@ -1,5 +1,5 @@
 // Project imports:
-import '../../../../domain/models/tool.dart';
+import '../../../../domain/models/editor/tool.dart';
 
 /// One-line help shown in the status bar for each tool.
 extension ToolHint on Tool {

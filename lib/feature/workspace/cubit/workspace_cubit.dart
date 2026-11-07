@@ -13,14 +13,14 @@ import 'package:injectable/injectable.dart';
 import '../../../common/constants/pref_constants.dart';
 import '../../../core/utils/app_util.dart';
 import '../../../core/utils/copy_with_util.dart';
-import '../../../domain/models/draft.dart';
-import '../../../domain/models/drawing.dart';
+import '../../../domain/models/drawing/draft.dart';
+import '../../../domain/models/drawing/drawing.dart';
 import '../../../domain/repos/draft_repo.dart';
 import '../../../domain/repos/prefs_repo.dart';
 import '../../../domain/repos/project_repo.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../editor/bloc/editor_bloc_factory.dart';
-import '../../editor/logic/editor_ops.dart';
+import '../../editor/logic/drawing/editor_ops.dart';
 import '../../editor/models/editor_seed.dart';
 import 'project_saver.dart';
 

@@ -72,5 +72,8 @@
   "layerItemEllipse": "Ellipse",
   "layerItemLine": "Line",
   "layerItemPolygon": "Polygon",
-  "layerItemFreehand": "Freehand"
+  "layerItemFreehand": "Freehand",
+  "layerEditItem": "Edit item name",
+  "layerEditGroup": "Edit group name",
+  "shapeScaleDown": "Scale down 10%"
 }

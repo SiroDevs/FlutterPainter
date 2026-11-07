@@ -4,11 +4,11 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 // Project imports:
-import '../../domain/models/drawing.dart';
-import '../../domain/models/paint_layer.dart';
-import '../../domain/models/reference_image.dart';
-import '../../domain/models/shape.dart';
-import '../../domain/models/shape_kind.dart';
+import '../../domain/models/drawing/drawing.dart';
+import '../../domain/models/drawing/paint_layer.dart';
+import '../../domain/models/drawing/reference_image.dart';
+import '../../domain/models/shapes/shape.dart';
+import '../../domain/models/shapes/shape_kind.dart';
 import 'gradient_mapper.dart';
 
 /// The .flp file format: JSON, with colours as 0xAARRGGBB integers and any
@@ -28,6 +28,7 @@ Map<String, dynamic> shapeToJson(Shape s) => {
   'strokeWidth': s.strokeWidth,
   'radius': s.radius,
   if (s.groupId != null) 'groupId': s.groupId,
+  if (s.groupId != null && s.groupName != null) 'groupName': s.groupName,
   if (s.rotation != 0) 'rotation': s.rotation,
 };
 
@@ -44,6 +45,7 @@ Shape shapeFromJson(Map<String, dynamic> j) => Shape(
   strokeWidth: ((j['strokeWidth'] as num?) ?? 1).toDouble(),
   radius: ((j['radius'] as num?) ?? 0).toDouble(),
   groupId: j['groupId'] as String?,
+  groupName: j['groupName'] as String?,
   rotation: ((j['rotation'] as num?) ?? 0).toDouble(),
 );
 

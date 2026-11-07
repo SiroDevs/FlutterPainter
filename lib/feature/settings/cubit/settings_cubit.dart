@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 // Project imports:
-import '../../../domain/models/app_settings.dart';
+import '../../../domain/models/editor/app_settings.dart';
 import '../../../domain/repos/prefs_repo.dart';
 
 /// The user's preferences (everything except the theme), remembered between

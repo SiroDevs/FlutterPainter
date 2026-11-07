@@ -6,7 +6,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
 import '../../../core/utils/l10n_ext.dart';
-import '../../../domain/models/shape_gradient.dart';
+import '../../../domain/models/shapes/shape_gradient.dart';
 
 // Edits everything about a gradient except the colour of its stops, which the
 // colour picker next to it edits for the selected stop: the kind, the stops

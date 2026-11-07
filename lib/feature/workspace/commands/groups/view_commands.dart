@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import '../../../../core/theme/bloc/theme_bloc.dart';
-import '../../../../domain/models/tool.dart';
+import '../../../../domain/models/editor/tool.dart';
 import '../../../editor/bloc/editor_bloc.dart';
 import '../../../editor/widgets/toolbar/tool_info.dart';
 import '../app_command.dart';

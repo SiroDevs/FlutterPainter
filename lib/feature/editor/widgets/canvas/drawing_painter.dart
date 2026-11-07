@@ -7,13 +7,13 @@ import 'package:flutter/rendering.dart';
 // Project imports:
 import '../../../../common/constants/palette_constants.dart';
 import '../../../../core/theme/theme_colors.dart';
-import '../../../../domain/models/reference_image.dart';
-import '../../../../domain/models/tool.dart';
-import '../../../../domain/services/geometry_utils.dart';
-import '../../../../domain/services/image_geometry.dart';
+import '../../../../domain/models/drawing/reference_image.dart';
+import '../../../../domain/models/editor/tool.dart';
+import '../../../../domain/services/geometry/geometry_utils.dart';
+import '../../../../domain/services/geometry/image_geometry.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/editor_ops.dart';
-import '../../logic/selection_transform_logic.dart';
+import '../../logic/drawing/editor_ops.dart';
+import '../../logic/interaction/selection_transform_logic.dart';
 import '../../models/gesture_state.dart';
 import 'shape_painter.dart';
 
@@ -146,12 +146,13 @@ class DrawingPainter extends CustomPainter {
     if (indices.length > 1) canvas.drawRect(bounds, line);
     final h = 4 / state.view.zoom;
     final fill = Paint()..color = const Color(0xFFFFFFFF);
-    if (indices.length == 1) {
-      for (final point in handlePoints(state.layer.shapes[indices.single])) {
-        final r = Rect.fromCenter(center: point, width: 2 * h, height: 2 * h);
-        canvas.drawRect(r, fill);
-        canvas.drawRect(r, line);
-      }
+    final handles = indices.length == 1
+        ? handlePoints(state.layer.shapes[indices.single])
+        : boundsHandlePoints(bounds);
+    for (final point in handles) {
+      final r = Rect.fromCenter(center: point, width: 2 * h, height: 2 * h);
+      canvas.drawRect(r, fill);
+      canvas.drawRect(r, line);
     }
 
     final rotate = SelectionTransformLogic.rotationHandle(

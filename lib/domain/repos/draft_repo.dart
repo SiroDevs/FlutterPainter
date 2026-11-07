@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 // Project imports:
 import '../../data/mappers/draft_mapper.dart';
 import '../../data/sources/draft_file_source.dart';
-import '../models/draft.dart';
+import '../models/drawing/draft.dart';
 
 /// Side copies of projects with unsaved changes.
 ///

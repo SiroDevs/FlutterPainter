@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
-import '../../../domain/models/app_settings.dart';
+import '../../../domain/models/editor/app_settings.dart';
 import '../../settings/cubit/settings_cubit.dart';
 import '../commands/commands_builder.dart';
 import '../commands/groups/exports.dart';

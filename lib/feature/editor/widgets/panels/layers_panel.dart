@@ -9,7 +9,7 @@ import 'package:styled_widget/styled_widget.dart';
 import '../../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/editor_ops.dart';
+import '../../logic/drawing/editor_ops.dart';
 import 'layer_item_tree.dart';
 
 /// Layer list, top layer first. The active layer receives new shapes; each

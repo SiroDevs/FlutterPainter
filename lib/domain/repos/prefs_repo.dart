@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import '../../common/constants/pref_constants.dart';
-import '../models/app_settings.dart';
+import '../models/editor/app_settings.dart';
 
 @singleton
 abstract class PrefsRepo {

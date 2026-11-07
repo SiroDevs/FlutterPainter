@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/editor_ops.dart';
+import '../../logic/drawing/editor_ops.dart';
 
 /// Actions that apply to the current shape selection.
 class ShapeActions extends StatelessWidget {
@@ -37,6 +37,11 @@ class ShapeActions extends StatelessWidget {
           Icons.delete_outline,
           context.l10n.shapeDelete,
           () => bloc.add(const ShapeDeleted()),
+        ),
+        _action(
+          Icons.zoom_out_map,
+          context.l10n.shapeScaleDown,
+          () => bloc.add(const SelectionScaled(0.9)),
         ),
         if (selectionCount == 1) ...[
           _action(

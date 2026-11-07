@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 // Project imports:
 import '../../data/mappers/drawing_mapper.dart';
 import '../../data/sources/project_file_source.dart';
-import '../models/drawing.dart';
+import '../models/drawing/drawing.dart';
 
 /// Opens and saves .flp project files.
 @lazySingleton
