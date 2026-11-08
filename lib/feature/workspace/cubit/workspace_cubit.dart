@@ -109,18 +109,16 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
     if (i < 0) return;
     _editors.removeAt(i);
     _timers.remove(bloc)?.cancel();
-    await _subs.remove(bloc)?.cancel();
+    final subscription = _subs.remove(bloc);
     _seen.remove(bloc);
-    await _drafts.delete(bloc.state.tabId);
     if (_editors.isEmpty) {
       addBlank();
     } else {
       final active = i < state.active ? state.active - 1 : state.active;
-      emit(
-        state.copyWith(active: active.clamp(0, _editors.length - 1).toInt()),
-      );
-      _syncTabs();
+      _syncTabs(active: active.clamp(0, _editors.length - 1).toInt());
     }
+    await subscription?.cancel();
+    await _drafts.delete(bloc.state.tabId);
     // Close after the frame so widgets still showing it can unsubscribe first.
     WidgetsBinding.instance.addPostFrameCallback((_) => bloc.close());
   }
@@ -149,13 +147,13 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
     _editors.add(bloc);
     _seen[bloc] = bloc.state.revision;
     _subs[bloc] = bloc.stream.listen((s) => _onEditorChanged(bloc, s));
-    emit(state.copyWith(active: _editors.length - 1));
-    _syncTabs();
+    _syncTabs(active: _editors.length - 1);
     return bloc;
   }
 
-  void _syncTabs() => emit(
+  void _syncTabs({int? active}) => emit(
     state.copyWith(
+      active: active,
       tabs: [
         for (final b in _editors)
           TabInfo(
