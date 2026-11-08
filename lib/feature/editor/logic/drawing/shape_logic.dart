@@ -21,6 +21,7 @@ abstract class ShapeLogic {
     if (layer < 0 || layer >= state.drawing.layers.length) return state;
     final shapes = state.drawing.layers[layer].shapes;
     if (index < 0 || index >= shapes.length) return state;
+    if (!shapes[index].visible) return state;
     final next = state.copyWith(
       layerIndex: layer,
       selected: null,
@@ -28,7 +29,12 @@ abstract class ShapeLogic {
     );
     return next
         .selectIndices(
-          includeGroup ? groupedShapeIndices(shapes, index) : [index],
+          includeGroup
+              ? groupedShapeIndices(
+                  shapes,
+                  index,
+                ).where((shapeIndex) => shapes[shapeIndex].visible).toList()
+              : [index],
           primary: index,
         )
         .copyWith(style: StyleLogic.adopt(state.style, shapes[index]));
@@ -69,9 +75,41 @@ abstract class ShapeLogic {
 
   static EditorState selectAll(EditorState state) => state.selectIndices(
     state.layer.visible
-        ? List.generate(state.layer.shapes.length, (index) => index)
+        ? [
+            for (var index = 0; index < state.layer.shapes.length; index++)
+              if (state.layer.shapes[index].visible) index,
+          ]
         : const [],
   );
+
+  static EditorState toggleVisibility(
+    EditorState state,
+    int layerIndex,
+    int shapeIndex, {
+    required bool includeGroup,
+  }) {
+    final layers = state.drawing.layers;
+    if (layerIndex < 0 || layerIndex >= layers.length) return state;
+    final layer = layers[layerIndex];
+    if (shapeIndex < 0 || shapeIndex >= layer.shapes.length) return state;
+    final indices = includeGroup
+        ? groupedShapeIndices(layer.shapes, shapeIndex)
+        : [shapeIndex];
+    final visible = !indices.every((index) => layer.shapes[index].visible);
+    final shapes = [...layer.shapes];
+    for (final index in indices) {
+      shapes[index] = shapes[index].copyWith(visible: visible);
+    }
+    final updated = layer.copyWith(shapes: shapes);
+    var next = state.withLayers(replacedAt(layers, layerIndex, updated));
+    if (layerIndex == state.layerIndex) {
+      next = next.selectIndices([
+        for (final index in state.validSelectedIndices)
+          if (next.layer.shapes[index].visible) index,
+      ]);
+    }
+    return next.commit();
+  }
 
   static EditorState scale(EditorState state, double factor) {
     final indices = state.validSelectedIndices;

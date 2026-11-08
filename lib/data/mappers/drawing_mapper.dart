@@ -30,6 +30,7 @@ Map<String, dynamic> shapeToJson(Shape s) => {
   if (s.groupId != null) 'groupId': s.groupId,
   if (s.groupId != null && s.groupName != null) 'groupName': s.groupName,
   if (s.rotation != 0) 'rotation': s.rotation,
+  if (!s.visible) 'visible': false,
 };
 
 Shape shapeFromJson(Map<String, dynamic> j) => Shape(
@@ -47,6 +48,7 @@ Shape shapeFromJson(Map<String, dynamic> j) => Shape(
   groupId: j['groupId'] as String?,
   groupName: j['groupName'] as String?,
   rotation: ((j['rotation'] as num?) ?? 0).toDouble(),
+  visible: (j['visible'] as bool?) ?? true,
 );
 
 Map<String, dynamic> layerToJson(PaintLayer l) => {

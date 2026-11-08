@@ -43,6 +43,7 @@ class DrawingPainter extends CustomPainter {
       if (!layer.visible) continue;
       _image(canvas, layer.image);
       for (final shape in layer.shapes) {
+        if (!shape.visible) continue;
         paintShape(canvas, shape, paint);
       }
     }

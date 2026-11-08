@@ -1,7 +1,3 @@
-// Dart imports:
-import 'dart:convert';
-import 'dart:typed_data';
-
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -9,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../../../common/widgets/progress/custom_snackbar.dart';
 import '../../../core/di/injectable.dart';
 import '../../../core/platform/file_dialogs.dart';
-import '../../../core/utils/zip_writer.dart';
 import '../cubit/export_cubit.dart';
+import '../cubit/export_jobs.dart';
 
 /// Asks a yes/no question in a small dialog.
 Future<bool> confirm(
@@ -52,6 +48,7 @@ void _report(
 /// Writes every file into a folder the user picks, inside a sub-folder named
 /// after the project (so it can be dropped into `lib/`).
 Future<void> saveLocally(BuildContext context, ExportCubit cubit) async {
+  if (cubit.state.isBusy) return;
   final dialogs = getIt<FileDialogs>();
   try {
     final directory = await dialogs.pickDirectory();
@@ -60,19 +57,28 @@ Future<void> saveLocally(BuildContext context, ExportCubit cubit) async {
     final files = {
       for (final f in state.files) '${state.folderName}/${f.path}': f.content,
     };
-    final existing = await dialogs.existingFiles(directory, files.keys.toList());
+    final existing = await dialogs.existingFiles(
+      directory,
+      files.keys.toList(),
+    );
     if (existing.isNotEmpty) {
       if (!context.mounted) return;
       final ok = await confirm(
         context,
         title: 'Replace existing files?',
-        message: '${existing.length} of ${files.length} files already exist in '
+        message:
+            '${existing.length} of ${files.length} files already exist in '
             'that folder and will be overwritten.',
         confirmLabel: 'Replace',
       );
       if (!ok) return;
     }
-    await dialogs.writeTextFiles(directory, files);
+    cubit.setSaving(true);
+    try {
+      await dialogs.writeTextFiles(directory, files);
+    } finally {
+      cubit.setSaving(false);
+    }
     if (!context.mounted) return;
     _report(
       context,
@@ -80,29 +86,33 @@ Future<void> saveLocally(BuildContext context, ExportCubit cubit) async {
       'Saved ${files.length} file(s) to $directory/${state.folderName}',
     );
   } catch (e) {
-    if (context.mounted) _report(context, cubit, 'Could not save: $e', error: true);
+    if (context.mounted) {
+      _report(context, cubit, 'Could not save: $e', error: true);
+    }
   }
 }
 
 /// Packs every file into one .zip the user names.
 Future<void> saveArchive(BuildContext context, ExportCubit cubit) async {
+  if (cubit.state.isBusy) return;
   final dialogs = getIt<FileDialogs>();
   try {
     final state = cubit.state;
-    final bytes = buildZip([
-      for (final f in state.files)
-        ZipItem(
-          '${state.folderName}/${f.path}',
-          Uint8List.fromList(utf8.encode(f.content)),
-        ),
-    ]);
-    final path = await dialogs.saveArchive(
-      bytes,
-      suggestedName: '${state.folderName}.zip',
-    );
-    if (path == null || !context.mounted) return;
-    _report(context, cubit, 'Saved ${state.files.length} file(s) to $path');
+    cubit.setSaving(true);
+    try {
+      final bytes = await buildExportArchive(state.folderName, state.files);
+      final path = await dialogs.saveArchive(
+        bytes,
+        suggestedName: '${state.folderName}.zip',
+      );
+      if (path == null || !context.mounted) return;
+      _report(context, cubit, 'Saved ${state.files.length} file(s) to $path');
+    } finally {
+      cubit.setSaving(false);
+    }
   } catch (e) {
-    if (context.mounted) _report(context, cubit, 'Could not save: $e', error: true);
+    if (context.mounted) {
+      _report(context, cubit, 'Could not save: $e', error: true);
+    }
   }
 }

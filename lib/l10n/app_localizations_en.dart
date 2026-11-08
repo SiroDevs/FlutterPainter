@@ -208,6 +208,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get layerEditItem => 'Edit item name';
 
   @override
+  String get canvasSelectGroupMemberHint =>
+      'Ctrl-click to select only this item from its group';
+
+  @override
   String get layerEditGroup => 'Edit group name';
 
   @override
@@ -219,4 +223,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get groupMethodsPublicHelp =>
       'On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private.';
+
+  @override
+  String get exportGenerating => 'Generating Dart code…';
+
+  @override
+  String get exportSaving => 'Preparing export…';
+
+  @override
+  String get exportGenerationFailed => 'Could not generate the Dart code.';
 }

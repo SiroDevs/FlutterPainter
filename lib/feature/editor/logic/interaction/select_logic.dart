@@ -8,6 +8,7 @@ import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../drawing/editor_ops.dart';
 import '../canvas/image_logic.dart';
+import 'selection_hit_logic.dart';
 import 'selection_transform_logic.dart';
 import '../drawing/style_logic.dart';
 import '../drawing/vertex_logic.dart';
@@ -21,6 +22,7 @@ abstract class SelectLogic {
     Offset point, {
     required bool alt,
     required bool shift,
+    required bool control,
     required int timeMs,
   }) {
     final doubleClick = timeMs - state.gesture.lastClickMs < 320;
@@ -92,11 +94,11 @@ abstract class SelectLogic {
     }
 
     if (shift) {
-      final hit = _hitInActiveLayer(base, point);
-      if (hit != null) return _toggle(base, hit);
+      final hit = SelectionHitLogic.hitInActiveLayer(base, point);
+      if (hit != null) return SelectionHitLogic.toggle(base, hit);
       return _startMarquee(base, point, additive: true);
     }
-    return _pick(base, point);
+    return _pick(base, point, control: control);
   }
 
   static EditorState _startMarquee(
@@ -119,7 +121,11 @@ abstract class SelectLogic {
 
   /// Selects topmost shape or picture and starts moving it. A grouped shape
   /// selects all its peers in the active layer.
-  static EditorState _pick(EditorState state, Offset point) {
+  static EditorState _pick(
+    EditorState state,
+    Offset point, {
+    required bool control,
+  }) {
     final tol = 4 / state.view.zoom;
     final layers = state.drawing.layers;
     for (var li = layers.length - 1; li >= 0; li--) {
@@ -127,6 +133,7 @@ abstract class SelectLogic {
       if (!layer.visible) continue;
       for (var si = layer.shapes.length - 1; si >= 0; si--) {
         final shape = layer.shapes[si];
+        if (!shape.visible) continue;
         if (!shape.hitTest(point, tol)) continue;
         final switchedLayer = li != state.layerIndex;
         final base = switchedLayer
@@ -136,10 +143,18 @@ abstract class SelectLogic {
                 selectedIndices: const [],
               )
             : state;
-        final selected = base.validSelectedIndices.contains(si)
+        final selected = !control && base.validSelectedIndices.contains(si)
             ? base
             : base.selectIndices(
-                groupedShapeIndices(layer.shapes, si),
+                control
+                    ? [si]
+                    : [
+                        for (final index in groupedShapeIndices(
+                          layer.shapes,
+                          si,
+                        ))
+                          if (layer.shapes[index].visible) index,
+                      ],
                 primary: si,
               );
         final indices = selected.validSelectedIndices;
@@ -178,28 +193,6 @@ abstract class SelectLogic {
       }
     }
     return _startMarquee(state, point, additive: false);
-  }
-
-  static int? _hitInActiveLayer(EditorState state, Offset point) {
-    if (!state.layer.visible) return null;
-    final shapes = state.layer.shapes;
-    final tol = 4 / state.view.zoom;
-    for (var i = shapes.length - 1; i >= 0; i--) {
-      if (shapes[i].hitTest(point, tol)) return i;
-    }
-    return null;
-  }
-
-  static EditorState _toggle(EditorState state, int index) {
-    final toggled = groupedShapeIndices(state.layer.shapes, index).toSet();
-    final old = state.validSelectedIndices.toSet();
-    final next = old.contains(index)
-        ? old.difference(toggled)
-        : old.union(toggled);
-    return state.selectIndices(
-      next.toList(),
-      primary: next.contains(index) ? index : null,
-    );
   }
 
   static EditorState moved(

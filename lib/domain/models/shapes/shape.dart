@@ -32,6 +32,7 @@ class Shape extends Equatable {
     this.groupId,
     this.groupName,
     this.rotation = 0,
+    this.visible = true,
   });
 
   final ShapeKind kind;
@@ -47,6 +48,7 @@ class Shape extends Equatable {
   final String? groupId;
   final String? groupName;
   final double rotation;
+  final bool visible;
 
   Shape copyWith({
     ShapeKind? kind,
@@ -60,6 +62,7 @@ class Shape extends Equatable {
     Object? groupId = unset,
     Object? groupName = unset,
     double? rotation,
+    bool? visible,
   }) => Shape(
     kind: kind ?? this.kind,
     points: points ?? this.points,
@@ -72,6 +75,7 @@ class Shape extends Equatable {
     groupId: keep<String>(groupId, this.groupId),
     groupName: keep<String>(groupName, this.groupName),
     rotation: rotation ?? this.rotation,
+    visible: visible ?? this.visible,
   );
 
   @override
@@ -87,6 +91,7 @@ class Shape extends Equatable {
     groupId,
     groupName,
     rotation,
+    visible,
   ];
 
   bool get isClosed => kind != ShapeKind.line && kind != ShapeKind.freehand;

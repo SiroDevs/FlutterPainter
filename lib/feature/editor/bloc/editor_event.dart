@@ -10,12 +10,14 @@ class PointerPressed extends EditorEvent {
     this.point, {
     this.shift = false,
     this.alt = false,
+    this.control = false,
     this.timeMs = 0,
   });
 
   final Offset point;
   final bool shift;
   final bool alt;
+  final bool control;
   final int timeMs;
 }
 

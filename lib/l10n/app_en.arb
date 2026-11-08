@@ -74,8 +74,12 @@
   "layerItemPolygon": "Polygon",
   "layerItemFreehand": "Freehand",
   "layerEditItem": "Edit item name",
+  "canvasSelectGroupMemberHint": "Ctrl-click to select only this item from its group",
   "layerEditGroup": "Edit group name",
   "shapeScaleDown": "Scale down 10%",
   "groupMethodsPublic": "Expose group shape methods",
-  "groupMethodsPublicHelp": "On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private."
+  "groupMethodsPublicHelp": "On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private.",
+  "exportGenerating": "Generating Dart code…",
+  "exportSaving": "Preparing export…",
+  "exportGenerationFailed": "Could not generate the Dart code."
 }

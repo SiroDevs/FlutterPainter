@@ -73,21 +73,37 @@ class LayerItemTree extends StatelessWidget {
   }
 
   Widget _groupTile(BuildContext context, _TreeEntry entry) {
+    final visibleIndices = entry.indices
+        .where((index) => layer.shapes[index].visible)
+        .toList();
     final selected =
         layerIndex == state.layerIndex &&
-        entry.indices.every(state.validSelectedIndices.contains);
+        visibleIndices.isNotEmpty &&
+        visibleIndices.every(state.validSelectedIndices.contains);
+    final visible = visibleIndices.length == entry.indices.length;
     return GroupTreeTile(
       key: ValueKey('group-$layerIndex-${entry.groupId}'),
       name: entry.name,
       tooltip: context.l10n.layerEditGroup,
       selected: selected,
+      visible: visible,
+      visibilityTooltip: visible
+          ? context.l10n.layerHide
+          : context.l10n.layerShow,
+      onToggleVisibility: () => context.read<EditorBloc>().add(
+        ShapeVisibilityToggled(
+          layerIndex,
+          entry.indices.first,
+          includeGroup: true,
+        ),
+      ),
       onRename: (name) => context.read<EditorBloc>().add(
         GroupRenamed(layerIndex, entry.groupId!, name),
       ),
       onSelect: () => context.read<EditorBloc>().add(
         ShapeSelectionRequested(
           layerIndex,
-          entry.indices.first,
+          visibleIndices.isEmpty ? entry.indices.first : visibleIndices.first,
           includeGroup: true,
         ),
       ),
@@ -107,11 +123,21 @@ class LayerItemTree extends StatelessWidget {
     final selected =
         layerIndex == state.layerIndex &&
         state.validSelectedIndices.contains(index);
-    return ListTile(
+    final visible = shape.visible;
+    final tile = ListTile(
       dense: true,
       visualDensity: VisualDensity.compact,
       contentPadding: EdgeInsets.only(left: leftPadding, right: 16),
       leading: Icon(_shapeIcon(shape.kind), size: 16),
+      trailing: IconButton(
+        tooltip: visible ? context.l10n.layerHide : context.l10n.layerShow,
+        visualDensity: VisualDensity.compact,
+        iconSize: 18,
+        icon: Icon(visible ? Icons.visibility : Icons.visibility_off),
+        onPressed: () => context.read<EditorBloc>().add(
+          ShapeVisibilityToggled(layerIndex, index),
+        ),
+      ),
       title: InlineTreeNameEditor(
         name: shape.name.isEmpty
             ? _shapeLabel(context, shape.kind)
@@ -127,6 +153,11 @@ class LayerItemTree extends StatelessWidget {
       onTap: () => context.read<EditorBloc>().add(
         ShapeSelectionRequested(layerIndex, index, includeGroup: false),
       ),
+    );
+    if (shape.groupId == null) return tile;
+    return Tooltip(
+      message: context.l10n.canvasSelectGroupMemberHint,
+      child: tile,
     );
   }
 

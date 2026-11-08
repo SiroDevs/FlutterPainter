@@ -209,6 +209,10 @@ class AppLocalizationsSw extends AppLocalizations {
   String get layerEditItem => 'Hariri jina la kitu';
 
   @override
+  String get canvasSelectGroupMemberHint =>
+      'Bonyeza Ctrl na ubofye ili kuchagua kipengee hiki pekee kutoka kwenye kundi lake';
+
+  @override
   String get layerEditGroup => 'Hariri jina la kikundi';
 
   @override
@@ -220,4 +224,13 @@ class AppLocalizationsSw extends AppLocalizations {
   @override
   String get groupMethodsPublicHelp =>
       'Ikiwashwa, tabaka huita mbinu ya kila umbo moja kwa moja. Ikizimwa, kikundi huwa na mbinu moja ya paint() na mbinu za maumbo hubaki za ndani.';
+
+  @override
+  String get exportGenerating => 'Inatengeneza msimbo wa Dart…';
+
+  @override
+  String get exportSaving => 'Inaandaa faili la nje…';
+
+  @override
+  String get exportGenerationFailed => 'Imeshindwa kutengeneza msimbo wa Dart.';
 }

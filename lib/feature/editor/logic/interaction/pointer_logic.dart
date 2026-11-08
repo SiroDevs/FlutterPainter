@@ -22,6 +22,7 @@ abstract class PointerLogic {
           e.point,
           alt: e.alt,
           shift: e.shift,
+          control: e.control,
           timeMs: e.timeMs,
         );
       case Tool.reference:
