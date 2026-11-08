@@ -46,8 +46,7 @@ Future<void> openPath(BuildContext context, WorkspaceCubit ws, String path) asyn
 /// Saves [bloc]'s project. Returns false if the user cancelled.
 ///
 /// - A project never saved asks where to save.
-/// - A project that was opened from disk asks, the first time, whether to
-///   overwrite the original or save a new file.
+/// - A project with a file path saves directly to that file.
 Future<bool> saveTab(
   BuildContext context,
   WorkspaceCubit ws,
@@ -58,15 +57,6 @@ Future<bool> saveTab(
   String? target = s.filePath;
   if (saveAs || target == null) {
     target = await _dialogs.pickSavePath();
-  } else if (!s.overwriteConfirmed) {
-    switch (await askOverwrite(context, target)) {
-      case OverwriteChoice.cancel:
-        return false;
-      case OverwriteChoice.saveNew:
-        target = await _dialogs.pickSavePath();
-      case OverwriteChoice.overwrite:
-        break;
-    }
   }
   if (target == null) return false;
   try {

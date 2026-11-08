@@ -27,110 +27,106 @@ class WorkspaceShortcuts {
   final WorkspaceCubit workspace;
   final bool Function() isTyping;
 
-  Map<ShortcutActivator, VoidCallback> bindings() {
-    final shortcuts = <ShortcutActivator, VoidCallback>{};
-    void both(LogicalKeyboardKey key, VoidCallback action, {bool shift = false}) {
-      shortcuts[SingleActivator(key, control: true, shift: shift)] = action;
-      shortcuts[SingleActivator(key, meta: true, shift: shift)] = action;
-    }
-
-    void send(EditorEvent event) => workspace.current.add(event);
-    void zoom(double factor) {
-      final viewport = workspace.current.state.view.viewport;
-      send(
-        ViewZoomed(
-          factor,
-          Offset(viewport.width / 2, viewport.height / 2),
-        ),
-      );
-    }
-
-    void guarded(VoidCallback action) {
-      if (!isTyping()) action();
-    }
-
-    both(
-      LogicalKeyboardKey.keyZ,
-      () => guarded(() => send(const UndoRequested())),
-    );
-    both(
-      LogicalKeyboardKey.keyZ,
-      () => guarded(() => send(const RedoRequested())),
-      shift: true,
-    );
-    both(
-      LogicalKeyboardKey.keyY,
-      () => guarded(() => send(const RedoRequested())),
-    );
-    both(
-      LogicalKeyboardKey.keyD,
-      () => guarded(() => send(const ShapeDuplicated())),
-    );
-    both(
-      LogicalKeyboardKey.keyA,
-      () => guarded(() => send(const SelectAllRequested())),
-    );
-    both(LogicalKeyboardKey.minus, () => guarded(() => zoom(1 / 1.25)));
-    both(LogicalKeyboardKey.equal, () => guarded(() => zoom(1.25)));
-    both(
-      LogicalKeyboardKey.digit0,
-      () => guarded(() => send(const FitRequested())),
-    );
-    both(
-      LogicalKeyboardKey.keyS,
-      () => guarded(() => saveTab(context, workspace, workspace.current)),
-    );
-    both(
-      LogicalKeyboardKey.keyS,
-      () => guarded(
-        () => saveTab(context, workspace, workspace.current, saveAs: true),
-      ),
-      shift: true,
-    );
-    both(
-      LogicalKeyboardKey.keyO,
-      () => guarded(() => openProjectDialog(context, workspace)),
-    );
-    both(LogicalKeyboardKey.keyN, () => guarded(workspace.addBlank));
-    both(
-      LogicalKeyboardKey.keyW,
-      () => guarded(() => closeTab(context, workspace, workspace.current)),
-    );
-    both(
-      LogicalKeyboardKey.keyE,
-      () => guarded(() => context.push(
-        RoutePaths.export,
-        extra: ExportArgs(workspace.current.state.drawing),
-      )),
-    );
-    both(
-      LogicalKeyboardKey.comma,
-      () => guarded(() => showSettingsDialog(context)),
-    );
-
-    for (final tool in Tool.values) {
-      shortcuts[SingleActivator(tool.shortcutKey)] =
-          () => guarded(() => send(ToolSelected(tool)));
-    }
-    shortcuts[const SingleActivator(LogicalKeyboardKey.delete)] =
-        () => guarded(() => send(const ShapeDeleted()));
-    shortcuts[const SingleActivator(LogicalKeyboardKey.backspace)] =
-        () => guarded(() => send(const ShapeDeleted()));
-    shortcuts[const SingleActivator(LogicalKeyboardKey.enter)] =
-        () => guarded(() => send(const PolygonFinished(closed: false)));
-    shortcuts[const SingleActivator(LogicalKeyboardKey.enter, shift: true)] =
-        () => guarded(() => send(const PolygonFinished()));
-    return shortcuts;
-  }
-
-  KeyEventResult handleEscape(FocusNode _, KeyEvent event) {
+  KeyEventResult handleKey(FocusNode _, KeyEvent event) {
     if (event is! KeyDownEvent ||
-        event.logicalKey != LogicalKeyboardKey.escape ||
         isTyping() ||
         ModalRoute.of(context)?.isCurrent == false) {
       return KeyEventResult.ignored;
     }
-    workspace.current.add(const ToolSelected(Tool.select));
+    final keyboard = HardwareKeyboard.instance;
+    final key = event.logicalKey;
+    final primary = keyboard.isControlPressed || keyboard.isMetaPressed;
+    if (primary && keyboard.isAltPressed) return KeyEventResult.ignored;
+
+    if (primary) return _handlePrimaryKey(key, keyboard.isShiftPressed);
+    if (keyboard.isAltPressed || keyboard.isMetaPressed ||
+        keyboard.isControlPressed) {
+      return KeyEventResult.ignored;
+    }
+    if (key == LogicalKeyboardKey.escape) {
+      workspace.current.add(const ToolSelected(Tool.select));
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.delete ||
+        key == LogicalKeyboardKey.backspace) {
+      workspace.current.add(const ShapeDeleted());
+      return KeyEventResult.handled;
+    }
+    if (key == LogicalKeyboardKey.enter) {
+      workspace.current.add(
+        PolygonFinished(closed: keyboard.isShiftPressed),
+      );
+      return KeyEventResult.handled;
+    }
+    if (!keyboard.isShiftPressed) {
+      for (final tool in Tool.values) {
+        if (key == tool.shortcutKey) {
+          workspace.current.add(ToolSelected(tool));
+          return KeyEventResult.handled;
+        }
+      }
+    }
+    return KeyEventResult.ignored;
+  }
+
+  KeyEventResult _handlePrimaryKey(LogicalKeyboardKey key, bool shift) {
+    final editor = workspace.current;
+    switch (key) {
+      case LogicalKeyboardKey.keyZ:
+        editor.add(shift ? const RedoRequested() : const UndoRequested());
+        break;
+      case LogicalKeyboardKey.keyY when !shift:
+        editor.add(const RedoRequested());
+        break;
+      case LogicalKeyboardKey.keyD when !shift:
+        editor.add(const ShapeDuplicated());
+        break;
+      case LogicalKeyboardKey.keyA when !shift:
+        editor.add(const SelectAllRequested());
+        break;
+      case LogicalKeyboardKey.minus when !shift:
+        _zoom(1 / 1.25);
+        break;
+      case LogicalKeyboardKey.equal when !shift:
+        _zoom(1.25);
+        break;
+      case LogicalKeyboardKey.digit0 when !shift:
+        editor.add(const FitRequested());
+        break;
+      case LogicalKeyboardKey.keyS:
+        saveTab(context, workspace, editor, saveAs: shift);
+        break;
+      case LogicalKeyboardKey.keyO when !shift:
+        openProjectDialog(context, workspace);
+        break;
+      case LogicalKeyboardKey.keyN when !shift:
+        workspace.addBlank();
+        break;
+      case LogicalKeyboardKey.keyW when !shift:
+        closeTab(context, workspace, editor);
+        break;
+      case LogicalKeyboardKey.keyE when !shift:
+        context.push(
+          RoutePaths.export,
+          extra: ExportArgs(editor.state.drawing),
+        );
+        break;
+      case LogicalKeyboardKey.comma when !shift:
+        showSettingsDialog(context);
+        break;
+      default:
+        return KeyEventResult.ignored;
+    }
     return KeyEventResult.handled;
+  }
+
+  void _zoom(double factor) {
+    final viewport = workspace.current.state.view.viewport;
+    workspace.current.add(
+      ViewZoomed(
+        factor,
+        Offset(viewport.width / 2, viewport.height / 2),
+      ),
+    );
   }
 }

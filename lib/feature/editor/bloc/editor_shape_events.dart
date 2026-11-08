@@ -67,10 +67,15 @@ class ShapeRenamed extends EditorEvent {
 }
 
 class ShapeSelectionRequested extends EditorEvent {
-  const ShapeSelectionRequested(this.layer, this.index);
+  const ShapeSelectionRequested(
+    this.layer,
+    this.index, {
+    this.includeGroup = true,
+  });
 
   final int layer;
   final int index;
+  final bool includeGroup;
 }
 
 class ClosedToggled extends EditorEvent {

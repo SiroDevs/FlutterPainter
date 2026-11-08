@@ -156,7 +156,7 @@ class _CanvasViewState extends State<CanvasView> {
         if (!shape.usesVertices) continue;
         for (var vi = 0; vi < shape.points.length; vi++) {
           if ((shape.points[vi] - point).distance > tolerance) continue;
-          _bloc.add(ShapeSelectionRequested(li, si));
+          _bloc.add(ShapeSelectionRequested(li, si, includeGroup: false));
           _openVertexMenu(event.position, vi);
           return true;
         }
