@@ -109,8 +109,8 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
         '',
       ],
       if (options.colorConstants && localFunctions.isNotEmpty)
-        "import '../$_painterFile';",
-      for (final group in groups) "import '../${_groupFile(group)}';",
+        "import '../../$_painterFile';",
+      for (final group in groups) "import '${_groupImport(group)}';",
       '',
       '/// Layer "${_oneLine(layer.name)}".',
       'class ${_layerClass(index)} {',

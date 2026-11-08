@@ -59,9 +59,10 @@ abstract class _DartExporterBase {
   String get folderName => snakeCase(_root);
   String get _painterClass => '${_root}Painter';
   String get _painterFile => '${folderName}_painter.dart';
+  String _layerFolder(int index) => 'layers/${snakeCase(_names[index])}';
   String _layerClass(int index) => '$_root${_names[index]}Layer';
   String _layerFile(int index) =>
-      'layers/${snakeCase(_names[index])}_layer.dart';
+      '${_layerFolder(index)}/${snakeCase(_names[index])}_layer.dart';
   List<_ShapeFunction> _shapeFunctions(PaintLayer layer);
   List<String> _layerMethod(String name, PaintLayer layer, int layerIndex);
 

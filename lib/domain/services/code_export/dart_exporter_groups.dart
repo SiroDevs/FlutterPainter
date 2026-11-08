@@ -59,8 +59,24 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
 
   String _groupField(_ExportGroup group) => '_${lowerFirst(group.className)}';
 
-  String _groupFile(_ExportGroup group) =>
-      'groups/${snakeCase(group.className)}.dart';
+  String _groupFile(_ExportGroup group) {
+    final layerGroups = _paintedGroups
+        .where((candidate) => candidate.layerIndex == group.layerIndex)
+        .length;
+    final folder = _layerFolder(group.layerIndex);
+    final directory = layerGroups > 1 ? '$folder/groups' : folder;
+    return '$directory/${snakeCase(group.className)}.dart';
+  }
+
+  String _groupImport(_ExportGroup group) {
+    final folder = '${_layerFolder(group.layerIndex)}/';
+    return _groupFile(group).substring(folder.length);
+  }
+
+  String _groupPainterImport(_ExportGroup group) {
+    final parentCount = _groupFile(group).split('/').length - 1;
+    return '${List.filled(parentCount, '..').join('/')}/$_painterFile';
+  }
 
   List<String> _layerMethod(String name, PaintLayer layer, int layerIndex) {
     _resetShader = _hasGradient(layer);
@@ -144,7 +160,7 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
       "import 'dart:ui';",
       if (options.colorConstants && functions.isNotEmpty) ...[
         '',
-        "import '../$_painterFile';",
+        "import '${_groupPainterImport(group)}';",
       ],
       '',
       ..._groupClassLines(group, functions),
