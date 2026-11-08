@@ -35,5 +35,8 @@ class SettingsCubit extends Cubit<AppSettings> {
   void setColorConstants(bool v) =>
       update((s) => s.copyWith(colorConstants: v));
 
+  void setGroupMethodsPublic(bool v) =>
+      update((s) => s.copyWith(groupMethodsPublic: v));
+
   void resetToDefaults() => update((_) => const AppSettings());
 }

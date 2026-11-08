@@ -8,4 +8,5 @@ class PrefConstants {
   static const colorPreviewKey = 'color_preview';
   static const colorFormatKey = 'color_format';
   static const colorConstantsKey = 'color_constants';
+  static const groupMethodsPublicKey = 'group_methods_public';
 }

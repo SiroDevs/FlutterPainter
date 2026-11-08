@@ -75,5 +75,7 @@
   "layerItemFreehand": "Freehand",
   "layerEditItem": "Edit item name",
   "layerEditGroup": "Edit group name",
-  "shapeScaleDown": "Scale down 10%"
+  "shapeScaleDown": "Scale down 10%",
+  "groupMethodsPublic": "Expose group shape methods",
+  "groupMethodsPublicHelp": "On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private."
 }

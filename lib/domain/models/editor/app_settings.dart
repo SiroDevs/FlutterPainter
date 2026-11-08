@@ -62,6 +62,7 @@ class AppSettings extends Equatable {
     this.colorPreview = ColorPreview.none,
     this.colorFormat = ColorFormat.hex,
     this.colorConstants = true,
+    this.groupMethodsPublic = false,
   });
 
   final InterfaceMode interfaceMode;
@@ -73,22 +74,32 @@ class AppSettings extends Equatable {
   /// the literal at every use.
   final bool colorConstants;
 
+  /// Expose each grouped shape method instead of one public group painter.
+  final bool groupMethodsPublic;
+
   AppSettings copyWith({
     InterfaceMode? interfaceMode,
     CodeStyle? codeStyle,
     ColorPreview? colorPreview,
     ColorFormat? colorFormat,
     bool? colorConstants,
-  }) =>
-      AppSettings(
-        interfaceMode: interfaceMode ?? this.interfaceMode,
-        codeStyle: codeStyle ?? this.codeStyle,
-        colorPreview: colorPreview ?? this.colorPreview,
-        colorFormat: colorFormat ?? this.colorFormat,
-        colorConstants: colorConstants ?? this.colorConstants,
-      );
+    bool? groupMethodsPublic,
+  }) => AppSettings(
+    interfaceMode: interfaceMode ?? this.interfaceMode,
+    codeStyle: codeStyle ?? this.codeStyle,
+    colorPreview: colorPreview ?? this.colorPreview,
+    colorFormat: colorFormat ?? this.colorFormat,
+    colorConstants: colorConstants ?? this.colorConstants,
+    groupMethodsPublic: groupMethodsPublic ?? this.groupMethodsPublic,
+  );
 
   @override
-  List<Object?> get props =>
-      [interfaceMode, codeStyle, colorPreview, colorFormat, colorConstants];
+  List<Object?> get props => [
+    interfaceMode,
+    codeStyle,
+    colorPreview,
+    colorFormat,
+    colorConstants,
+    groupMethodsPublic,
+  ];
 }

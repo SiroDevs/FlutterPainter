@@ -469,6 +469,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scale down 10%'**
   String get shapeScaleDown;
+
+  /// No description provided for @groupMethodsPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Expose group shape methods'**
+  String get groupMethodsPublic;
+
+  /// No description provided for @groupMethodsPublicHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private.'**
+  String get groupMethodsPublicHelp;
 }
 
 class _AppLocalizationsDelegate

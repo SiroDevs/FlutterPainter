@@ -6,10 +6,7 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
   List<ExportFile> _refactored() {
     final layerFiles = [
       for (var index = 0; index < _layers.length; index++)
-        ExportFile(
-          path: _layerFile(index),
-          content: _layerSource(index),
-        ),
+        ExportFile(path: _layerFile(index), content: _layerSource(index)),
     ];
     final groupFiles = [
       for (final group in _paintedGroups)
@@ -17,8 +14,6 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
     ];
     return [
       ExportFile(path: _painterFile, content: _painterSource()),
-      if (_hasPalette)
-        ExportFile(path: _paletteFile, content: _paletteSource()),
       ...groupFiles,
       ...layerFiles,
     ];
@@ -39,6 +34,8 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
     final body = [
       'class $_painterClass {',
       ..._sizeConstants(),
+      if (_hasPalette) '',
+      if (_hasPalette) ..._paletteFields(),
       '',
       _paintField,
       for (final group in _paintedGroups)
@@ -58,13 +55,7 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
       '',
       ...groupClasses,
     ];
-    final lines = [
-      ..._header(),
-      "import 'dart:ui';",
-      '',
-      if (_hasPalette) ..._paletteLines(),
-      ...body,
-    ];
+    final lines = [..._header(), "import 'dart:ui';", '', ...body];
     return [ExportFile(path: _painterFile, content: lines.join('\n'))];
   }
 
@@ -78,6 +69,8 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
     '/// Paints every layer of "${_label()}", bottom to top.',
     'class $_painterClass {',
     ..._sizeConstants(),
+    if (_hasPalette) '',
+    if (_hasPalette) ..._paletteFields(),
     if (_layers.isNotEmpty) '',
     for (var index = 0; index < _layers.length; index++)
       '  final ${_layerClass(index)} _${lowerFirst(_names[index])} = '
@@ -103,8 +96,7 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
     final groups = [
       for (final group in _groupsInLayer(index))
         if (functions.any(
-          (function) =>
-              layer.shapes[function.index].groupId == group.id,
+          (function) => layer.shapes[function.index].groupId == group.id,
         ))
           group,
     ];
@@ -117,9 +109,8 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
         '',
       ],
       if (options.colorConstants && localFunctions.isNotEmpty)
-        "import '../$_paletteFile';",
-      for (final group in groups)
-        "import '../${_groupFile(group)}';",
+        "import '../$_painterFile';",
+      for (final group in groups) "import '../${_groupFile(group)}';",
       '',
       '/// Layer "${_oneLine(layer.name)}".',
       'class ${_layerClass(index)} {',
@@ -129,12 +120,7 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
       if (needsPath) '  final Path _path = Path();',
       '',
       '  void paint(Canvas canvas) {',
-      for (final function in functions) ...[
-        if (_groupForShape(index, layer.shapes[function.index]) case final group?)
-          '    ${_groupField(group)}.paint${function.name}(canvas);'
-        else
-          '    _draw${function.name}(canvas);',
-      ],
+      ..._layerPaintCalls(index, functions),
       if (functions.isEmpty) '    // Nothing visible on this layer.',
       '  }',
       for (final function in localFunctions) ...[
@@ -150,21 +136,30 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
     return lines.join('\n');
   }
 
-  String _paletteSource() => [
-    _generatedLine(),
-    "import 'dart:ui';",
-    '',
-    ..._paletteLines(),
-  ].join('\n');
-
-  List<String> _paletteLines() => [
-    '/// Every colour used by "${_label()}".',
-    'abstract final class $_paletteClass {',
+  List<String> _paletteFields() => [
     for (final color in _usedColors)
       '  static const Color ${_colorName(color)} = ${_colorLiteral(color)};',
-    '}',
-    '',
   ];
+
+  List<String> _layerPaintCalls(
+    int layerIndex,
+    List<_ShapeFunction> functions,
+  ) {
+    final layer = _layers[layerIndex];
+    final paintedGroups = <String>{};
+    final calls = <String>[];
+    for (final function in functions) {
+      final group = _groupForShape(layerIndex, layer.shapes[function.index]);
+      if (group == null) {
+        calls.add('    _draw${function.name}(canvas);');
+      } else if (options.groupMethodsPublic) {
+        calls.add('    ${_groupField(group)}.paint${function.name}(canvas);');
+      } else if (paintedGroups.add(group.id)) {
+        calls.add('    ${_groupField(group)}.paint(canvas);');
+      }
+    }
+    return calls;
+  }
 
   List<_ShapeFunction> _shapeFunctions(PaintLayer layer) {
     _resetShader = _hasGradient(layer);
