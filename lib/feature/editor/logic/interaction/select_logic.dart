@@ -8,6 +8,7 @@ import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../drawing/editor_ops.dart';
 import '../canvas/image_logic.dart';
+import 'selection_hit_logic.dart';
 import 'selection_transform_logic.dart';
 import '../drawing/style_logic.dart';
 import '../drawing/vertex_logic.dart';
@@ -93,8 +94,8 @@ abstract class SelectLogic {
     }
 
     if (shift) {
-      final hit = _hitInActiveLayer(base, point);
-      if (hit != null) return _toggle(base, hit);
+      final hit = SelectionHitLogic.hitInActiveLayer(base, point);
+      if (hit != null) return SelectionHitLogic.toggle(base, hit);
       return _startMarquee(base, point, additive: true);
     }
     return _pick(base, point, control: control);
@@ -145,7 +146,15 @@ abstract class SelectLogic {
         final selected = !control && base.validSelectedIndices.contains(si)
             ? base
             : base.selectIndices(
-                control ? [si] : groupedShapeIndices(layer.shapes, si),
+                control
+                    ? [si]
+                    : [
+                        for (final index in groupedShapeIndices(
+                          layer.shapes,
+                          si,
+                        ))
+                          if (layer.shapes[index].visible) index,
+                      ],
                 primary: si,
               );
         final indices = selected.validSelectedIndices;
@@ -184,28 +193,6 @@ abstract class SelectLogic {
       }
     }
     return _startMarquee(state, point, additive: false);
-  }
-
-  static int? _hitInActiveLayer(EditorState state, Offset point) {
-    if (!state.layer.visible) return null;
-    final shapes = state.layer.shapes;
-    final tol = 4 / state.view.zoom;
-    for (var i = shapes.length - 1; i >= 0; i--) {
-      if (shapes[i].visible && shapes[i].hitTest(point, tol)) return i;
-    }
-    return null;
-  }
-
-  static EditorState _toggle(EditorState state, int index) {
-    final toggled = groupedShapeIndices(state.layer.shapes, index).toSet();
-    final old = state.validSelectedIndices.toSet();
-    final next = old.contains(index)
-        ? old.difference(toggled)
-        : old.union(toggled);
-    return state.selectIndices(
-      next.toList(),
-      primary: next.contains(index) ? index : null,
-    );
   }
 
   static EditorState moved(

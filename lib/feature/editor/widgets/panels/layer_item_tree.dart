@@ -73,10 +73,14 @@ class LayerItemTree extends StatelessWidget {
   }
 
   Widget _groupTile(BuildContext context, _TreeEntry entry) {
+    final visibleIndices = entry.indices
+        .where((index) => layer.shapes[index].visible)
+        .toList();
     final selected =
         layerIndex == state.layerIndex &&
-        entry.indices.every(state.validSelectedIndices.contains);
-    final visible = entry.indices.any((index) => layer.shapes[index].visible);
+        visibleIndices.isNotEmpty &&
+        visibleIndices.every(state.validSelectedIndices.contains);
+    final visible = visibleIndices.length == entry.indices.length;
     return GroupTreeTile(
       key: ValueKey('group-$layerIndex-${entry.groupId}'),
       name: entry.name,
@@ -87,7 +91,11 @@ class LayerItemTree extends StatelessWidget {
           ? context.l10n.layerHide
           : context.l10n.layerShow,
       onToggleVisibility: () => context.read<EditorBloc>().add(
-        ShapeVisibilityToggled(layerIndex, entry.indices.first, includeGroup: true),
+        ShapeVisibilityToggled(
+          layerIndex,
+          entry.indices.first,
+          includeGroup: true,
+        ),
       ),
       onRename: (name) => context.read<EditorBloc>().add(
         GroupRenamed(layerIndex, entry.groupId!, name),
@@ -95,7 +103,7 @@ class LayerItemTree extends StatelessWidget {
       onSelect: () => context.read<EditorBloc>().add(
         ShapeSelectionRequested(
           layerIndex,
-          entry.indices.first,
+          visibleIndices.isEmpty ? entry.indices.first : visibleIndices.first,
           includeGroup: true,
         ),
       ),

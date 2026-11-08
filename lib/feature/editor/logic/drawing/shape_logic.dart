@@ -30,9 +30,10 @@ abstract class ShapeLogic {
     return next
         .selectIndices(
           includeGroup
-              ? groupedShapeIndices(shapes, index)
-                    .where((shapeIndex) => shapes[shapeIndex].visible)
-                    .toList()
+              ? groupedShapeIndices(
+                  shapes,
+                  index,
+                ).where((shapeIndex) => shapes[shapeIndex].visible).toList()
               : [index],
           primary: index,
         )

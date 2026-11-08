@@ -29,9 +29,7 @@ part 'editor_shape_events.dart';
 part 'editor_state.dart';
 part 'editor_style_events.dart';
 
-/// One bloc per open project (tab). It holds no business logic itself: every
-/// event is routed to a pure function in `logic/` that maps the old state to
-/// the new one, which keeps the behaviour easy to test without any widgets.
+/// Routes each open project's events to pure functions in `logic/`.
 @injectable
 class EditorBloc extends Bloc<EditorEvent, EditorState> {
   EditorBloc(@factoryParam EditorSeed seed)
@@ -44,7 +42,7 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _registerLayers();
     _registerDocument();
     _registerImages();
-    if (seed.drawing.layers.any((l) => l.image != null)) {
+    if (seed.drawing.layers.any((layer) => layer.image != null)) {
       add(const ImageSyncRequested());
     }
   }
@@ -116,20 +114,11 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<ShapeReordered>((s, e) => ShapeLogic.reorder(s, e.direction));
     _reduce<ShapeMovedToLayer>((s, e) => ShapeLogic.moveToLayer(s, e.layer));
     _reduce<ShapeRenamed>(
-      (s, e) => ShapeLogic.rename(
-        s,
-        e.name,
-        layer: e.layer,
-        index: e.index,
-      ),
+      (s, e) => ShapeLogic.rename(s, e.name, layer: e.layer, index: e.index),
     );
     _reduce<ShapeSelectionRequested>(
-      (s, e) => ShapeLogic.select(
-        s,
-        e.layer,
-        e.index,
-        includeGroup: e.includeGroup,
-      ),
+      (s, e) =>
+          ShapeLogic.select(s, e.layer, e.index, includeGroup: e.includeGroup),
     );
     _reduce<ShapeVisibilityToggled>(
       (s, e) => ShapeLogic.toggleVisibility(
