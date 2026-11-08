@@ -1,19 +1,17 @@
 part of 'dart_exporter.dart';
 
 mixin _DartExporterShapeWriter on _DartExporterBase {
+  @override
   bool _hasGradient(PaintLayer layer) =>
       layer.shapes.any((shape) => shape.gradient != null);
 
-  // ignore: unused_element
-  bool _needsPath(PaintLayer layer) => layer.shapes.any(
-    (shape) => _usesPath(shape) && _shape(shape, comment: false).isNotEmpty,
-  );
-
+  @override
   bool _usesPath(Shape shape) =>
       shape.kind == ShapeKind.polygon ||
       shape.kind == ShapeKind.freehand ||
       (shape.kind == ShapeKind.line && shape.points.length > 2);
 
+  @override
   List<String> _shape(Shape shape, {required bool comment}) {
     if (!shape.isClosed && shape.stroke == null) return const [];
     if (shape.isClosed && shape.fill == null && shape.stroke == null) {
@@ -121,11 +119,13 @@ mixin _DartExporterShapeWriter on _DartExporterBase {
         : 'const ${_colorLiteral(value)}';
   }
 
+  @override
   String _colorName(int argb) {
     final hex = argb.toRadixString(16).padLeft(8, '0').toUpperCase();
     return 'color${hex.startsWith('FF') ? hex.substring(2) : hex}';
   }
 
+  @override
   String _colorLiteral(int argb) {
     final alpha = (argb >> 24) & 0xFF;
     final red = (argb >> 16) & 0xFF;

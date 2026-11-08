@@ -59,9 +59,10 @@ abstract class _DartExporterBase {
   String get folderName => snakeCase(_root);
   String get _painterClass => '${_root}Painter';
   String get _painterFile => '${folderName}_painter.dart';
+  String _layerFolder(int index) => 'layers/${snakeCase(_names[index])}';
   String _layerClass(int index) => '$_root${_names[index]}Layer';
   String _layerFile(int index) =>
-      'layers/${snakeCase(_names[index])}_layer.dart';
+      '${_layerFolder(index)}/${snakeCase(_names[index])}_layer.dart';
   List<_ShapeFunction> _shapeFunctions(PaintLayer layer);
   List<String> _layerMethod(String name, PaintLayer layer, int layerIndex);
 
@@ -103,8 +104,6 @@ abstract class _DartExporterBase {
   }
 
   bool _hasGradient(PaintLayer layer);
-  // ignore: unused_element
-  bool _needsPath(PaintLayer layer);
   bool _usesPath(Shape shape);
   List<String> _shape(Shape shape, {required bool comment});
   String _colorName(int argb);
@@ -117,6 +116,7 @@ abstract class _DartExporterBase {
   _ExportGroup? _groupForShape(int layerIndex, Shape shape);
   String _groupField(_ExportGroup group);
   String _groupFile(_ExportGroup group);
+  String _groupImport(_ExportGroup group);
   List<_ShapeFunction> _groupFunctions(_ExportGroup group);
   List<String> _groupClassLines(
     _ExportGroup group,

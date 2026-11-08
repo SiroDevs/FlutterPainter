@@ -109,8 +109,8 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
         '',
       ],
       if (options.colorConstants && localFunctions.isNotEmpty)
-        "import '../$_painterFile';",
-      for (final group in groups) "import '../${_groupFile(group)}';",
+        "import '../../$_painterFile';",
+      for (final group in groups) "import '${_groupImport(group)}';",
       '',
       '/// Layer "${_oneLine(layer.name)}".',
       'class ${_layerClass(index)} {',
@@ -161,6 +161,7 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
     return calls;
   }
 
+  @override
   List<_ShapeFunction> _shapeFunctions(PaintLayer layer) {
     _resetShader = _hasGradient(layer);
     final taken = <String>{};
