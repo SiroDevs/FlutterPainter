@@ -40,9 +40,7 @@ abstract class _DartExporterBase {
 
   late final List<int> _layerIndexes = [
     for (var index = 0; index < drawing.layers.length; index++)
-      if (drawing.layers[index].visible &&
-          drawing.layers[index].shapes.isNotEmpty)
-        index,
+      if (drawing.layers[index].shapes.isNotEmpty) index,
   ];
   late final List<PaintLayer> _layers = [
     for (final index in _layerIndexes) drawing.layers[index],

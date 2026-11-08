@@ -43,9 +43,10 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
       if (needsPath) '  final Path _path = Path();',
       '',
       '  void paint(Canvas canvas) {',
-      for (final name in _names) '    paint$name(canvas);',
-      if (_layers.isEmpty)
-        '    // Nothing to paint: every layer is empty or hidden.',
+      for (var index = 0; index < _names.length; index++)
+        if (_layers[index].visible) '    paint${_names[index]}(canvas);',
+      if (!_layers.any((layer) => layer.visible))
+        '    // No visible layers to paint.',
       '  }',
       for (var index = 0; index < _layers.length; index++) ...[
         '',
@@ -77,10 +78,19 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
           '${_layerClass(index)}();',
     '',
     '  void paint(Canvas canvas) {',
-    for (final name in _names) '    _${lowerFirst(name)}.paint(canvas);',
-    if (_layers.isEmpty)
-      '    // Nothing to paint: every layer is empty or hidden.',
+    for (var index = 0; index < _names.length; index++)
+      if (_layers[index].visible)
+        '    _${lowerFirst(_names[index])}.paint(canvas);',
+    if (!_layers.any((layer) => layer.visible))
+      '    // No visible layers to paint.',
     '  }',
+    for (var index = 0; index < _names.length; index++) ...[
+      '',
+      '  /// Paints layer "${_oneLine(_layers[index].name)}".',
+      '  void paint${_names[index]}(Canvas canvas) {',
+      '    _${lowerFirst(_names[index])}.paint(canvas);',
+      '  }',
+    ],
     '}',
     '',
   ].join('\n');
