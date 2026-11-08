@@ -117,6 +117,8 @@ class _CanvasViewState extends State<CanvasView> {
         _design(e.localPosition),
         shift: HardwareKeyboard.instance.isShiftPressed,
         alt: HardwareKeyboard.instance.isAltPressed,
+        control: HardwareKeyboard.instance.isControlPressed ||
+            HardwareKeyboard.instance.isMetaPressed,
         timeMs: DateTime.now().millisecondsSinceEpoch,
       ),
     );
@@ -153,7 +155,7 @@ class _CanvasViewState extends State<CanvasView> {
       if (!layer.visible) continue;
       for (var si = layer.shapes.length - 1; si >= 0; si--) {
         final shape = layer.shapes[si];
-        if (!shape.usesVertices) continue;
+        if (!shape.visible || !shape.usesVertices) continue;
         for (var vi = 0; vi < shape.points.length; vi++) {
           if ((shape.points[vi] - point).distance > tolerance) continue;
           _bloc.add(ShapeSelectionRequested(li, si, includeGroup: false));

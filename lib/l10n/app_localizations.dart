@@ -458,6 +458,12 @@ abstract class AppLocalizations {
   /// **'Edit item name'**
   String get layerEditItem;
 
+  /// Describes how to select one item from its group on the canvas.
+  ///
+  /// In en, this message translates to:
+  /// **'Ctrl-click to select only this item from its group'**
+  String get canvasSelectGroupMemberHint;
+
   /// No description provided for @layerEditGroup.
   ///
   /// In en, this message translates to:
@@ -482,14 +488,20 @@ abstract class AppLocalizations {
   /// **'On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private.'**
   String get groupMethodsPublicHelp;
 
+  /// No description provided for @exportGenerating.
+  ///
   /// In en, this message translates to:
   /// **'Generating Dart code…'**
   String get exportGenerating;
 
+  /// No description provided for @exportSaving.
+  ///
   /// In en, this message translates to:
   /// **'Preparing export…'**
   String get exportSaving;
 
+  /// No description provided for @exportGenerationFailed.
+  ///
   /// In en, this message translates to:
   /// **'Could not generate the Dart code.'**
   String get exportGenerationFailed;

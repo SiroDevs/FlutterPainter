@@ -78,6 +78,18 @@ class ShapeSelectionRequested extends EditorEvent {
   final bool includeGroup;
 }
 
+class ShapeVisibilityToggled extends EditorEvent {
+  const ShapeVisibilityToggled(
+    this.layer,
+    this.index, {
+    this.includeGroup = false,
+  });
+
+  final int layer;
+  final int index;
+  final bool includeGroup;
+}
+
 class ClosedToggled extends EditorEvent {
   const ClosedToggled(this.closed);
 

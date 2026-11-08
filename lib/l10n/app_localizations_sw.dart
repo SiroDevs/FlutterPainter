@@ -209,6 +209,10 @@ class AppLocalizationsSw extends AppLocalizations {
   String get layerEditItem => 'Hariri jina la kitu';
 
   @override
+  String get canvasSelectGroupMemberHint =>
+      'Bonyeza Ctrl na ubofye ili kuchagua kipengee hiki pekee kutoka kwenye kundi lake';
+
+  @override
   String get layerEditGroup => 'Hariri jina la kikundi';
 
   @override

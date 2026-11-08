@@ -47,6 +47,7 @@
     "layerItemPolygon": "Poligoni",
     "layerItemFreehand": "Mchoro huru",
     "layerEditItem": "Hariri jina la kitu",
+    "canvasSelectGroupMemberHint": "Bonyeza Ctrl na ubofye ili kuchagua kipengee hiki pekee kutoka kwenye kundi lake",
     "layerEditGroup": "Hariri jina la kikundi",
     "shapeScaleDown": "Punguza ukubwa kwa 10%",
     "groupMethodsPublic": "Onyesha mbinu za maumbo ya kikundi",

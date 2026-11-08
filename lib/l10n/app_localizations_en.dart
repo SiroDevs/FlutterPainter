@@ -208,6 +208,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get layerEditItem => 'Edit item name';
 
   @override
+  String get canvasSelectGroupMemberHint =>
+      'Ctrl-click to select only this item from its group';
+
+  @override
   String get layerEditGroup => 'Edit group name';
 
   @override

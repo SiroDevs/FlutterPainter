@@ -11,6 +11,9 @@ class GroupTreeTile extends StatefulWidget {
     required this.name,
     required this.tooltip,
     required this.selected,
+    required this.visible,
+    required this.visibilityTooltip,
+    required this.onToggleVisibility,
     required this.onRename,
     required this.onSelect,
     required this.children,
@@ -19,6 +22,9 @@ class GroupTreeTile extends StatefulWidget {
   final String name;
   final String tooltip;
   final bool selected;
+  final bool visible;
+  final String visibilityTooltip;
+  final VoidCallback onToggleVisibility;
   final ValueChanged<String> onRename;
   final VoidCallback onSelect;
   final List<Widget> children;
@@ -47,11 +53,25 @@ class _GroupTreeTileState extends State<GroupTreeTile> {
               : null,
           onSaved: widget.onRename,
         ),
-        trailing: IconButton(
-          iconSize: 18,
-          visualDensity: VisualDensity.compact,
-          icon: Icon(_expanded ? Icons.expand_more : Icons.chevron_right),
-          onPressed: () => setState(() => _expanded = !_expanded),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              tooltip: widget.visibilityTooltip,
+              iconSize: 18,
+              visualDensity: VisualDensity.compact,
+              icon: Icon(
+                widget.visible ? Icons.visibility : Icons.visibility_off,
+              ),
+              onPressed: widget.onToggleVisibility,
+            ),
+            IconButton(
+              iconSize: 18,
+              visualDensity: VisualDensity.compact,
+              icon: Icon(_expanded ? Icons.expand_more : Icons.chevron_right),
+              onPressed: () => setState(() => _expanded = !_expanded),
+            ),
+          ],
         ),
         selected: widget.selected,
         onTap: widget.onSelect,

@@ -74,6 +74,7 @@
   "layerItemPolygon": "Polygon",
   "layerItemFreehand": "Freehand",
   "layerEditItem": "Edit item name",
+  "canvasSelectGroupMemberHint": "Ctrl-click to select only this item from its group",
   "layerEditGroup": "Edit group name",
   "shapeScaleDown": "Scale down 10%",
   "groupMethodsPublic": "Expose group shape methods",

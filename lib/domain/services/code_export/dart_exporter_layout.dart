@@ -179,6 +179,7 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
     final functions = <_ShapeFunction>[];
     for (var shapeIndex = 0; shapeIndex < layer.shapes.length; shapeIndex++) {
       final shape = layer.shapes[shapeIndex];
+      if (!shape.visible) continue;
       final body = _shape(shape, comment: false);
       if (body.isEmpty) continue;
       final usableName = RegExp(r'[A-Za-z0-9]').hasMatch(shape.name);

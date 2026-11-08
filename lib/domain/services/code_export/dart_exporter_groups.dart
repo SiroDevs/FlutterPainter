@@ -20,6 +20,7 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
     for (var layerIndex = 0; layerIndex < _layers.length; layerIndex++) {
       final seenIds = <String>{};
       for (final shape in _layers[layerIndex].shapes) {
+        if (!shape.visible) continue;
         final id = shape.groupId;
         if (id == null || !seenIds.add(id)) continue;
         defaultNumber++;

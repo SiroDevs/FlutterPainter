@@ -159,7 +159,9 @@ abstract class SelectionTransformLogic {
         (area.width >= 2 / state.view.zoom ||
             area.height >= 2 / state.view.zoom)) {
       for (var index = 0; index < state.layer.shapes.length; index++) {
-        final bounds = state.layer.shapes[index].bounds;
+        final shape = state.layer.shapes[index];
+        if (!shape.visible) continue;
+        final bounds = shape.bounds;
         if (bounds.overlaps(area) || area.contains(bounds.center))
           selected.add(index);
       }
@@ -168,7 +170,8 @@ abstract class SelectionTransformLogic {
       final groupId = state.layer.shapes[index].groupId;
       if (groupId == null) continue;
       for (var other = 0; other < state.layer.shapes.length; other++) {
-        if (state.layer.shapes[other].groupId == groupId) selected.add(other);
+        final shape = state.layer.shapes[other];
+        if (shape.visible && shape.groupId == groupId) selected.add(other);
       }
     }
     if (gesture.additiveSelection) selected.addAll(gesture.selectionAtStart);

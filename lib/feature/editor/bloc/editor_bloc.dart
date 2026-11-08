@@ -131,6 +131,14 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
         includeGroup: e.includeGroup,
       ),
     );
+    _reduce<ShapeVisibilityToggled>(
+      (s, e) => ShapeLogic.toggleVisibility(
+        s,
+        e.layer,
+        e.index,
+        includeGroup: e.includeGroup,
+      ),
+    );
     _reduce<ClosedToggled>((s, e) => VertexLogic.setClosed(s, e.closed));
   }
 
