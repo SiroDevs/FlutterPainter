@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
-import '../../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../../../domain/models/shapes/shape.dart';
 import '../../../../domain/models/shapes/shape_kind.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/drawing/editor_ops.dart';
+import 'inline_tree_name_editor.dart';
 
 /// Shows the shapes and picture nested under one layer.
 class LayerItemTree extends StatelessWidget {
@@ -80,53 +80,18 @@ class LayerItemTree extends StatelessWidget {
       tilePadding: const EdgeInsets.only(left: 24, right: 16),
       childrenPadding: EdgeInsets.zero,
       leading: const Icon(Icons.folder_outlined, size: 18),
-      title: Row(children: [
-        Expanded(
-          child: Text(
-            entry.name,
-            style: selected ? TextStyle(color: color) : null,
-          ),
+      title: InlineTreeNameEditor(
+        name: entry.name,
+        tooltip: context.l10n.layerEditGroup,
+        style: selected ? TextStyle(color: color) : null,
+        onSaved: (name) => context.read<EditorBloc>().add(
+          GroupRenamed(layerIndex, entry.groupId!, name),
         ),
-        IconButton(
-          tooltip: context.l10n.layerEditGroup,
-          iconSize: 16,
-          visualDensity: VisualDensity.compact,
-          icon: const Icon(Icons.edit_outlined),
-          onPressed: () => _renameGroup(context, entry),
-        ),
-      ]),
+      ),
       children: [
         for (final index in entry.indices)
           _shapeTile(context, index, leftPadding: 48),
       ],
-    );
-  }
-
-  Future<void> _renameGroup(BuildContext context, _TreeEntry entry) async {
-    final name = await promptText(
-      context,
-      title: context.l10n.layerEditGroup,
-      initial: entry.name,
-    );
-    if (name == null || name.trim().isEmpty || !context.mounted) return;
-    context
-        .read<EditorBloc>()
-        .add(GroupRenamed(layerIndex, entry.groupId!, name.trim()));
-  }
-
-  Future<void> _renameShape(BuildContext context, int index) async {
-    final shape = layer.shapes[index];
-    final currentName = shape.name.isEmpty
-        ? _shapeLabel(context, shape.kind)
-        : shape.name;
-    final name = await promptText(
-      context,
-      title: context.l10n.layerEditItem,
-      initial: currentName,
-    );
-    if (name == null || !context.mounted) return;
-    context.read<EditorBloc>().add(
-      ShapeRenamed(name, layer: layerIndex, index: index),
     );
   }
 
@@ -143,18 +108,18 @@ class LayerItemTree extends StatelessWidget {
       visualDensity: VisualDensity.compact,
       contentPadding: EdgeInsets.only(left: leftPadding, right: 16),
       leading: Icon(_shapeIcon(shape.kind), size: 16),
-      title: Text(
-        shape.name.isEmpty ? _shapeLabel(context, shape.kind) : shape.name,
+      title: InlineTreeNameEditor(
+        name: shape.name.isEmpty
+            ? _shapeLabel(context, shape.kind)
+            : shape.name,
+        tooltip: context.l10n.layerEditItem,
         style: Theme.of(context).textTheme.bodySmall,
+        allowEmpty: true,
+        onSaved: (name) => context.read<EditorBloc>().add(
+          ShapeRenamed(name, layer: layerIndex, index: index),
+        ),
       ),
       selected: selected,
-      trailing: IconButton(
-        tooltip: context.l10n.layerEditItem,
-        iconSize: 16,
-        visualDensity: VisualDensity.compact,
-        icon: const Icon(Icons.edit_outlined),
-        onPressed: () => _renameShape(context, index),
-      ),
       onTap: () => context
           .read<EditorBloc>()
           .add(
