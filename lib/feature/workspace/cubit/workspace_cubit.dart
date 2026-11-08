@@ -15,6 +15,7 @@ import '../../../core/utils/app_util.dart';
 import '../../../core/utils/copy_with_util.dart';
 import '../../../domain/models/drawing/draft.dart';
 import '../../../domain/models/drawing/drawing.dart';
+import '../../../domain/models/export/export_options.dart';
 import '../../../domain/repos/draft_repo.dart';
 import '../../../domain/repos/prefs_repo.dart';
 import '../../../domain/repos/project_repo.dart';
@@ -25,7 +26,6 @@ import '../../editor/models/editor_seed.dart';
 import 'project_saver.dart';
 
 part 'workspace_state.dart';
-
 
 /// The set of open projects (tabs) and the rules for keeping their work safe.
 ///
@@ -42,8 +42,7 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
     this._saver,
     this._prefs,
     this._factory,
-  )
-      : super(const WorkspaceState());
+  ) : super(const WorkspaceState());
 
   final ProjectRepo _projects;
   final DraftRepo _drafts;
@@ -64,7 +63,9 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
       _editors[state.active.clamp(0, _editors.length - 1).toInt()];
 
   void init() {
-    emit(state.copyWith(autoSave: _prefs.getPrefBool(PrefConstants.autoSaveKey)));
+    emit(
+      state.copyWith(autoSave: _prefs.getPrefBool(PrefConstants.autoSaveKey)),
+    );
     if (_editors.isEmpty) addBlank();
   }
 
@@ -72,13 +73,19 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
 
   EditorBloc addBlank() => addDrawing(Drawing(name: _nextUntitled()));
 
-  EditorBloc addDrawing(Drawing drawing, {String? path, bool recovered = false, String? tabId}) =>
-      _addTab(EditorSeed(
-        tabId: tabId ?? newTabId(),
-        drawing: drawing,
-        filePath: path,
-        recovered: recovered,
-      ));
+  EditorBloc addDrawing(
+    Drawing drawing, {
+    String? path,
+    bool recovered = false,
+    String? tabId,
+  }) => _addTab(
+    EditorSeed(
+      tabId: tabId ?? newTabId(),
+      drawing: drawing,
+      filePath: path,
+      recovered: recovered,
+    ),
+  );
 
   EditorBloc restore(Draft d) =>
       addDrawing(d.drawing, path: d.path, recovered: true, tabId: d.tabId);
@@ -102,16 +109,16 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
     if (i < 0) return;
     _editors.removeAt(i);
     _timers.remove(bloc)?.cancel();
-    await _subs.remove(bloc)?.cancel();
+    final subscription = _subs.remove(bloc);
     _seen.remove(bloc);
-    await _drafts.delete(bloc.state.tabId);
     if (_editors.isEmpty) {
       addBlank();
     } else {
       final active = i < state.active ? state.active - 1 : state.active;
-      emit(state.copyWith(active: active.clamp(0, _editors.length - 1).toInt()));
-      _syncTabs();
+      _syncTabs(active: active.clamp(0, _editors.length - 1).toInt());
     }
+    await subscription?.cancel();
+    await _drafts.delete(bloc.state.tabId);
     // Close after the frame so widgets still showing it can unsubscribe first.
     WidgetsBinding.instance.addPostFrameCallback((_) => bloc.close());
   }
@@ -140,22 +147,24 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
     _editors.add(bloc);
     _seen[bloc] = bloc.state.revision;
     _subs[bloc] = bloc.stream.listen((s) => _onEditorChanged(bloc, s));
-    emit(state.copyWith(active: _editors.length - 1));
-    _syncTabs();
+    _syncTabs(active: _editors.length - 1);
     return bloc;
   }
 
-  void _syncTabs() => emit(state.copyWith(
-        tabs: [
-          for (final b in _editors)
-            TabInfo(
-              id: b.state.tabId,
-              title: b.state.drawing.name,
-              path: b.state.filePath,
-              dirty: b.state.dirty,
-            ),
-        ],
-      ));
+  void _syncTabs({int? active}) => emit(
+    state.copyWith(
+      active: active,
+      tabs: [
+        for (final b in _editors)
+          TabInfo(
+            id: b.state.tabId,
+            title: b.state.drawing.name,
+            path: b.state.filePath,
+            dirty: b.state.dirty,
+          ),
+      ],
+    ),
+  );
 
   // ---- keeping work safe -------------------------------------------------
 
@@ -174,7 +183,10 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
     if (s.revision == _seen[bloc]) return;
     _seen[bloc] = s.revision;
     _timers[bloc]?.cancel();
-    _timers[bloc] = Timer(const Duration(milliseconds: 900), () => persist(bloc));
+    _timers[bloc] = Timer(
+      const Duration(milliseconds: 900),
+      () => persist(bloc),
+    );
   }
 
   /// Writes the tab's pending work somewhere safe: its own file if auto-save is
@@ -193,10 +205,20 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
   }
 
   /// Saves the tab to [path] (see [ProjectSaver.save]) and refreshes the tabs.
-  Future<void> commitSave(EditorBloc bloc, String path, {String? name}) async {
+  Future<String> commitSave(
+    EditorBloc bloc,
+    String path, {
+    String? name,
+  }) async {
     _timers.remove(bloc)?.cancel();
-    await _saver.save(bloc, path, name: name);
+    final savedPath = await _saver.save(
+      bloc,
+      path,
+      name: name,
+      options: ExportOptions.fromSettings(_prefs.getAppSettings()),
+    );
     _syncTabs();
+    return savedPath;
   }
 
   Future<List<Draft>> pendingDrafts() => _drafts.pending();

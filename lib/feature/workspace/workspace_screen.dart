@@ -90,7 +90,8 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   bool _isTyping() {
     final focusContext = FocusManager.instance.primaryFocus?.context;
     if (focusContext == null) return false;
-    if (focusContext.widget is EditableText || focusContext.widget is TextField) {
+    if (focusContext.widget is EditableText ||
+        focusContext.widget is TextField) {
       return true;
     }
     var hasEditor = false;

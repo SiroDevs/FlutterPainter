@@ -58,9 +58,11 @@ class LayerItemTree extends StatelessWidget {
             groupId,
             shapes[index].groupName ?? 'Group $groupNumber',
             [
-              for (var memberIndex = shapes.length - 1;
-                  memberIndex >= 0;
-                  memberIndex--)
+              for (
+                var memberIndex = shapes.length - 1;
+                memberIndex >= 0;
+                memberIndex--
+              )
                 if (shapes[memberIndex].groupId == groupId) memberIndex,
             ],
           ),
@@ -71,7 +73,8 @@ class LayerItemTree extends StatelessWidget {
   }
 
   Widget _groupTile(BuildContext context, _TreeEntry entry) {
-    final selected = layerIndex == state.layerIndex &&
+    final selected =
+        layerIndex == state.layerIndex &&
         entry.indices.every(state.validSelectedIndices.contains);
     return GroupTreeTile(
       key: ValueKey('group-$layerIndex-${entry.groupId}'),
@@ -79,7 +82,7 @@ class LayerItemTree extends StatelessWidget {
       tooltip: context.l10n.layerEditGroup,
       selected: selected,
       onRename: (name) => context.read<EditorBloc>().add(
-          GroupRenamed(layerIndex, entry.groupId!, name),
+        GroupRenamed(layerIndex, entry.groupId!, name),
       ),
       onSelect: () => context.read<EditorBloc>().add(
         ShapeSelectionRequested(
@@ -101,7 +104,8 @@ class LayerItemTree extends StatelessWidget {
     required double leftPadding,
   }) {
     final shape = layer.shapes[index];
-    final selected = layerIndex == state.layerIndex &&
+    final selected =
+        layerIndex == state.layerIndex &&
         state.validSelectedIndices.contains(index);
     return ListTile(
       dense: true,
@@ -120,46 +124,40 @@ class LayerItemTree extends StatelessWidget {
         ),
       ),
       selected: selected,
-      onTap: () => context
-          .read<EditorBloc>()
-          .add(
-            ShapeSelectionRequested(
-              layerIndex,
-              index,
-              includeGroup: false,
-            ),
-          ),
+      onTap: () => context.read<EditorBloc>().add(
+        ShapeSelectionRequested(layerIndex, index, includeGroup: false),
+      ),
     );
   }
 
   Widget _imageTile(BuildContext context) => ListTile(
-        dense: true,
-        visualDensity: VisualDensity.compact,
-        contentPadding: const EdgeInsets.only(left: 32, right: 16),
-        leading: const Icon(Icons.image_outlined, size: 16),
-        title: Text(
-          context.l10n.layerPicture,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        selected: layerIndex == state.layerIndex && state.imageSelected,
-        onTap: () => context.read<EditorBloc>().add(const ImageSelected()),
-      );
+    dense: true,
+    visualDensity: VisualDensity.compact,
+    contentPadding: const EdgeInsets.only(left: 32, right: 16),
+    leading: const Icon(Icons.image_outlined, size: 16),
+    title: Text(
+      context.l10n.layerPicture,
+      style: Theme.of(context).textTheme.bodySmall,
+    ),
+    selected: layerIndex == state.layerIndex && state.imageSelected,
+    onTap: () => context.read<EditorBloc>().add(const ImageSelected()),
+  );
 
   String _shapeLabel(BuildContext context, ShapeKind kind) => switch (kind) {
-        ShapeKind.rect => context.l10n.layerItemRectangle,
-        ShapeKind.ellipse => context.l10n.layerItemEllipse,
-        ShapeKind.line => context.l10n.layerItemLine,
-        ShapeKind.polygon => context.l10n.layerItemPolygon,
-        ShapeKind.freehand => context.l10n.layerItemFreehand,
-      };
+    ShapeKind.rect => context.l10n.layerItemRectangle,
+    ShapeKind.ellipse => context.l10n.layerItemEllipse,
+    ShapeKind.line => context.l10n.layerItemLine,
+    ShapeKind.polygon => context.l10n.layerItemPolygon,
+    ShapeKind.freehand => context.l10n.layerItemFreehand,
+  };
 
   IconData _shapeIcon(ShapeKind kind) => switch (kind) {
-        ShapeKind.rect => Icons.crop_square,
-        ShapeKind.ellipse => Icons.circle_outlined,
-        ShapeKind.line => Icons.horizontal_rule,
-        ShapeKind.polygon => Icons.change_history,
-        ShapeKind.freehand => Icons.brush_outlined,
-      };
+    ShapeKind.rect => Icons.crop_square,
+    ShapeKind.ellipse => Icons.circle_outlined,
+    ShapeKind.line => Icons.horizontal_rule,
+    ShapeKind.polygon => Icons.change_history,
+    ShapeKind.freehand => Icons.brush_outlined,
+  };
 }
 
 class _TreeEntry {
