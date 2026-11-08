@@ -1,8 +1,10 @@
 part of 'dart_exporter.dart';
 
 mixin _DartExporterGroupWriter on _DartExporterBase {
+  @override
   late final List<_ExportGroup> _groups = _buildGroups();
 
+  @override
   List<_ExportGroup> get _paintedGroups => [
     for (final group in _groups)
       if (_groupFunctions(group).isNotEmpty) group,
@@ -43,11 +45,13 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
     return groups;
   }
 
+  @override
   List<_ExportGroup> _groupsInLayer(int layerIndex) => [
     for (final group in _groups)
       if (group.layerIndex == layerIndex) group,
   ];
 
+  @override
   _ExportGroup? _groupForShape(int layerIndex, Shape shape) {
     final groupId = shape.groupId;
     if (groupId == null) return null;
@@ -57,8 +61,10 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
     return null;
   }
 
+  @override
   String _groupField(_ExportGroup group) => '_${lowerFirst(group.className)}';
 
+  @override
   String _groupFile(_ExportGroup group) {
     final layerGroups = _paintedGroups
         .where((candidate) => candidate.layerIndex == group.layerIndex)
@@ -68,6 +74,7 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
     return '$directory/${snakeCase(group.className)}.dart';
   }
 
+  @override
   String _groupImport(_ExportGroup group) {
     final folder = '${_layerFolder(group.layerIndex)}/';
     return _groupFile(group).substring(folder.length);
@@ -78,6 +85,7 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
     return '${List.filled(parentCount, '..').join('/')}/$_painterFile';
   }
 
+  @override
   List<String> _layerMethod(String name, PaintLayer layer, int layerIndex) {
     _resetShader = _hasGradient(layer);
     final functions = {
@@ -106,6 +114,7 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
     ];
   }
 
+  @override
   List<_ShapeFunction> _groupFunctions(_ExportGroup group) {
     final layer = _layers[group.layerIndex];
     return [
@@ -114,6 +123,7 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
     ];
   }
 
+  @override
   List<String> _groupClassLines(
     _ExportGroup group,
     List<_ShapeFunction> functions,
@@ -153,6 +163,7 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
     ];
   }
 
+  @override
   String _groupSource(_ExportGroup group) {
     final functions = _groupFunctions(group);
     return [

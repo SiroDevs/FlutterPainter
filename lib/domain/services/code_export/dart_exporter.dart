@@ -104,8 +104,6 @@ abstract class _DartExporterBase {
   }
 
   bool _hasGradient(PaintLayer layer);
-  // ignore: unused_element
-  bool _needsPath(PaintLayer layer);
   bool _usesPath(Shape shape);
   List<String> _shape(Shape shape, {required bool comment});
   String _colorName(int argb);
@@ -118,6 +116,7 @@ abstract class _DartExporterBase {
   _ExportGroup? _groupForShape(int layerIndex, Shape shape);
   String _groupField(_ExportGroup group);
   String _groupFile(_ExportGroup group);
+  String _groupImport(_ExportGroup group);
   List<_ShapeFunction> _groupFunctions(_ExportGroup group);
   List<String> _groupClassLines(
     _ExportGroup group,

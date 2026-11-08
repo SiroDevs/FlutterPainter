@@ -161,6 +161,7 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
     return calls;
   }
 
+  @override
   List<_ShapeFunction> _shapeFunctions(PaintLayer layer) {
     _resetShader = _hasGradient(layer);
     final taken = <String>{};
