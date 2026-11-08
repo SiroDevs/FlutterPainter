@@ -39,7 +39,8 @@ class WorkspaceShortcuts {
     if (primary && keyboard.isAltPressed) return KeyEventResult.ignored;
 
     if (primary) return _handlePrimaryKey(key, keyboard.isShiftPressed);
-    if (keyboard.isAltPressed || keyboard.isMetaPressed ||
+    if (keyboard.isAltPressed ||
+        keyboard.isMetaPressed ||
         keyboard.isControlPressed) {
       return KeyEventResult.ignored;
     }
@@ -53,9 +54,7 @@ class WorkspaceShortcuts {
       return KeyEventResult.handled;
     }
     if (key == LogicalKeyboardKey.enter) {
-      workspace.current.add(
-        PolygonFinished(closed: keyboard.isShiftPressed),
-      );
+      workspace.current.add(PolygonFinished(closed: keyboard.isShiftPressed));
       return KeyEventResult.handled;
     }
     if (!keyboard.isShiftPressed) {
@@ -123,10 +122,7 @@ class WorkspaceShortcuts {
   void _zoom(double factor) {
     final viewport = workspace.current.state.view.viewport;
     workspace.current.add(
-      ViewZoomed(
-        factor,
-        Offset(viewport.width / 2, viewport.height / 2),
-      ),
+      ViewZoomed(factor, Offset(viewport.width / 2, viewport.height / 2)),
     );
   }
 }

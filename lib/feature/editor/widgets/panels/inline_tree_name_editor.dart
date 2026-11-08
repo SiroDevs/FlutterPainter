@@ -56,9 +56,7 @@ class _InlineTreeNameEditorState extends State<InlineTreeNameEditor> {
     if (!_editing) return;
     final name = _controller.text.trim();
     setState(() => _editing = false);
-    if (save &&
-        (name.isNotEmpty || widget.allowEmpty) &&
-        name != widget.name) {
+    if (save && (name.isNotEmpty || widget.allowEmpty) && name != widget.name) {
       widget.onSaved(name);
     }
   }
@@ -96,7 +94,12 @@ class _InlineTreeNameEditorState extends State<InlineTreeNameEditor> {
                   onSubmitted: (_) => _finishEditing(save: true),
                 ),
               )
-            : Text(widget.name, style: widget.style),
+            : Text(
+                widget.name,
+                style: widget.style,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
       ),
       if (!_editing)
         IconButton(

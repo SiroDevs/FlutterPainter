@@ -27,7 +27,11 @@ Future<void> openProjectDialog(BuildContext context, WorkspaceCubit ws) async {
 /// Opens a dropped or chosen file: a project opens in its own tab (or switches
 /// to the tab already showing it); an image goes onto the active layer, or onto
 /// a new layer when the active layer already has a picture.
-Future<void> openPath(BuildContext context, WorkspaceCubit ws, String path) async {
+Future<void> openPath(
+  BuildContext context,
+  WorkspaceCubit ws,
+  String path,
+) async {
   try {
     if (isImageFile(path)) {
       final bytes = await _dialogs.readBytes(path);
@@ -39,7 +43,8 @@ Future<void> openPath(BuildContext context, WorkspaceCubit ws, String path) asyn
       CustomSnackbar.show(context, 'Not a Flutter Painter project: $path');
     }
   } catch (e) {
-    if (context.mounted) CustomSnackbar.show(context, 'Could not open $path: $e');
+    if (context.mounted)
+      CustomSnackbar.show(context, 'Could not open $path: $e');
   }
 }
 
@@ -60,9 +65,16 @@ Future<bool> saveTab(
   }
   if (target == null) return false;
   try {
-    final firstSave = s.filePath == null && s.drawing.name.startsWith('Untitled');
-    await ws.commitSave(bloc, target, name: firstSave ? baseNameOf(target) : null);
-    if (context.mounted) CustomSnackbar.show(context, 'Saved $target', isSuccess: true);
+    final firstSave =
+        s.filePath == null && s.drawing.name.startsWith('Untitled');
+    final savedPath = await ws.commitSave(
+      bloc,
+      target,
+      name: firstSave ? baseNameOf(target) : null,
+    );
+    if (context.mounted) {
+      CustomSnackbar.show(context, 'Saved $savedPath', isSuccess: true);
+    }
     return true;
   } catch (e) {
     if (context.mounted) CustomSnackbar.show(context, 'Could not save: $e');
@@ -72,7 +84,11 @@ Future<bool> saveTab(
 
 /// Closes a tab, asking to save first if it has unsaved changes.
 /// Returns false if the user cancelled.
-Future<bool> closeTab(BuildContext context, WorkspaceCubit ws, EditorBloc bloc) async {
+Future<bool> closeTab(
+  BuildContext context,
+  WorkspaceCubit ws,
+  EditorBloc bloc,
+) async {
   if (bloc.state.dirty) {
     ws.activate(ws.editors.indexOf(bloc));
     switch (await askSaveChanges(context, bloc.state.drawing.name)) {
