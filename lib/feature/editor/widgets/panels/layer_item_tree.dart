@@ -11,6 +11,7 @@ import '../../../../domain/models/shapes/shape.dart';
 import '../../../../domain/models/shapes/shape_kind.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/drawing/editor_ops.dart';
+import 'group_tree_tile.dart';
 import 'inline_tree_name_editor.dart';
 
 /// Shows the shapes and picture nested under one layer.
@@ -72,20 +73,19 @@ class LayerItemTree extends StatelessWidget {
   Widget _groupTile(BuildContext context, _TreeEntry entry) {
     final selected = layerIndex == state.layerIndex &&
         entry.indices.every(state.validSelectedIndices.contains);
-    final color = Theme.of(context).colorScheme.primary;
-    return ExpansionTile(
-      key: PageStorageKey('group-$layerIndex-${entry.groupId}'),
-      dense: true,
-      initiallyExpanded: true,
-      tilePadding: const EdgeInsets.only(left: 24, right: 16),
-      childrenPadding: EdgeInsets.zero,
-      leading: const Icon(Icons.folder_outlined, size: 18),
-      title: InlineTreeNameEditor(
-        name: entry.name,
-        tooltip: context.l10n.layerEditGroup,
-        style: selected ? TextStyle(color: color) : null,
-        onSaved: (name) => context.read<EditorBloc>().add(
+    return GroupTreeTile(
+      key: ValueKey('group-$layerIndex-${entry.groupId}'),
+      name: entry.name,
+      tooltip: context.l10n.layerEditGroup,
+      selected: selected,
+      onRename: (name) => context.read<EditorBloc>().add(
           GroupRenamed(layerIndex, entry.groupId!, name),
+      ),
+      onSelect: () => context.read<EditorBloc>().add(
+        ShapeSelectionRequested(
+          layerIndex,
+          entry.indices.first,
+          includeGroup: true,
         ),
       ),
       children: [
