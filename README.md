@@ -1,451 +1,236 @@
 # Flutter Painter
 
-A desktop vector painting tool, in the spirit of MS Paint with a control like that of Canva, built with Flutter.
-You draw shapes on layers, trace over a background picture if you like, and
-**export the result as plain Dart** that paints the same picture on a
-`dart:ui` `Canvas`. It was made to build game sprites visually instead of guessing coordinates in code.
+Flutter Painter is a desktop vector drawing app for making artwork and exporting
+it as Dart code. Draw with shapes and paths, arrange them on layers, and use the
+generated `dart:ui` painter in a Flutter project.
 
-Everything is vector: shapes are stored as points, colours and stroke widths,
-never as pixels, so a drawing stays sharp at any zoom and exports to compact
-code.
+![Flutter Painter screenshot](./screenshots/image1.png)
 
-<image src="./screenshots/image1.png"> 
-The code follows the clean architecture: **bloc + Freezed**,
-**injectable / get_it** dependency injection, a **data / domain / feature**
-split, and `go_router`. See [Architecture](#architecture).
+## Features
 
-- [Getting started](#getting-started)
-- [Drawing](#drawing)
-- [Tracing over a background image](#tracing-over-a-background-image)
-- [Layers](#layers)
-- [Projects, tabs and the .flp format](#projects-tabs-and-the-flp-format)
-- [Saving, auto-save and recovery](#saving-auto-save-and-recovery)
-- [Exporting to Dart](#exporting-to-dart)
-- [Keyboard shortcuts](#keyboard-shortcuts)
-- [Opening .flp files from the desktop](#opening-flp-files-from-the-desktop)
-- [Architecture](#architecture)
-- [Tests](#tests)
-- [Known limits](#known-limits)
+- Draw rectangles, ellipses, lines, polygons, open line paths and smoothed
+  freehand strokes.
+- Select one or many shapes, move, resize and rotate them, or group them for
+  easier editing.
+- Keep artwork organized with layers and an expandable item tree. Rename items
+  and groups inline, select a group or an individual member, and edit or delete
+  its members separately.
+- Refine polygon and line-path points by dragging, adding points on an edge, or
+  using the point context menu.
+- Trace over an image on any layer. The image is stored with the project.
+- Keep multiple projects open in tabs, with undo, redo, auto-save and draft
+  recovery.
+- Export a drawing as either a refactored set of Dart files or one monolithic
+  Dart file.
 
 ## Getting started
 
-Requires Flutter with desktop support enabled (Dart `^3.13.5`).
+Requires Flutter with desktop support and Dart `^3.13.5`.
 
-```
-flutter create --platforms=windows,macos,linux .
+```sh
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs
-flutter run -d windows          # or macos / linux
-flutter build windows           # release build
+flutter run -d linux
 ```
 
-`flutter create .` only adds the platform folders; it does not overwrite the
-files in this project.
+Use `-d windows` or `-d macos` on the corresponding desktop platform. Build a
+release with `flutter build linux`, `flutter build windows` or
+`flutter build macos`.
 
-**`build_runner` is required.** This project uses Freezed and injectable, whose
-generated files (`*.freezed.dart` and `lib/core/di/injectable.config.dart`) are
-not checked in here. Run the command above once after `flutter pub get`, and
-again after you change a Freezed class, an event or state, or an `@injectable`
-class. While developing, `dart run build_runner watch -d` keeps them current.
+The Advanced workspace has a tool palette, ribbon and menus, canvas, colour
+controls, and panels for layers, images and shape properties. The canvas uses a
+design box (120 × 170 units by default); those units become coordinates in the
+Dart output. Change the size from the canvas-size command.
 
-Packages: `flutter_bloc`, `freezed`, `injectable` + `get_it`, `go_router`,
-`shared_preferences` (settings), `file_selector` (open/save dialogs),
-`desktop_drop` (drag a file onto the window), `path_provider` (the folder for
-side copies).
+The interface supports English and Swahili, light and dark themes, and minimal
+or advanced layouts.
 
-- **Top bar:** file actions, the Auto-save switch, Export Dart, undo/redo, zoom,
-  grid and snap toggles, background colour, canvas size, light/dark theme and the
-  project name.
-- **Project tabs:** one tab per open project, each with its name, a dot when it
-  has unsaved changes, and a close button. The `+` opens a new blank project.
-- **Tool palette (left):** Select, Rectangle, Ellipse, Line, Polygon / line
-  path, Freehand, and Move background image.
-- **Canvas (centre):** the design box with an optional grid. Right- or
-  middle-drag pans, the wheel zooms around the cursor. The status bar shows the
-  cursor position in design units and a hint for the active tool.
-- **Side panel (right):** Layers, Background image, and Properties.
-- **Colour bar (bottom):** like Paint's: two overlapping swatches (fill in
-  front, stroke behind), a hex field, the classic palette and a strip of colours
-  already used in the drawing.
+## Drawing and editing
 
-The canvas is a "design box" measured in abstract units (default 120 x 170).
-Those units become the coordinates in the exported code, so you can pick any
-scale that suits your game and change it with **Canvas size**.
+| Tool | Use |
+| --- | --- |
+| Select / move | Select and move shapes. Drag a corner handle to resize, or use the rotation handle above the selection. |
+| Rectangle | Drag to draw; hold Shift for a square. Set corner radius in Properties. |
+| Ellipse | Drag to draw; hold Shift for a circle. |
+| Line | Drag to draw; hold Shift to constrain it to 45° angles. |
+| Polygon / line path | Click to add points. Click the first point or double-click to close a polygon. Press Enter for an open path or Shift+Enter for a closed polygon. |
+| Freehand | Drag to draw a smoothed stroke. |
+| Move / resize image | Drag the active layer's reference image or its handles. |
 
-## Drawing
+Drag on empty canvas to marquee-select shapes on the active layer. Hold Shift to
+add to the selection. Ctrl+A selects every shape on the active layer. A selected
+group moves, scales and rotates together. Shift while rotating snaps to 15°
+steps. The Properties panel also has a **Scale down 10%** action.
 
-| Tool                    | How it works                                                                                                                                                                                                                                         |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Select**              | Click a shape to select it. Drag to move it. Drag a corner handle to resize it. On lines and polygons the handles are the points themselves: drag one to reshape. **Double-click an edge** to add a point there, **Alt-click a point** to delete it. |
-| **Rectangle**           | Drag. Hold Shift for a square. Set a corner radius in Properties.                                                                                                                                                                                    |
-| **Ellipse**             | Drag. Hold Shift for a circle.                                                                                                                                                                                                                       |
-| **Line**                | Drag. Hold Shift to snap to 45 degree steps.                                                                                                                                                                                                         |
-| **Polygon / line path** | Click to place points one after another. See below.                                                                                                                                                                                                  |
-| **Freehand**            | Drag. The stroke is smoothed with quadratic curves; the exported code uses the same curves.                                                                                                                                                          |
+### Points, groups and the item tree
 
-### Making a shape out of lines
+With a polygon or line path selected:
 
-Use the **Polygon / line path** tool. Each click adds a point and a line to the
-previous one, so you build a shape one edge at a time.
+- Drag a point to move it. Double-click an edge to insert a point.
+- Alt-click a point to delete it, or right-click a point for **Delete this
+  point** and **Split this point**. Split inserts a midpoint on an adjacent
+  segment.
+- Points cannot be deleted below the minimum needed to keep a valid polygon or
+  line path.
 
-- **Close it into a filled shape:** click back on the first point, or
-  double-click, or press **Shift+Enter**. You get a polygon that takes a fill
-  colour.
-- **Leave it open:** press **Enter**. You get a line path (a stroke only).
-- **Change your mind later:** select the shape and tick or untick **Closed
-  shape** in Properties. Closing an open path makes it fillable; opening a
-  polygon turns it back into a line path.
-- **Refine it:** with the Select tool, drag points, double-click an edge to add
-  a point, Alt-click a point to remove one. Esc cancels a shape you are still
-  placing.
+Use **Group** and **Ungroup** in the arrange commands to manage selected shapes
+together. Groups start with names such as `Group 1`. In the Layers panel, expand
+a layer to see its items and groups. Click a group to select its members
+together, or click a child item to select it on its own. Rename either inline.
+You can edit, move or delete an individual group member without ungrouping the
+rest.
 
 ### Colour and stroke
 
-Left-click a palette colour to paint the **active** swatch (click the Fill or
-Stroke swatch to choose which). Right-click a palette colour to set the stroke.
-The hex field accepts `#RRGGBB` or `#AARRGGBB` (the first pair is the alpha, so
-`#80FF0000` is half-transparent red). **None / Use** turns fill or stroke off or
-on. Stroke width and corner radius are sliders in Properties.
+Choose whether the fill or stroke swatch is active, then click a palette colour
+to apply it. Right-click a palette colour to set the stroke. The hex field
+accepts `#RRGGBB` and `#AARRGGBB`. The colour picker supports solid and gradient
+fills; stroke width and rectangle corner radius are available in Properties.
 
-These settings do two jobs. With a shape selected they edit that shape; with
-nothing selected they are what the next shape you draw will use. Selecting a
-shape loads its settings into the controls.
+With a shape selected, these controls edit it. With no shape selected, they set
+the style for the next shape. The grid and snap controls help align points.
 
-**Snap** rounds points to whole units (half units once you zoom in far), which
-keeps coordinates tidy in the exported code. Turn it off for freehand work.
+## Layers and reference images
 
-## Tracing over a background image
+Layers draw from bottom to top. Add, rename, reorder, hide or delete them from
+the Layers panel. New shapes go on the active layer. Each layer can hold a
+reference image as well as shapes.
 
-Load a picture and draw over it to copy its outline.
+Load an image from the image panel or drop a PNG, JPG, WebP, BMP or GIF onto the
+window. Adjust its opacity, visibility, position and size while tracing. Fit
+to canvas resets its placement. Reference images are embedded in the `.flp`
+project and are not included in Dart code.
 
-1. In the **Background image** panel press **Load**, or drag an image file
-   (PNG, JPG, WebP, BMP, GIF) onto the window. It is fitted to the canvas box.
-2. Lower **Opacity** so your lines stand out against it.
-3. Choose **Move image** (or the _Move background image_ tool) and drag it into
-   place. Adjust **Scale** with the slider (it scales about the image centre).
-   **Fit to canvas** resets both.
-4. Switch back to a drawing tool and trace. The image sits under the grid and
-   your shapes, and may extend past the canvas box so a large photo can be
-   traced piece by piece.
-5. Untick **Show** to hide it and check your work, or **Remove** it when done.
+## Projects, saving and recovery
 
-The image is saved inside the `.flp` file, so a project always opens with its
-reference. It is not part of the Dart export.
+Each project has its own tab and undo history. Open `.flp` projects with the
+Open command or drop one or more files onto the window. Dropping an image adds
+it to the active layer, or to a new layer if the active layer already has an
+image. Closing the last tab opens a fresh blank project.
 
-## Layers
+Projects use the readable JSON `.flp` format. Plain `.json` drawing files can
+also be opened. When saving, the app keeps the project and its generated code
+together in a folder named after the project file. For example, saving as
+`Rider.flp` creates:
 
-Layers draw from bottom to top, and **each visible layer is exported as its own
-method or class**. That is how the bike and the rider stay separate: put the bike
-on a `Bike` layer and the rider on a `Body` layer and you get `RiderBike` and
-`RiderBody`.
-
-The Layers panel lists the top layer first. Click a layer to make it active (it
-receives new shapes). Use the buttons to add, rename, reorder and delete layers;
-the eye hides a layer (hidden layers are not exported). In Properties you can
-change a shape's order within its layer (Forward / Back), duplicate or delete it,
-or move it to another layer.
-
-## Projects, tabs and the .flp format
-
-Each project opens in **its own tab**. A tab shows the project name, a dot when
-it has unsaved changes, and a close button. Hover a tab to see its file path.
-
-- **New:** `+` on the tab strip, Ctrl+N, or the New menu (blank or template).
-- **Open:** Ctrl+O, or **drag one or more `.flp` files onto the window**. A file
-  that is already open just switches to its tab.
-- **Several projects at once:** each tab has its own `EditorBloc`, so its drawing,
-  selection, view and undo history are independent.
-- **Closing the last tab** leaves a fresh blank one so the window is never empty.
-
-Projects are saved as **`.flp`** ("Flutter Painter Project") files. The format is
-readable JSON, so it diffs well in git:
-
-```json
-{
-  "format": "flp",
-  "version": 1,
-  "name": "Rider",
-  "width": 120.0,
-  "height": 170.0,
-  "layers": [
-    {
-      "name": "Bike",
-      "visible": true,
-      "shapes": [
-        {
-          "kind": "rect",
-          "name": "Rear tyre",
-          "points": [
-            [48.0, 96.0],
-            [72.0, 164.0]
-          ],
-          "fill": 4279638296,
-          "stroke": null,
-          "strokeWidth": 1.0,
-          "radius": 10.0
-        }
-      ]
-    }
-  ],
-  "reference": {
-    "id": "3fa2c1-48211",
-    "x": 0.0,
-    "y": 0.0,
-    "scale": 0.25,
-    "opacity": 0.5,
-    "visible": true,
-    "data": "<base64 image bytes>"
-  }
-}
+```text
+Rider/
+├── Rider.flp
+├── rider_painter.dart
+└── layers/
+    ├── bike/
+    │   ├── bike_layer.dart
+    │   └── wheels.dart            # one group in this layer
+    └── rider/
+        ├── rider_layer.dart
+        └── groups/                # multiple groups in this layer
+            ├── body.dart
+            └── helmet.dart
 ```
 
-- `kind` is one of `rect`, `ellipse`, `line`, `polygon`, `freehand`.
-- For `rect` and `ellipse`, `points` holds two opposite corners. For `line`,
-  `polygon` and `freehand` it is the list of vertices.
-- `fill` and `stroke` are `0xAARRGGBB` colours as integers, or `null` for none.
-- `reference` is present only when a background image is loaded.
+**Ctrl+S** saves directly to the current project without asking which save
+action to use. A new project asks for a location the first time it is saved.
+Use **Ctrl+Shift+S** to save to another location. **Auto-save** writes edits to
+the project file after it has been saved once; before then, changes are kept in
+a draft.
 
-Plain `.json` files in this format also open. The mapping between this JSON and
-the domain models lives in `lib/data/mappers/drawing_mapper.dart`.
+Drafts are written automatically while you work. If the app closes unexpectedly,
+the next launch offers to restore or discard them. Closing a project with
+unsaved changes asks whether to save, discard or cancel.
 
-## Saving, auto-save and recovery
+## Exporting Dart
 
-The goal: you never lose work, and you never overwrite a file by accident.
+Press **Ctrl+E** to open the generated-code editor. It can show the generated
+files, format or copy the active file, save all files into a folder, or package
+them in a ZIP archive. The **Inline Code** view can also be opened beside the
+canvas; supported code edits there are applied back to the drawing.
 
-**Side copies.** As soon as a project has unsaved changes, Flutter Painter keeps
-a safe side copy of it (a _draft_) in the app's support folder, rewritten about a
-second after each edit. Your real `.flp` file is not touched until you save.
+Choose the output style in Settings:
 
-**Save (Ctrl+S).** Writes your latest state into the real file and deletes the
-side copy. The write goes to a temporary file that is then renamed over the
-target, so a crash in the middle of a save cannot leave a half-written project.
+- **Refactored** (default) creates a project painter and a file for each layer.
+  Layer files live in `layers/<layer>/`. A layer with one group has its group
+  file beside the layer file; layers with multiple groups put them in that
+  layer's `groups/` folder.
+- **Monolithic** writes the painter and its layer and group methods to one Dart
+  file.
 
-- A project that was **never saved** asks where to save (Save as).
-- The **first time you save a project you opened from disk**, you are asked
-  whether to **overwrite** the original or **save as a new file**. After you
-  choose to overwrite, later saves just save.
+Both styles export visible artwork in layer order. Named colour constants, when
+enabled, live on the project painter class. Group classes default to private
+shape methods behind one public `paint()` method. The **Expose group shape
+methods** setting switches to public per-shape methods called by the layer.
+Colour format and named-colour options are also available in Settings.
 
-**Auto-save.** The **Auto-save** switch changes where edits go. Off (the
-default): to the side copy until you press Save. On: straight into the project's
-own `.flp` file, a moment after each edit. Auto-save only writes to a file you
-have already confirmed (by saving it, or by choosing Overwrite once), so it can
-never silently overwrite a file you merely opened. Projects that have never been
-saved still use side copies until you save them. The switch is remembered
-between launches.
-
-**Closing.** Closing a tab with unsaved changes asks **Save / Don't save /
-Cancel**; for a project that was never saved, _Save_ opens the Save As dialog
-and cancelling it keeps the tab open. Closing the window does the same for every
-project with unsaved changes.
-
-**Recovery.** If the app crashes or is killed, the side copies are still on disk.
-Next launch offers to **restore** them (each comes back in a tab, still marked
-unsaved, remembering its original file) or discard them.
-
-A tab is "unsaved" exactly when it differs from what is on disk: undo back to the
-saved state and the dot goes away.
-
-## Exporting to Dart
-
-**Export Dart** (Ctrl+E) shows generated code you can copy or save as a `.dart`
-file. It depends only on `dart:ui`.
-
-- **One class per layer** (default): a class per layer (`RiderBike`,
-  `RiderBody`, ...) each with `paint(Canvas)`, plus a `RiderPainter` that holds
-  them and paints them in layer order.
-- **Single class**: one `RiderPainter` with a `paintBike(canvas)`,
-  `paintBody(canvas)`, ... method per layer.
-
-Every shape is emitted as the matching canvas call (`drawRRect`, `drawOval`,
-`drawLine`, `drawPath`) with exact colours and widths. Class names come from the
-project name and layer names, so name them as you want them to appear.
-
-Using it in a game:
+Generated code uses `dart:ui` and can be used from a Flutter application:
 
 ```dart
-final rider = RiderPainter();
+final painter = RiderPainter();
 
-void render(Canvas canvas, double lean) {
-  canvas.save();
-  canvas.translate(RiderPainter.width / 2, RiderPainter.height);
-  canvas.rotate(lean);
-  canvas.translate(-RiderPainter.width / 2, -RiderPainter.height);
-  rider.paint(canvas);
-  canvas.restore();
+void render(Canvas canvas) {
+  painter.paint(canvas);
 }
 ```
 
-The export is **static artwork**. Lean, steering, bobbing, the brake light and
-the tread scroll are not stored in the drawing; apply them in the game around
-each layer's `paint(canvas)` call (that is the reason to keep parts on separate
-layers, so you can rotate or tint one without touching the others).
+The export describes static artwork. Apply animation, rotation or other runtime
+transforms around the painter calls in your app. Background images are only
+stored in the `.flp` project.
 
 ## Keyboard shortcuts
 
-Use Cmd instead of Ctrl on macOS.
+On macOS, use **Cmd** in place of **Ctrl**.
 
-| Keys                           | Action                                            |
-| ------------------------------ | ------------------------------------------------- |
-| Ctrl+N / Ctrl+O                | New project / open                                |
-| Ctrl+S / Ctrl+Shift+S          | Save / save as                                    |
-| Ctrl+W                         | Close the current tab                             |
-| Ctrl+E                         | Export Dart                                       |
-| Ctrl+Z, Ctrl+Y or Ctrl+Shift+Z | Undo, redo                                        |
-| Ctrl+D                         | Duplicate the selected shape                      |
-| Delete / Backspace             | Delete the selected shape                         |
-| Enter                          | Finish a polygon as an open line path             |
-| Shift+Enter                    | Finish a polygon as a closed shape                |
-| Esc                            | Cancel the shape being drawn and return to Select |
-| Shift (while dragging)         | Square / circle / 45 degree line                  |
-| Alt+click a point              | Delete that point of a line or polygon            |
+| Keys | Action |
+| --- | --- |
+| Ctrl+N / Ctrl+O | New project / open project |
+| Ctrl+S / Ctrl+Shift+S | Save / Save As |
+| Ctrl+W | Close the current project tab |
+| Ctrl+E | Open the Dart code editor |
+| Ctrl+Z / Ctrl+Y / Ctrl+Shift+Z | Undo / redo |
+| Ctrl+D | Duplicate the selection |
+| Ctrl+A | Select all shapes on the active layer |
+| Delete / Backspace | Delete selected shapes or image |
+| Ctrl+- / Ctrl+= / Ctrl+0 | Zoom out / zoom in / fit canvas |
+| V / I / R / E / L / P / B | Select / image / rectangle / ellipse / line / polygon / freehand tool |
+| Enter / Shift+Enter | Finish a path open / finish it closed |
+| Esc | Switch to Select and cancel an unfinished shape |
 
-Shortcuts that edit shapes are ignored while a text field (such as the hex box)
-has the keyboard.
+Right- or middle-drag to pan; use the mouse wheel to zoom around the pointer.
+Shortcuts that edit shapes are ignored while a text field has focus.
 
-## Opening .flp files from the desktop
+## Development
 
-Dragging a file onto the window works everywhere. Double-clicking a `.flp` in the
-file manager needs a one-time OS file association; the app opens any file path
-passed on its command line (`main(List<String> args)`).
-
-- **Windows:** register the extension (adjust the path), for example:
-
-  ```
-  reg add HKCU\Software\Classes\.flp /ve /d FlutterPainter.Project /f
-  reg add HKCU\Software\Classes\FlutterPainter.Project\shell\open\command /ve ^
-      /d "\"C:\Apps\flutter_painter\flutter_painter.exe\" \"%1\"" /f
-  ```
-
-- **Linux:** add a `.desktop` file with `Exec=/path/to/flutter_painter %f` and
-  `MimeType=application/x-flp;` plus a matching mime type for `*.flp`.
-- **macOS:** Finder passes documents to the app through an Apple event rather
-  than the command line, which this project does not handle. Drag files onto the
-  window or use Open instead.
-
-## Architecture
-
-The rule is simple: **widgets send
-events, blocs turn events into states, repositories talk to the outside world.**
-
-```
-lib/
-  main.dart, app.dart          entry point, MultiBlocProvider, MaterialApp.router
-  common/
-    app_router/                go_router: RouteNames, RoutePaths, AppRouter
-    constants/                 AppConstants, PrefConstants, palette
-    widgets/                   dialogs, labelled slider, snackbar
-  core/
-    di/                        injectable.dart (+ generated injectable.config.dart)
-    platform/                  FileDialogs: native open/save dialogs
-    theme/                     ThemeBloc (+ Freezed event), colours, ThemeData
-    utils/                     logger, path helpers, image decoding
-  data/                        talks to the disk
-    sources/                   ProjectFileSource, DraftFileSource, support folder
-    mappers/                   Drawing <-> .flp JSON, Draft <-> JSON
-  domain/                      no Flutter widgets, no IO
-    models/                    Freezed: Shape, PaintLayer, Drawing, ReferenceImage,
-                               EditHistory, Draft; enums ShapeKind, Tool
-    repos/                     ProjectRepo, DraftRepo, PrefsRepo
-    services/                  DartExporter, shape geometry, geometry utils
-  feature/
-    editor/                    one project (one tab)
-      bloc/                    EditorBloc + editor_event / editor_state parts
-      logic/                   pure functions: (state, event) -> state
-      models/                  StyleSettings, ViewSettings, GestureState, EditorSeed
-      widgets/                 canvas, toolbar, panels
-      flows/                   picking a background image
-      editor_screen.dart
-    workspace/                 the window: tabs, saving, recovery
-      cubit/                   WorkspaceCubit (+ Freezed state), ProjectSaver
-      flows/                   save / overwrite / close / recover dialogs
-      widgets/                 TopBar, ProjectTabs
-      workspace_screen.dart
-    export/                    ExportCubit + the export dialog
-```
-
-**State management.** Events and states are Freezed, in `part` files next to the
-bloc:
-
-- `EditorBloc` (one per tab) holds the whole project: the immutable `Drawing`,
-  its `EditHistory`, the tool, selection, style, view and any pointer gesture in
-  progress. Pointer events arrive in design units with the modifier keys, so the
-  canvas widget is a thin forwarder and every behaviour is testable without a
-  widget.
-- The bloc contains almost no logic. Each event is routed to a **pure function**
-  in `feature/editor/logic/` (`DrawLogic`, `SelectLogic`, `StyleLogic`,
-  `LayerLogic`, `VertexLogic`, `ViewLogic`, `ReferenceLogic`, ...) that maps the
-  old state to the new one. Files stay small and each rule has one home.
-- Because `Drawing` is immutable, undo history is just a list of snapshots that
-  share structure; "unsaved changes" is `history.index != history.savedIndex`.
-- `WorkspaceCubit` owns the tabs. It creates an `EditorBloc` per project (through
-  `EditorBlocFactory`, which asks get_it with an `@factoryParam` seed), watches
-  each one, and decides when to write a side copy or auto-save.
-- `ThemeBloc` and `WorkspaceCubit` are provided at the top of the app; the
-  `EditorBloc` for the active tab is provided by `WorkspaceScreen`, so every
-  editor widget just does `context.read<EditorBloc>()`.
-
-**Dependency injection.** `injectable` generates `initGetIt`. Repos, data
-sources, `FileDialogs`, `ProjectSaver`, `WorkspaceCubit` and `ThemeBloc` are
-singletons; `EditorBloc` and `ExportCubit` are factories. `PrefsRepo` uses an abstract-class-plus-implementation pattern.
-
-**Data.** Flutter Painter's
-data is files (the `.flp` projects and the side copies), so the `data` layer is
-file sources and JSON mappers instead of DAOs and entities. The shape is the
-same: the domain asks a repo, the repo uses a source, the source does the IO.
-
-### Adding a feature
-
-1. Model any new data as a Freezed class in `domain/models/`.
-2. Add an event to `editor_event.dart` (or a new bloc for a new feature), run
-   `build_runner`, and register it in `EditorBloc` with `_reduce<MyEvent>(...)`.
-3. Put the rule in a pure function under `feature/editor/logic/` and cover it with
-   a test in `test/feature/editor_bloc_test.dart`.
-4. Build the widget with `BlocBuilder<EditorBloc, EditorState>` (use `buildWhen`
-   so it only rebuilds on what it shows).
-
-### What moved where (from the first version)
-
-| Before                              | Now                                                 |
-| ----------------------------------- | --------------------------------------------------- |
-| `EditorController` (ChangeNotifier) | `EditorBloc` + `feature/editor/logic/*`             |
-| `*_ops.dart` extensions             | `*_logic.dart` pure classes                         |
-| `model/*` (mutable)                 | `domain/models/*` (Freezed, immutable)              |
-| `Workspace`, `tab_actions`          | `WorkspaceCubit`, `ProjectSaver`, `workspace/flows` |
-| `storage/*`                         | `data/sources`, `data/mappers`, `domain/repos`      |
-| `AppSettings` (settings.json)       | `PrefsRepo` (shared_preferences)                    |
-| `DartExporter`                      | `domain/services/dart_exporter.dart`                |
-| Flutter `ChangeNotifier` listeners  | `BlocBuilder` / `BlocProvider`                      |
-
-## Tests
-
-```
-dart run build_runner build --delete-conflicting-outputs
+```sh
+flutter pub get
 flutter analyze
-flutter test
 ```
 
-The tests cover:
+After changing dependency-injection registrations, regenerate the checked-in
+Injectable configuration with:
 
-- `domain/` - the undo history and unsaved-changes marker, the Dart exporter.
-- `data/` - the `.flp` round trip including the background image, drafts, and
-  the rider template.
-- `feature/editor_bloc_test.dart` - drawing every tool, shapes from lines (open,
-  closed, double-click, first-point), selecting, moving, resizing, vertex insert
-  and delete, style edits, layers, undo/redo, dirty tracking, zoom and fit.
-- `feature/workspace_cubit_test.dart` - save, side copies, auto-save rules,
-  overwrite confirmation, tab lifecycle and recovery, with in-memory fakes.
-- `feature/workspace_screen_test.dart` - the window renders and tabs open.
+```sh
+dart run build_runner build --delete-conflicting-outputs
+```
 
-## Known limits
+After changing localization resources in `lib/l10n/`, run `flutter gen-l10n`.
 
-- **Localization:** UI strings are plain text; `l10n` setup is not
-  applied here.
-- **Static export:** poses and animation are applied in your game code, not stored.
-- **No curve handles:** shapes are made of straight edges plus smoothed freehand
-  strokes; there are no Bezier control handles.
-- **One selection:** you can select and edit one shape at a time.
-- **Window-close prompt** relies on Flutter's app-exit request, which the standard
-  Windows and Linux runners support; on macOS the runner must use the current
-  template. Side copies still protect your work either way.
-- **Large background images** make `.flp` files and side copies larger because the
-  image is embedded; scale big photos down first if that matters.
+### Source layout
+
+```text
+lib/
+├── common/       Shared navigation, constants and widgets
+├── core/         Dependency injection, platform services, theme and utilities
+├── data/         File sources and project/draft JSON mapping
+├── domain/       Drawing models, repositories, geometry and code import/export
+└── feature/      Editor, workspace, export, inline-code and settings features
+```
+
+The editor uses BLoC for state updates and keeps drawing operations in
+`feature/editor/logic/`. The workspace owns project tabs, saving and recovery.
+Domain services handle geometry and Dart import/export; the data layer handles
+project and draft file storage.
+
+## Current limits
+
+- Dart export is static; animation and runtime transforms belong in the calling
+  app.
+- Reference images are saved in `.flp` files but are not exported as Dart.
+- Polygon edges are straight. Freehand strokes are smoothed, but editable
+  Bézier control handles are not available.
