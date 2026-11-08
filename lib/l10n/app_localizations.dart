@@ -481,6 +481,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private.'**
   String get groupMethodsPublicHelp;
+
+  /// In en, this message translates to:
+  /// **'Generating Dart code…'**
+  String get exportGenerating;
+
+  /// In en, this message translates to:
+  /// **'Preparing export…'**
+  String get exportSaving;
+
+  /// In en, this message translates to:
+  /// **'Could not generate the Dart code.'**
+  String get exportGenerationFailed;
 }
 
 class _AppLocalizationsDelegate

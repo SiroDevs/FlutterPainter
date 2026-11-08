@@ -220,4 +220,13 @@ class AppLocalizationsSw extends AppLocalizations {
   @override
   String get groupMethodsPublicHelp =>
       'Ikiwashwa, tabaka huita mbinu ya kila umbo moja kwa moja. Ikizimwa, kikundi huwa na mbinu moja ya paint() na mbinu za maumbo hubaki za ndani.';
+
+  @override
+  String get exportGenerating => 'Inatengeneza msimbo wa Dart…';
+
+  @override
+  String get exportSaving => 'Inaandaa faili la nje…';
+
+  @override
+  String get exportGenerationFailed => 'Imeshindwa kutengeneza msimbo wa Dart.';
 }

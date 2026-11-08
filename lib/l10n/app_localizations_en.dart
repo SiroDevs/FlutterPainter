@@ -219,4 +219,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get groupMethodsPublicHelp =>
       'On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private.';
+
+  @override
+  String get exportGenerating => 'Generating Dart code…';
+
+  @override
+  String get exportSaving => 'Preparing export…';
+
+  @override
+  String get exportGenerationFailed => 'Could not generate the Dart code.';
 }

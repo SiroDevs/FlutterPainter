@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
+import '../../../core/utils/l10n_ext.dart';
 import '../cubit/export_cubit.dart';
 import 'code_editor.dart';
 import 'vscode_colors.dart';
@@ -33,42 +34,48 @@ class ExportStatusBar extends StatelessWidget {
     return BlocBuilder<ExportCubit, ExportState>(
       buildWhen: (a, b) =>
           a.status != b.status ||
+          a.generationFailed != b.generationFailed ||
           a.activePath != b.activePath ||
           a.activeFile?.content != b.activeFile?.content,
       builder: (context, state) {
         final file = state.activeFile;
-        final lines =
-            file == null ? 0 : '\n'.allMatches(file.content).length + 1;
-        return Row(children: [
-          if (file != null) ...[
-            ValueListenableBuilder<CaretInfo>(
-              valueListenable: caret,
-              builder: (context, c, _) => Text(
-                c.selected > 0
-                    ? 'Ln ${c.line}, Col ${c.column} (${c.selected} selected)'
-                    : 'Ln ${c.line}, Col ${c.column}',
-                style: style,
+        final lines = file == null
+            ? 0
+            : '\n'.allMatches(file.content).length + 1;
+        return Row(
+          children: [
+            if (file != null) ...[
+              ValueListenableBuilder<CaretInfo>(
+                valueListenable: caret,
+                builder: (context, c, _) => Text(
+                  c.selected > 0
+                      ? 'Ln ${c.line}, Col ${c.column} (${c.selected} selected)'
+                      : 'Ln ${c.line}, Col ${c.column}',
+                  style: style,
+                ),
               ),
-            ),
+              gap(),
+              Text('$lines lines', style: style),
+              gap(),
+            ],
+            Text(
+              state.generationFailed
+                  ? context.l10n.exportGenerationFailed
+                  : state.status,
+              overflow: TextOverflow.ellipsis,
+              style: style,
+            ).expanded(),
+            Text('Spaces: 2', style: style),
             gap(),
-            Text('$lines lines', style: style),
+            Text('UTF-8', style: style),
             gap(),
+            Text('LF', style: style),
+            gap(),
+            Text('Dart', style: style),
+            gap(),
+            Text(styleLabel, style: style),
           ],
-          Text(
-            state.status,
-            overflow: TextOverflow.ellipsis,
-            style: style,
-          ).expanded(),
-          Text('Spaces: 2', style: style),
-          gap(),
-          Text('UTF-8', style: style),
-          gap(),
-          Text('LF', style: style),
-          gap(),
-          Text('Dart', style: style),
-          gap(),
-          Text(styleLabel, style: style),
-        ]);
+        );
       },
     ).padding(horizontal: 12).backgroundColor(colors.statusBar).height(22);
   }

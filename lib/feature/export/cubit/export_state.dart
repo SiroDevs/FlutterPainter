@@ -8,6 +8,9 @@ class ExportState extends Equatable {
     required this.openPaths,
     required this.activePath,
     this.status = '',
+    this.isGenerating = false,
+    this.isSaving = false,
+    this.generationFailed = false,
   });
 
   /// The project folder the files belong to, e.g. `rider`.
@@ -26,6 +29,12 @@ class ExportState extends Equatable {
   /// The last thing that happened, for the status bar.
   final String status;
 
+  final bool isGenerating;
+  final bool isSaving;
+  final bool generationFailed;
+
+  bool get isBusy => isGenerating || isSaving;
+
   ExportFile? fileAt(String? path) {
     for (final f in files) {
       if (f.path == path) return f;
@@ -41,30 +50,44 @@ class ExportState extends Equatable {
 
   /// The paths whose text differs from what was generated.
   Set<String> get modifiedPaths => {
-        for (final f in files)
-          if (f.content != originals[f.path]) f.path,
-      };
+    for (final f in files)
+      if (f.content != originals[f.path]) f.path,
+  };
 
   ExportState copyWith({
     List<ExportFile>? files,
     List<String>? openPaths,
     Object? activePath = _unset,
     String? status,
-  }) =>
-      ExportState(
-        folderName: folderName,
-        files: files ?? this.files,
-        originals: originals,
-        openPaths: openPaths ?? this.openPaths,
-        activePath: identical(activePath, _unset)
-            ? this.activePath
-            : activePath as String?,
-        status: status ?? this.status,
-      );
+    bool? isGenerating,
+    bool? isSaving,
+    bool? generationFailed,
+  }) => ExportState(
+    folderName: folderName,
+    files: files ?? this.files,
+    originals: originals,
+    openPaths: openPaths ?? this.openPaths,
+    activePath: identical(activePath, _unset)
+        ? this.activePath
+        : activePath as String?,
+    status: status ?? this.status,
+    isGenerating: isGenerating ?? this.isGenerating,
+    isSaving: isSaving ?? this.isSaving,
+    generationFailed: generationFailed ?? this.generationFailed,
+  );
 
   @override
-  List<Object?> get props =>
-      [folderName, files, originals, openPaths, activePath, status];
+  List<Object?> get props => [
+    folderName,
+    files,
+    originals,
+    openPaths,
+    activePath,
+    status,
+    isGenerating,
+    isSaving,
+    generationFailed,
+  ];
 }
 
 const Object _unset = Object();
