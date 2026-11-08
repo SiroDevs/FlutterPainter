@@ -117,7 +117,7 @@ mixin _DartExporterShapeWriter on _DartExporterBase {
     final value = argb & 0xFFFFFFFF;
     _usedColors.add(value);
     return options.colorConstants
-        ? '$_paletteClass.${_colorName(value)}'
+        ? '$_painterClass.${_colorName(value)}'
         : 'const ${_colorLiteral(value)}';
   }
 

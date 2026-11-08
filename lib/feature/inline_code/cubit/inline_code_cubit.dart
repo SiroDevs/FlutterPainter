@@ -50,6 +50,7 @@ class InlineCodeCubit extends Cubit<InlineCodeState> {
           style: CodeStyle.refactored,
           colorFormat: settings.colorFormat,
           colorConstants: settings.colorConstants,
+          groupMethodsPublic: settings.groupMethodsPublic,
         ),
       );
 
@@ -108,7 +109,10 @@ class InlineCodeCubit extends Cubit<InlineCodeState> {
     final drawing = _editor.state.drawing;
     final palette = readPalette(state.files.map((file) => file.content));
     final size = Size(drawing.width, drawing.height);
-    final paletteEdited = _editedPaths.any((path) => path.endsWith('_palette.dart'));
+    final paletteEdited = _editedPaths.any(
+      (path) =>
+          path.endsWith('_palette.dart') || path.endsWith('_painter.dart'),
+    );
     final layers = [...drawing.layers];
     final unclaimed = <Shape>[];
     var layerName = '';

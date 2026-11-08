@@ -212,4 +212,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shapeScaleDown => 'Scale down 10%';
+
+  @override
+  String get groupMethodsPublic => 'Expose group shape methods';
+
+  @override
+  String get groupMethodsPublicHelp =>
+      'On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private.';
 }

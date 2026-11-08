@@ -48,5 +48,7 @@
     "layerItemFreehand": "Mchoro huru",
     "layerEditItem": "Hariri jina la kitu",
     "layerEditGroup": "Hariri jina la kikundi",
-    "shapeScaleDown": "Punguza ukubwa kwa 10%"
+    "shapeScaleDown": "Punguza ukubwa kwa 10%",
+    "groupMethodsPublic": "Onyesha mbinu za maumbo ya kikundi",
+    "groupMethodsPublicHelp": "Ikiwashwa, tabaka huita mbinu ya kila umbo moja kwa moja. Ikizimwa, kikundi huwa na mbinu moja ya paint() na mbinu za maumbo hubaki za ndani."
 }

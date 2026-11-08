@@ -12,7 +12,6 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
     final groups = <_ExportGroup>[];
     final usedNames = {
       _painterClass,
-      _paletteClass,
       for (var index = 0; index < _layers.length; index++) _layerClass(index),
     };
     var defaultNumber = 0;
@@ -69,14 +68,17 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
       for (final function in _shapeFunctions(layer)) function.index: function,
     };
     final body = <String>[];
+    final paintedGroups = <String>{};
     for (var index = 0; index < layer.shapes.length; index++) {
       final function = functions[index];
       if (function == null) continue;
       final group = _groupForShape(layerIndex, layer.shapes[index]);
       if (group == null) {
         body.addAll(_shape(layer.shapes[index], comment: true));
-      } else {
+      } else if (options.groupMethodsPublic) {
         body.add('${_groupField(group)}.paint${function.name}(canvas);');
+      } else if (paintedGroups.add(group.id)) {
+        body.add('${_groupField(group)}.paint(canvas);');
       }
     }
     if (body.isEmpty) body.add('// Nothing visible on this layer.');
@@ -108,11 +110,26 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
       _paintField,
       if (functions.any((function) => function.usesPath))
         '  final Path _path = Path();',
-      for (final function in functions) ...[
+      if (options.groupMethodsPublic) ...[
+        for (final function in functions) ...[
+          '',
+          if (function.doc != null) '  /// ${function.doc}',
+          '  void paint${function.name}(Canvas canvas) {',
+          for (final line in function.body) '    $line',
+          '  }',
+        ],
+      ] else ...[
+        for (final function in functions) ...[
+          '',
+          if (function.doc != null) '  /// ${function.doc}',
+          '  void _draw${function.name}(Canvas canvas) {',
+          for (final line in function.body) '    $line',
+          '  }',
+        ],
         '',
-        if (function.doc != null) '  /// ${function.doc}',
-        '  void paint${function.name}(Canvas canvas) {',
-        for (final line in function.body) '    $line',
+        '  /// Paints every shape in this group.',
+        '  void paint(Canvas canvas) {',
+        for (final function in functions) '    _draw${function.name}(canvas);',
         '  }',
       ],
       '}',
@@ -127,7 +144,7 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
       "import 'dart:ui';",
       if (options.colorConstants && functions.isNotEmpty) ...[
         '',
-        "import '../$_paletteFile';",
+        "import '../$_painterFile';",
       ],
       '',
       ..._groupClassLines(group, functions),

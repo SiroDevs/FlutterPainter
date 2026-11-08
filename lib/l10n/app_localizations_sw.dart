@@ -213,4 +213,11 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get shapeScaleDown => 'Punguza ukubwa kwa 10%';
+
+  @override
+  String get groupMethodsPublic => 'Onyesha mbinu za maumbo ya kikundi';
+
+  @override
+  String get groupMethodsPublicHelp =>
+      'Ikiwashwa, tabaka huita mbinu ya kila umbo moja kwa moja. Ikizimwa, kikundi huwa na mbinu moja ya paint() na mbinu za maumbo hubaki za ndani.';
 }

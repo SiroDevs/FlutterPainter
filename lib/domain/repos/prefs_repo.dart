@@ -99,8 +99,10 @@ class PrefsRepoImp implements PrefsRepo {
       ),
       // Stored as text because "false" must stay distinguishable from "never
       // saved", which defaults to true.
-      colorConstants: sharedPrefs.getString(PrefConstants.colorConstantsKey) !=
-          'false',
+      colorConstants:
+          sharedPrefs.getString(PrefConstants.colorConstantsKey) != 'false',
+      groupMethodsPublic:
+          sharedPrefs.getString(PrefConstants.groupMethodsPublicKey) == 'true',
     );
   }
 
@@ -123,6 +125,10 @@ class PrefsRepoImp implements PrefsRepo {
       PrefConstants.colorConstantsKey,
       settings.colorConstants.toString(),
     );
+    sharedPrefs.setString(
+      PrefConstants.groupMethodsPublicKey,
+      settings.groupMethodsPublic.toString(),
+    );
   }
 
   @override
@@ -134,6 +140,7 @@ class PrefsRepoImp implements PrefsRepo {
     sharedPrefs.remove(PrefConstants.colorPreviewKey);
     sharedPrefs.remove(PrefConstants.colorFormatKey);
     sharedPrefs.remove(PrefConstants.colorConstantsKey);
+    sharedPrefs.remove(PrefConstants.groupMethodsPublicKey);
   }
 
   @override
