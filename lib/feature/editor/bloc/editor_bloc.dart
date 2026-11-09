@@ -105,6 +105,8 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<SelectAllRequested>((s, e) => ShapeLogic.selectAll(s));
     _reduce<ShapesGrouped>((s, e) => GroupLogic.group(s));
     _reduce<ShapesUngrouped>((s, e) => GroupLogic.ungroup(s));
+    _reduce<GroupCopied>((s, e) => GroupLogic.copy(s));
+    _reduce<GroupPasted>((s, e) => GroupLogic.paste(s));
     _reduce<SelectionScaled>((s, e) => ShapeLogic.scale(s, e.factor));
     _reduce<GroupRenamed>(
       (s, e) => GroupLogic.rename(s, e.layer, e.groupId, e.name),

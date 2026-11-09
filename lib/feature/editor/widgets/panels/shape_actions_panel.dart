@@ -20,9 +20,11 @@ class ShapeActionsPanel extends StatelessWidget {
         before.layerIndex != after.layerIndex ||
         before.selected != after.selected ||
         before.selectedIndices != after.selectedIndices ||
+        before.groupClipboard != after.groupClipboard ||
         before.drawing.layers != after.drawing.layers,
     builder: (context, state) {
       final hasSelection = state.validSelectedIndices.isNotEmpty;
+      final hasCopiedGroup = state.groupClipboard.isNotEmpty;
       return Column(
         children: [
           const Divider(height: 1),
@@ -37,7 +39,7 @@ class ShapeActionsPanel extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: hasSelection
+            child: hasSelection || hasCopiedGroup
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: ShapeActions(state: state),

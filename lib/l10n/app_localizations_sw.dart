@@ -159,6 +159,12 @@ class AppLocalizationsSw extends AppLocalizations {
   String get shapeDuplicate => 'Nakili';
 
   @override
+  String get shapeCopyGroup => 'Nakili kikundi';
+
+  @override
+  String get shapePasteGroup => 'Bandika kikundi';
+
+  @override
   String get shapeDelete => 'Futa';
 
   @override

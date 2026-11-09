@@ -158,6 +158,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shapeDuplicate => 'Duplicate';
 
   @override
+  String get shapeCopyGroup => 'Copy group';
+
+  @override
+  String get shapePasteGroup => 'Paste group';
+
+  @override
   String get shapeDelete => 'Delete';
 
   @override

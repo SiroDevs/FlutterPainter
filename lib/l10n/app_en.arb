@@ -57,6 +57,8 @@
   "vertexDelete": "Delete this point",
   "vertexSplit": "Split this point",
   "shapeDuplicate": "Duplicate",
+  "shapeCopyGroup": "Copy group",
+  "shapePasteGroup": "Paste group",
   "shapeDelete": "Delete",
   "shapeForward": "Forward",
   "shapeBack": "Back",
