@@ -80,7 +80,7 @@ class WorkspaceShortcuts {
       case LogicalKeyboardKey.keyD when !shift:
         editor.add(const ShapeDuplicated());
         break;
-      case LogicalKeyboardKey.keyA when !shift:
+      case LogicalKeyboardKey.keyA:
         editor.add(const SelectAllRequested());
         break;
       case LogicalKeyboardKey.minus when !shift:

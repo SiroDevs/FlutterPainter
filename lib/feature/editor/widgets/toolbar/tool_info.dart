@@ -51,6 +51,7 @@ extension ToolInfo on Tool {
 const List<List<Tool>> kToolGroups = [
   [Tool.select, Tool.reference],
   [Tool.rect, Tool.ellipse],
-  [Tool.line, Tool.polygon, Tool.freehand],
+  [Tool.line, Tool.freehand],
+  [Tool.polygon],
   [Tool.paint],
 ];
