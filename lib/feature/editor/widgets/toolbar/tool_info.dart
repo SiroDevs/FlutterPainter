@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Project imports:
+import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/editor/tool.dart';
 
 /// Name, icon and single-key shortcut of each tool, shared by the toolbox, the
 /// ribbon, the menus and the keyboard shortcuts so they never disagree.
 extension ToolInfo on Tool {
-  String get label => switch (this) {
+  String localizedLabel(BuildContext context) => switch (this) {
         Tool.select => 'Select / move',
         Tool.reference => 'Move / resize layer image',
         Tool.rect => 'Rectangle',
@@ -16,6 +17,7 @@ extension ToolInfo on Tool {
         Tool.line => 'Line',
         Tool.polygon => 'Polygon / line path',
         Tool.freehand => 'Freehand',
+        Tool.paint => context.l10n.paintBucketTool,
       };
 
   IconData get icon => switch (this) {
@@ -26,6 +28,7 @@ extension ToolInfo on Tool {
         Tool.line => Icons.horizontal_rule,
         Tool.polygon => Icons.change_history,
         Tool.freehand => Icons.brush,
+        Tool.paint => Icons.format_color_fill,
       };
 
   LogicalKeyboardKey get shortcutKey => switch (this) {
@@ -36,6 +39,7 @@ extension ToolInfo on Tool {
         Tool.line => LogicalKeyboardKey.keyL,
         Tool.polygon => LogicalKeyboardKey.keyP,
         Tool.freehand => LogicalKeyboardKey.keyB,
+        Tool.paint => LogicalKeyboardKey.keyG,
       };
 
   /// The letter shown next to the tool's name.
@@ -48,4 +52,5 @@ const List<List<Tool>> kToolGroups = [
   [Tool.select, Tool.reference],
   [Tool.rect, Tool.ellipse, Tool.line],
   [Tool.polygon, Tool.freehand],
+  [Tool.paint],
 ];

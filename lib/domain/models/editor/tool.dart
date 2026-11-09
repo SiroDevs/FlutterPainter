@@ -1,1 +1,1 @@
-enum Tool { select, rect, ellipse, line, polygon, freehand, reference }
+enum Tool { select, rect, ellipse, line, polygon, freehand, paint, reference }

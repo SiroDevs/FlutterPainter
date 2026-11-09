@@ -7,6 +7,7 @@ import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../canvas/image_logic.dart';
 import '../drawing/draw_logic.dart';
+import 'paint_bucket_logic.dart';
 import 'select_logic.dart';
 
 /// Routes raw pointer events to the active tool, or to the gesture in progress.
@@ -27,6 +28,8 @@ abstract class PointerLogic {
         );
       case Tool.reference:
         return ImageLogic.pressed(next, e.point);
+      case Tool.paint:
+        return PaintBucketLogic.pressed(next, e.point);
       case Tool.rect:
       case Tool.ellipse:
       case Tool.line:

@@ -61,7 +61,7 @@ extension ViewCommands on WorkspaceCommands {
       );
 
   AppCommand tool(Tool t) => AppCommand(
-        label: t.label,
+        label: t.localizedLabel(context),
         icon: t.icon,
         keys: t.keyLabel,
         checked: state.tool == t,

@@ -18,6 +18,7 @@ List<Widget> insertTabGroups(WorkspaceCommands c) => [
           RibbonButton.small(c.tool(Tool.line)),
         ],
       ),
+      RibbonButton.large(c.tool(Tool.paint)),
     ],
   ),
   RibbonGroup(

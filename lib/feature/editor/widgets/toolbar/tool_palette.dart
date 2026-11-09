@@ -85,7 +85,7 @@ class _ToolSlotState extends State<_ToolSlot> {
           Center(
             child: Tooltip(
               message:
-                  '${_shown.label} (${_shown.keyLabel})'
+                  '${_shown.localizedLabel(context)} (${_shown.keyLabel})'
                   '${hasMore ? '\nRight-click or hold for related tools' : ''}',
               child: IconButton(
                 icon: Icon(_shown.icon),
@@ -123,7 +123,7 @@ class _ToolSlotState extends State<_ToolSlot> {
             leadingIcon: Icon(t.icon, size: 20),
             trailingIcon: Text(t.keyLabel),
             onPressed: () => _choose(t),
-            child: Text(t.label),
+            child: Text(t.localizedLabel(context)),
           ),
       ],
       child: GestureDetector(
