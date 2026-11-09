@@ -53,7 +53,7 @@ class _InlineTreeNameEditorState extends State<InlineTreeNameEditor> {
   }
 
   void _finishEditing({required bool save}) {
-    if (!_editing) return;
+    if (!_editing || !mounted) return;
     final name = _controller.text.trim();
     setState(() => _editing = false);
     if (save && (name.isNotEmpty || widget.allowEmpty) && name != widget.name) {
@@ -78,7 +78,11 @@ class _InlineTreeNameEditorState extends State<InlineTreeNameEditor> {
             ? Focus(
                 onKeyEvent: _handleKey,
                 onFocusChange: (focused) {
-                  if (!focused) _finishEditing(save: true);
+                  if (!focused) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted && _editing) _finishEditing(save: true);
+                    });
+                  }
                 },
                 child: TextField(
                   controller: _controller,
@@ -91,6 +95,7 @@ class _InlineTreeNameEditorState extends State<InlineTreeNameEditor> {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 4),
                   ),
+                  onTapOutside: (_) => _finishEditing(save: true),
                   onSubmitted: (_) => _finishEditing(save: true),
                 ),
               )

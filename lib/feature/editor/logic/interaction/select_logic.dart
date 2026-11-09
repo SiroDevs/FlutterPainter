@@ -8,7 +8,6 @@ import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../drawing/editor_ops.dart';
 import '../canvas/image_logic.dart';
-import 'selection_hit_logic.dart';
 import 'selection_transform_logic.dart';
 import '../drawing/style_logic.dart';
 import '../drawing/vertex_logic.dart';
@@ -26,9 +25,13 @@ abstract class SelectLogic {
     required int timeMs,
   }) {
     final doubleClick = timeMs - state.gesture.lastClickMs < 320;
-    final base = state.copyWith(gesture: state.gesture.copyWith(lastClickMs: timeMs));
+    final base = state.copyWith(
+      gesture: state.gesture.copyWith(lastClickMs: timeMs),
+    );
     final shape = base.selectedShape;
     final bounds = base.selectedBounds;
+
+    if (shift) return _startMarquee(base, point, additive: true);
 
     if (bounds != null && base.validSelectedIndices.isNotEmpty) {
       final rotateHandle = SelectionTransformLogic.rotationHandle(
@@ -60,7 +63,9 @@ abstract class SelectLogic {
             origin: point,
             startBounds: bounds,
             startIndices: indices,
-            startShapes: [for (final index in indices) base.layer.shapes[index]],
+            startShapes: [
+              for (final index in indices) base.layer.shapes[index],
+            ],
           ),
         );
       }
@@ -93,11 +98,6 @@ abstract class SelectLogic {
       }
     }
 
-    if (shift) {
-      final hit = SelectionHitLogic.hitInActiveLayer(base, point);
-      if (hit != null) return SelectionHitLogic.toggle(base, hit);
-      return _startMarquee(base, point, additive: true);
-    }
     return _pick(base, point, control: control);
   }
 

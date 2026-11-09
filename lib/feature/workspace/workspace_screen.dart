@@ -116,48 +116,53 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
       focusNode: _focus,
       autofocus: true,
       onKeyEvent: shortcuts.handleKey,
-      child: DropTarget(
-        onDragDone: _onDrop,
-        onDragEntered: (_) => setState(() => _dragging = true),
-        onDragExited: (_) => setState(() => _dragging = false),
-        child: Scaffold(
-          body: Stack(
-            fit: StackFit.expand,
-            children: [
-              BlocBuilder<WorkspaceCubit, WorkspaceState>(
-                buildWhen: (a, b) =>
-                    a.active != b.active || a.tabs.length != b.tabs.length,
-                builder: (context, _) {
-                  final bloc = _ws.current;
-                  // One editor bloc per tab. The provider (and so the menu bar,
-                  // which on macOS must exist exactly once) stays put; only the
-                  // editor below is keyed, so switching tabs rebuilds it
-                  // against the right project.
-                  return BlocProvider<EditorBloc>.value(
-                    value: bloc,
-                    child: AppMenuBar(
-                      child: KeyedSubtree(
-                        key: ObjectKey(bloc),
-                        child: Column(
-                          children: [
-                            ToolbarArea(ribbon: _ribbon),
-                            ProjectTabs(inlineCode: _inlineCode),
-                            const Divider(height: 1),
-                            Expanded(
-                              child: InlineCodeHost(
-                                open: _inlineCode,
-                                child: EditorScreen(canvasFocus: _focus),
+      child: Listener(
+        onPointerDown: (_) {
+          if (!_isTyping()) _focus.requestFocus();
+        },
+        child: DropTarget(
+          onDragDone: _onDrop,
+          onDragEntered: (_) => setState(() => _dragging = true),
+          onDragExited: (_) => setState(() => _dragging = false),
+          child: Scaffold(
+            body: Stack(
+              fit: StackFit.expand,
+              children: [
+                BlocBuilder<WorkspaceCubit, WorkspaceState>(
+                  buildWhen: (a, b) =>
+                      a.active != b.active || a.tabs.length != b.tabs.length,
+                  builder: (context, _) {
+                    final bloc = _ws.current;
+                    // One editor bloc per tab. The provider (and so the menu bar,
+                    // which on macOS must exist exactly once) stays put; only the
+                    // editor below is keyed, so switching tabs rebuilds it
+                    // against the right project.
+                    return BlocProvider<EditorBloc>.value(
+                      value: bloc,
+                      child: AppMenuBar(
+                        child: KeyedSubtree(
+                          key: ObjectKey(bloc),
+                          child: Column(
+                            children: [
+                              ToolbarArea(ribbon: _ribbon),
+                              ProjectTabs(inlineCode: _inlineCode),
+                              const Divider(height: 1),
+                              Expanded(
+                                child: InlineCodeHost(
+                                  open: _inlineCode,
+                                  child: EditorScreen(canvasFocus: _focus),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              if (_dragging) _dropOverlay(),
-            ],
+                    );
+                  },
+                ),
+                if (_dragging) _dropOverlay(),
+              ],
+            ),
           ),
         ),
       ),

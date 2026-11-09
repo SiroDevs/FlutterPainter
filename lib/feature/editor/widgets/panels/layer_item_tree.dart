@@ -82,7 +82,7 @@ class LayerItemTree extends StatelessWidget {
         visibleIndices.every(state.validSelectedIndices.contains);
     final visible = visibleIndices.length == entry.indices.length;
     return GroupTreeTile(
-      key: ValueKey('group-${state.tabId}-${layer.name}-${entry.groupId}'),
+      key: ValueKey('group-${state.tabId}-$layerIndex-${entry.groupId}'),
       name: entry.name,
       tooltip: context.l10n.layerEditGroup,
       selected: selected,
@@ -125,6 +125,7 @@ class LayerItemTree extends StatelessWidget {
         state.validSelectedIndices.contains(index);
     final visible = shape.visible;
     final tile = ListTile(
+      key: ValueKey('shape-${state.tabId}-$layerIndex-$index'),
       dense: true,
       visualDensity: VisualDensity.compact,
       contentPadding: EdgeInsets.only(left: leftPadding, right: 16),

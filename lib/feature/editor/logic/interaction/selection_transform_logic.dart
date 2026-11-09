@@ -9,6 +9,7 @@ import '../../../../domain/services/geometry/geometry_utils.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../drawing/editor_ops.dart';
+import 'selection_hit_logic.dart';
 
 /// Applies pointer movement to the current selection gesture.
 abstract class SelectionTransformLogic {
@@ -154,6 +155,14 @@ abstract class SelectionTransformLogic {
     if (gesture.mode != GestureMode.marquee) return state.endGesture().commit();
 
     final area = gesture.startBounds;
+    final clickTolerance = 2 / state.view.zoom;
+    if (gesture.additiveSelection &&
+        area.width < clickTolerance &&
+        area.height < clickTolerance) {
+      final hit = SelectionHitLogic.hitInActiveLayer(state, gesture.origin);
+      return (hit == null ? state : SelectionHitLogic.toggle(state, hit))
+          .endGesture();
+    }
     final selected = <int>{};
     if (state.layer.visible &&
         (area.width >= 2 / state.view.zoom ||
@@ -161,9 +170,10 @@ abstract class SelectionTransformLogic {
       for (var index = 0; index < state.layer.shapes.length; index++) {
         final shape = state.layer.shapes[index];
         if (!shape.visible) continue;
-        final bounds = shape.bounds;
-        if (bounds.overlaps(area) || area.contains(bounds.center))
+        final bounds = shape.bounds.inflate(2 / state.view.zoom);
+        if (bounds.overlaps(area) || area.contains(bounds.center)) {
           selected.add(index);
+        }
       }
     }
     for (final index in [...selected]) {
