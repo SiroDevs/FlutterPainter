@@ -128,6 +128,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shapeUngroupTooltip => 'Ungroup selected shapes';
 
   @override
+  String get shapeActionsPanelTitle => 'Shape actions';
+
+  @override
+  String get shapeActionsPanelEmpty => 'Select a shape to see its actions.';
+
+  @override
   String shapeSelectionCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

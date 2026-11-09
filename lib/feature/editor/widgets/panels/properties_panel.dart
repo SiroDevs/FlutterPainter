@@ -14,7 +14,6 @@ import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/drawing/editor_ops.dart';
 import 'property_style_controls.dart';
-import 'shape_actions.dart';
 
 /// Style controls. They edit the selected shape, or set the style used for the
 /// next shapes when nothing is selected.
@@ -70,10 +69,6 @@ class PropertiesPanel extends StatelessWidget {
                     ),
                   ),
                 ],
-              ],
-              if (selectionCount > 0) ...[
-                const SizedBox(width: 12),
-                ShapeActions(state: state),
               ],
             ],
           ),

@@ -43,6 +43,8 @@
   "shapeUngroup": "Ungroup",
   "shapeGroupTooltip": "Group selected shapes so they move together",
   "shapeUngroupTooltip": "Ungroup selected shapes",
+  "shapeActionsPanelTitle": "Shape actions",
+  "shapeActionsPanelEmpty": "Select a shape to see its actions.",
   "shapeSelectionCount": "{count, plural, =1{1 shape selected} other{{count} shapes selected}}",
   "@shapeSelectionCount": {
     "placeholders": {

@@ -314,6 +314,18 @@ abstract class AppLocalizations {
   /// **'Ungroup selected shapes'**
   String get shapeUngroupTooltip;
 
+  /// No description provided for @shapeActionsPanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shape actions'**
+  String get shapeActionsPanelTitle;
+
+  /// No description provided for @shapeActionsPanelEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a shape to see its actions.'**
+  String get shapeActionsPanelEmpty;
+
   /// No description provided for @shapeSelectionCount.
   ///
   /// In en, this message translates to:
