@@ -356,6 +356,18 @@ abstract class AppLocalizations {
   /// **'Duplicate'**
   String get shapeDuplicate;
 
+  /// No description provided for @shapeCopyGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy group'**
+  String get shapeCopyGroup;
+
+  /// No description provided for @shapePasteGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste group'**
+  String get shapePasteGroup;
+
   /// No description provided for @shapeDelete.
   ///
   /// In en, this message translates to:

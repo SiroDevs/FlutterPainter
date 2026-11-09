@@ -77,6 +77,12 @@ class WorkspaceShortcuts {
       case LogicalKeyboardKey.keyY when !shift:
         editor.add(const RedoRequested());
         break;
+      case LogicalKeyboardKey.keyC when !shift:
+        editor.add(const GroupCopied());
+        break;
+      case LogicalKeyboardKey.keyV when !shift:
+        editor.add(const GroupPasted());
+        break;
       case LogicalKeyboardKey.keyD when !shift:
         editor.add(const ShapeDuplicated());
         break;

@@ -30,6 +30,8 @@
     "vertexDelete": "Futa nukta hii",
     "vertexSplit": "Gawa nukta hii",
     "shapeDuplicate": "Nakili",
+    "shapeCopyGroup": "Nakili kikundi",
+    "shapePasteGroup": "Bandika kikundi",
     "shapeDelete": "Futa",
     "shapeForward": "Peleka mbele",
     "shapeBack": "Rudisha nyuma",

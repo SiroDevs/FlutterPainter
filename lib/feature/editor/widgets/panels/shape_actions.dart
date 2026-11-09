@@ -21,29 +21,37 @@ class ShapeActions extends StatelessWidget {
     final selectionCount = state.validSelectedIndices.length;
     final selectedShapes = state.selectedShapes;
     final groups = selectedShapes.map((shape) => shape.groupId).toSet();
+    final selectedGroupId = selectedShapes.isEmpty
+        ? null
+        : selectedShapes.first.groupId;
+    final canCopyGroup =
+        selectedGroupId != null &&
+        selectedShapes.every((shape) => shape.groupId == selectedGroupId);
     final canGroup =
         selectedShapes.length > 1 &&
         (groups.length > 1 || groups.single == null);
     final grouped = selectedShapes.any((shape) => shape.groupId != null);
     final actions = <Widget Function(double width)>[
-      (width) => _action(
-        Icons.copy,
-        context.l10n.shapeDuplicate,
-        () => bloc.add(const ShapeDuplicated()),
-        width,
-      ),
-      (width) => _action(
-        Icons.delete_outline,
-        context.l10n.shapeDelete,
-        () => bloc.add(const ShapeDeleted()),
-        width,
-      ),
-      (width) => _action(
-        Icons.zoom_out_map,
-        context.l10n.shapeScaleDown,
-        () => bloc.add(const SelectionScaled(0.9)),
-        width,
-      ),
+      if (selectionCount > 0) ...[
+        (width) => _action(
+          Icons.copy,
+          context.l10n.shapeDuplicate,
+          () => bloc.add(const ShapeDuplicated()),
+          width,
+        ),
+        (width) => _action(
+          Icons.delete_outline,
+          context.l10n.shapeDelete,
+          () => bloc.add(const ShapeDeleted()),
+          width,
+        ),
+        (width) => _action(
+          Icons.zoom_out_map,
+          context.l10n.shapeScaleDown,
+          () => bloc.add(const SelectionScaled(0.9)),
+          width,
+        ),
+      ],
       if (selectionCount == 1) ...[
         (width) => _action(
           Icons.flip_to_front,
@@ -71,6 +79,20 @@ class ShapeActions extends StatelessWidget {
           Icons.workspaces_outline,
           context.l10n.shapeUngroup,
           () => bloc.add(const ShapesUngrouped()),
+          width,
+        ),
+      if (canCopyGroup)
+        (width) => _action(
+          Icons.content_copy,
+          context.l10n.shapeCopyGroup,
+          () => bloc.add(const GroupCopied()),
+          width,
+        ),
+      if (state.groupClipboard.isNotEmpty)
+        (width) => _action(
+          Icons.content_paste,
+          context.l10n.shapePasteGroup,
+          () => bloc.add(const GroupPasted()),
           width,
         ),
     ];
