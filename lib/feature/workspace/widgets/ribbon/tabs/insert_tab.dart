@@ -15,7 +15,6 @@ List<Widget> insertTabGroups(WorkspaceCommands c) => [
         children: [
           RibbonButton.small(c.tool(Tool.rect)),
           RibbonButton.small(c.tool(Tool.ellipse)),
-          RibbonButton.small(c.tool(Tool.line)),
         ],
       ),
       RibbonButton.large(c.tool(Tool.paint)),
@@ -24,6 +23,7 @@ List<Widget> insertTabGroups(WorkspaceCommands c) => [
   RibbonGroup(
     label: 'Paths',
     children: [
+      RibbonButton.large(c.tool(Tool.line)),
       RibbonButton.large(c.tool(Tool.polygon), label: 'Polygon'),
       RibbonButton.large(c.tool(Tool.freehand)),
     ],
