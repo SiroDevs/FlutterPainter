@@ -6,7 +6,8 @@ import '../drawing/editor_ops.dart';
 abstract class LayerLogic {
   LayerLogic._();
 
-  static bool _valid(EditorState s, int i) => i >= 0 && i < s.drawing.layers.length;
+  static bool _valid(EditorState s, int i) =>
+      i >= 0 && i < s.drawing.layers.length;
 
   static EditorState add(EditorState s) {
     final layers = [
@@ -24,7 +25,10 @@ abstract class LayerLogic {
     final layers = removedAt(s.drawing.layers, i);
     return s
         .withLayers(layers)
-        .copyWith(layerIndex: s.layerIndex.clamp(0, layers.length - 1).toInt(), selected: null)
+        .copyWith(
+          layerIndex: s.layerIndex.clamp(0, layers.length - 1).toInt(),
+          selected: null,
+        )
         .commit();
   }
 
@@ -49,11 +53,15 @@ abstract class LayerLogic {
     if (!_valid(s, i) || !_valid(s, j)) return s;
     final layers = [...s.drawing.layers];
     layers.insert(j, layers.removeAt(i));
-    final active = s.layerIndex == i ? j : (s.layerIndex == j ? i : s.layerIndex);
-    return s.withLayers(layers).copyWith(layerIndex: active, selected: null).commit();
+    final active = s.layerIndex == i
+        ? j
+        : (s.layerIndex == j ? i : s.layerIndex);
+    return s.withLayers(layers).copyWith(layerIndex: active).commit();
   }
 
   /// Which layer receives new shapes. Not an edit, so no history entry.
-  static EditorState activate(EditorState s, int i) =>
-      _valid(s, i) ? s.copyWith(layerIndex: i, selected: null) : s;
+  static EditorState activate(EditorState s, int i) {
+    if (!_valid(s, i) || i == s.layerIndex) return s;
+    return s.copyWith(layerIndex: i, selected: null);
+  }
 }

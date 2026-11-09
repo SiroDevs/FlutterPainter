@@ -82,7 +82,7 @@ class LayerItemTree extends StatelessWidget {
         visibleIndices.every(state.validSelectedIndices.contains);
     final visible = visibleIndices.length == entry.indices.length;
     return GroupTreeTile(
-      key: ValueKey('group-$layerIndex-${entry.groupId}'),
+      key: ValueKey('group-${state.tabId}-${layer.name}-${entry.groupId}'),
       name: entry.name,
       tooltip: context.l10n.layerEditGroup,
       selected: selected,
