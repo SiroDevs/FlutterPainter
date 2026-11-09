@@ -32,9 +32,9 @@ class EditorScreen extends StatefulWidget {
 class _EditorScreenState extends State<EditorScreen> {
   double _toolWidth = 52;
   double _inspectorWidth = 340;
-  double _propertiesWidth = 340;
+  double? _propertiesWidth;
   double _layersFraction = 0.50;
-  double _colorBarHeight = 104;
+  double _colorBarHeight = 148;
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +55,8 @@ class _EditorScreenState extends State<EditorScreen> {
           math.min(180.0, constraints.maxWidth - inspectorWidth - 250),
         );
         final toolWidth = _toolWidth.clamp(52.0, toolMaximum).toDouble();
-        final propertiesMaximum = math.max(
-          220.0,
-          math.min(600.0, constraints.maxWidth - 520),
-        );
-        final propertiesWidth = _propertiesWidth
+        final propertiesMaximum = math.max(220.0, constraints.maxWidth - 520);
+        final propertiesWidth = (_propertiesWidth ?? constraints.maxWidth / 2)
             .clamp(220.0, propertiesMaximum)
             .toDouble();
         return Column(
@@ -98,7 +95,7 @@ class _EditorScreenState extends State<EditorScreen> {
               axis: Axis.vertical,
               onDragUpdate: (details) => setState(() {
                 _colorBarHeight = (_colorBarHeight + details.delta.dy)
-                    .clamp(84.0, 280.0)
+                    .clamp(128.0, 280.0)
                     .toDouble();
               }),
             ),
@@ -110,7 +107,7 @@ class _EditorScreenState extends State<EditorScreen> {
                   PanelResizeHandle(
                     axis: Axis.horizontal,
                     onDragUpdate: (details) => setState(() {
-                      _propertiesWidth = (_propertiesWidth - details.delta.dx)
+                      _propertiesWidth = (propertiesWidth - details.delta.dx)
                           .clamp(220.0, propertiesMaximum)
                           .toDouble();
                     }),
@@ -139,9 +136,13 @@ class _EditorScreenState extends State<EditorScreen> {
       final layerHeight = (_layersFraction * available)
           .clamp(minLayers, maxLayers)
           .toDouble();
+      final layerFlex = available > 0
+          ? (layerHeight / available * 1000).round().clamp(1, 999).toInt()
+          : 1;
+      final imageFlex = 1000 - layerFlex;
       return Column(
         children: [
-          SizedBox(height: layerHeight, child: const LayersPanel()),
+          Expanded(flex: layerFlex, child: const LayersPanel()),
           PanelResizeHandle(
             axis: Axis.vertical,
             onDragUpdate: (details) => setState(() {
@@ -154,7 +155,7 @@ class _EditorScreenState extends State<EditorScreen> {
               }
             }),
           ),
-          Expanded(child: const ImagePanel()),
+          Flexible(flex: imageFlex, child: const ImagePanel()),
         ],
       );
     },

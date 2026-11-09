@@ -22,53 +22,66 @@ class ShapeActions extends StatelessWidget {
     final selectedShapes = state.selectedShapes;
     final groups = selectedShapes.map((shape) => shape.groupId).toSet();
     final canGroup =
-        selectedShapes.length > 1 && (groups.length > 1 || groups.single == null);
+        selectedShapes.length > 1 &&
+        (groups.length > 1 || groups.single == null);
     final grouped = selectedShapes.any((shape) => shape.groupId != null);
-    return Wrap(
-      spacing: 6,
-      runSpacing: 6,
-      children: [
+    final actions = <Widget>[
+      _action(
+        Icons.copy,
+        context.l10n.shapeDuplicate,
+        () => bloc.add(const ShapeDuplicated()),
+      ),
+      _action(
+        Icons.delete_outline,
+        context.l10n.shapeDelete,
+        () => bloc.add(const ShapeDeleted()),
+      ),
+      _action(
+        Icons.zoom_out_map,
+        context.l10n.shapeScaleDown,
+        () => bloc.add(const SelectionScaled(0.9)),
+      ),
+      if (selectionCount == 1) ...[
         _action(
-          Icons.copy,
-          context.l10n.shapeDuplicate,
-          () => bloc.add(const ShapeDuplicated()),
+          Icons.flip_to_front,
+          context.l10n.shapeForward,
+          () => bloc.add(const ShapeReordered(1)),
         ),
         _action(
-          Icons.delete_outline,
-          context.l10n.shapeDelete,
-          () => bloc.add(const ShapeDeleted()),
+          Icons.flip_to_back,
+          context.l10n.shapeBack,
+          () => bloc.add(const ShapeReordered(-1)),
         ),
-        _action(
-          Icons.zoom_out_map,
-          context.l10n.shapeScaleDown,
-          () => bloc.add(const SelectionScaled(0.9)),
-        ),
-        if (selectionCount == 1) ...[
-          _action(
-            Icons.flip_to_front,
-            context.l10n.shapeForward,
-            () => bloc.add(const ShapeReordered(1)),
-          ),
-          _action(
-            Icons.flip_to_back,
-            context.l10n.shapeBack,
-            () => bloc.add(const ShapeReordered(-1)),
-          ),
-          _moveToLayer(context, bloc),
-        ],
-        if (canGroup)
-          _action(
-            Icons.group_work_outlined,
-            context.l10n.shapeGroup,
-            () => bloc.add(const ShapesGrouped()),
-          ),
-        if (grouped)
-          _action(
-            Icons.workspaces_outline,
-            context.l10n.shapeUngroup,
-            () => bloc.add(const ShapesUngrouped()),
-          ),
+        _moveToLayer(context, bloc),
       ],
+      if (canGroup)
+        _action(
+          Icons.group_work_outlined,
+          context.l10n.shapeGroup,
+          () => bloc.add(const ShapesGrouped()),
+        ),
+      if (grouped)
+        _action(
+          Icons.workspaces_outline,
+          context.l10n.shapeUngroup,
+          () => bloc.add(const ShapesUngrouped()),
+        ),
+    ];
+    final columns = (actions.length + 1) ~/ 2;
+    return SizedBox(
+      width: columns * 140,
+      height: 84,
+      child: GridView.count(
+        padding: EdgeInsets.zero,
+        primary: false,
+        scrollDirection: Axis.horizontal,
+        crossAxisCount: 2,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        childAspectRatio: 3.4,
+        physics: const NeverScrollableScrollPhysics(),
+        children: actions,
+      ),
     );
   }
 
