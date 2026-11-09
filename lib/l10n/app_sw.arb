@@ -14,6 +14,8 @@
     "shapeUngroup": "Tenganisha",
     "shapeGroupTooltip": "Unganisha maumbo yaliyochaguliwa ili yahame pamoja",
     "shapeUngroupTooltip": "Tenganisha maumbo yaliyochaguliwa",
+    "paintBucketTool": "Ndoo ya rangi",
+    "paintBucketHint": "Bofya ndani ya umbo lililofungwa kulijaza kwa rangi ya sasa ya kujaza.",
     "shapeSelectionCount": "{count, plural, =1{Umbo 1 limechaguliwa} other{Maumbo {count} yamechaguliwa}}",
     "@shapeSelectionCount": {
         "placeholders": {

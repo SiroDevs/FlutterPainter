@@ -45,6 +45,7 @@ abstract class DrawLogic {
       case Tool.polygon:
         return _polygonClick(s, snapped, timeMs);
       case Tool.select:
+      case Tool.paint:
       case Tool.reference:
         return s;
     }

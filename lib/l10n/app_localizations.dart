@@ -170,6 +170,10 @@ abstract class AppLocalizations {
   /// **'Open the color picker'**
   String get colorMoreTooltip;
 
+  String get paintBucketTool;
+
+  String get paintBucketHint;
+
   /// No description provided for @colorPickerTitle.
   ///
   /// In en, this message translates to:

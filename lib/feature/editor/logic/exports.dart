@@ -10,6 +10,7 @@ export 'drawing/shape_logic.dart';
 export 'drawing/style_logic.dart';
 export 'drawing/vertex_logic.dart';
 export 'interaction/pointer_logic.dart';
+export 'interaction/paint_bucket_logic.dart';
 export 'interaction/select_logic.dart';
 export 'interaction/selection_transform_logic.dart';
 export 'interaction/tool_logic.dart';

@@ -33,7 +33,8 @@ class StatusBar extends StatelessWidget {
             style: style,
           ).width(150),
           Text(
-            '${state.tool.hint}   Scroll or right-drag pans, Ctrl+wheel zooms.',
+            '${state.tool.localizedHint(context)}   Scroll or right-drag pans, '
+            'Ctrl+wheel zooms.',
             style: style,
             overflow: TextOverflow.ellipsis,
           ).expanded(),

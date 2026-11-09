@@ -55,6 +55,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get colorMoreTooltip => 'Open the color picker';
 
   @override
+  String get paintBucketTool => 'Paint bucket';
+
+  @override
+  String get paintBucketHint =>
+      'Click inside a closed shape to fill it with the active fill color.';
+
+  @override
   String get colorPickerTitle => 'Color picker';
 
   @override

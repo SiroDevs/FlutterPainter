@@ -19,6 +19,8 @@
     }
   },
   "colorMoreTooltip": "Open the color picker",
+  "paintBucketTool": "Paint bucket",
+  "paintBucketHint": "Click inside a closed shape to fill it with the active fill color.",
   "colorPickerTitle": "Color picker",
   "colorSolid": "Solid",
   "colorGradient": "Gradient",

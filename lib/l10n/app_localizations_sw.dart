@@ -122,6 +122,13 @@ class AppLocalizationsSw extends AppLocalizations {
   String get shapeUngroupTooltip => 'Tenganisha maumbo yaliyochaguliwa';
 
   @override
+  String get paintBucketTool => 'Ndoo ya rangi';
+
+  @override
+  String get paintBucketHint =>
+      'Bofya ndani ya umbo lililofungwa kulijaza kwa rangi ya sasa ya kujaza.';
+
+  @override
   String shapeSelectionCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

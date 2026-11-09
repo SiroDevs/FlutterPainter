@@ -32,8 +32,8 @@ class EditorScreen extends StatefulWidget {
 class _EditorScreenState extends State<EditorScreen> {
   double _toolWidth = 52;
   double _inspectorWidth = 340;
+  double _propertiesWidth = 340;
   double _layersFraction = 0.50;
-  double _imageFraction = 0.23;
   double _colorBarHeight = 104;
 
   @override
@@ -55,6 +55,13 @@ class _EditorScreenState extends State<EditorScreen> {
           math.min(180.0, constraints.maxWidth - inspectorWidth - 250),
         );
         final toolWidth = _toolWidth.clamp(52.0, toolMaximum).toDouble();
+        final propertiesMaximum = math.max(
+          220.0,
+          math.min(600.0, constraints.maxWidth - 520),
+        );
+        final propertiesWidth = _propertiesWidth
+            .clamp(220.0, propertiesMaximum)
+            .toDouble();
         return Column(
           children: [
             Expanded(
@@ -95,7 +102,26 @@ class _EditorScreenState extends State<EditorScreen> {
                     .toDouble();
               }),
             ),
-            ColorBar(height: _colorBarHeight),
+            SizedBox(
+              height: _colorBarHeight,
+              child: Row(
+                children: [
+                  Expanded(child: ColorBar(height: _colorBarHeight)),
+                  PanelResizeHandle(
+                    axis: Axis.horizontal,
+                    onDragUpdate: (details) => setState(() {
+                      _propertiesWidth = (_propertiesWidth - details.delta.dx)
+                          .clamp(220.0, propertiesMaximum)
+                          .toDouble();
+                    }),
+                  ),
+                  SizedBox(
+                    width: propertiesWidth,
+                    child: const PropertiesPanel(),
+                  ),
+                ],
+              ),
+            ),
             const Divider(height: 1),
             const StatusBar(),
           ],
@@ -106,23 +132,12 @@ class _EditorScreenState extends State<EditorScreen> {
 
   Widget _inspector(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
-      final available = math.max(0.0, constraints.maxHeight - 16);
+      final available = math.max(0.0, constraints.maxHeight - 8);
       final minLayers = math.min(120.0, available * 0.28);
       final minImage = math.min(90.0, available * 0.18);
-      final minProperties = math.min(130.0, available * 0.28);
-      final maxLayers = math.max(
-        minLayers,
-        available - minImage - minProperties,
-      );
+      final maxLayers = math.max(minLayers, available - minImage);
       final layerHeight = (_layersFraction * available)
           .clamp(minLayers, maxLayers)
-          .toDouble();
-      final maxImage = math.max(
-        minImage,
-        available - layerHeight - minProperties,
-      );
-      final imageHeight = (_imageFraction * available)
-          .clamp(minImage, maxImage)
           .toDouble();
       return Column(
         children: [
@@ -139,20 +154,7 @@ class _EditorScreenState extends State<EditorScreen> {
               }
             }),
           ),
-          SizedBox(height: imageHeight, child: const ImagePanel()),
-          PanelResizeHandle(
-            axis: Axis.vertical,
-            onDragUpdate: (details) => setState(() {
-              if (available > 0) {
-                _imageFraction =
-                    (imageHeight + details.delta.dy)
-                        .clamp(minImage, maxImage)
-                        .toDouble() /
-                    available;
-              }
-            }),
-          ),
-          const Expanded(child: PropertiesPanel()),
+          Expanded(child: const ImagePanel()),
         ],
       );
     },

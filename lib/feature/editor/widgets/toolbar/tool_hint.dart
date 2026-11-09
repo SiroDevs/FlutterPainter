@@ -1,9 +1,13 @@
+// Flutter imports:
+import 'package:flutter/widgets.dart';
+
 // Project imports:
+import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/editor/tool.dart';
 
 /// One-line help shown in the status bar for each tool.
 extension ToolHint on Tool {
-  String get hint => switch (this) {
+  String localizedHint(BuildContext context) => switch (this) {
         Tool.select =>
           'Click a shape or image to select it. Drag to move, drag handles to '
               'resize. Double-click an edge to add a point, Alt-click a point to '
@@ -18,5 +22,6 @@ extension ToolHint on Tool {
         Tool.reference =>
           'Drag to move this layer\'s image; drag a handle to resize it '
               '(corners keep proportions, Shift or an edge handle stretches).',
+        Tool.paint => context.l10n.paintBucketHint,
       };
 }
