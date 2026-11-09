@@ -30,6 +30,19 @@ class PropertiesPanel extends StatelessWidget {
     if (name != null) bloc.add(ShapeRenamed(name));
   }
 
+  Future<void> _renameGroup(
+    BuildContext context,
+    EditorState state,
+    String groupId,
+    String currentName,
+  ) async {
+    final bloc = context.read<EditorBloc>();
+    final title = context.l10n.layerEditGroup;
+    final name = await promptText(context, title: title, initial: currentName);
+    if (name == null || name.isEmpty || name == currentName) return;
+    bloc.add(GroupRenamed(state.layerIndex, groupId, name));
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<EditorBloc>();
@@ -79,6 +92,11 @@ class PropertiesPanel extends StatelessWidget {
 
   Widget _selectionInfo(BuildContext context, EditorState state, Shape? shape) {
     final selectionCount = state.validSelectedIndices.length;
+    final groupId = _selectedGroupId(state);
+    final groupShape = groupId == null
+        ? null
+        : state.layer.shapes[state.validSelectedIndices.first];
+    final groupName = groupShape?.groupName ?? context.l10n.layerGroup;
     return SizedBox(
       width: 240,
       child: Column(
@@ -126,6 +144,33 @@ class PropertiesPanel extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ],
+          if (groupId != null) ...[
+            Row(
+              children: [
+                const Icon(Icons.folder_outlined, size: 16),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    groupName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  tooltip: context.l10n.layerEditGroup,
+                  iconSize: 18,
+                  visualDensity: VisualDensity.compact,
+                  constraints: const BoxConstraints.tightFor(
+                    width: 32,
+                    height: 32,
+                  ),
+                  icon: const Icon(Icons.edit_outlined),
+                  onPressed: () =>
+                      _renameGroup(context, state, groupId, groupName),
+                ),
+              ],
+            ),
+          ],
           if (selectionCount > 0)
             Text(
               context.l10n.shapeRotateHint,
@@ -136,6 +181,18 @@ class PropertiesPanel extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String? _selectedGroupId(EditorState state) {
+    final indices = state.validSelectedIndices;
+    if (indices.isEmpty) return null;
+    final groupId = state.layer.shapes[indices.first].groupId;
+    if (groupId == null) return null;
+    return indices.every(
+          (index) => state.layer.shapes[index].groupId == groupId,
+        )
+        ? groupId
+        : null;
   }
 
   Widget _closedShapeControl(Shape shape, EditorBloc bloc) => SizedBox(

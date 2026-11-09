@@ -25,12 +25,14 @@ class InlineTreeNameEditor extends StatefulWidget {
 
 class _InlineTreeNameEditorState extends State<InlineTreeNameEditor> {
   late final TextEditingController _controller;
+  late final FocusNode _focusNode;
   bool _editing = false;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.name);
+    _focusNode = FocusNode(debugLabel: 'Inline tree name editor');
   }
 
   @override
@@ -44,6 +46,7 @@ class _InlineTreeNameEditorState extends State<InlineTreeNameEditor> {
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -55,9 +58,14 @@ class _InlineTreeNameEditorState extends State<InlineTreeNameEditor> {
   void _finishEditing({required bool save}) {
     if (!_editing || !mounted) return;
     final name = _controller.text.trim();
+    final shouldSave =
+        save && (name.isNotEmpty || widget.allowEmpty) && name != widget.name;
+    final onSaved = widget.onSaved;
     setState(() => _editing = false);
-    if (save && (name.isNotEmpty || widget.allowEmpty) && name != widget.name) {
-      widget.onSaved(name);
+    if (shouldSave) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) onSaved(name);
+      });
     }
   }
 
@@ -84,19 +92,27 @@ class _InlineTreeNameEditorState extends State<InlineTreeNameEditor> {
                     });
                   }
                 },
-                child: TextField(
-                  controller: _controller,
-                  autofocus: true,
-                  maxLines: 1,
-                  style: widget.style,
-                  textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(
-                    isDense: true,
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 4),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: EditableText(
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    autofocus: true,
+                    maxLines: 1,
+                    style: DefaultTextStyle.of(context).style
+                        .merge(widget.style),
+                    cursorColor: Theme.of(context).colorScheme.primary,
+                    backgroundCursorColor: Theme.of(context)
+                        .colorScheme
+                        .onSurface,
+                    selectionColor:
+                        Theme.of(context).textSelectionTheme.selectionColor ??
+                        Theme.of(context).colorScheme.primary.withAlpha(100),
+                    mouseCursor: SystemMouseCursors.text,
+                    textInputAction: TextInputAction.done,
+                    onTapOutside: (_) => _finishEditing(save: true),
+                    onSubmitted: (_) => _finishEditing(save: true),
                   ),
-                  onTapOutside: (_) => _finishEditing(save: true),
-                  onSubmitted: (_) => _finishEditing(save: true),
                 ),
               )
             : Text(
