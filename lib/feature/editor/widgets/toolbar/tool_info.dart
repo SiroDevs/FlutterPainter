@@ -50,7 +50,7 @@ extension ToolInfo on Tool {
 /// tools: the slot shows the last one used and a flyout offers the others.
 const List<List<Tool>> kToolGroups = [
   [Tool.select, Tool.reference],
-  [Tool.rect, Tool.ellipse, Tool.line],
-  [Tool.polygon, Tool.freehand],
+  [Tool.rect, Tool.ellipse],
+  [Tool.line, Tool.polygon, Tool.freehand],
   [Tool.paint],
 ];

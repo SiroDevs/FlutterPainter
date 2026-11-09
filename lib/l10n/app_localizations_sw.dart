@@ -129,6 +129,12 @@ class AppLocalizationsSw extends AppLocalizations {
   String get shapeUngroupTooltip => 'Tenganisha maumbo yaliyochaguliwa';
 
   @override
+  String get shapeActionsPanelTitle => 'Vitendo vya umbo';
+
+  @override
+  String get shapeActionsPanelEmpty => 'Chagua umbo ili kuona vitendo vyake.';
+
+  @override
   String shapeSelectionCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

@@ -15,6 +15,7 @@ import 'widgets/panels/image_panel.dart';
 import 'widgets/panels/layers_panel.dart';
 import 'widgets/panels/panel_resize_handle.dart';
 import 'widgets/panels/properties_panel.dart';
+import 'widgets/panels/shape_actions_panel.dart';
 import 'widgets/toolbar/color_bar.dart';
 import 'widgets/toolbar/status_bar.dart';
 import 'widgets/toolbar/tool_palette.dart';
@@ -32,9 +33,10 @@ class EditorScreen extends StatefulWidget {
 class _EditorScreenState extends State<EditorScreen> {
   double _toolWidth = 52;
   double _inspectorWidth = 340;
-  double _propertiesWidth = 340;
+  double? _propertiesWidth;
   double _layersFraction = 0.50;
-  double _colorBarHeight = 104;
+  double _shapeActionsHeight = 132;
+  double _colorBarHeight = 148;
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +57,8 @@ class _EditorScreenState extends State<EditorScreen> {
           math.min(180.0, constraints.maxWidth - inspectorWidth - 250),
         );
         final toolWidth = _toolWidth.clamp(52.0, toolMaximum).toDouble();
-        final propertiesMaximum = math.max(
-          220.0,
-          math.min(600.0, constraints.maxWidth - 520),
-        );
-        final propertiesWidth = _propertiesWidth
+        final propertiesMaximum = math.max(220.0, constraints.maxWidth - 520);
+        final propertiesWidth = (_propertiesWidth ?? constraints.maxWidth / 2)
             .clamp(220.0, propertiesMaximum)
             .toDouble();
         return Column(
@@ -98,7 +97,7 @@ class _EditorScreenState extends State<EditorScreen> {
               axis: Axis.vertical,
               onDragUpdate: (details) => setState(() {
                 _colorBarHeight = (_colorBarHeight + details.delta.dy)
-                    .clamp(84.0, 280.0)
+                    .clamp(128.0, 280.0)
                     .toDouble();
               }),
             ),
@@ -110,7 +109,7 @@ class _EditorScreenState extends State<EditorScreen> {
                   PanelResizeHandle(
                     axis: Axis.horizontal,
                     onDragUpdate: (details) => setState(() {
-                      _propertiesWidth = (_propertiesWidth - details.delta.dx)
+                      _propertiesWidth = (propertiesWidth - details.delta.dx)
                           .clamp(220.0, propertiesMaximum)
                           .toDouble();
                     }),
@@ -135,13 +134,28 @@ class _EditorScreenState extends State<EditorScreen> {
       final available = math.max(0.0, constraints.maxHeight - 8);
       final minLayers = math.min(120.0, available * 0.28);
       final minImage = math.min(90.0, available * 0.18);
-      final maxLayers = math.max(minLayers, available - minImage);
+      final minActions = math.min(96.0, available * 0.20);
+      final maxActions = math.max(
+        minActions,
+        math.min(260.0, available - minLayers - minImage - 8),
+      );
+      final actionsHeight = _shapeActionsHeight
+          .clamp(minActions, maxActions)
+          .toDouble();
+      final maxLayers = math.max(
+        minLayers,
+        available - actionsHeight - 8 - minImage,
+      );
       final layerHeight = (_layersFraction * available)
           .clamp(minLayers, maxLayers)
           .toDouble();
+      final layerFlex = available > 0
+          ? (layerHeight / available * 1000).round().clamp(1, 999).toInt()
+          : 1;
+      final imageFlex = 1000 - layerFlex;
       return Column(
         children: [
-          SizedBox(height: layerHeight, child: const LayersPanel()),
+          Expanded(flex: layerFlex, child: const LayersPanel()),
           PanelResizeHandle(
             axis: Axis.vertical,
             onDragUpdate: (details) => setState(() {
@@ -154,7 +168,27 @@ class _EditorScreenState extends State<EditorScreen> {
               }
             }),
           ),
-          Expanded(child: const ImagePanel()),
+          Flexible(
+            flex: imageFlex,
+            child: Column(
+              children: [
+                Expanded(child: const ImagePanel()),
+                PanelResizeHandle(
+                  axis: Axis.vertical,
+                  onDragUpdate: (details) => setState(() {
+                    _shapeActionsHeight =
+                        (_shapeActionsHeight - details.delta.dy)
+                            .clamp(minActions, maxActions)
+                            .toDouble();
+                  }),
+                ),
+                SizedBox(
+                  height: actionsHeight,
+                  child: const ShapeActionsPanel(),
+                ),
+              ],
+            ),
+          ),
         ],
       );
     },
