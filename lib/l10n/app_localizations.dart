@@ -458,7 +458,7 @@ abstract class AppLocalizations {
   /// **'Edit item name'**
   String get layerEditItem;
 
-  /// Describes how to select one item from its group on the canvas.
+  /// No description provided for @canvasSelectGroupMemberHint.
   ///
   /// In en, this message translates to:
   /// **'Ctrl-click to select only this item from its group'**

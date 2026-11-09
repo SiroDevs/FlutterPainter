@@ -14,7 +14,9 @@ import 'tool_info.dart';
 /// its corner means there are more, and right-click or press-and-hold opens a
 /// flyout with the others. Thin lines separate the groups.
 class ToolPalette extends StatelessWidget {
-  const ToolPalette({super.key});
+  const ToolPalette({super.key, this.width = 52});
+
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +26,22 @@ class ToolPalette extends StatelessWidget {
       child: BlocBuilder<EditorBloc, EditorState>(
         buildWhen: (a, b) => a.tool != b.tool,
         builder: (context, state) => SizedBox(
-          width: 52,
-          child: Column(children: [
-            const SizedBox(height: 6),
-            for (var g = 0; g < kToolGroups.length; g++) ...[
-              if (g > 0)
-                Divider(
-                  height: 13,
-                  indent: 10,
-                  endIndent: 10,
-                  color: scheme.outlineVariant,
-                ),
-              _ToolSlot(group: kToolGroups[g], active: state.tool),
+          width: width,
+          child: Column(
+            children: [
+              const SizedBox(height: 6),
+              for (var g = 0; g < kToolGroups.length; g++) ...[
+                if (g > 0)
+                  Divider(
+                    height: 13,
+                    indent: 10,
+                    endIndent: 10,
+                    color: scheme.outlineVariant,
+                  ),
+                _ToolSlot(group: kToolGroups[g], active: state.tool),
+              ],
             ],
-          ]),
+          ),
         ),
       ),
     );
@@ -76,33 +80,36 @@ class _ToolSlotState extends State<_ToolSlot> {
     final button = SizedBox(
       width: 44,
       height: 44,
-      child: Stack(children: [
-        Center(
-          child: Tooltip(
-            message: '${_shown.label} (${_shown.keyLabel})'
-                '${hasMore ? '\nRight-click or hold for related tools' : ''}',
-            child: IconButton(
-              icon: Icon(_shown.icon),
-              onPressed: () => _choose(_shown),
-              style: IconButton.styleFrom(
-                backgroundColor: inGroup ? scheme.primaryContainer : null,
-                foregroundColor: inGroup ? scheme.onPrimaryContainer : null,
+      child: Stack(
+        children: [
+          Center(
+            child: Tooltip(
+              message:
+                  '${_shown.label} (${_shown.keyLabel})'
+                  '${hasMore ? '\nRight-click or hold for related tools' : ''}',
+              child: IconButton(
+                icon: Icon(_shown.icon),
+                onPressed: () => _choose(_shown),
+                style: IconButton.styleFrom(
+                  backgroundColor: inGroup ? scheme.primaryContainer : null,
+                  foregroundColor: inGroup ? scheme.onPrimaryContainer : null,
+                ),
               ),
             ),
           ),
-        ),
-        if (hasMore)
-          Positioned(
-            right: 3,
-            bottom: 3,
-            child: IgnorePointer(
-              child: CustomPaint(
-                size: const Size(7, 7),
-                painter: _CornerMark(scheme.onSurfaceVariant),
+          if (hasMore)
+            Positioned(
+              right: 3,
+              bottom: 3,
+              child: IgnorePointer(
+                child: CustomPaint(
+                  size: const Size(7, 7),
+                  painter: _CornerMark(scheme.onSurfaceVariant),
+                ),
               ),
             ),
-          ),
-      ]),
+        ],
+      ),
     );
 
     if (!hasMore) return button;
