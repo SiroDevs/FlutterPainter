@@ -9,11 +9,10 @@ import '../../../../common/constants/palette_constants.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/style_settings.dart';
+import 'color_cell.dart';
 import 'color_picker_dialog.dart';
 
-/// Paint-style colour strip: two overlapping swatches (fill in front, stroke
-/// behind), a hex field, the classic palette, and the colours already used.
-/// Left-click a colour paints the active swatch; right-click paints the stroke.
+/// Paint-style colour strip with swatches, a hex field, and color palettes.
 class ColorBar extends StatelessWidget {
   const ColorBar({super.key, this.height = 104});
 
@@ -98,7 +97,7 @@ class ColorBar extends StatelessWidget {
                     spacing: 2,
                     runSpacing: 2,
                     children: [
-                      for (final v in kPalette) _Cell(color: v, size: 24),
+                      for (final v in kPalette) ColorCell(color: v, size: 24),
                     ],
                   ),
                 ),
@@ -110,7 +109,7 @@ class ColorBar extends StatelessWidget {
                       runSpacing: 2,
                       children: [
                         for (final v in state.drawing.usedColors)
-                          _Cell(color: v, size: 18),
+                          ColorCell(color: v, size: 18),
                       ],
                     ),
                   ),
@@ -195,33 +194,6 @@ class _Swatches extends StatelessWidget {
             child: box(true, style.fillColor, style.fillOn),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _Cell extends StatelessWidget {
-  const _Cell({required this.color, required this.size});
-
-  final int color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = context.read<EditorBloc>();
-    return Tooltip(
-      message: hexOf(color),
-      child: GestureDetector(
-        onTap: () => bloc.add(ColorPicked(color)),
-        onSecondaryTap: () => bloc.add(StrokeColorPicked(color)),
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            color: Color(color),
-            border: Border.all(color: const Color(0x66808080)),
-          ),
-        ),
       ),
     );
   }

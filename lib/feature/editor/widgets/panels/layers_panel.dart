@@ -87,6 +87,7 @@ class LayersPanel extends StatelessWidget {
               ],
             ).padding(left: 12),
             ListView.builder(
+              key: PageStorageKey<String>('layer-list-${state.tabId}'),
               itemCount: layers.length,
               findChildIndexCallback: (key) => rowByKey[key],
               itemBuilder: (context, row) {
