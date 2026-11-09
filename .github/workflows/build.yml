@@ -372,69 +372,69 @@ jobs:
 # MACOS (signed with Developer ID, notarized, stapled)
 # ============================================================
 
-  macos:
-    name: macOS ${{ matrix.arch }}
-    needs: check-version
-    if: needs.check-version.outputs.should_release == 'true'
-    runs-on: ${{ matrix.runner }}
-    env:
-      VERSION: ${{ needs.check-version.outputs.version }}
+  # macos:
+  #   name: macOS ${{ matrix.arch }}
+  #   needs: check-version
+  #   if: needs.check-version.outputs.should_release == 'true'
+  #   runs-on: ${{ matrix.runner }}
+  #   env:
+  #     VERSION: ${{ needs.check-version.outputs.version }}
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: arm64
-            runner: macos-15          # Apple Silicon
-          - arch: x64
-            runner: macos-15-intel    # Intel
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include:
+  #         - arch: arm64
+  #           runner: macos-15          # Apple Silicon
+  #         - arch: x64
+  #           runner: macos-15-intel    # Intel
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: ./.github/actions/setup-flutter
-        with:
-          version: ${{ env.FLUTTER_VERSION }}
-          arch: ${{ matrix.arch }}
+  #     - name: Setup Flutter
+  #       uses: ./.github/actions/setup-flutter
+  #       with:
+  #         version: ${{ env.FLUTTER_VERSION }}
+  #         arch: ${{ matrix.arch }}
 
-      - name: Flutter diagnostics
-        run: |
-          flutter --version
-          flutter doctor -v
+  #     - name: Flutter diagnostics
+  #       run: |
+  #         flutter --version
+  #         flutter doctor -v
 
-      - name: Prepare
-        run: |
-          flutter config --enable-macos-desktop
-          flutter pub get
-          flutter gen-l10n
+  #     - name: Prepare
+  #       run: |
+  #         flutter config --enable-macos-desktop
+  #         flutter pub get
+  #         flutter gen-l10n
 
-      - name: Generate code (build_runner)
-        run: dart run build_runner build --delete-conflicting-outputs
+  #     - name: Generate code (build_runner)
+  #       run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Build macOS application
-        run: |
-          flutter build macos --release -t "$ENTRY" --no-tree-shake-icons
+  #     - name: Build macOS application
+  #       run: |
+  #         flutter build macos --release -t "$ENTRY" --no-tree-shake-icons
 
-      - name: Sign, notarize and package
-        uses: ./.github/actions/macos-package
-        with:
-          arch: ${{ matrix.arch }}
-          version: ${{ env.VERSION }}
-          app-name: ${{ env.APP_NAME }}
-          certificate-base64: ${{ secrets.MACOS_CERTIFICATE }}
-          certificate-password: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
-          apple-id: ${{ secrets.APPLE_ID }}
-          apple-app-password: ${{ secrets.APPLE_APP_PASSWORD }}
-          apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
+  #     - name: Sign, notarize and package
+  #       uses: ./.github/actions/macos-package
+  #       with:
+  #         arch: ${{ matrix.arch }}
+  #         version: ${{ env.VERSION }}
+  #         app-name: ${{ env.APP_NAME }}
+  #         certificate-base64: ${{ secrets.MACOS_CERTIFICATE }}
+  #         certificate-password: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+  #         apple-id: ${{ secrets.APPLE_ID }}
+  #         apple-app-password: ${{ secrets.APPLE_APP_PASSWORD }}
+  #         apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-macos-${{ matrix.arch }}
-          path: dist/*.dmg
-          if-no-files-found: error
+  #     - name: Upload artifacts
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: release-macos-${{ matrix.arch }}
+  #         path: dist/*.dmg
+  #         if-no-files-found: error
 
 # ============================================================
 # GITHUB RELEASE
@@ -446,7 +446,7 @@ jobs:
       - check-version
       - windows-x64
       - linux
-      - macos
+      # - macos
     if: >
       !cancelled() &&
       github.ref == 'refs/heads/main' &&

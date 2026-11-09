@@ -170,8 +170,16 @@ abstract class AppLocalizations {
   /// **'Open the color picker'**
   String get colorMoreTooltip;
 
+  /// No description provided for @paintBucketTool.
+  ///
+  /// In en, this message translates to:
+  /// **'Paint bucket'**
   String get paintBucketTool;
 
+  /// No description provided for @paintBucketHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Click inside a closed shape to fill it with the active fill color.'**
   String get paintBucketHint;
 
   /// No description provided for @colorPickerTitle.

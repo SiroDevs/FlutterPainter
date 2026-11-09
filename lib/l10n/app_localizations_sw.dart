@@ -55,6 +55,13 @@ class AppLocalizationsSw extends AppLocalizations {
   String get colorMoreTooltip => 'Open the color picker';
 
   @override
+  String get paintBucketTool => 'Ndoo ya rangi';
+
+  @override
+  String get paintBucketHint =>
+      'Bofya ndani ya umbo lililofungwa kulijaza kwa rangi ya sasa ya kujaza.';
+
+  @override
   String get colorPickerTitle => 'Color picker';
 
   @override
@@ -120,13 +127,6 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get shapeUngroupTooltip => 'Tenganisha maumbo yaliyochaguliwa';
-
-  @override
-  String get paintBucketTool => 'Ndoo ya rangi';
-
-  @override
-  String get paintBucketHint =>
-      'Bofya ndani ya umbo lililofungwa kulijaza kwa rangi ya sasa ya kujaza.';
 
   @override
   String shapeSelectionCount(int count) {
