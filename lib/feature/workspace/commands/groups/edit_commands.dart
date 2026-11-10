@@ -27,14 +27,14 @@ extension EditCommands on WorkspaceCommands {
   );
 
   AppCommand get duplicate => AppCommand(
-    label: 'Duplicate',
+    label: context.l10n.shapeDuplicate,
     icon: Icons.content_copy,
     shortcut: primaryShortcut(LogicalKeyboardKey.keyD),
     onPressed: hasShape ? () => send(const ShapeDuplicated()) : null,
   );
 
   AppCommand get delete => AppCommand(
-    label: 'Delete',
+    label: context.l10n.shapeDelete,
     icon: Icons.delete_outline,
     tooltip: 'Delete the selected shape or image',
     keys: 'Del',
@@ -44,7 +44,7 @@ extension EditCommands on WorkspaceCommands {
   );
 
   AppCommand get bringForward => AppCommand(
-    label: 'Bring forward',
+    label: context.l10n.shapeForward,
     icon: Icons.flip_to_front,
     onPressed: state.validSelectedIndices.length == 1
         ? () => send(const ShapeReordered(1))
@@ -52,7 +52,7 @@ extension EditCommands on WorkspaceCommands {
   );
 
   AppCommand get sendBackward => AppCommand(
-    label: 'Send backward',
+    label: context.l10n.shapeBack,
     icon: Icons.flip_to_back,
     onPressed: state.validSelectedIndices.length == 1
         ? () => send(const ShapeReordered(-1))
@@ -76,17 +76,26 @@ extension EditCommands on WorkspaceCommands {
   AppCommand get closedPath {
     final shape = state.selectedShape;
     return AppCommand(
-      label: 'Closed path',
+      label: context.l10n.shapeClosedPath,
       icon: Icons.polyline_outlined,
       tooltip: 'Close or open the selected polygon / line path',
       checked: shape?.isClosed ?? false,
-      onPressed: (shape != null &&
+      onPressed:
+          (shape != null &&
               shape.usesVertices &&
               state.validSelectedIndices.length == 1)
           ? () => send(ClosedToggled(!shape.isClosed))
           : null,
     );
   }
+
+  AppCommand get scaleDown => AppCommand(
+    label: context.l10n.shapeScaleDown,
+    icon: Icons.zoom_out_map,
+    onPressed: state.validSelectedIndices.isNotEmpty
+        ? () => send(const SelectionScaled(0.9))
+        : null,
+  );
 
   AppCommand get fillOn => AppCommand(
     label: 'Fill',

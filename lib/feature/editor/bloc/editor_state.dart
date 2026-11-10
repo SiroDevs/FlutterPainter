@@ -21,7 +21,6 @@ class EditorState extends Equatable {
     this.view = const ViewSettings(),
     this.gesture = const GestureState(),
     this.images = const <String, Image>{},
-    this.groupClipboard = const <Shape>[],
   });
 
   factory EditorState.fromSeed(EditorSeed seed) => EditorState(
@@ -71,9 +70,6 @@ class EditorState extends Equatable {
   /// used by any layer (or any undo step).
   final Map<String, Image> images;
 
-  /// Copied group contents, kept local to this project tab.
-  final List<Shape> groupClipboard;
-
   /// Nullable fields ([filePath], [selected], [draft], [hover], [cursor]) can
   /// be cleared by passing `null` explicitly.
   EditorState copyWith({
@@ -94,7 +90,6 @@ class EditorState extends Equatable {
     ViewSettings? view,
     GestureState? gesture,
     Map<String, Image>? images,
-    List<Shape>? groupClipboard,
   }) {
     final nextSelected = keep<int>(selected, this.selected);
     final nextSelectedIndices =
@@ -122,7 +117,6 @@ class EditorState extends Equatable {
       view: view ?? this.view,
       gesture: gesture ?? this.gesture,
       images: images ?? this.images,
-      groupClipboard: groupClipboard ?? this.groupClipboard,
     );
   }
 
@@ -145,6 +139,5 @@ class EditorState extends Equatable {
     view,
     gesture,
     images,
-    groupClipboard,
   ];
 }

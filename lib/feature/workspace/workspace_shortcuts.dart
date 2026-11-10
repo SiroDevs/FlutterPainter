@@ -13,6 +13,7 @@ import '../editor/widgets/toolbar/tool_info.dart';
 import '../export/export_args.dart';
 import '../settings/widgets/settings_dialog.dart';
 import 'cubit/workspace_cubit.dart';
+import 'clipboard/project_transfer_clipboard.dart';
 import 'flows/tab_flows.dart';
 
 /// Shortcuts available while the workspace has keyboard focus.
@@ -78,10 +79,10 @@ class WorkspaceShortcuts {
         editor.add(const RedoRequested());
         break;
       case LogicalKeyboardKey.keyC when !shift:
-        editor.add(const GroupCopied());
+        ProjectTransferClipboard.instance.copySelection(editor.state);
         break;
       case LogicalKeyboardKey.keyV when !shift:
-        editor.add(const GroupPasted());
+        ProjectTransferClipboard.instance.pasteInto(editor);
         break;
       case LogicalKeyboardKey.keyD when !shift:
         editor.add(const ShapeDuplicated());

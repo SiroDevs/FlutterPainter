@@ -95,3 +95,19 @@ class ImageScaleChanged extends EditorEvent {
 class ImageSyncRequested extends EditorEvent {
   const ImageSyncRequested();
 }
+
+abstract class ProjectTransferEvent extends EditorEvent {
+  const ProjectTransferEvent();
+}
+
+class ProjectContentPasted extends ProjectTransferEvent {
+  const ProjectContentPasted(this.transfer);
+
+  final ProjectTransfer transfer;
+}
+
+class ProjectLayersImported extends ProjectTransferEvent {
+  const ProjectLayersImported(this.layers);
+
+  final List<PaintLayer> layers;
+}

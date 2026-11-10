@@ -15,7 +15,6 @@ import 'widgets/panels/image_panel.dart';
 import 'widgets/panels/layers_panel.dart';
 import 'widgets/panels/panel_resize_handle.dart';
 import 'widgets/panels/properties_panel.dart';
-import 'widgets/panels/shape_actions_panel.dart';
 import 'widgets/toolbar/color_bar.dart';
 import 'widgets/toolbar/status_bar.dart';
 import 'widgets/toolbar/tool_palette.dart';
@@ -35,7 +34,6 @@ class _EditorScreenState extends State<EditorScreen> {
   double _inspectorWidth = 340;
   double? _propertiesWidth;
   double _layersFraction = 0.50;
-  double _shapeActionsHeight = 132;
   double _colorBarHeight = 148;
 
   @override
@@ -134,18 +132,7 @@ class _EditorScreenState extends State<EditorScreen> {
       final available = math.max(0.0, constraints.maxHeight - 8);
       final minLayers = math.min(120.0, available * 0.28);
       final minImage = math.min(90.0, available * 0.18);
-      final minActions = math.min(96.0, available * 0.20);
-      final maxActions = math.max(
-        minActions,
-        math.min(260.0, available - minLayers - minImage - 8),
-      );
-      final actionsHeight = _shapeActionsHeight
-          .clamp(minActions, maxActions)
-          .toDouble();
-      final maxLayers = math.max(
-        minLayers,
-        available - actionsHeight - 8 - minImage,
-      );
+      final maxLayers = math.max(minLayers, available - minImage);
       final layerHeight = (_layersFraction * available)
           .clamp(minLayers, maxLayers)
           .toDouble();
@@ -168,27 +155,7 @@ class _EditorScreenState extends State<EditorScreen> {
               }
             }),
           ),
-          Flexible(
-            flex: imageFlex,
-            child: Column(
-              children: [
-                Expanded(child: const ImagePanel()),
-                PanelResizeHandle(
-                  axis: Axis.vertical,
-                  onDragUpdate: (details) => setState(() {
-                    _shapeActionsHeight =
-                        (_shapeActionsHeight - details.delta.dy)
-                            .clamp(minActions, maxActions)
-                            .toDouble();
-                  }),
-                ),
-                SizedBox(
-                  height: actionsHeight,
-                  child: const ShapeActionsPanel(),
-                ),
-              ],
-            ),
-          ),
+          Expanded(flex: imageFlex, child: const ImagePanel()),
         ],
       );
     },

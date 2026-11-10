@@ -6,7 +6,9 @@ import '../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../common/widgets/progress/custom_snackbar.dart';
 import '../../../core/di/injectable.dart';
 import '../../../core/platform/file_dialogs.dart';
+import '../../../core/utils/l10n_ext.dart';
 import '../../../core/utils/path_util.dart';
+import '../../../domain/repos/project_repo.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../editor/logic/drawing/editor_ops.dart';
 import '../cubit/workspace_cubit.dart';
@@ -21,6 +23,33 @@ Future<void> openProjectDialog(BuildContext context, WorkspaceCubit ws) async {
   for (final path in paths) {
     if (!context.mounted) return;
     await openPath(context, ws, path);
+  }
+}
+
+Future<void> importProjectDialog(
+  BuildContext context,
+  EditorBloc target,
+) async {
+  final paths = await _dialogs.pickProjectPaths();
+  var importedCount = 0;
+  for (final path in paths) {
+    if (!context.mounted) return;
+    try {
+      final drawing = await getIt<ProjectRepo>().open(path);
+      target.add(ProjectLayersImported(drawing.layers));
+      importedCount += drawing.layers.length;
+    } catch (_) {
+      if (context.mounted) {
+        CustomSnackbar.show(context, context.l10n.projectImportFailed(path));
+      }
+    }
+  }
+  if (context.mounted && importedCount > 0) {
+    CustomSnackbar.show(
+      context,
+      context.l10n.projectImportComplete(importedCount),
+      isSuccess: true,
+    );
   }
 }
 
@@ -43,8 +72,9 @@ Future<void> openPath(
       CustomSnackbar.show(context, 'Not a Flutter Painter project: $path');
     }
   } catch (e) {
-    if (context.mounted)
+    if (context.mounted) {
       CustomSnackbar.show(context, 'Could not open $path: $e');
+    }
   }
 }
 
@@ -91,11 +121,13 @@ Future<bool> closeTab(
 ) async {
   if (bloc.state.dirty) {
     ws.activate(ws.editors.indexOf(bloc));
-    switch (await askSaveChanges(context, bloc.state.drawing.name)) {
+    final choice = await askSaveChanges(context, bloc.state.drawing.name);
+    if (!context.mounted) return false;
+    switch (choice) {
       case SaveChoice.cancel:
         return false;
       case SaveChoice.save:
-        if (!context.mounted || !await saveTab(context, ws, bloc)) return false;
+        if (!await saveTab(context, ws, bloc)) return false;
       case SaveChoice.discard:
         break;
     }

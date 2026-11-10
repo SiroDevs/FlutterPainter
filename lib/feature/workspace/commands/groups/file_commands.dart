@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 // Project imports:
 import '../../../../common/app_router/route_names.dart';
 import '../../../../common/widgets/dialogs/app_dialogs.dart';
+import '../../../../core/utils/l10n_ext.dart';
 import '../../../editor/bloc/editor_bloc.dart';
 import '../../../export/export_args.dart';
 import '../../../settings/widgets/settings_dialog.dart';
@@ -31,6 +32,12 @@ extension FileCommands on WorkspaceCommands {
     icon: Icons.folder_open,
     shortcut: primaryShortcut(LogicalKeyboardKey.keyO),
     onPressed: () => openProjectDialog(context, ws),
+  );
+
+  AppCommand get importProject => AppCommand(
+    label: context.l10n.projectImport,
+    icon: Icons.file_download_outlined,
+    onPressed: () => importProjectDialog(context, bloc),
   );
 
   AppCommand get save => AppCommand(

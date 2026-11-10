@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/bloc/theme_bloc.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../editor/logic/drawing/editor_ops.dart';
+import '../clipboard/project_transfer_clipboard.dart';
 import '../cubit/workspace_cubit.dart';
 import 'workspace_commands.dart';
 
@@ -59,20 +60,23 @@ class CommandsBuilder extends StatelessWidget {
     final themeBloc = context.read<ThemeBloc>();
     // Reading the theme here rebuilds this when it switches light / dark.
     final dark = Theme.of(context).brightness == Brightness.dark;
-    return BlocBuilder<WorkspaceCubit, WorkspaceState>(
-      buildWhen: (a, b) => a.autoSave != b.autoSave,
-      builder: (context, wsState) => BlocBuilder<EditorBloc, EditorState>(
-        buildWhen: _changed,
-        builder: (context, state) => builder(
-          context,
-          WorkspaceCommands(
-            context: context,
-            ws: ws,
-            bloc: bloc,
-            themeBloc: themeBloc,
-            state: state,
-            autoSaveOn: wsState.autoSave,
-            dark: dark,
+    return ListenableBuilder(
+      listenable: ProjectTransferClipboard.instance,
+      builder: (context, _) => BlocBuilder<WorkspaceCubit, WorkspaceState>(
+        buildWhen: (a, b) => a.autoSave != b.autoSave,
+        builder: (context, wsState) => BlocBuilder<EditorBloc, EditorState>(
+          buildWhen: _changed,
+          builder: (context, state) => builder(
+            context,
+            WorkspaceCommands(
+              context: context,
+              ws: ws,
+              bloc: bloc,
+              themeBloc: themeBloc,
+              state: state,
+              autoSaveOn: wsState.autoSave,
+              dark: dark,
+            ),
           ),
         ),
       ),
