@@ -386,6 +386,36 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get shapeBack;
 
+  /// No description provided for @shapeBringToFront.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring to front'**
+  String get shapeBringToFront;
+
+  /// No description provided for @shapeSendToBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to back'**
+  String get shapeSendToBack;
+
+  /// No description provided for @shapeBringForward.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring forward'**
+  String get shapeBringForward;
+
+  /// No description provided for @shapeSendBackward.
+  ///
+  /// In en, this message translates to:
+  /// **'Send backward'**
+  String get shapeSendBackward;
+
+  /// No description provided for @shapeOrderGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get shapeOrderGroup;
+
   /// No description provided for @shapeMoveToLayer.
   ///
   /// In en, this message translates to:

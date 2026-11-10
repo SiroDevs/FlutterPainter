@@ -38,9 +38,33 @@ class WorkspaceCommands {
     final groups = shapes.map((shape) => shape.groupId).toSet();
     return groups.length > 1 || groups.single == null;
   }
+
   bool get hasGroupedSelection =>
       state.selectedShapes.any((shape) => shape.groupId != null);
+  bool get canBringForward => _canMoveSelectionOneStep(1);
+  bool get canSendBackward => _canMoveSelectionOneStep(-1);
+  bool get canBringToFront => _canMoveSelection(front: true);
+  bool get canSendToBack => _canMoveSelection(front: false);
   bool get hasImage => state.layer.image != null;
+
+  bool _canMoveSelection({required bool front}) {
+    final indices = state.validSelectedIndices..sort();
+    if (indices.isEmpty) return false;
+    final count = state.layer.shapes.length;
+    return front
+        ? indices.length < count - indices.first
+        : indices.length < indices.last + 1;
+  }
+
+  bool _canMoveSelectionOneStep(int direction) {
+    final selected = state.validSelectedIndices.toSet();
+    return selected.any((index) {
+      final neighbor = index + direction;
+      return neighbor >= 0 &&
+          neighbor < state.layer.shapes.length &&
+          !selected.contains(neighbor);
+    });
+  }
 
   void send(EditorEvent e) => bloc.add(e);
 

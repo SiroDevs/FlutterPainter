@@ -174,6 +174,21 @@ class AppLocalizationsSw extends AppLocalizations {
   String get shapeBack => 'Rudisha nyuma';
 
   @override
+  String get shapeBringToFront => 'Peleka mbele kabisa';
+
+  @override
+  String get shapeSendToBack => 'Rudisha nyuma kabisa';
+
+  @override
+  String get shapeBringForward => 'Peleka mbele';
+
+  @override
+  String get shapeSendBackward => 'Rudisha nyuma';
+
+  @override
+  String get shapeOrderGroup => 'Mpangilio';
+
+  @override
   String get shapeMoveToLayer => 'Hamisha kwenye tabaka';
 
   @override

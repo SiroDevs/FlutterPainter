@@ -173,6 +173,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shapeBack => 'Back';
 
   @override
+  String get shapeBringToFront => 'Bring to front';
+
+  @override
+  String get shapeSendToBack => 'Send to back';
+
+  @override
+  String get shapeBringForward => 'Bring forward';
+
+  @override
+  String get shapeSendBackward => 'Send backward';
+
+  @override
+  String get shapeOrderGroup => 'Order';
+
+  @override
   String get shapeMoveToLayer => 'Move to layer';
 
   @override
