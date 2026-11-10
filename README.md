@@ -4,7 +4,8 @@ Flutter Painter is a desktop vector drawing app for making artwork and exporting
 it as Dart code. Draw with shapes and paths, arrange them on layers, and use the
 generated `dart:ui` painter in a Flutter project.
 
-![Flutter Painter screenshot](./screenshots/image1.png)
+![Flutter Painter screenshot1](./screenshots/image1.png)
+![Flutter Painter screenshot2](./screenshots/image2.png)
 
 ## Features
 
