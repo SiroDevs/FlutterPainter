@@ -102,3 +102,29 @@ class ClosedToggled extends EditorEvent {
 
   final bool closed;
 }
+
+class QuickCodePolygonPreviewChanged extends EditorEvent {
+  const QuickCodePolygonPreviewChanged(this.points);
+
+  final List<Offset> points;
+}
+
+class QuickCodePolygonApplied extends EditorEvent {
+  const QuickCodePolygonApplied(this.points);
+
+  final List<Offset> points;
+}
+
+class QuickCodeShapePointsChanged extends EditorEvent {
+  const QuickCodeShapePointsChanged({
+    required this.layerIndex,
+    required this.shapeIndex,
+    required this.points,
+    this.commit = false,
+  });
+
+  final int layerIndex;
+  final int shapeIndex;
+  final List<Offset> points;
+  final bool commit;
+}

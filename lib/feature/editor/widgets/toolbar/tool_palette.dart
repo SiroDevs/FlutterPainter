@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../../domain/models/editor/tool.dart';
+import '../../../../core/utils/l10n_ext.dart';
+import '../../../quick_code/quick_code_request.dart';
 import '../../bloc/editor_bloc.dart';
 import 'tool_info.dart';
 
@@ -14,9 +16,14 @@ import 'tool_info.dart';
 /// its corner means there are more, and right-click or press-and-hold opens a
 /// flyout with the others. Thin lines separate the groups.
 class ToolPalette extends StatelessWidget {
-  const ToolPalette({super.key, this.width = 52});
+  const ToolPalette({
+    super.key,
+    this.width = 52,
+    required this.onQuickCodeRequested,
+  });
 
   final double width;
+  final ValueChanged<QuickCodeRequest> onQuickCodeRequested;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +45,11 @@ class ToolPalette extends StatelessWidget {
                     endIndent: 10,
                     color: scheme.outlineVariant,
                   ),
-                _ToolSlot(group: kToolGroups[g], active: state.tool),
+                _ToolSlot(
+                  group: kToolGroups[g],
+                  active: state.tool,
+                  onQuickCodeRequested: onQuickCodeRequested,
+                ),
               ],
             ],
           ),
@@ -49,10 +60,15 @@ class ToolPalette extends StatelessWidget {
 }
 
 class _ToolSlot extends StatefulWidget {
-  const _ToolSlot({required this.group, required this.active});
+  const _ToolSlot({
+    required this.group,
+    required this.active,
+    required this.onQuickCodeRequested,
+  });
 
   final List<Tool> group;
   final Tool active;
+  final ValueChanged<QuickCodeRequest> onQuickCodeRequested;
 
   @override
   State<_ToolSlot> createState() => _ToolSlotState();
@@ -76,6 +92,7 @@ class _ToolSlotState extends State<_ToolSlot> {
     final inGroup = group.contains(widget.active);
     if (inGroup) _shown = widget.active;
     final hasMore = group.length > 1;
+    final hasQuickCode = group.contains(Tool.polygon);
 
     final button = SizedBox(
       width: 44,
@@ -86,7 +103,7 @@ class _ToolSlotState extends State<_ToolSlot> {
             child: Tooltip(
               message:
                   '${_shown.localizedLabel(context)} (${_shown.keyLabel})'
-                  '${hasMore ? '\nRight-click or hold for related tools' : ''}',
+                  '${hasMore || hasQuickCode ? '\n${context.l10n.quickCodeToolMenuHint}' : ''}',
               child: IconButton(
                 icon: Icon(_shown.icon),
                 onPressed: () => _choose(_shown),
@@ -97,7 +114,7 @@ class _ToolSlotState extends State<_ToolSlot> {
               ),
             ),
           ),
-          if (hasMore)
+          if (hasMore || hasQuickCode)
             Positioned(
               right: 3,
               bottom: 3,
@@ -112,7 +129,7 @@ class _ToolSlotState extends State<_ToolSlot> {
       ),
     );
 
-    if (!hasMore) return button;
+    if (!hasMore && !hasQuickCode) return button;
     return MenuAnchor(
       controller: _menu,
       // Open to the right of the slot, level with it.
@@ -124,6 +141,15 @@ class _ToolSlotState extends State<_ToolSlot> {
             trailingIcon: Text(t.keyLabel),
             onPressed: () => _choose(t),
             child: Text(t.localizedLabel(context)),
+          ),
+        if (hasQuickCode)
+          MenuItemButton(
+            leadingIcon: const Icon(Icons.code, size: 20),
+            onPressed: () {
+              _choose(Tool.polygon);
+              widget.onQuickCodeRequested(const QuickCodeRequest.polygon());
+            },
+            child: Text(context.l10n.quickCodePolygonMenu),
           ),
       ],
       child: GestureDetector(

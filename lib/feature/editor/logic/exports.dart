@@ -8,6 +8,7 @@ export 'drawing/editor_ops.dart';
 export 'drawing/group_logic.dart';
 export 'drawing/order_logic.dart';
 export 'drawing/project_transfer_logic.dart';
+export 'drawing/quick_code_logic.dart';
 export 'drawing/shape_logic.dart';
 export 'drawing/style_logic.dart';
 export 'drawing/vertex_logic.dart';

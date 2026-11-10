@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../domain/models/editor/app_settings.dart';
+import '../quick_code/quick_code_request.dart';
 import '../settings/cubit/settings_cubit.dart';
 import 'widgets/canvas/canvas_view.dart';
 import 'widgets/panels/image_panel.dart';
@@ -21,9 +22,14 @@ import 'widgets/toolbar/tool_palette.dart';
 
 /// One project's editor with draggable tool, inspector and color panels.
 class EditorScreen extends StatefulWidget {
-  const EditorScreen({super.key, required this.canvasFocus});
+  const EditorScreen({
+    super.key,
+    required this.canvasFocus,
+    required this.onQuickCodeRequested,
+  });
 
   final FocusNode canvasFocus;
+  final ValueChanged<QuickCodeRequest> onQuickCodeRequested;
 
   @override
   State<EditorScreen> createState() => _EditorScreenState();
@@ -64,7 +70,10 @@ class _EditorScreenState extends State<EditorScreen> {
             Expanded(
               child: Row(
                 children: [
-                  ToolPalette(width: toolWidth),
+                  ToolPalette(
+                    width: toolWidth,
+                    onQuickCodeRequested: widget.onQuickCodeRequested,
+                  ),
                   PanelResizeHandle(
                     axis: Axis.horizontal,
                     onDragUpdate: (details) => setState(() {
@@ -74,7 +83,12 @@ class _EditorScreenState extends State<EditorScreen> {
                     }),
                   ),
                   const VerticalDivider(width: 1),
-                  Expanded(child: CanvasView(focus: widget.canvasFocus)),
+                  Expanded(
+                    child: CanvasView(
+                      focus: widget.canvasFocus,
+                      onQuickCodeRequested: widget.onQuickCodeRequested,
+                    ),
+                  ),
                   if (!minimal) ...[
                     const VerticalDivider(width: 1),
                     PanelResizeHandle(
