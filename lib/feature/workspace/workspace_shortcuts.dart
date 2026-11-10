@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import '../../common/app_router/route_names.dart';
 import '../../domain/models/editor/tool.dart';
 import '../editor/bloc/editor_bloc.dart';
+import '../editor/logic/drawing/editor_ops.dart';
 import '../editor/widgets/toolbar/tool_info.dart';
 import '../export/export_args.dart';
 import '../settings/widgets/settings_dialog.dart';
@@ -89,6 +90,18 @@ class WorkspaceShortcuts {
         break;
       case LogicalKeyboardKey.keyA:
         editor.add(const SelectAllRequested());
+        break;
+      case LogicalKeyboardKey.arrowUp when !shift:
+        if (editor.state.validSelectedIndices.isEmpty) {
+          return KeyEventResult.ignored;
+        }
+        editor.add(const ShapeReordered(1));
+        break;
+      case LogicalKeyboardKey.arrowDown when !shift:
+        if (editor.state.validSelectedIndices.isEmpty) {
+          return KeyEventResult.ignored;
+        }
+        editor.add(const ShapeReordered(-1));
         break;
       case LogicalKeyboardKey.minus when !shift:
         _zoom(1 / 1.25);

@@ -33,7 +33,7 @@ class _EditorScreenState extends State<EditorScreen> {
   double _toolWidth = 52;
   double _inspectorWidth = 340;
   double? _propertiesWidth;
-  double _layersFraction = 0.50;
+  double _layersFraction = 0.75;
   double _colorBarHeight = 148;
 
   @override

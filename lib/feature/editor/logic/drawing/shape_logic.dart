@@ -6,6 +6,7 @@ import '../../../../domain/services/geometry/geometry_utils.dart';
 import '../../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
 import '../canvas/image_logic.dart';
+import 'order_logic.dart';
 import 'style_logic.dart';
 
 /// Operations on the selected shape: delete, duplicate, order, layer, name.
@@ -148,15 +149,11 @@ abstract class ShapeLogic {
   }
 
   /// [direction] +1 draws the shape later (in front), -1 earlier (behind).
-  static EditorState reorder(EditorState state, int direction) {
-    final selectedIndex = state.selected;
-    if (selectedIndex == null || state.selectedShape == null) return state;
-    final nextIndex = selectedIndex + direction;
-    if (nextIndex < 0 || nextIndex >= state.layer.shapes.length) return state;
-    final shapes = [...state.layer.shapes];
-    shapes.insert(nextIndex, shapes.removeAt(selectedIndex));
-    return state.withShapes(shapes).copyWith(selected: nextIndex).commit();
-  }
+  static EditorState reorder(
+    EditorState state,
+    int direction, {
+    bool toExtreme = false,
+  }) => ShapeOrderLogic.reorder(state, direction, toExtreme: toExtreme);
 
   static EditorState moveToLayer(EditorState state, int target) {
     final selectedIndex = state.selected;

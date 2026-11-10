@@ -44,18 +44,32 @@ extension EditCommands on WorkspaceCommands {
   );
 
   AppCommand get bringForward => AppCommand(
-    label: context.l10n.shapeForward,
-    icon: Icons.flip_to_front,
-    onPressed: state.validSelectedIndices.length == 1
-        ? () => send(const ShapeReordered(1))
-        : null,
+    label: context.l10n.shapeBringForward,
+    icon: Icons.arrow_upward,
+    shortcut: primaryShortcut(LogicalKeyboardKey.arrowUp),
+    onPressed: canBringForward ? () => send(const ShapeReordered(1)) : null,
   );
 
   AppCommand get sendBackward => AppCommand(
-    label: context.l10n.shapeBack,
+    label: context.l10n.shapeSendBackward,
+    icon: Icons.arrow_downward,
+    shortcut: primaryShortcut(LogicalKeyboardKey.arrowDown),
+    onPressed: canSendBackward ? () => send(const ShapeReordered(-1)) : null,
+  );
+
+  AppCommand get bringToFront => AppCommand(
+    label: context.l10n.shapeBringToFront,
+    icon: Icons.flip_to_front,
+    onPressed: canBringToFront
+        ? () => send(const ShapeReordered(1, toExtreme: true))
+        : null,
+  );
+
+  AppCommand get sendToBack => AppCommand(
+    label: context.l10n.shapeSendToBack,
     icon: Icons.flip_to_back,
-    onPressed: state.validSelectedIndices.length == 1
-        ? () => send(const ShapeReordered(-1))
+    onPressed: canSendToBack
+        ? () => send(const ShapeReordered(-1, toExtreme: true))
         : null,
   );
 

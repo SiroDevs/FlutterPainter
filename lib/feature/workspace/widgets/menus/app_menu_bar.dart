@@ -32,73 +32,75 @@ class _Menu {
 const _sep = _Separator();
 
 List<_Menu> _menus(WorkspaceCommands c, {required bool mac}) => [
-      _Menu('File', [
-        _Item(c.newBlank),
-        _sep,
-        _Item(c.open),
-        _sep,
-        _Item(c.save),
-        _Item(c.saveAs),
-        _Item(c.autoSave),
-        _sep,
-        _Item(c.exportDart),
-        _sep,
-        _Item(c.rename),
-        _Item(c.canvasSize),
-        _sep,
-        _Item(c.closeProject),
-        if (!mac) ...[_sep, _Item(c.settings), _sep, _Item(c.exitApp)],
-      ]),
-      _Menu('Edit', [
-        _Item(c.undo),
-        _Item(c.redo),
-        _sep,
-        _Item(c.duplicate),
-        _Item(c.delete),
-        _sep,
-        _Item(c.bringForward),
-        _Item(c.sendBackward),
-        _Item(c.closedPath),
-        _sep,
-        _Item(c.fillOn),
-        _Item(c.strokeOn),
-      ]),
-      _Menu('Layer', [
-        _Item(c.layerAdd),
-        _Item(c.layerDelete),
-        _Item(c.layerRename),
-        _sep,
-        _Item(c.layerUp),
-        _Item(c.layerDown),
-        _Item(c.layerVisible),
-        _sep,
-        _Item(c.imageLoad),
-        _Item(c.imageLoadNewLayer),
-        _Item(c.imageSelect),
-        _Item(c.imageTool),
-        _Item(c.imageFit),
-        _Item(c.imageVisible),
-        _Item(c.imageRemove),
-      ]),
-      _Menu('View', [
-        _Item(c.zoomIn),
-        _Item(c.zoomOut),
-        _Item(c.zoomFit),
-        _sep,
-        _Item(c.grid),
-        _Item(c.snap),
-        _Item(c.background),
-        _sep,
-        _Item(c.theme),
-      ]),
-      _Menu('Tools', [
-        for (var g = 0; g < kToolGroups.length; g++) ...[
-          if (g > 0) _sep,
-          for (final t in kToolGroups[g]) _Item(c.tool(t)),
-        ],
-      ]),
-      if (!mac) _Menu('Help', [_Item(c.about)]),
-    ];
+  _Menu('File', [
+    _Item(c.newBlank),
+    _sep,
+    _Item(c.open),
+    _sep,
+    _Item(c.save),
+    _Item(c.saveAs),
+    _Item(c.autoSave),
+    _sep,
+    _Item(c.exportDart),
+    _sep,
+    _Item(c.rename),
+    _Item(c.canvasSize),
+    _sep,
+    _Item(c.closeProject),
+    if (!mac) ...[_sep, _Item(c.settings), _sep, _Item(c.exitApp)],
+  ]),
+  _Menu('Edit', [
+    _Item(c.undo),
+    _Item(c.redo),
+    _sep,
+    _Item(c.duplicate),
+    _Item(c.delete),
+    _sep,
+    _Item(c.bringForward),
+    _Item(c.sendBackward),
+    _Item(c.bringToFront),
+    _Item(c.sendToBack),
+    _Item(c.closedPath),
+    _sep,
+    _Item(c.fillOn),
+    _Item(c.strokeOn),
+  ]),
+  _Menu('Layer', [
+    _Item(c.layerAdd),
+    _Item(c.layerDelete),
+    _Item(c.layerRename),
+    _sep,
+    _Item(c.layerUp),
+    _Item(c.layerDown),
+    _Item(c.layerVisible),
+    _sep,
+    _Item(c.imageLoad),
+    _Item(c.imageLoadNewLayer),
+    _Item(c.imageSelect),
+    _Item(c.imageTool),
+    _Item(c.imageFit),
+    _Item(c.imageVisible),
+    _Item(c.imageRemove),
+  ]),
+  _Menu('View', [
+    _Item(c.zoomIn),
+    _Item(c.zoomOut),
+    _Item(c.zoomFit),
+    _sep,
+    _Item(c.grid),
+    _Item(c.snap),
+    _Item(c.background),
+    _sep,
+    _Item(c.theme),
+  ]),
+  _Menu('Tools', [
+    for (var g = 0; g < kToolGroups.length; g++) ...[
+      if (g > 0) _sep,
+      for (final t in kToolGroups[g]) _Item(c.tool(t)),
+    ],
+  ]),
+  if (!mac) _Menu('Help', [_Item(c.about)]),
+];
 
 /// The application's menu bar.
 ///
@@ -125,10 +127,12 @@ class AppMenuBar extends StatelessWidget {
         if (isMacOS) {
           return PlatformMenuBar(menus: _macMenus(c, active), child: child);
         }
-        return Column(children: [
-          _WindowMenuBar(menus: _menus(c, mac: false)),
-          Expanded(child: child),
-        ]);
+        return Column(
+          children: [
+            _WindowMenuBar(menus: _menus(c, mac: false)),
+            Expanded(child: child),
+          ],
+        );
       },
     );
   }
@@ -138,53 +142,78 @@ class AppMenuBar extends StatelessWidget {
 
 List<PlatformMenuItem> _macMenus(WorkspaceCommands c, bool active) {
   return [
-    PlatformMenu(label: AppConstants.appTitle, menus: [
-      PlatformMenuItemGroup(members: [
-        PlatformProvidedMenuItem(type: PlatformProvidedMenuItemType.about),
-      ]),
-      PlatformMenuItemGroup(members: [
-        PlatformMenuItem(
-          label: c.settings.label,
-          shortcut: c.settings.shortcut,
-          onSelected: active ? c.settings.onPressed : null,
+    PlatformMenu(
+      label: AppConstants.appTitle,
+      menus: [
+        PlatformMenuItemGroup(
+          members: [
+            PlatformProvidedMenuItem(type: PlatformProvidedMenuItemType.about),
+          ],
         ),
-      ]),
-      PlatformMenuItemGroup(members: [
-        PlatformProvidedMenuItem(
-          type: PlatformProvidedMenuItemType.servicesSubmenu,
+        PlatformMenuItemGroup(
+          members: [
+            PlatformMenuItem(
+              label: c.settings.label,
+              shortcut: c.settings.shortcut,
+              onSelected: active ? c.settings.onPressed : null,
+            ),
+          ],
         ),
-      ]),
-      PlatformMenuItemGroup(members: [
-        PlatformProvidedMenuItem(type: PlatformProvidedMenuItemType.hide),
-        PlatformProvidedMenuItem(
-          type: PlatformProvidedMenuItemType.hideOtherApplications,
+        PlatformMenuItemGroup(
+          members: [
+            PlatformProvidedMenuItem(
+              type: PlatformProvidedMenuItemType.servicesSubmenu,
+            ),
+          ],
         ),
-        PlatformProvidedMenuItem(
-          type: PlatformProvidedMenuItemType.showAllApplications,
+        PlatformMenuItemGroup(
+          members: [
+            PlatformProvidedMenuItem(type: PlatformProvidedMenuItemType.hide),
+            PlatformProvidedMenuItem(
+              type: PlatformProvidedMenuItemType.hideOtherApplications,
+            ),
+            PlatformProvidedMenuItem(
+              type: PlatformProvidedMenuItemType.showAllApplications,
+            ),
+          ],
         ),
-      ]),
-      PlatformMenuItemGroup(members: [
-        PlatformProvidedMenuItem(type: PlatformProvidedMenuItemType.quit),
-      ]),
-    ]),
+        PlatformMenuItemGroup(
+          members: [
+            PlatformProvidedMenuItem(type: PlatformProvidedMenuItemType.quit),
+          ],
+        ),
+      ],
+    ),
     for (final m in _menus(c, mac: true))
-      PlatformMenu(label: m.label, menus: _macItems(m.nodes, c.context, active)),
-    PlatformMenu(label: 'Window', menus: [
-      PlatformMenuItemGroup(members: [
-        PlatformProvidedMenuItem(
-          type: PlatformProvidedMenuItemType.minimizeWindow,
+      PlatformMenu(
+        label: m.label,
+        menus: _macItems(m.nodes, c.context, active),
+      ),
+    PlatformMenu(
+      label: 'Window',
+      menus: [
+        PlatformMenuItemGroup(
+          members: [
+            PlatformProvidedMenuItem(
+              type: PlatformProvidedMenuItemType.minimizeWindow,
+            ),
+            PlatformProvidedMenuItem(
+              type: PlatformProvidedMenuItemType.zoomWindow,
+            ),
+            PlatformProvidedMenuItem(
+              type: PlatformProvidedMenuItemType.toggleFullScreen,
+            ),
+          ],
         ),
-        PlatformProvidedMenuItem(type: PlatformProvidedMenuItemType.zoomWindow),
-        PlatformProvidedMenuItem(
-          type: PlatformProvidedMenuItemType.toggleFullScreen,
+        PlatformMenuItemGroup(
+          members: [
+            PlatformProvidedMenuItem(
+              type: PlatformProvidedMenuItemType.arrangeWindowsInFront,
+            ),
+          ],
         ),
-      ]),
-      PlatformMenuItemGroup(members: [
-        PlatformProvidedMenuItem(
-          type: PlatformProvidedMenuItemType.arrangeWindowsInFront,
-        ),
-      ]),
-    ]),
+      ],
+    ),
   ];
 }
 
@@ -277,12 +306,15 @@ class _WindowMenuBar extends StatelessWidget {
       ),
     );
     return Theme(
-      data: theme.copyWith(menuButtonTheme: MenuButtonThemeData(style: compact)),
+      data: theme.copyWith(
+        menuButtonTheme: MenuButtonThemeData(style: compact),
+      ),
       child: MenuBar(
         style: MenuStyle(
           elevation: const WidgetStatePropertyAll(0),
-          backgroundColor:
-              WidgetStatePropertyAll(theme.colorScheme.surfaceContainerLow),
+          backgroundColor: WidgetStatePropertyAll(
+            theme.colorScheme.surfaceContainerLow,
+          ),
           shape: const WidgetStatePropertyAll(RoundedRectangleBorder()),
           padding: const WidgetStatePropertyAll(
             EdgeInsets.symmetric(horizontal: 4),

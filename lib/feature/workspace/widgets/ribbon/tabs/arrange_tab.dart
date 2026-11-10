@@ -39,9 +39,16 @@ List<Widget> arrangeTabGroups(WorkspaceCommands c) => [
     children: [
       RibbonButton.small(c.group),
       RibbonButton.small(c.ungroup),
+      RibbonButton.small(c.closedPath),
+    ],
+  ),
+  RibbonGroup(
+    label: c.context.l10n.shapeOrderGroup,
+    children: [
       RibbonButton.small(c.bringForward),
       RibbonButton.small(c.sendBackward),
-      RibbonButton.small(c.closedPath),
+      RibbonButton.small(c.bringToFront),
+      RibbonButton.small(c.sendToBack),
     ],
   ),
 ];

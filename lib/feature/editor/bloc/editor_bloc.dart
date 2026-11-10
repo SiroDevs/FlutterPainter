@@ -115,7 +115,9 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     );
     _reduce<VertexPointDeleted>((s, e) => VertexLogic.remove(s, e.index));
     _reduce<VertexSegmentSplit>((s, e) => VertexLogic.split(s, e.index));
-    _reduce<ShapeReordered>((s, e) => ShapeLogic.reorder(s, e.direction));
+    _reduce<ShapeReordered>(
+      (s, e) => ShapeLogic.reorder(s, e.direction, toExtreme: e.toExtreme),
+    );
     _reduce<ShapeMovedToLayer>((s, e) => ShapeLogic.moveToLayer(s, e.layer));
     _reduce<ShapeRenamed>(
       (s, e) => ShapeLogic.rename(s, e.name, layer: e.layer, index: e.index),
@@ -145,6 +147,7 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<LayerMoved>((s, e) => LayerLogic.move(s, e.index, e.direction));
     _reduce<LayerActivated>((s, e) => LayerLogic.activate(s, e.index));
   }
+
   void _registerDocument() {
     _reduce<DrawingRenamed>((s, e) => DocumentLogic.rename(s, e.name));
     _reduce<CanvasResized>(

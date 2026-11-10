@@ -53,9 +53,10 @@ class VertexSegmentSplit extends EditorEvent {
 }
 
 class ShapeReordered extends EditorEvent {
-  const ShapeReordered(this.direction);
+  const ShapeReordered(this.direction, {this.toExtreme = false});
 
   final int direction;
+  final bool toExtreme;
 }
 
 class ShapeMovedToLayer extends EditorEvent {
