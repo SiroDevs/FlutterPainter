@@ -120,18 +120,31 @@ abstract class ShapeLogic {
       width: bounds.width * factor,
       height: bounds.height * factor,
     );
-    return state
-        .withShapeChanges({
-          for (final index in indices)
-            index: state.layer.shapes[index].copyWith(
-              points: remapPoints(
-                state.layer.shapes[index].points,
-                bounds,
-                target,
+    return state.withShapeChanges({
+      for (final index in indices)
+        index: state.layer.shapes[index].copyWith(
+          points: remapPoints(state.layer.shapes[index].points, bounds, target),
+        ),
+    }).commit();
+  }
+
+  static EditorState flip(EditorState state, {required bool horizontal}) {
+    final indices = state.validSelectedIndices;
+    final bounds = state.selectedBounds;
+    if (indices.isEmpty || bounds == null) return state;
+    return state.withShapeChanges({
+      for (final index in indices)
+        index: state.layer.shapes[index].copyWith(
+          points: [
+            for (final point in state.layer.shapes[index].points)
+              Offset(
+                horizontal ? bounds.left + bounds.right - point.dx : point.dx,
+                horizontal ? point.dy : bounds.top + bounds.bottom - point.dy,
               ),
-            ),
-        })
-        .commit();
+          ],
+          rotation: -state.layer.shapes[index].rotation,
+        ),
+    }).commit();
   }
 
   /// [direction] +1 draws the shape later (in front), -1 earlier (behind).

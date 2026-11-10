@@ -238,6 +238,52 @@ class AppLocalizationsSw extends AppLocalizations {
   String get shapeScaleDown => 'Punguza ukubwa kwa 10%';
 
   @override
+  String get ribbonArrangeTab => 'Panga';
+
+  @override
+  String get projectTransferGroup => 'Hamisha kati ya miradi';
+
+  @override
+  String get projectCopySelection => 'Nakili vilivyochaguliwa';
+
+  @override
+  String get projectCopyLayer => 'Nakili tabaka';
+
+  @override
+  String get projectPaste => 'Bandika';
+
+  @override
+  String get projectImportGroup => 'Leta';
+
+  @override
+  String get projectImport => 'Leta mradi…';
+
+  @override
+  String projectImportComplete(int count) {
+    return 'Tabaka $count yameletwa.';
+  }
+
+  @override
+  String projectImportFailed(String path) {
+    return 'Imeshindwa kuleta $path.';
+  }
+
+  @override
+  String get shapeTransformGroup => 'Badilisha umbo';
+
+  @override
+  String get shapeSelectionGroup => 'Chaguo';
+
+  @override
+  String get shapeFlipHorizontal => 'Geuza mlalo';
+
+  @override
+  String get shapeFlipVertical => 'Geuza wima';
+
+  @override
+  String get shapeClosedPath => 'Njia iliyofungwa';
+
+  @override
   String get groupMethodsPublic => 'Onyesha mbinu za maumbo ya kikundi';
 
   @override

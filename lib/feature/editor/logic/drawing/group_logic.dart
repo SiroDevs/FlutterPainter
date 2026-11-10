@@ -1,6 +1,3 @@
-// Dart imports:
-import 'dart:ui';
-
 // Project imports:
 import '../../../../domain/models/shapes/shape.dart';
 import '../../bloc/editor_bloc.dart';
@@ -56,61 +53,6 @@ abstract class GroupLogic {
           ),
     };
     return state.withShapeChanges(changes).selectIndices(indices).commit();
-  }
-
-  static EditorState copy(EditorState state) {
-    final indices = state.validSelectedIndices;
-    if (indices.isEmpty) return state;
-    final groupId = state.layer.shapes[indices.first].groupId;
-    if (groupId == null ||
-        indices.any((index) => state.layer.shapes[index].groupId != groupId)) {
-      return state;
-    }
-    final shapes = [
-      for (final shape in state.layer.shapes)
-        if (shape.groupId == groupId) shape,
-    ];
-    return state.copyWith(groupClipboard: shapes);
-  }
-
-  static EditorState paste(EditorState state) {
-    final copied = state.groupClipboard;
-    if (copied.isEmpty) return state;
-    final usedIds = {
-      for (final layer in state.drawing.layers)
-        for (final shape in layer.shapes)
-          if (shape.groupId != null) shape.groupId,
-    };
-    var suffix = state.revision + 1;
-    var groupId = 'group-$suffix';
-    while (usedIds.contains(groupId)) {
-      suffix++;
-      groupId = 'group-$suffix';
-    }
-    final pasted = [
-      for (final shape in copied)
-        shape.copyWith(
-          points: [
-            for (final point in shape.points) point + const Offset(3, 3),
-          ],
-          groupId: groupId,
-        ),
-    ];
-    final targetLayer = state.layer.copyWith(
-      visible: true,
-      shapes: [...state.layer.shapes, ...pasted],
-    );
-    final next = state.withLayers(
-      replacedAt(state.drawing.layers, state.layerIndex, targetLayer),
-    );
-    return next.selectIndices([
-      for (
-        var index = state.layer.shapes.length;
-        index < state.layer.shapes.length + pasted.length;
-        index++
-      )
-        index,
-    ]).commit();
   }
 
   static EditorState rename(

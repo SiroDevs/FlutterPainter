@@ -512,6 +512,90 @@ abstract class AppLocalizations {
   /// **'Scale down 10%'**
   String get shapeScaleDown;
 
+  /// No description provided for @ribbonArrangeTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrange'**
+  String get ribbonArrangeTab;
+
+  /// No description provided for @projectTransferGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Project transfer'**
+  String get projectTransferGroup;
+
+  /// No description provided for @projectCopySelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy selection'**
+  String get projectCopySelection;
+
+  /// No description provided for @projectCopyLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy layer'**
+  String get projectCopyLayer;
+
+  /// No description provided for @projectPaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste'**
+  String get projectPaste;
+
+  /// No description provided for @projectImportGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get projectImportGroup;
+
+  /// No description provided for @projectImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Import project…'**
+  String get projectImport;
+
+  /// No description provided for @projectImportComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported {count} layers.'**
+  String projectImportComplete(int count);
+
+  /// No description provided for @projectImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not import {path}.'**
+  String projectImportFailed(String path);
+
+  /// No description provided for @shapeTransformGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Transform'**
+  String get shapeTransformGroup;
+
+  /// No description provided for @shapeSelectionGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Selection'**
+  String get shapeSelectionGroup;
+
+  /// No description provided for @shapeFlipHorizontal.
+  ///
+  /// In en, this message translates to:
+  /// **'Flip horizontal'**
+  String get shapeFlipHorizontal;
+
+  /// No description provided for @shapeFlipVertical.
+  ///
+  /// In en, this message translates to:
+  /// **'Flip vertical'**
+  String get shapeFlipVertical;
+
+  /// No description provided for @shapeClosedPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed path'**
+  String get shapeClosedPath;
+
   /// No description provided for @groupMethodsPublic.
   ///
   /// In en, this message translates to:

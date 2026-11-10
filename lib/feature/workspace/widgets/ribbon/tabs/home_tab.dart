@@ -2,7 +2,6 @@
 import 'package:flutter/widgets.dart';
 
 // Project imports:
-import '../../../../../core/utils/l10n_ext.dart';
 import '../../../commands/workspace_commands.dart';
 import '../ribbon_parts.dart';
 
@@ -11,37 +10,6 @@ List<Widget> homeTabGroups(WorkspaceCommands c) => [
   RibbonGroup(
     label: 'History',
     children: [RibbonButton.large(c.undo), RibbonButton.large(c.redo)],
-  ),
-  RibbonGroup(
-    label: 'Shape',
-    children: [
-      RibbonStack(
-        children: [
-          RibbonButton.small(c.duplicate),
-          RibbonButton.small(c.delete),
-          RibbonButton.small(c.closedPath),
-        ],
-      ),
-    ],
-  ),
-  RibbonGroup(
-    label: 'Arrange',
-    children: [
-      RibbonStack(
-        children: [
-          RibbonButton.small(
-            c.bringForward,
-            label: c.context.l10n.shapeForward,
-          ),
-          RibbonButton.small(
-            c.sendBackward,
-            label: c.context.l10n.shapeBack,
-          ),
-          RibbonButton.small(c.group),
-          RibbonButton.small(c.ungroup),
-        ],
-      ),
-    ],
   ),
   RibbonGroup(
     label: 'Style',

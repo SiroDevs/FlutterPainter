@@ -56,6 +56,30 @@
     "canvasSelectGroupMemberHint": "Bonyeza Ctrl na ubofye ili kuchagua kipengee hiki pekee kutoka kwenye kundi lake",
     "layerEditGroup": "Hariri jina la kikundi",
     "shapeScaleDown": "Punguza ukubwa kwa 10%",
+    "ribbonArrangeTab": "Panga",
+    "projectTransferGroup": "Hamisha kati ya miradi",
+    "projectCopySelection": "Nakili vilivyochaguliwa",
+    "projectCopyLayer": "Nakili tabaka",
+    "projectPaste": "Bandika",
+    "projectImportGroup": "Leta",
+    "projectImport": "Leta mradi…",
+    "projectImportComplete": "Tabaka {count} yameletwa.",
+    "@projectImportComplete": {
+        "placeholders": {
+            "count": { "type": "int" }
+        }
+    },
+    "projectImportFailed": "Imeshindwa kuleta {path}.",
+    "@projectImportFailed": {
+        "placeholders": {
+            "path": { "type": "String" }
+        }
+    },
+    "shapeTransformGroup": "Badilisha umbo",
+    "shapeSelectionGroup": "Chaguo",
+    "shapeFlipHorizontal": "Geuza mlalo",
+    "shapeFlipVertical": "Geuza wima",
+    "shapeClosedPath": "Njia iliyofungwa",
     "groupMethodsPublic": "Onyesha mbinu za maumbo ya kikundi",
     "groupMethodsPublicHelp": "Ikiwashwa, tabaka huita mbinu ya kila umbo moja kwa moja. Ikizimwa, kikundi huwa na mbinu moja ya paint() na mbinu za maumbo hubaki za ndani.",
     "exportGenerating": "Inatengeneza msimbo wa Dart…",

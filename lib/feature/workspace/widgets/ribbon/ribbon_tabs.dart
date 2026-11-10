@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 // Project imports:
 import '../../commands/workspace_commands.dart';
 import 'tabs/file_tab.dart';
+import 'tabs/arrange_tab.dart';
 import 'tabs/home_tab.dart';
 import 'tabs/image_tab.dart';
 import 'tabs/insert_tab.dart';
@@ -14,6 +15,7 @@ import 'tabs/view_tab.dart';
 enum RibbonTab {
   file('File'),
   home('Home'),
+  arrange('Arrange'),
   insert('Insert'),
   layer('Layer'),
   image('Image'),
@@ -32,4 +34,5 @@ List<Widget> ribbonGroups(RibbonTab tab, WorkspaceCommands c) => switch (tab) {
   RibbonTab.layer => layerTabGroups(c),
   RibbonTab.image => imageTabGroups(c),
   RibbonTab.view => viewTabGroups(c),
+  RibbonTab.arrange => arrangeTabGroups(c),
 };

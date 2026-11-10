@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../commands/commands_builder.dart';
 import '../../commands/workspace_commands.dart';
+import '../../../../core/utils/l10n_ext.dart';
 import 'command_icon_button.dart';
 import 'ribbon_tabs.dart';
 
@@ -80,57 +81,61 @@ class _TabRow extends StatelessWidget {
     final collapsed = controller.collapsed.value;
     return SizedBox(
       height: Ribbon._tabHeight,
-      child: Row(children: [
-        Expanded(
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(left: 4),
-            children: [
-              for (final t in RibbonTab.values)
-                _TabLabel(
-                  title: t.title,
-                  selected: t == controller.tab.value && !collapsed,
-                  onTap: () {
-                    controller.tab.value = t;
-                    controller.collapsed.value = false;
-                  },
-                  onDoubleTap: () =>
-                      controller.collapsed.value = !controller.collapsed.value,
-                ),
-            ],
-          ),
-        ),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 170),
-          child: TextButton.icon(
-            style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
-            onPressed: commands.rename.onPressed,
-            icon: const Icon(Icons.edit_outlined, size: 16),
-            label: Text(
-              commands.state.drawing.name,
-              overflow: TextOverflow.ellipsis,
+      child: Row(
+        children: [
+          Expanded(
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(left: 4),
+              children: [
+                for (final t in RibbonTab.values)
+                  _TabLabel(
+                    title: t == RibbonTab.arrange
+                        ? context.l10n.ribbonArrangeTab
+                        : t.title,
+                    selected: t == controller.tab.value && !collapsed,
+                    onTap: () {
+                      controller.tab.value = t;
+                      controller.collapsed.value = false;
+                    },
+                    onDoubleTap: () => controller.collapsed.value =
+                        !controller.collapsed.value,
+                  ),
+              ],
             ),
           ),
-        ),
-        CommandIconButton(commands.undo),
-        CommandIconButton(commands.redo),
-        const SizedBox(width: 4),
-        FilledButton.icon(
-          style: FilledButton.styleFrom(visualDensity: VisualDensity.compact),
-          onPressed: commands.exportDart.onPressed,
-          icon: const Icon(Icons.code, size: 18),
-          label: const Text('Export'),
-        ),
-        CommandIconButton(commands.settings),
-        IconButton(
-          tooltip: collapsed ? 'Expand the ribbon' : 'Collapse the ribbon',
-          iconSize: 20,
-          visualDensity: VisualDensity.compact,
-          icon: Icon(collapsed ? Icons.expand_more : Icons.expand_less),
-          onPressed: () => controller.collapsed.value = !collapsed,
-        ),
-        const SizedBox(width: 4),
-      ]),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 170),
+            child: TextButton.icon(
+              style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+              onPressed: commands.rename.onPressed,
+              icon: const Icon(Icons.edit_outlined, size: 16),
+              label: Text(
+                commands.state.drawing.name,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          CommandIconButton(commands.undo),
+          CommandIconButton(commands.redo),
+          const SizedBox(width: 4),
+          FilledButton.icon(
+            style: FilledButton.styleFrom(visualDensity: VisualDensity.compact),
+            onPressed: commands.exportDart.onPressed,
+            icon: const Icon(Icons.code, size: 18),
+            label: const Text('Export'),
+          ),
+          CommandIconButton(commands.settings),
+          IconButton(
+            tooltip: collapsed ? 'Expand the ribbon' : 'Collapse the ribbon',
+            iconSize: 20,
+            visualDensity: VisualDensity.compact,
+            icon: Icon(collapsed ? Icons.expand_more : Icons.expand_less),
+            onPressed: () => controller.collapsed.value = !collapsed,
+          ),
+          const SizedBox(width: 4),
+        ],
+      ),
     );
   }
 }

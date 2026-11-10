@@ -2,6 +2,7 @@
 import 'package:flutter/widgets.dart';
 
 // Project imports:
+import '../../../../../core/utils/l10n_ext.dart';
 import '../../../commands/workspace_commands.dart';
 import '../ribbon_parts.dart';
 
@@ -9,13 +10,17 @@ import '../ribbon_parts.dart';
 List<Widget> fileTabGroups(WorkspaceCommands c) => [
   RibbonGroup(
     label: 'New',
-    children: [
-      RibbonButton.large(c.newBlank, label: 'Blank canvas'),
-    ],
+    children: [RibbonButton.large(c.newBlank, label: 'Blank canvas')],
   ),
   RibbonGroup(
     label: 'Open',
     children: [RibbonButton.large(c.open, label: 'Open')],
+  ),
+  RibbonGroup(
+    label: c.context.l10n.projectImportGroup,
+    children: [
+      RibbonButton.large(c.importProject, label: c.context.l10n.projectImport),
+    ],
   ),
   RibbonGroup(
     label: 'Save',

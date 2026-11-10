@@ -13,6 +13,7 @@ import '../../../core/utils/image_util.dart';
 import '../../../domain/models/drawing/drawing.dart';
 import '../../../domain/models/drawing/edit_history.dart';
 import '../../../domain/models/drawing/paint_layer.dart';
+import '../../../domain/models/drawing/project_transfer.dart';
 import '../../../domain/models/drawing/reference_image.dart';
 import '../../../domain/models/shapes/shape.dart';
 import '../../../domain/models/shapes/shape_gradient.dart';
@@ -105,9 +106,10 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<SelectAllRequested>((s, e) => ShapeLogic.selectAll(s));
     _reduce<ShapesGrouped>((s, e) => GroupLogic.group(s));
     _reduce<ShapesUngrouped>((s, e) => GroupLogic.ungroup(s));
-    _reduce<GroupCopied>((s, e) => GroupLogic.copy(s));
-    _reduce<GroupPasted>((s, e) => GroupLogic.paste(s));
     _reduce<SelectionScaled>((s, e) => ShapeLogic.scale(s, e.factor));
+    _reduce<SelectionFlipped>(
+      (s, e) => ShapeLogic.flip(s, horizontal: e.horizontal),
+    );
     _reduce<GroupRenamed>(
       (s, e) => GroupLogic.rename(s, e.layer, e.groupId, e.name),
     );
@@ -143,7 +145,6 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<LayerMoved>((s, e) => LayerLogic.move(s, e.index, e.direction));
     _reduce<LayerActivated>((s, e) => LayerLogic.activate(s, e.index));
   }
-
   void _registerDocument() {
     _reduce<DrawingRenamed>((s, e) => DocumentLogic.rename(s, e.name));
     _reduce<CanvasResized>(
@@ -151,6 +152,10 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     );
     _reduce<DocumentSaved>((s, e) => DocumentLogic.saved(s, e.path));
     _reduce<CodeApplied>((s, e) => DocumentLogic.applyCode(s, e.layers));
+    on<ProjectTransferEvent>((event, emit) async {
+      emit(ProjectTransferLogic.apply(state, event));
+      await _syncImages(emit);
+    });
   }
 
   void _registerImages() {

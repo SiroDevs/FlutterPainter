@@ -20,18 +20,16 @@ class ShapesUngrouped extends EditorEvent {
   const ShapesUngrouped();
 }
 
-class GroupCopied extends EditorEvent {
-  const GroupCopied();
-}
-
-class GroupPasted extends EditorEvent {
-  const GroupPasted();
-}
-
 class SelectionScaled extends EditorEvent {
   const SelectionScaled(this.factor);
 
   final double factor;
+}
+
+class SelectionFlipped extends EditorEvent {
+  const SelectionFlipped({required this.horizontal});
+
+  final bool horizontal;
 }
 
 class GroupRenamed extends EditorEvent {

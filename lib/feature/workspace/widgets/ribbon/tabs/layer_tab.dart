@@ -11,6 +11,7 @@ List<Widget> layerTabGroups(WorkspaceCommands c) => [
     label: 'Layers',
     children: [
       RibbonButton.large(c.layerAdd),
+      RibbonButton.small(c.copyLayer),
       RibbonStack(
         children: [
           RibbonButton.small(c.layerDelete),

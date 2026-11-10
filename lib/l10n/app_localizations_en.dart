@@ -237,6 +237,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shapeScaleDown => 'Scale down 10%';
 
   @override
+  String get ribbonArrangeTab => 'Arrange';
+
+  @override
+  String get projectTransferGroup => 'Project transfer';
+
+  @override
+  String get projectCopySelection => 'Copy selection';
+
+  @override
+  String get projectCopyLayer => 'Copy layer';
+
+  @override
+  String get projectPaste => 'Paste';
+
+  @override
+  String get projectImportGroup => 'Import';
+
+  @override
+  String get projectImport => 'Import project…';
+
+  @override
+  String projectImportComplete(int count) {
+    return 'Imported $count layers.';
+  }
+
+  @override
+  String projectImportFailed(String path) {
+    return 'Could not import $path.';
+  }
+
+  @override
+  String get shapeTransformGroup => 'Transform';
+
+  @override
+  String get shapeSelectionGroup => 'Selection';
+
+  @override
+  String get shapeFlipHorizontal => 'Flip horizontal';
+
+  @override
+  String get shapeFlipVertical => 'Flip vertical';
+
+  @override
+  String get shapeClosedPath => 'Closed path';
+
+  @override
   String get groupMethodsPublic => 'Expose group shape methods';
 
   @override

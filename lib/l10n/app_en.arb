@@ -83,6 +83,30 @@
   "canvasSelectGroupMemberHint": "Ctrl-click to select only this item from its group",
   "layerEditGroup": "Edit group name",
   "shapeScaleDown": "Scale down 10%",
+  "ribbonArrangeTab": "Arrange",
+  "projectTransferGroup": "Project transfer",
+  "projectCopySelection": "Copy selection",
+  "projectCopyLayer": "Copy layer",
+  "projectPaste": "Paste",
+  "projectImportGroup": "Import",
+  "projectImport": "Import project…",
+  "projectImportComplete": "Imported {count} layers.",
+  "@projectImportComplete": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "projectImportFailed": "Could not import {path}.",
+  "@projectImportFailed": {
+    "placeholders": {
+      "path": { "type": "String" }
+    }
+  },
+  "shapeTransformGroup": "Transform",
+  "shapeSelectionGroup": "Selection",
+  "shapeFlipHorizontal": "Flip horizontal",
+  "shapeFlipVertical": "Flip vertical",
+  "shapeClosedPath": "Closed path",
   "groupMethodsPublic": "Expose group shape methods",
   "groupMethodsPublicHelp": "On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private.",
   "exportGenerating": "Generating Dart code…",
