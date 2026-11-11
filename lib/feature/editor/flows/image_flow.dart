@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../common/widgets/progress/custom_snackbar.dart';
 import '../../../core/di/injectable.dart';
 import '../../../core/platform/file_dialogs.dart';
+import '../../../core/utils/l10n_ext.dart';
 import '../bloc/editor_bloc.dart';
 
 /// Lets the user pick a picture and puts it on the active layer, or on a new
@@ -15,11 +16,11 @@ Future<void> chooseLayerImage(
   bool onNewLayer = false,
 }) async {
   try {
-    final bytes = await getIt<FileDialogs>().pickImageBytes();
+    final bytes = await getIt<FileDialogs>().pickImageBytes(context.l10n);
     if (bytes != null) bloc.add(ImageLoaded(bytes, onNewLayer: onNewLayer));
   } catch (e) {
     if (context.mounted) {
-      CustomSnackbar.show(context, 'Could not load that image: $e');
+      CustomSnackbar.show(context, context.l10n.imageLoadFailed('$e'));
     }
   }
 }

@@ -1,6 +1,9 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
+import '../../../core/utils/l10n_ext.dart';
+
 /// Asks for a line of text. Null if cancelled.
 Future<String?> promptText(
   BuildContext context, {
@@ -18,10 +21,13 @@ Future<String?> promptText(
         onSubmitted: (v) => Navigator.pop(ctx, v.trim()),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+        TextButton(
+          onPressed: () => Navigator.pop(ctx),
+          child: Text(ctx.l10n.cancel),
+        ),
         FilledButton(
           onPressed: () => Navigator.pop(ctx, ctl.text.trim()),
-          child: const Text('OK'),
+          child: Text(ctx.l10n.buttonOk),
         ),
       ],
     ),
@@ -35,24 +41,29 @@ Future<(double, double)?> promptSize(BuildContext context, double w, double h) {
   return showDialog<(double, double)>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: const Text('Canvas size (design units)'),
-      content: Row(children: [
-        Expanded(
-          child: TextField(
-            controller: wc,
-            decoration: const InputDecoration(labelText: 'Width'),
+      title: Text(ctx.l10n.canvasSizeTitle),
+      content: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: wc,
+              decoration: InputDecoration(labelText: ctx.l10n.fieldWidth),
+            ),
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: TextField(
-            controller: hc,
-            decoration: const InputDecoration(labelText: 'Height'),
+          const SizedBox(width: 12),
+          Expanded(
+            child: TextField(
+              controller: hc,
+              decoration: InputDecoration(labelText: ctx.l10n.fieldHeight),
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+        TextButton(
+          onPressed: () => Navigator.pop(ctx),
+          child: Text(ctx.l10n.cancel),
+        ),
         FilledButton(
           onPressed: () {
             final nw = double.tryParse(wc.text);
@@ -61,7 +72,7 @@ Future<(double, double)?> promptSize(BuildContext context, double w, double h) {
               Navigator.pop(ctx, (nw, nh));
             }
           },
-          child: const Text('Resize'),
+          child: Text(ctx.l10n.buttonResize),
         ),
       ],
     ),
@@ -75,20 +86,20 @@ Future<SaveChoice> askSaveChanges(BuildContext context, String name) async {
   final choice = await showDialog<SaveChoice>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: Text('Save changes to "$name"?'),
-      content: const Text('Your changes will be lost if you do not save them.'),
+      title: Text(ctx.l10n.saveChangesTitle(name)),
+      content: Text(ctx.l10n.unsavedChangesMessage),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, SaveChoice.cancel),
-          child: const Text('Cancel'),
+          child: Text(ctx.l10n.cancel),
         ),
         TextButton(
           onPressed: () => Navigator.pop(ctx, SaveChoice.discard),
-          child: const Text("Don't save"),
+          child: Text(ctx.l10n.buttonDontSave),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(ctx, SaveChoice.save),
-          child: const Text('Save'),
+          child: Text(ctx.l10n.fileSave),
         ),
       ],
     ),
@@ -102,19 +113,19 @@ Future<bool> askRecover(BuildContext context, List<String> titles) async {
     context: context,
     barrierDismissible: false,
     builder: (ctx) => AlertDialog(
-      title: const Text('Recover unsaved work?'),
+      title: Text(ctx.l10n.recoverUnsavedTitle),
       content: Text(
-        'These projects had unsaved changes when Flutter Painter last closed:\n\n'
+        '${ctx.l10n.recoverUnsavedIntro}\n\n'
         '${titles.map((t) => '  - $t').join('\n')}',
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
-          child: const Text('Discard'),
+          child: Text(ctx.l10n.buttonDiscard),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(ctx, true),
-          child: const Text('Restore'),
+          child: Text(ctx.l10n.buttonRestore),
         ),
       ],
     ),

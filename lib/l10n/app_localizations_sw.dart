@@ -10,16 +10,17 @@ class AppLocalizationsSw extends AppLocalizations {
   AppLocalizationsSw([String locale = 'sw']) : super(locale);
 
   @override
-  String get newProject => 'New Project';
+  String get newProject => 'Mradi Mpya';
 
   @override
-  String get newProjectTooltip => 'Start a new project (Ctrl+N)';
+  String get newProjectTooltip => 'Anzisha mradi mpya (Ctrl+N)';
 
   @override
-  String get inlineCode => 'Inline Code';
+  String get inlineCode => 'Msimbo wa Ndani';
 
   @override
-  String get inlineCodeTooltip => 'Show or hide the inline code view';
+  String get inlineCodeTooltip =>
+      'Onyesha au ficha mwonekano wa msimbo wa ndani';
 
   @override
   String get quickCode => 'Msimbo wa Haraka';
@@ -71,37 +72,37 @@ class AppLocalizationsSw extends AppLocalizations {
   String get quickCodeClose => 'Funga Msimbo wa Haraka';
 
   @override
-  String get openFullEditor => 'Open the full code editor';
+  String get openFullEditor => 'Fungua kihariri kamili cha msimbo';
 
   @override
-  String get undo => 'Undo';
+  String get undo => 'Tendua';
 
   @override
-  String get removeFileTooltip => 'Remove this file and its shapes';
+  String get removeFileTooltip => 'Ondoa faili hili na maumbo yake';
 
   @override
-  String get statusIdle => 'Edit the code and the canvas follows';
+  String get statusIdle => 'Hariri msimbo ili turubai ifuate';
 
   @override
-  String get statusRendered => 'Canvas updated from the code';
+  String get statusRendered => 'Turubai imesasishwa kutoka kwenye msimbo';
 
   @override
   String get statusUnreadable =>
-      'Cannot read this code yet; the canvas is unchanged';
+      'Msimbo huu hauwezi kusomwa bado; turubai haijabadilika';
 
   @override
   String statusSkipped(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count statements were skipped',
-      one: '1 statement was skipped',
+      other: 'Kauli $count zimerukwa',
+      one: 'Kauli 1 imerukwa',
     );
     return '$_temp0';
   }
 
   @override
-  String get colorMoreTooltip => 'Open the color picker';
+  String get colorMoreTooltip => 'Fungua kichagua rangi';
 
   @override
   String get paintBucketTool => 'Ndoo ya rangi';
@@ -111,58 +112,58 @@ class AppLocalizationsSw extends AppLocalizations {
       'Bofya ndani ya umbo lililofungwa kulijaza kwa rangi ya sasa ya kujaza.';
 
   @override
-  String get colorPickerTitle => 'Color picker';
+  String get colorPickerTitle => 'Kichagua rangi';
 
   @override
-  String get colorSolid => 'Solid';
+  String get colorSolid => 'Rangi moja';
 
   @override
-  String get colorGradient => 'Gradient';
+  String get colorGradient => 'Mchanganyiko wa rangi';
 
   @override
-  String get colorWheel => 'Wheel';
+  String get colorWheel => 'Gurudumu';
 
   @override
-  String get colorSquare => 'Square';
+  String get colorSquare => 'Mraba';
 
   @override
-  String get colorHexCode => 'Hex code';
+  String get colorHexCode => 'Msimbo wa Hex';
 
   @override
-  String get colorBrightness => 'Brightness';
+  String get colorBrightness => 'Mwangaza';
 
   @override
-  String get colorOpacity => 'Opacity';
+  String get colorOpacity => 'Uwazi';
 
   @override
-  String get gradientLinear => 'Linear';
+  String get gradientLinear => 'Mstari';
 
   @override
-  String get gradientRadial => 'Radial';
+  String get gradientRadial => 'Duara';
 
   @override
-  String get gradientSweep => 'Sweep';
+  String get gradientSweep => 'Mzunguko';
 
   @override
-  String get gradientAngle => 'Angle';
+  String get gradientAngle => 'Pembe';
 
   @override
-  String get gradientRadius => 'Radius';
+  String get gradientRadius => 'Kipenyo';
 
   @override
-  String get gradientAddStop => 'Add stop';
+  String get gradientAddStop => 'Ongeza kikomo';
 
   @override
-  String get gradientRemoveStop => 'Remove stop';
+  String get gradientRemoveStop => 'Ondoa kikomo';
 
   @override
-  String get gradientStopPosition => 'Position';
+  String get gradientStopPosition => 'Nafasi';
 
   @override
-  String get apply => 'Apply';
+  String get apply => 'Tumia';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Ghairi';
 
   @override
   String get shapeGroup => 'Unganisha';
@@ -362,4 +363,814 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get exportGenerationFailed => 'Imeshindwa kutengeneza msimbo wa Dart.';
+
+  @override
+  String get settingsTitle => 'Mipangilio';
+
+  @override
+  String get settingsGeneral => 'Jumla';
+
+  @override
+  String get settingsProject => 'Mradi';
+
+  @override
+  String get settingsAbout => 'Kuhusu';
+
+  @override
+  String get settingsLanguage => 'Lugha';
+
+  @override
+  String get settingsLanguageHelp => 'Chagua lugha itakayotumiwa na programu.';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageFrench => 'Français';
+
+  @override
+  String get languageSwahili => 'Kiswahili';
+
+  @override
+  String get previewNone => 'Zima (rangi halisi)';
+
+  @override
+  String get previewGrayscale => 'Vivuli vya kijivu';
+
+  @override
+  String get previewProtanopia => 'Protanopia (bila nyekundu)';
+
+  @override
+  String get previewDeuteranopia => 'Deuteranopia (bila kijani)';
+
+  @override
+  String get previewTritanopia => 'Tritanopia (bila bluu)';
+
+  @override
+  String get settingsAppearance => 'Mwonekano';
+
+  @override
+  String get settingsTheme => 'Mandhari';
+
+  @override
+  String get themeLight => 'Nyepesi';
+
+  @override
+  String get themeDark => 'Giza';
+
+  @override
+  String get themeSystem => 'Mfumo';
+
+  @override
+  String get settingsInterface => 'Kiolesura';
+
+  @override
+  String get interfaceMinimal => 'Rahisi';
+
+  @override
+  String get interfaceAdvanced => 'Kina';
+
+  @override
+  String get interfaceHelp =>
+      'Mwonekano wa kina huonyesha utepe na paneli za pembeni. Mwonekano rahisi huacha turubai, zana na rangi; amri hubaki kwenye menyu.';
+
+  @override
+  String get settingsCodeExport => 'Utoaji wa msimbo';
+
+  @override
+  String get settingsCodeStructure => 'Muundo wa msimbo';
+
+  @override
+  String get codeRefactored => 'Uliopangwa upya';
+
+  @override
+  String get codeMonolithic => 'Faili moja';
+
+  @override
+  String get codeRefactoredHelp =>
+      'Mchoraji, darasa moja kwa kila tabaka kwenye faili lake, kitendaji kimoja kwa kila umbo, na paleti ya rangi.';
+
+  @override
+  String get codeMonolithicHelp =>
+      'Faili moja ya msimbo yenye darasa la mchoraji na mbinu moja kwa kila tabaka.';
+
+  @override
+  String get settingsColourManagement => 'Udhibiti wa rangi';
+
+  @override
+  String get settingsColourVision => 'Muhtasari wa uoni wa rangi';
+
+  @override
+  String get settingsColourVisionHelp =>
+      'Hukadiria jinsi turubai inaweza kuonekana kwa mtu mwenye tofauti ya uoni wa rangi. Haibadilishi mradi wala msimbo unaotolewa.';
+
+  @override
+  String get settingsColourFormat => 'Muundo wa rangi kwenye msimbo unaotolewa';
+
+  @override
+  String get settingsColourFormatHelp =>
+      'Chagua jinsi rangi zinavyoandikwa kwenye Dart inayozalishwa.';
+
+  @override
+  String get settingsColourConstants =>
+      'Kusanya rangi kwenye vigezo vyenye majina';
+
+  @override
+  String get settingsColourConstantsHelp =>
+      'Andika kila rangi tofauti mara moja kama kigezo, kisha maumbo yataitumia.';
+
+  @override
+  String get settingsReset => 'Rejesha chaguo-msingi';
+
+  @override
+  String get settingsDone => 'Imekamilika';
+
+  @override
+  String get projectSettingsDescription =>
+      'Dhibiti jina na turubai ya muundo wa mradi huu.';
+
+  @override
+  String get projectCurrentName => 'Jina la mradi';
+
+  @override
+  String get projectCanvasSize => 'Ukubwa wa turubai';
+
+  @override
+  String get projectRename => 'Badilisha jina la mradi';
+
+  @override
+  String get projectResizeCanvas => 'Badilisha ukubwa wa turubai';
+
+  @override
+  String projectDimensions(String width, String height) {
+    return '$width × $height vipimo vya usanifu';
+  }
+
+  @override
+  String get aboutDescription =>
+      'Studio ya uchoraji ya kuunda wachoraji maalum wa Flutter.';
+
+  @override
+  String get aboutCredits => 'Imetengenezwa na Siro Devs';
+
+  @override
+  String get buttonOk => 'Sawa';
+
+  @override
+  String get canvasSizeTitle => 'Ukubwa wa turubai (vipimo vya usanifu)';
+
+  @override
+  String get fieldWidth => 'Upana';
+
+  @override
+  String get fieldHeight => 'Urefu';
+
+  @override
+  String get buttonResize => 'Badilisha ukubwa';
+
+  @override
+  String saveChangesTitle(String name) {
+    return 'Hifadhi mabadiliko ya \"$name\"?';
+  }
+
+  @override
+  String get unsavedChangesMessage =>
+      'Mabadiliko yako yatapotea usipoyahifadhi.';
+
+  @override
+  String get buttonDontSave => 'Usihifadhi';
+
+  @override
+  String get recoverUnsavedTitle => 'Rejesha kazi ambayo haijahifadhiwa?';
+
+  @override
+  String get recoverUnsavedIntro =>
+      'Miradi hii ilikuwa na mabadiliko ambayo hayakuhifadhiwa Flutter Painter ilipofungwa mara ya mwisho:';
+
+  @override
+  String get buttonDiscard => 'Tupa';
+
+  @override
+  String get buttonRestore => 'Rejesha';
+
+  @override
+  String get fileNewBlank => 'Nouveau turubai tupu';
+
+  @override
+  String get fileOpen => 'Fungua…';
+
+  @override
+  String get fileSave => 'Hifadhi';
+
+  @override
+  String get fileSaveAs => 'Hifadhi kama…';
+
+  @override
+  String get fileAutoSave => 'Hifadhi kiotomatiki';
+
+  @override
+  String get fileAutoSaveHelp =>
+      'Ikiwashwa: andika mabadiliko moja kwa moja kwenye faili la .flp lililofunguliwa. Ikizimwa: hifadhi nakala ya kurejesha hadi uhifadhi.';
+
+  @override
+  String get fileExportDart => 'Hamisha Dart…';
+
+  @override
+  String get fileCodeEditorTooltip => 'Fungua kihariri cha msimbo';
+
+  @override
+  String get fileSettings => 'Mipangilio…';
+
+  @override
+  String get fileRenameProject => 'Badilisha jina la mradi…';
+
+  @override
+  String get projectNameTooltip =>
+      'Jina la mradi (pia hutumika kwa majina ya madarasa)';
+
+  @override
+  String get fileCanvasSize => 'Ukubwa wa turubai…';
+
+  @override
+  String get fileCloseProject => 'Funga mradi';
+
+  @override
+  String get fileExit => 'Toka';
+
+  @override
+  String aboutMenu(String appName) {
+    return 'Kuhusu $appName';
+  }
+
+  @override
+  String get editRedo => 'Rudia';
+
+  @override
+  String get editDeleteTooltip => 'Futa umbo au picha iliyochaguliwa';
+
+  @override
+  String get editPathClosedTooltip =>
+      'Funga au fungua njia ya poligoni au mstari iliyochaguliwa';
+
+  @override
+  String get editFill => 'Jaza';
+
+  @override
+  String get editOutline => 'Muhtasari';
+
+  @override
+  String get editStrokeTooltip => 'Mstari wa nje';
+
+  @override
+  String get imageReplace => 'Badilisha picha…';
+
+  @override
+  String get imageLoad => 'Pakia picha…';
+
+  @override
+  String get imageLoadNewLayer => 'Picha kwenye tabaka jipya…';
+
+  @override
+  String get imagePutLayerTooltip => 'Weka picha kwenye tabaka hili';
+
+  @override
+  String get imageLoadNewLayerTooltip => 'Pakia picha kwenye tabaka jipya';
+
+  @override
+  String get imageSelect => 'Chagua picha';
+
+  @override
+  String get imageSelectTooltip =>
+      'Chagua picha ya tabaka hili (huonyesha vishikio vya kubadilisha ukubwa)';
+
+  @override
+  String get imageMoveResize => 'Sogeza / badilisha ukubwa wa picha';
+
+  @override
+  String get imageMoveResizeTooltip =>
+      'Zana ya kusogeza / kubadilisha ukubwa wa picha';
+
+  @override
+  String get imageFit => 'Tosheleza picha kwenye turubai';
+
+  @override
+  String get imageFitTooltip => 'Tosheleza turubai (weka upya unyooshaji)';
+
+  @override
+  String get imageShow => 'Onyesha picha';
+
+  @override
+  String get imageRemove => 'Ondoa picha';
+
+  @override
+  String get imageLoadTooltip => 'Pakia picha kwenye tabaka jipya';
+
+  @override
+  String get imagePanelShow => 'Onyesha';
+
+  @override
+  String imageOpacity(String value) {
+    return 'Uwazi $value%';
+  }
+
+  @override
+  String imageScale(String value) {
+    return 'Kipimo $value';
+  }
+
+  @override
+  String imagePanelTitle(String name) {
+    return 'Picha kwenye “$name”';
+  }
+
+  @override
+  String get imagePanelPrompt =>
+      'Pakia picha kwenye tabaka hili ili uchore juu yake au uitumie kama mandharinyuma.';
+
+  @override
+  String get viewZoomIn => 'Kuza';
+
+  @override
+  String get viewZoomOut => 'Punguza ukubwa';
+
+  @override
+  String get viewFitWindow => 'Tosheleza dirisha';
+
+  @override
+  String get viewGrid => 'Gridi';
+
+  @override
+  String get viewSnap => 'Shikiza kwenye gridi';
+
+  @override
+  String get viewCanvasBackground => 'Mandharinyuma ya turubai';
+
+  @override
+  String get viewCanvasBackgroundTooltip =>
+      'Badili rangi ya mandharinyuma ya turubai';
+
+  @override
+  String get viewLightTheme => 'Mandhari nyepesi';
+
+  @override
+  String get viewDarkTheme => 'Mandhari ya giza';
+
+  @override
+  String get viewThemeTooltip => 'Badili kati ya mandhari nyepesi na ya giza';
+
+  @override
+  String get menuFile => 'Faili';
+
+  @override
+  String get menuEdit => 'Hariri';
+
+  @override
+  String get menuLayer => 'Tabaka';
+
+  @override
+  String get menuView => 'Tazama';
+
+  @override
+  String get menuTools => 'Zana';
+
+  @override
+  String get menuHelp => 'Msaada';
+
+  @override
+  String get menuWindow => 'Dirisha';
+
+  @override
+  String get ribbonExport => 'Hamisha';
+
+  @override
+  String get ribbonExpand => 'Panua utepe';
+
+  @override
+  String get ribbonCollapse => 'Kunja utepe';
+
+  @override
+  String get ribbonLayers => 'Tabaka';
+
+  @override
+  String get ribbonOrder => 'Mpangilio';
+
+  @override
+  String get ribbonHistory => 'Historia';
+
+  @override
+  String get ribbonStyle => 'Mtindo';
+
+  @override
+  String get ribbonNew => 'Mpya';
+
+  @override
+  String get ribbonOpen => 'Fungua';
+
+  @override
+  String get ribbonBlankCanvas => 'Turubai tupu';
+
+  @override
+  String get ribbonProject => 'Mradi';
+
+  @override
+  String get ribbonApp => 'Programu';
+
+  @override
+  String get ribbonShapes => 'Maumbo';
+
+  @override
+  String get ribbonPaths => 'Njia';
+
+  @override
+  String get ribbonPolygon => 'Poligoni';
+
+  @override
+  String get ribbonPictures => 'Picha';
+
+  @override
+  String get ribbonPicture => 'Picha';
+
+  @override
+  String get ribbonOnNewLayer => 'Kwenye tabaka jipya';
+
+  @override
+  String get ribbonLayersGroup => 'Tabaka';
+
+  @override
+  String get ribbonZoom => 'Kuza';
+
+  @override
+  String get ribbonFit => 'Tosheleza';
+
+  @override
+  String get ribbonShow => 'Onyesha';
+
+  @override
+  String get ribbonCanvas => 'Turubai';
+
+  @override
+  String get ribbonAppearance => 'Mwonekano';
+
+  @override
+  String get ribbonLightDark => 'Nyepesi / giza';
+
+  @override
+  String get ribbonArrange => 'Panga';
+
+  @override
+  String get ribbonAdjust => 'Rekebisha';
+
+  @override
+  String get toolSelectMove => 'Chagua / sogeza';
+
+  @override
+  String get toolMoveImage => 'Sogeza / badilisha ukubwa wa picha ya tabaka';
+
+  @override
+  String get toolRectangle => 'Mstatili';
+
+  @override
+  String get toolEllipse => 'Duara bapa';
+
+  @override
+  String get toolLine => 'Mstari';
+
+  @override
+  String get toolPolygonPath => 'Njia ya poligoni / mstari';
+
+  @override
+  String get toolFreehand => 'Mchoro huru';
+
+  @override
+  String get propertyTitle => 'Sifa';
+
+  @override
+  String get propertyNoSelection =>
+      'Hakuna umbo lililochaguliwa. Mipangilio hii itatumika kwa umbo linalofuata utakalochora.';
+
+  @override
+  String get propertyFill => 'Jaza';
+
+  @override
+  String get propertyStroke => 'Mstari wa mpaka';
+
+  @override
+  String get propertyClosedShape => 'Umbo lililofungwa (linaweza kujazwa)';
+
+  @override
+  String get propertyRenameShape => 'Badili jina la umbo';
+
+  @override
+  String propertyCornerRadius(String value) {
+    return 'Mviringo wa kona: $value';
+  }
+
+  @override
+  String propertyStrokeWidth(String value) {
+    return 'Upana wa mpaka: $value';
+  }
+
+  @override
+  String imageOnLayer(Object name) {
+    return 'Picha kwenye “$name”';
+  }
+
+  @override
+  String get imagePanelHint =>
+      'Pakia picha kwenye tabaka hili ili kuichorea juu yake au kuitumia kama mandharinyuma.';
+
+  @override
+  String statusPreview(String value) {
+    return 'Onyesho la awali: $value';
+  }
+
+  @override
+  String get statusCtrlWheel => 'Ctrl + gurudumu la kipanya hukuza.';
+
+  @override
+  String get buttonClose => 'Funga';
+
+  @override
+  String get buttonReplace => 'Badilisha';
+
+  @override
+  String get buttonLoad => 'Pakia';
+
+  @override
+  String get buttonUse => 'Tumia';
+
+  @override
+  String get buttonNone => 'Hakuna';
+
+  @override
+  String get colorFillTooltip => 'Rangi ya kujaza';
+
+  @override
+  String get colorStrokeTooltip => 'Rangi ya mpaka';
+
+  @override
+  String get buttonExport => 'Hamisha';
+
+  @override
+  String get interfaceSwitchAdvanced => 'Badili kwenda kiolesura cha kina';
+
+  @override
+  String get toolHintSelect =>
+      'Bofya umbo au picha ili kuichagua. Buruta ili kuisogeza, au buruta vishikio ili kubadilisha ukubwa. Bofya mara mbili kwenye ukingo kuongeza nukta, au Alt-bofya nukta ili kuiondoa.';
+
+  @override
+  String get toolHintRectangle =>
+      'Buruta kuchora mstatili. Shikilia Shift kupata mraba.';
+
+  @override
+  String get toolHintEllipse =>
+      'Buruta kuchora duara bapa. Shikilia Shift kupata duara.';
+
+  @override
+  String get toolHintLine =>
+      'Buruta kuchora mstari. Shikilia Shift kupata pembe za 45°.';
+
+  @override
+  String get toolHintPolygon =>
+      'Bofya kuongeza nukta. Bofya nukta ya kwanza au bofya mara mbili kufunga umbo. Bonyeza Enter kuacha njia ya mstari wazi; Esc kughairi.';
+
+  @override
+  String get toolHintFreehand => 'Buruta kuchora mstari laini wa mkono huru.';
+
+  @override
+  String get toolHintImage =>
+      'Buruta picha ya tabaka hili ili kuisogeza; buruta kishikio kubadilisha ukubwa. Kona huhifadhi uwiano; Shift au kishikio cha ukingo hunyoosha.';
+
+  @override
+  String get ribbonFile => 'Faili';
+
+  @override
+  String get ribbonHome => 'Nyumbani';
+
+  @override
+  String get ribbonInsert => 'Ingiza';
+
+  @override
+  String get ribbonLayer => 'Tabaka';
+
+  @override
+  String get ribbonImage => 'Picha';
+
+  @override
+  String get ribbonView => 'Tazama';
+
+  @override
+  String viewZoomLabel(String value) {
+    return 'Kuza $value';
+  }
+
+  @override
+  String get statusMousePan =>
+      'Tembeza au buruta kwa kitufe cha kulia kusogeza mwonekano.';
+
+  @override
+  String get fileTypeProject => 'Mradi wa Flutter Painter';
+
+  @override
+  String get fileTypeImages => 'Picha';
+
+  @override
+  String get fileTypeDart => 'Dart';
+
+  @override
+  String get fileTypeZip => 'Kumbukumbu ya ZIP';
+
+  @override
+  String get fileSaveHere => 'Hifadhi hapa';
+
+  @override
+  String workspaceInvalidProject(String path) {
+    return 'Hii si miradi wa Flutter Painter: $path';
+  }
+
+  @override
+  String workspaceOpenFailed(String path, String error) {
+    return 'Imeshindwa kufungua $path: $error';
+  }
+
+  @override
+  String workspaceSaved(String path) {
+    return 'Imehifadhiwa $path';
+  }
+
+  @override
+  String workspaceSaveFailed(String error) {
+    return 'Imeshindwa kuhifadhi: $error';
+  }
+
+  @override
+  String imageLoadFailed(String error) {
+    return 'Imeshindwa kupakia picha hiyo: $error';
+  }
+
+  @override
+  String get dropProjectHint =>
+      'Dondosha mradi wa .flp kuufungua kwenye kichupo kipya, au picha kuiweka kwenye tabaka linalotumika.';
+
+  @override
+  String get exportReplaceTitle => 'Badilisha faili zilizopo?';
+
+  @override
+  String exportReplaceMessage(int existing, int total) {
+    return 'Faili $existing kati ya $total tayari zipo kwenye folda hiyo na zitabadilishwa.';
+  }
+
+  @override
+  String get exportReplace => 'Badilisha';
+
+  @override
+  String exportSavedFolder(int count, String path) {
+    return 'Faili $count zimehifadhiwa kwenye $path';
+  }
+
+  @override
+  String exportSavedArchive(int count, String path) {
+    return 'Faili $count zimehifadhiwa kwenye $path';
+  }
+
+  @override
+  String exportSaveFailed(String error) {
+    return 'Imeshindwa kuhifadhi: $error';
+  }
+
+  @override
+  String get exportCloseTitle => 'Funga kihariri cha msimbo?';
+
+  @override
+  String get exportCloseMessage =>
+      'Mabadiliko yako kwenye faili zilizozalishwa hayajahifadhiwa na yatapotea.';
+
+  @override
+  String get exportClose => 'Funga';
+
+  @override
+  String get exportRegenerateTitle => 'Tengeneza faili upya?';
+
+  @override
+  String get exportRegenerateMessage =>
+      'Hii itaunda kila faili upya kutoka kwenye mchoro na kufuta mabadiliko yako.';
+
+  @override
+  String get exportRegenerate => 'Tengeneza upya';
+
+  @override
+  String get exportSettingsChanged =>
+      'Mipangilio ya uhamishaji imebadilika. Tengeneza upya ili kuitumia (mabadiliko yako yatafutwa).';
+
+  @override
+  String exportTitle(String name) {
+    return 'Kihariri cha msimbo — $name';
+  }
+
+  @override
+  String get exportSaveFolder => 'Hifadhi kwenye folda';
+
+  @override
+  String exportSaveFolderTooltip(String modifier) {
+    return 'Hifadhi faili zote kwenye folda ($modifier+S)';
+  }
+
+  @override
+  String get exportSaveArchive => 'Hifadhi kama kumbukumbu';
+
+  @override
+  String exportSaveArchiveTooltip(String modifier) {
+    return 'Hifadhi faili zote kama .zip moja ($modifier+Shift+S)';
+  }
+
+  @override
+  String get exportCopy => 'Nakili';
+
+  @override
+  String get exportCopyTooltip =>
+      'Nakili faili lililofunguliwa kwenye ubao wa kunakili';
+
+  @override
+  String get exportFormatDocument => 'Panga hati';
+
+  @override
+  String get exportFormatTooltip => 'Panga faili lililofunguliwa (Shift+Alt+F)';
+
+  @override
+  String get exportBuildAgain => 'Tengeneza tena';
+
+  @override
+  String get exportBuildAgainTooltip =>
+      'Tengeneza faili upya kutoka kwenye mchoro (hufuta mabadiliko yako)';
+
+  @override
+  String get exportBackToDrawing => 'Rudi kwenye mchoro';
+
+  @override
+  String get exportSelectFileHint =>
+      'Chagua faili kwenye kichunguzi ili uifungue';
+
+  @override
+  String get exportExplorer => 'Kichunguzi';
+
+  @override
+  String get exportSettingsLabel => 'Mipangilio';
+
+  @override
+  String get exportCloseTab => 'Funga';
+
+  @override
+  String get projectTabCloseTooltip => 'Funga (Ctrl+W)';
+
+  @override
+  String get projectTabNotSaved => 'Bado haijahifadhiwa';
+
+  @override
+  String layerDefaultGroup(int number) {
+    return 'Kikundi $number';
+  }
+
+  @override
+  String editorCaret(int line, int column) {
+    return 'Mst $line, Safu $column';
+  }
+
+  @override
+  String editorCaretSelection(int line, int column, int selected) {
+    return 'Mst $line, Safu $column ($selected zimechaguliwa)';
+  }
+
+  @override
+  String editorLineCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'mistari $count',
+      one: 'mstari 1',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String editorSpaceCount(int count) {
+    return 'Nafasi: $count';
+  }
+
+  @override
+  String exportRegenerated(int count) {
+    return 'Faili $count zimetengenezwa upya';
+  }
+
+  @override
+  String exportFormatted(String name) {
+    return 'Imepangiliwa $name';
+  }
+
+  @override
+  String exportCopied(String name) {
+    return 'Imenakili $name kwenye ubao wa kunakili';
+  }
+
+  @override
+  String get projectUnavailable => 'Hakuna mradi unaotumika unaopatikana hapa.';
 }

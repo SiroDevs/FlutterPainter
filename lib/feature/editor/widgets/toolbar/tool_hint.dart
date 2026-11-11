@@ -8,20 +8,13 @@ import '../../../../domain/models/editor/tool.dart';
 /// One-line help shown in the status bar for each tool.
 extension ToolHint on Tool {
   String localizedHint(BuildContext context) => switch (this) {
-        Tool.select =>
-          'Click a shape or image to select it. Drag to move, drag handles to '
-              'resize. Double-click an edge to add a point, Alt-click a point to '
-              'remove it.',
-        Tool.rect => 'Drag to draw a rectangle. Hold Shift for a square.',
-        Tool.ellipse => 'Drag to draw an ellipse. Hold Shift for a circle.',
-        Tool.line => 'Drag to draw a line. Hold Shift for 45° angles.',
-        Tool.polygon =>
-          'Click to add points. Click the first point or double-click to close '
-              'the shape; Enter leaves it open as a line path. Esc cancels.',
-        Tool.freehand => 'Drag to draw a smoothed freehand stroke.',
-        Tool.reference =>
-          'Drag to move this layer\'s image; drag a handle to resize it '
-              '(corners keep proportions, Shift or an edge handle stretches).',
-        Tool.paint => context.l10n.paintBucketHint,
-      };
+    Tool.select => context.l10n.toolHintSelect,
+    Tool.rect => context.l10n.toolHintRectangle,
+    Tool.ellipse => context.l10n.toolHintEllipse,
+    Tool.line => context.l10n.toolHintLine,
+    Tool.polygon => context.l10n.toolHintPolygon,
+    Tool.freehand => context.l10n.toolHintFreehand,
+    Tool.reference => context.l10n.toolHintImage,
+    Tool.paint => context.l10n.paintBucketHint,
+  };
 }

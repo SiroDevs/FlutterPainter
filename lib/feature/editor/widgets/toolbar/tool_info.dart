@@ -10,37 +10,37 @@ import '../../../../domain/models/editor/tool.dart';
 /// ribbon, the menus and the keyboard shortcuts so they never disagree.
 extension ToolInfo on Tool {
   String localizedLabel(BuildContext context) => switch (this) {
-        Tool.select => 'Select / move',
-        Tool.reference => 'Move / resize layer image',
-        Tool.rect => 'Rectangle',
-        Tool.ellipse => 'Ellipse',
-        Tool.line => 'Line',
-        Tool.polygon => 'Polygon / line path',
-        Tool.freehand => 'Freehand',
-        Tool.paint => context.l10n.paintBucketTool,
-      };
+    Tool.select => context.l10n.toolSelectMove,
+    Tool.reference => context.l10n.toolMoveImage,
+    Tool.rect => context.l10n.toolRectangle,
+    Tool.ellipse => context.l10n.toolEllipse,
+    Tool.line => context.l10n.toolLine,
+    Tool.polygon => context.l10n.toolPolygonPath,
+    Tool.freehand => context.l10n.toolFreehand,
+    Tool.paint => context.l10n.paintBucketTool,
+  };
 
   IconData get icon => switch (this) {
-        Tool.select => Icons.near_me,
-        Tool.reference => Icons.image_outlined,
-        Tool.rect => Icons.crop_square,
-        Tool.ellipse => Icons.circle_outlined,
-        Tool.line => Icons.horizontal_rule,
-        Tool.polygon => Icons.change_history,
-        Tool.freehand => Icons.brush,
-        Tool.paint => Icons.format_color_fill,
-      };
+    Tool.select => Icons.near_me,
+    Tool.reference => Icons.image_outlined,
+    Tool.rect => Icons.crop_square,
+    Tool.ellipse => Icons.circle_outlined,
+    Tool.line => Icons.horizontal_rule,
+    Tool.polygon => Icons.change_history,
+    Tool.freehand => Icons.brush,
+    Tool.paint => Icons.format_color_fill,
+  };
 
   LogicalKeyboardKey get shortcutKey => switch (this) {
-        Tool.select => LogicalKeyboardKey.keyV,
-        Tool.reference => LogicalKeyboardKey.keyI,
-        Tool.rect => LogicalKeyboardKey.keyR,
-        Tool.ellipse => LogicalKeyboardKey.keyE,
-        Tool.line => LogicalKeyboardKey.keyL,
-        Tool.polygon => LogicalKeyboardKey.keyP,
-        Tool.freehand => LogicalKeyboardKey.keyB,
-        Tool.paint => LogicalKeyboardKey.keyG,
-      };
+    Tool.select => LogicalKeyboardKey.keyV,
+    Tool.reference => LogicalKeyboardKey.keyI,
+    Tool.rect => LogicalKeyboardKey.keyR,
+    Tool.ellipse => LogicalKeyboardKey.keyE,
+    Tool.line => LogicalKeyboardKey.keyL,
+    Tool.polygon => LogicalKeyboardKey.keyP,
+    Tool.freehand => LogicalKeyboardKey.keyB,
+    Tool.paint => LogicalKeyboardKey.keyG,
+  };
 
   /// The letter shown next to the tool's name.
   String get keyLabel => shortcutKey.keyLabel;

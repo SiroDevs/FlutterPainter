@@ -9,4 +9,7 @@ class PrefConstants {
   static const colorFormatKey = 'color_format';
   static const colorConstantsKey = 'color_constants';
   static const groupMethodsPublicKey = 'group_methods_public';
+  static const languageCodeKey = 'language_code';
+  static const windowWidthKey = 'window_width';
+  static const windowHeightKey = 'window_height';
 }

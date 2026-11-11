@@ -19,7 +19,7 @@ import '../cubit/workspace_cubit.dart';
 FileDialogs get _dialogs => getIt<FileDialogs>();
 
 Future<void> openProjectDialog(BuildContext context, WorkspaceCubit ws) async {
-  final paths = await _dialogs.pickProjectPaths();
+  final paths = await _dialogs.pickProjectPaths(context.l10n);
   for (final path in paths) {
     if (!context.mounted) return;
     await openPath(context, ws, path);
@@ -30,7 +30,7 @@ Future<void> importProjectDialog(
   BuildContext context,
   EditorBloc target,
 ) async {
-  final paths = await _dialogs.pickProjectPaths();
+  final paths = await _dialogs.pickProjectPaths(context.l10n);
   var importedCount = 0;
   for (final path in paths) {
     if (!context.mounted) return;
@@ -69,11 +69,14 @@ Future<void> openPath(
     } else if (isProjectFile(path)) {
       await ws.openProject(path);
     } else if (context.mounted) {
-      CustomSnackbar.show(context, 'Not a Flutter Painter project: $path');
+      CustomSnackbar.show(context, context.l10n.workspaceInvalidProject(path));
     }
   } catch (e) {
     if (context.mounted) {
-      CustomSnackbar.show(context, 'Could not open $path: $e');
+      CustomSnackbar.show(
+        context,
+        context.l10n.workspaceOpenFailed(path, '$e'),
+      );
     }
   }
 }
@@ -91,7 +94,7 @@ Future<bool> saveTab(
   final s = bloc.state;
   String? target = s.filePath;
   if (saveAs || target == null) {
-    target = await _dialogs.pickSavePath();
+    target = await _dialogs.pickSavePath(context.l10n);
   }
   if (target == null) return false;
   try {
@@ -103,11 +106,17 @@ Future<bool> saveTab(
       name: firstSave ? baseNameOf(target) : null,
     );
     if (context.mounted) {
-      CustomSnackbar.show(context, 'Saved $savedPath', isSuccess: true);
+      CustomSnackbar.show(
+        context,
+        context.l10n.workspaceSaved(savedPath),
+        isSuccess: true,
+      );
     }
     return true;
   } catch (e) {
-    if (context.mounted) CustomSnackbar.show(context, 'Could not save: $e');
+    if (context.mounted) {
+      CustomSnackbar.show(context, context.l10n.workspaceSaveFailed('$e'));
+    }
     return false;
   }
 }

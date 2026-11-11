@@ -8,29 +8,22 @@ import 'package:injectable/injectable.dart';
 
 // Project imports:
 import '../../common/constants/app_constants.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Native open/save dialogs and raw file reads, behind one injectable class so
 /// the rest of the app (and its tests) never touches the platform directly.
 @lazySingleton
 class FileDialogs {
-  static const _projectFiles = XTypeGroup(
-    label: 'Flutter Painter Project',
-    extensions: [AppConstants.projectExtension, 'json'],
-  );
-  static const _flpOnly = XTypeGroup(
-    label: 'Flutter Painter Project',
-    extensions: [AppConstants.projectExtension],
-  );
-  static const _imageFiles = XTypeGroup(
-    label: 'Images',
-    extensions: ['png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif'],
-  );
-  static const _dartFiles = XTypeGroup(label: 'Dart', extensions: ['dart']);
-  static const _zipFiles = XTypeGroup(label: 'Zip archive', extensions: ['zip']);
-
   /// Asks where to save a project. Always returns a path ending in .flp.
-  Future<String?> pickSavePath() async {
-    final location = await getSaveLocation(acceptedTypeGroups: [_flpOnly]);
+  Future<String?> pickSavePath(AppLocalizations l10n) async {
+    final location = await getSaveLocation(
+      acceptedTypeGroups: [
+        XTypeGroup(
+          label: l10n.fileTypeProject,
+          extensions: [AppConstants.projectExtension],
+        ),
+      ],
+    );
     if (location == null) return null;
     final path = location.path;
     return path.toLowerCase().endsWith('.${AppConstants.projectExtension}')
@@ -38,21 +31,39 @@ class FileDialogs {
         : '$path.${AppConstants.projectExtension}';
   }
 
-  Future<List<String>> pickProjectPaths() async {
-    final files = await openFiles(acceptedTypeGroups: [_projectFiles]);
+  Future<List<String>> pickProjectPaths(AppLocalizations l10n) async {
+    final files = await openFiles(
+      acceptedTypeGroups: [
+        XTypeGroup(
+          label: l10n.fileTypeProject,
+          extensions: [AppConstants.projectExtension, 'json'],
+        ),
+      ],
+    );
     return [for (final f in files) f.path];
   }
 
-  Future<Uint8List?> pickImageBytes() async {
-    final file = await openFile(acceptedTypeGroups: [_imageFiles]);
+  Future<Uint8List?> pickImageBytes(AppLocalizations l10n) async {
+    final file = await openFile(
+      acceptedTypeGroups: [
+        XTypeGroup(
+          label: l10n.fileTypeImages,
+          extensions: ['png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif'],
+        ),
+      ],
+    );
     return file?.readAsBytes();
   }
 
   Future<Uint8List> readBytes(String path) => File(path).readAsBytes();
 
   /// Writes exported code to a file the user picks. Returns the path or null.
-  Future<String?> saveDartFile(String code) async {
-    final location = await getSaveLocation(acceptedTypeGroups: [_dartFiles]);
+  Future<String?> saveDartFile(String code, AppLocalizations l10n) async {
+    final location = await getSaveLocation(
+      acceptedTypeGroups: [
+        XTypeGroup(label: l10n.fileTypeDart, extensions: ['dart']),
+      ],
+    );
     if (location == null) return null;
     var path = location.path;
     if (!path.toLowerCase().endsWith('.dart')) path = '$path.dart';
@@ -61,8 +72,8 @@ class FileDialogs {
   }
 
   /// Asks for a folder to write into. Null if the user cancels.
-  Future<String?> pickDirectory() =>
-      getDirectoryPath(confirmButtonText: 'Save here');
+  Future<String?> pickDirectory(AppLocalizations l10n) =>
+      getDirectoryPath(confirmButtonText: l10n.fileSaveHere);
 
   static String _join(String directory, String relative) {
     final sep = Platform.pathSeparator;
@@ -77,9 +88,9 @@ class FileDialogs {
     String directory,
     List<String> relativePaths,
   ) async => [
-        for (final p in relativePaths)
-          if (await File(_join(directory, p)).exists()) p,
-      ];
+    for (final p in relativePaths)
+      if (await File(_join(directory, p)).exists()) p,
+  ];
 
   /// Writes each file (relative path -> text) under [directory], creating any
   /// folders it needs. Returns the folder that was written to.
@@ -99,10 +110,13 @@ class FileDialogs {
   Future<String?> saveArchive(
     Uint8List bytes, {
     required String suggestedName,
+    required AppLocalizations l10n,
   }) async {
     final location = await getSaveLocation(
       suggestedName: suggestedName,
-      acceptedTypeGroups: [_zipFiles],
+      acceptedTypeGroups: [
+        XTypeGroup(label: l10n.fileTypeZip, extensions: ['zip']),
+      ],
     );
     if (location == null) return null;
     var path = location.path;

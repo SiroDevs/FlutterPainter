@@ -83,7 +83,7 @@ class _Tab extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Tooltip(
-      message: info.path ?? 'Not saved yet',
+      message: info.path ?? context.l10n.projectTabNotSaved,
       child: InkWell(
         onTap: onTap,
         child:
@@ -100,7 +100,7 @@ class _Tab extends StatelessWidget {
                     if (info.dirty)
                       const Icon(Icons.circle, size: 8).padding(left: 6),
                     IconButton(
-                      tooltip: 'Close (Ctrl+W)',
+                      tooltip: context.l10n.projectTabCloseTooltip,
                       iconSize: 16,
                       visualDensity: VisualDensity.compact,
                       icon: const Icon(Icons.close),

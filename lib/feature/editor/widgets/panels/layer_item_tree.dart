@@ -29,7 +29,7 @@ class LayerItemTree extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final entries = _entries(layer.shapes);
+    final entries = _entries(context, layer.shapes);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -43,7 +43,7 @@ class LayerItemTree extends StatelessWidget {
     );
   }
 
-  List<_TreeEntry> _entries(List<Shape> shapes) {
+  List<_TreeEntry> _entries(BuildContext context, List<Shape> shapes) {
     final seenGroups = <String>{};
     final entries = <_TreeEntry>[];
     var groupNumber = 0;
@@ -56,7 +56,8 @@ class LayerItemTree extends StatelessWidget {
         entries.add(
           _TreeEntry.group(
             groupId,
-            shapes[index].groupName ?? 'Group $groupNumber',
+            shapes[index].groupName ??
+                context.l10n.layerDefaultGroup(groupNumber),
             [
               for (
                 var memberIndex = shapes.length - 1;

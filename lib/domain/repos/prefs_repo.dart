@@ -29,7 +29,7 @@ abstract class PrefsRepo {
   String getPrefString(String settingsKey);
 
   void setPrefBool(String settingsKey, bool settingsValue);
-  void setPrefInt(String settingsKey, int settingsValue);
+  Future<void> setPrefInt(String settingsKey, int settingsValue);
   void setPrefString(String settingsKey, String settingsValue);
 
   void clearData();
@@ -77,6 +77,9 @@ class PrefsRepoImp implements PrefsRepo {
   AppSettings getAppSettings() {
     const defaults = AppSettings();
     return AppSettings(
+      languageCode:
+          sharedPrefs.getString(PrefConstants.languageCodeKey) ??
+          defaults.languageCode,
       interfaceMode: _enum(
         InterfaceMode.values,
         PrefConstants.interfaceModeKey,
@@ -108,6 +111,7 @@ class PrefsRepoImp implements PrefsRepo {
 
   @override
   void saveAppSettings(AppSettings settings) {
+    sharedPrefs.setString(PrefConstants.languageCodeKey, settings.languageCode);
     sharedPrefs.setString(
       PrefConstants.interfaceModeKey,
       settings.interfaceMode.name,
@@ -141,6 +145,7 @@ class PrefsRepoImp implements PrefsRepo {
     sharedPrefs.remove(PrefConstants.colorFormatKey);
     sharedPrefs.remove(PrefConstants.colorConstantsKey);
     sharedPrefs.remove(PrefConstants.groupMethodsPublicKey);
+    sharedPrefs.remove(PrefConstants.languageCodeKey);
   }
 
   @override
@@ -178,9 +183,9 @@ class PrefsRepoImp implements PrefsRepo {
   }
 
   @override
-  void setPrefInt(String settingsKey, int settingsValue) async {
+  Future<void> setPrefInt(String settingsKey, int settingsValue) async {
     if (settingsValue.isNegative) {
-      sharedPrefs.remove(settingsKey);
+      await sharedPrefs.remove(settingsKey);
       return;
     }
     await sharedPrefs.setInt(settingsKey, settingsValue);

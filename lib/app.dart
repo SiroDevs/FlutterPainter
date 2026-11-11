@@ -58,6 +58,11 @@ class AppViewState extends State<AppView> {
         builder: (context, themeMode) => MaterialApp.router(
           title: AppConstants.appTitle,
           routerConfig: _router,
+          locale: Locale(
+            context.select<SettingsCubit, String>(
+              (settings) => settings.state.languageCode,
+            ),
+          ),
           themeMode: themeMode,
           theme: AppTheme.lightTheme(),
           darkTheme: AppTheme.darkTheme(),

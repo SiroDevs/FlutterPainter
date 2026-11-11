@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
-import '../../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../../common/widgets/inputs/labeled_slider.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/shapes/shape.dart';
@@ -13,35 +12,13 @@ import '../../../../domain/models/shapes/shape_kind.dart';
 import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/drawing/editor_ops.dart';
+import 'property_selection_info.dart';
 import 'property_style_controls.dart';
 
 /// Style controls. They edit the selected shape, or set the style used for the
 /// next shapes when nothing is selected.
 class PropertiesPanel extends StatelessWidget {
   const PropertiesPanel({super.key});
-
-  Future<void> _rename(BuildContext context, Shape s) async {
-    final bloc = context.read<EditorBloc>();
-    final name = await promptText(
-      context,
-      title: 'Rename shape',
-      initial: s.name,
-    );
-    if (name != null) bloc.add(ShapeRenamed(name));
-  }
-
-  Future<void> _renameGroup(
-    BuildContext context,
-    EditorState state,
-    String groupId,
-    String currentName,
-  ) async {
-    final bloc = context.read<EditorBloc>();
-    final title = context.l10n.layerEditGroup;
-    final name = await promptText(context, title: title, initial: currentName);
-    if (name == null || name.isEmpty || name == currentName) return;
-    bloc.add(GroupRenamed(state.layerIndex, groupId, name));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +35,10 @@ class PropertiesPanel extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _selectionInfo(context, state, s),
+              PropertySelectionInfo(state: state, shape: s, bloc: bloc),
               if (s != null && s.usesVertices && s.points.length >= 3) ...[
                 const SizedBox(width: 12),
-                _closedShapeControl(s, bloc),
+                _closedShapeControl(context, s, bloc),
               ],
               if (selectionCount <= 1) ...[
                 const SizedBox(width: 12),
@@ -72,7 +49,9 @@ class PropertiesPanel extends StatelessWidget {
                     width: 190,
                     child: LabeledSlider(
                       compact: true,
-                      label: 'Corner radius: ${st.radius.toStringAsFixed(2)}',
+                      label: context.l10n.propertyCornerRadius(
+                        st.radius.toStringAsFixed(2),
+                      ),
                       value: st.radius,
                       min: 0,
                       max: 40,
@@ -90,112 +69,11 @@ class PropertiesPanel extends StatelessWidget {
     );
   }
 
-  Widget _selectionInfo(BuildContext context, EditorState state, Shape? shape) {
-    final selectionCount = state.validSelectedIndices.length;
-    final groupId = _selectedGroupId(state);
-    final groupShape = groupId == null
-        ? null
-        : state.layer.shapes[state.validSelectedIndices.first];
-    final groupName = groupShape?.groupName ?? context.l10n.layerGroup;
-    return SizedBox(
-      width: 240,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Properties', style: Theme.of(context).textTheme.titleSmall),
-          if (selectionCount > 1)
-            Text(
-              context.l10n.shapeSelectionCount(selectionCount),
-              style: Theme.of(context).textTheme.bodySmall,
-            )
-          else if (shape == null)
-            Text(
-              'No shape selected. These settings apply to the next shape you draw.',
-              style: Theme.of(context).textTheme.bodySmall,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            )
-          else ...[
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    shape.name.isEmpty ? shape.kind.name : shape.name,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                IconButton(
-                  tooltip: 'Rename shape',
-                  iconSize: 18,
-                  visualDensity: VisualDensity.compact,
-                  constraints: const BoxConstraints.tightFor(
-                    width: 32,
-                    height: 32,
-                  ),
-                  icon: const Icon(Icons.edit_outlined),
-                  onPressed: () => _rename(context, shape),
-                ),
-              ],
-            ),
-            Text(
-              _bounds(shape),
-              style: Theme.of(context).textTheme.bodySmall,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-          if (groupId != null) ...[
-            Row(
-              children: [
-                const Icon(Icons.folder_outlined, size: 16),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    groupName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                IconButton(
-                  tooltip: context.l10n.layerEditGroup,
-                  iconSize: 18,
-                  visualDensity: VisualDensity.compact,
-                  constraints: const BoxConstraints.tightFor(
-                    width: 32,
-                    height: 32,
-                  ),
-                  icon: const Icon(Icons.edit_outlined),
-                  onPressed: () =>
-                      _renameGroup(context, state, groupId, groupName),
-                ),
-              ],
-            ),
-          ],
-          if (selectionCount > 0)
-            Text(
-              context.l10n.shapeRotateHint,
-              style: Theme.of(context).textTheme.bodySmall,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-        ],
-      ),
-    );
-  }
-
-  String? _selectedGroupId(EditorState state) {
-    final indices = state.validSelectedIndices;
-    if (indices.isEmpty) return null;
-    final groupId = state.layer.shapes[indices.first].groupId;
-    if (groupId == null) return null;
-    return indices.every(
-          (index) => state.layer.shapes[index].groupId == groupId,
-        )
-        ? groupId
-        : null;
-  }
-
-  Widget _closedShapeControl(Shape shape, EditorBloc bloc) => SizedBox(
+  Widget _closedShapeControl(
+    BuildContext context,
+    Shape shape,
+    EditorBloc bloc,
+  ) => SizedBox(
     width: 190,
     child: Row(
       children: [
@@ -203,14 +81,8 @@ class PropertiesPanel extends StatelessWidget {
           value: shape.kind == ShapeKind.polygon,
           onChanged: (value) => bloc.add(ClosedToggled(value ?? false)),
         ),
-        const Expanded(child: Text('Closed shape (can be filled)')),
+        Expanded(child: Text(context.l10n.propertyClosedShape)),
       ],
     ),
   );
-
-  String _bounds(Shape s) {
-    final b = s.bounds;
-    String f(double v) => v.toStringAsFixed(1);
-    return 'x ${f(b.left)}  y ${f(b.top)}  w ${f(b.width)}  h ${f(b.height)}';
-  }
 }

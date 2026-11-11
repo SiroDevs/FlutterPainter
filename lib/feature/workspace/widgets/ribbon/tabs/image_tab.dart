@@ -2,6 +2,7 @@
 import 'package:flutter/widgets.dart';
 
 // Project imports:
+import '../../../../../core/utils/l10n_ext.dart';
 import '../../../../editor/logic/drawing/editor_ops.dart';
 import '../../../commands/workspace_commands.dart';
 import '../ribbon_parts.dart';
@@ -11,17 +12,22 @@ List<Widget> imageTabGroups(WorkspaceCommands c) {
   final img = c.state.layer.image;
   return [
     RibbonGroup(
-      label: 'Picture',
+      label: c.context.l10n.ribbonPicture,
       children: [
         RibbonButton.large(
           c.imageLoad,
-          label: img == null ? 'Load' : 'Replace',
+          label: img == null
+              ? c.context.l10n.buttonLoad
+              : c.context.l10n.buttonReplace,
         ),
-        RibbonButton.large(c.imageLoadNewLayer, label: 'On new layer'),
+        RibbonButton.large(
+          c.imageLoadNewLayer,
+          label: c.context.l10n.ribbonOnNewLayer,
+        ),
       ],
     ),
     RibbonGroup(
-      label: 'Arrange',
+      label: c.context.l10n.ribbonArrangeTab,
       children: [
         RibbonStack(
           children: [
@@ -33,13 +39,15 @@ List<Widget> imageTabGroups(WorkspaceCommands c) {
       ],
     ),
     RibbonGroup(
-      label: 'Adjust',
+      label: c.context.l10n.ribbonAdjust,
       children: [
         RibbonStack(
           children: [
             RibbonButton.small(c.imageVisible),
             RibbonSlider(
-              label: 'Opacity ${((img?.opacity ?? 0.5) * 100).round()}%',
+              label: c.context.l10n.imageOpacity(
+                ((img?.opacity ?? 0.5) * 100).round().toString(),
+              ),
               value: img?.opacity ?? 0.5,
               min: 0.05,
               max: 1,
@@ -47,7 +55,9 @@ List<Widget> imageTabGroups(WorkspaceCommands c) {
               onChangeEnd: c.commitChanges,
             ),
             RibbonSlider(
-              label: 'Scale ${(img?.scaleX ?? 1).toStringAsFixed(3)}',
+              label: c.context.l10n.imageScale(
+                (img?.scaleX ?? 1).toStringAsFixed(3),
+              ),
               value: img?.scaleX ?? 1,
               min: WorkspaceCommands.scaleMin(img?.scaleX ?? 1),
               max: WorkspaceCommands.scaleMax(img?.scaleX ?? 1),
@@ -59,8 +69,10 @@ List<Widget> imageTabGroups(WorkspaceCommands c) {
       ],
     ),
     RibbonGroup(
-      label: 'Remove',
-      children: [RibbonButton.large(c.imageRemove, label: 'Remove')],
+      label: c.context.l10n.imageRemove,
+      children: [
+        RibbonButton.large(c.imageRemove, label: c.context.l10n.imageRemove),
+      ],
     ),
   ];
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../common/widgets/progress/custom_snackbar.dart';
 import '../../../core/di/injectable.dart';
 import '../../../core/platform/file_dialogs.dart';
+import '../../../core/utils/l10n_ext.dart';
 import '../cubit/export_cubit.dart';
 import '../cubit/export_jobs.dart';
 
@@ -23,7 +24,7 @@ Future<bool> confirm(
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(context, true),
@@ -51,7 +52,7 @@ Future<void> saveLocally(BuildContext context, ExportCubit cubit) async {
   if (cubit.state.isBusy) return;
   final dialogs = getIt<FileDialogs>();
   try {
-    final directory = await dialogs.pickDirectory();
+    final directory = await dialogs.pickDirectory(context.l10n);
     if (directory == null) return;
     final state = cubit.state;
     final files = {
@@ -65,11 +66,12 @@ Future<void> saveLocally(BuildContext context, ExportCubit cubit) async {
       if (!context.mounted) return;
       final ok = await confirm(
         context,
-        title: 'Replace existing files?',
-        message:
-            '${existing.length} of ${files.length} files already exist in '
-            'that folder and will be overwritten.',
-        confirmLabel: 'Replace',
+        title: context.l10n.exportReplaceTitle,
+        message: context.l10n.exportReplaceMessage(
+          existing.length,
+          files.length,
+        ),
+        confirmLabel: context.l10n.exportReplace,
       );
       if (!ok) return;
     }
@@ -83,11 +85,14 @@ Future<void> saveLocally(BuildContext context, ExportCubit cubit) async {
     _report(
       context,
       cubit,
-      'Saved ${files.length} file(s) to $directory/${state.folderName}',
+      context.l10n.exportSavedFolder(
+        files.length,
+        '$directory/${state.folderName}',
+      ),
     );
   } catch (e) {
     if (context.mounted) {
-      _report(context, cubit, 'Could not save: $e', error: true);
+      _report(context, cubit, context.l10n.exportSaveFailed('$e'), error: true);
     }
   }
 }
@@ -96,6 +101,7 @@ Future<void> saveLocally(BuildContext context, ExportCubit cubit) async {
 Future<void> saveArchive(BuildContext context, ExportCubit cubit) async {
   if (cubit.state.isBusy) return;
   final dialogs = getIt<FileDialogs>();
+  final l10n = context.l10n;
   try {
     final state = cubit.state;
     cubit.setSaving(true);
@@ -104,15 +110,20 @@ Future<void> saveArchive(BuildContext context, ExportCubit cubit) async {
       final path = await dialogs.saveArchive(
         bytes,
         suggestedName: '${state.folderName}.zip',
+        l10n: l10n,
       );
       if (path == null || !context.mounted) return;
-      _report(context, cubit, 'Saved ${state.files.length} file(s) to $path');
+      _report(
+        context,
+        cubit,
+        l10n.exportSavedArchive(state.files.length, path),
+      );
     } finally {
       cubit.setSaving(false);
     }
   } catch (e) {
     if (context.mounted) {
-      _report(context, cubit, 'Could not save: $e', error: true);
+      _report(context, cubit, context.l10n.exportSaveFailed('$e'), error: true);
     }
   }
 }

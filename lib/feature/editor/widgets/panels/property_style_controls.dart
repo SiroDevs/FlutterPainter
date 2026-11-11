@@ -5,6 +5,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
 import '../../../../common/widgets/inputs/labeled_slider.dart';
+import '../../../../core/utils/l10n_ext.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/style_settings.dart';
 
@@ -22,14 +23,14 @@ class PropertyStyleControls extends StatelessWidget {
       children: [
         [
           _toggle(
-            'Fill',
+            context.l10n.propertyFill,
             style.fillOn,
             style.fillColor,
             (value) => bloc.add(FillToggled(value)),
             () => bloc.add(const StyleTargetChanged(true)),
           ),
           _toggle(
-            'Stroke',
+            context.l10n.propertyStroke,
             style.strokeOn,
             style.strokeColor,
             (value) => bloc.add(StrokeToggled(value)),
@@ -40,7 +41,9 @@ class PropertyStyleControls extends StatelessWidget {
           width: 190,
           child: LabeledSlider(
             compact: true,
-            label: 'Stroke width: ${style.strokeWidth.toStringAsFixed(2)}',
+            label: context.l10n.propertyStrokeWidth(
+              style.strokeWidth.toStringAsFixed(2),
+            ),
             value: style.strokeWidth,
             min: 0.25,
             max: 20,

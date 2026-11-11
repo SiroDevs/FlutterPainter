@@ -21,14 +21,14 @@ import '../workspace_commands.dart';
 
 extension FileCommands on WorkspaceCommands {
   AppCommand get newBlank => AppCommand(
-    label: 'New blank canvas',
+    label: context.l10n.fileNewBlank,
     icon: Icons.note_add_outlined,
     shortcut: primaryShortcut(LogicalKeyboardKey.keyN),
     onPressed: ws.addBlank,
   );
 
   AppCommand get open => AppCommand(
-    label: 'Open…',
+    label: context.l10n.fileOpen,
     icon: Icons.folder_open,
     shortcut: primaryShortcut(LogicalKeyboardKey.keyO),
     onPressed: () => openProjectDialog(context, ws),
@@ -41,54 +41,52 @@ extension FileCommands on WorkspaceCommands {
   );
 
   AppCommand get save => AppCommand(
-    label: 'Save',
+    label: context.l10n.fileSave,
     icon: Icons.save_outlined,
     shortcut: primaryShortcut(LogicalKeyboardKey.keyS),
     onPressed: () => saveTab(context, ws, bloc),
   );
 
   AppCommand get saveAs => AppCommand(
-    label: 'Save as…',
+    label: context.l10n.fileSaveAs,
     icon: Icons.save_as_outlined,
     shortcut: primaryShortcut(LogicalKeyboardKey.keyS, shift: true),
     onPressed: () => saveTab(context, ws, bloc, saveAs: true),
   );
 
   AppCommand get autoSave => AppCommand(
-    label: 'Auto-save',
+    label: context.l10n.fileAutoSave,
     icon: Icons.autorenew,
-    tooltip:
-        'Auto-save: write changes straight into the open .flp file. '
-        'Off: changes go to a safe side copy until you press Save.',
+    tooltip: context.l10n.fileAutoSaveHelp,
     checked: autoSaveOn,
     onPressed: () => ws.setAutoSave(!autoSaveOn),
   );
 
   /// Opens the code editor as a page of its own, over the workspace.
   AppCommand get exportDart => AppCommand(
-    label: 'Export Dart…',
+    label: context.l10n.fileExportDart,
     icon: Icons.code,
-    tooltip: 'Open the code editor',
+    tooltip: context.l10n.fileCodeEditorTooltip,
     shortcut: primaryShortcut(LogicalKeyboardKey.keyE),
     onPressed: () =>
         context.push(RoutePaths.export, extra: ExportArgs(bloc.state.drawing)),
   );
 
   AppCommand get settings => AppCommand(
-    label: 'Settings…',
+    label: context.l10n.fileSettings,
     icon: Icons.settings_outlined,
     shortcut: primaryShortcut(LogicalKeyboardKey.comma),
     onPressed: () => showSettingsDialog(context),
   );
 
   AppCommand get rename => AppCommand(
-    label: 'Rename project…',
+    label: context.l10n.fileRenameProject,
     icon: Icons.edit_outlined,
-    tooltip: 'Project name (also used for class names)',
+    tooltip: context.l10n.projectNameTooltip,
     onPressed: () async {
       final name = await promptText(
         context,
-        title: 'Project name (also used for class names)',
+        title: context.l10n.projectNameTooltip,
         initial: bloc.state.drawing.name,
       );
       if (name != null && name.isNotEmpty) send(DrawingRenamed(name));
@@ -96,7 +94,7 @@ extension FileCommands on WorkspaceCommands {
   );
 
   AppCommand get canvasSize => AppCommand(
-    label: 'Canvas size…',
+    label: context.l10n.fileCanvasSize,
     icon: Icons.aspect_ratio,
     onPressed: () async {
       final d = bloc.state.drawing;
@@ -106,7 +104,7 @@ extension FileCommands on WorkspaceCommands {
   );
 
   AppCommand get closeProject => AppCommand(
-    label: 'Close project',
+    label: context.l10n.fileCloseProject,
     icon: Icons.close,
     shortcut: primaryShortcut(LogicalKeyboardKey.keyW),
     onPressed: () => closeTab(context, ws, bloc),
@@ -115,7 +113,7 @@ extension FileCommands on WorkspaceCommands {
   /// Quits through the normal exit request, so unsaved work is still asked
   /// about. (macOS has its own Quit item in the application menu.)
   AppCommand get exitApp => AppCommand(
-    label: 'Exit',
+    label: context.l10n.fileExit,
     icon: Icons.exit_to_app,
     onPressed: () =>
         ServicesBinding.instance.exitApplication(AppExitType.cancelable),
