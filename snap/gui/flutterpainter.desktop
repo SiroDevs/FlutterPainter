@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=FlutterPainter
+Name=Flutter Painter
 Comment=A paint studio for your Flutter App
 Exec=flutterpainter
 Icon=${SNAP}/meta/gui/flutterpainter.png

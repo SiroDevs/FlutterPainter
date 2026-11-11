@@ -47,6 +47,9 @@ class DrawingPainter extends CustomPainter {
         paintShape(canvas, shape, paint);
       }
     }
+    for (final shape in state.quickCodePreviews) {
+      paintShape(canvas, shape, paint);
+    }
     _draft(canvas, paint);
 
     canvas.drawRect(

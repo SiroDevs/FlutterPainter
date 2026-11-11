@@ -15,6 +15,7 @@ class EditorState extends Equatable {
     this.selected,
     this.selectedIndices = const <int>[],
     this.draft,
+    this.quickCodePreviews = const <Shape>[],
     this.hover,
     this.cursor,
     this.style = const StyleSettings(),
@@ -58,6 +59,7 @@ class EditorState extends Equatable {
 
   /// The shape being drawn right now, plus the rubber-band point for polygons.
   final Shape? draft;
+  final List<Shape> quickCodePreviews;
   final Offset? hover;
 
   /// Last pointer position in design units, for the status bar.
@@ -84,6 +86,7 @@ class EditorState extends Equatable {
     Object? selected = unset,
     List<int>? selectedIndices,
     Object? draft = unset,
+    List<Shape>? quickCodePreviews,
     Object? hover = unset,
     Object? cursor = unset,
     StyleSettings? style,
@@ -111,6 +114,7 @@ class EditorState extends Equatable {
       selected: nextSelected,
       selectedIndices: nextSelectedIndices,
       draft: keep<Shape>(draft, this.draft),
+      quickCodePreviews: quickCodePreviews ?? this.quickCodePreviews,
       hover: keep<Offset>(hover, this.hover),
       cursor: keep<Offset>(cursor, this.cursor),
       style: style ?? this.style,
@@ -133,6 +137,7 @@ class EditorState extends Equatable {
     selected,
     selectedIndices,
     draft,
+    quickCodePreviews,
     hover,
     cursor,
     style,

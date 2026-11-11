@@ -12,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../editor/bloc/editor_bloc.dart';
 import '../editor/editor_screen.dart';
 import '../inline_code/widgets/inline_code_host.dart';
+import '../quick_code/quick_code_request.dart';
+import '../quick_code/widgets/quick_code_host.dart';
 import 'cubit/workspace_cubit.dart';
 import 'flows/tab_flows.dart';
 import 'widgets/menus/app_menu_bar.dart';
@@ -38,6 +40,10 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
   late final AppLifecycleListener _lifecycle;
   final RibbonController _ribbon = RibbonController();
   final ValueNotifier<bool> _inlineCode = ValueNotifier(false);
+  final ValueNotifier<bool> _quickCodeOpen = ValueNotifier(false);
+  final ValueNotifier<QuickCodeRequest?> _quickCodeRequest = ValueNotifier(
+    null,
+  );
   bool _dragging = false;
 
   // ignore: unused_element
@@ -56,6 +62,8 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     _lifecycle.dispose();
     _ribbon.dispose();
     _inlineCode.dispose();
+    _quickCodeOpen.dispose();
+    _quickCodeRequest.dispose();
     _focus.dispose();
     super.dispose();
   }
@@ -85,6 +93,12 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
       if (!mounted) return;
       await openPath(context, _ws, f.path);
     }
+  }
+
+  void _openQuickCode(QuickCodeRequest request) {
+    _inlineCode.value = false;
+    _quickCodeRequest.value = request;
+    _quickCodeOpen.value = true;
   }
 
   bool _isTyping() {
@@ -145,12 +159,23 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
                           child: Column(
                             children: [
                               ToolbarArea(ribbon: _ribbon),
-                              ProjectTabs(inlineCode: _inlineCode),
+                              ProjectTabs(
+                                inlineCode: _inlineCode,
+                                quickCodeOpen: _quickCodeOpen,
+                                quickCodeRequest: _quickCodeRequest,
+                              ),
                               const Divider(height: 1),
                               Expanded(
-                                child: InlineCodeHost(
-                                  open: _inlineCode,
-                                  child: EditorScreen(canvasFocus: _focus),
+                                child: QuickCodeHost(
+                                  open: _quickCodeOpen,
+                                  request: _quickCodeRequest,
+                                  child: InlineCodeHost(
+                                    open: _inlineCode,
+                                    child: EditorScreen(
+                                      canvasFocus: _focus,
+                                      onQuickCodeRequested: _openQuickCode,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],

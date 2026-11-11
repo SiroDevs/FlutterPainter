@@ -122,6 +122,96 @@ abstract class AppLocalizations {
   /// **'Show or hide the inline code view'**
   String get inlineCodeTooltip;
 
+  /// No description provided for @quickCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Code'**
+  String get quickCode;
+
+  /// No description provided for @quickCodeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit or paste shape coordinates'**
+  String get quickCodeTooltip;
+
+  /// No description provided for @quickCodePolygonMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get quickCodePolygonMenu;
+
+  /// No description provided for @quickCodeToolMenuHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Right-click or hold for more options'**
+  String get quickCodeToolMenuHint;
+
+  /// No description provided for @quickCodeCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates'**
+  String get quickCodeCoordinates;
+
+  /// No description provided for @quickCodeDartCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dart code'**
+  String get quickCodeDartCode;
+
+  /// No description provided for @quickCodeFormatTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch between Dart code and compact coordinates'**
+  String get quickCodeFormatTooltip;
+
+  /// No description provided for @quickCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste Offset(x, y) points or x,y pairs separated by spaces.'**
+  String get quickCodeHint;
+
+  /// No description provided for @quickCodeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Code must be a list of Offset(x, y) points.'**
+  String get quickCodeInvalid;
+
+  /// No description provided for @quickCodeNeedMorePoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Add enough points for this shape.'**
+  String get quickCodeNeedMorePoints;
+
+  /// No description provided for @quickCodePolygonReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Polygon preview ready.'**
+  String get quickCodePolygonReady;
+
+  /// No description provided for @quickCodeShapeReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Canvas updated from these points.'**
+  String get quickCodeShapeReady;
+
+  /// No description provided for @quickCodeAddPolygon.
+  ///
+  /// In en, this message translates to:
+  /// **'Add polygon'**
+  String get quickCodeAddPolygon;
+
+  /// No description provided for @quickCodeAddShapes.
+  ///
+  /// In en, this message translates to:
+  /// **'Add shapes'**
+  String get quickCodeAddShapes;
+
+  /// No description provided for @quickCodeClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close Quick Code'**
+  String get quickCodeClose;
+
   /// No description provided for @openFullEditor.
   ///
   /// In en, this message translates to:

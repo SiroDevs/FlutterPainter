@@ -22,6 +22,55 @@ class AppLocalizationsSw extends AppLocalizations {
   String get inlineCodeTooltip => 'Show or hide the inline code view';
 
   @override
+  String get quickCode => 'Msimbo wa Haraka';
+
+  @override
+  String get quickCodeTooltip => 'Hariri au bandika viwianishi vya umbo';
+
+  @override
+  String get quickCodePolygonMenu => 'Msimbo';
+
+  @override
+  String get quickCodeToolMenuHint =>
+      'Bofya kulia au shikilia ili kuona chaguo zaidi';
+
+  @override
+  String get quickCodeCoordinates => 'Viwianishi';
+
+  @override
+  String get quickCodeDartCode => 'Msimbo wa Dart';
+
+  @override
+  String get quickCodeFormatTooltip =>
+      'Badili kati ya msimbo wa Dart na viwianishi vifupi';
+
+  @override
+  String get quickCodeHint =>
+      'Bandika nukta za Offset(x, y) au jozi za x,y zilizotenganishwa kwa nafasi.';
+
+  @override
+  String get quickCodeInvalid => 'Msimbo uwe orodha ya nukta za Offset(x, y).';
+
+  @override
+  String get quickCodeNeedMorePoints =>
+      'Ongeza nukta za kutosha kwa umbo hili.';
+
+  @override
+  String get quickCodePolygonReady => 'Muhtasari wa poligoni uko tayari.';
+
+  @override
+  String get quickCodeShapeReady => 'Turubai imesasishwa kwa nukta hizi.';
+
+  @override
+  String get quickCodeAddPolygon => 'Ongeza poligoni';
+
+  @override
+  String get quickCodeAddShapes => 'Ongeza maumbo';
+
+  @override
+  String get quickCodeClose => 'Funga Msimbo wa Haraka';
+
+  @override
   String get openFullEditor => 'Open the full code editor';
 
   @override

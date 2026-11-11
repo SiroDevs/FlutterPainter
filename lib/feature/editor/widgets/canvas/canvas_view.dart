@@ -1,6 +1,3 @@
-// Dart imports:
-import 'dart:ui';
-
 // Flutter imports:
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +8,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../../core/utils/color_preview.dart';
-import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/editor/app_settings.dart';
 import '../../../../domain/models/editor/tool.dart';
+import '../../../../domain/services/geometry/shape_geometry.dart';
 import '../../../settings/cubit/settings_cubit.dart';
+import '../../../quick_code/quick_code_request.dart';
 import '../../bloc/editor_bloc.dart';
+import '../../logic/drawing/editor_ops.dart';
+import 'canvas_context_menu.dart';
 import 'drawing_painter.dart';
 
 class CanvasView extends StatefulWidget {
-  const CanvasView({super.key, required this.focus});
+  const CanvasView({
+    super.key,
+    required this.focus,
+    required this.onQuickCodeRequested,
+  });
 
   final FocusNode focus;
+  final ValueChanged<QuickCodeRequest> onQuickCodeRequested;
 
   @override
   State<CanvasView> createState() => _CanvasViewState();
@@ -104,7 +109,13 @@ class _CanvasViewState extends State<CanvasView> {
   void _down(PointerDownEvent e) {
     widget.focus.requestFocus();
     if ((e.buttons & (kSecondaryButton | kMiddleMouseButton)) != 0) {
-      if ((e.buttons & kSecondaryButton) != 0 && _showVertexMenu(e)) {
+      if ((e.buttons & kSecondaryButton) != 0 &&
+          CanvasContextMenu.showVertexMenu(
+            context,
+            _bloc,
+            _design(e.localPosition),
+            e.position,
+          )) {
         _ignoreRelease = true;
         return;
       }
@@ -112,6 +123,10 @@ class _CanvasViewState extends State<CanvasView> {
       return;
     }
     if ((e.buttons & kPrimaryButton) == 0) return;
+    if (_openSelectedShapeCode(e)) {
+      _ignoreRelease = true;
+      return;
+    }
     _bloc.add(
       PointerPressed(
         _design(e.localPosition),
@@ -123,6 +138,35 @@ class _CanvasViewState extends State<CanvasView> {
         timeMs: DateTime.now().millisecondsSinceEpoch,
       ),
     );
+  }
+
+  bool _openSelectedShapeCode(PointerDownEvent event) {
+    final state = _bloc.state;
+    final indices = state.validSelectedIndices;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final modifiers =
+        HardwareKeyboard.instance.isShiftPressed ||
+        HardwareKeyboard.instance.isAltPressed ||
+        HardwareKeyboard.instance.isControlPressed ||
+        HardwareKeyboard.instance.isMetaPressed;
+    if (state.tool != Tool.select || modifiers || indices.length != 1) {
+      return false;
+    }
+    if (now - state.gesture.lastClickMs >= 320) return false;
+    final shapeIndex = indices.single;
+    final shape = state.layer.shapes[shapeIndex];
+    if (!state.layer.visible ||
+        !shape.visible ||
+        !shape.hitTest(_design(event.localPosition), 5 / state.view.zoom)) {
+      return false;
+    }
+    widget.onQuickCodeRequested(
+      QuickCodeRequest.shape(
+        layerIndex: state.layerIndex,
+        shapeIndex: shapeIndex,
+      ),
+    );
+    return true;
   }
 
   void _move(PointerMoveEvent e) {
@@ -145,50 +189,6 @@ class _CanvasViewState extends State<CanvasView> {
     }
     if (!_panning) _bloc.add(const PointerReleased());
     _panning = false;
-  }
-
-  bool _showVertexMenu(PointerDownEvent event) {
-    final state = _bloc.state;
-    final point = _design(event.localPosition);
-    final tolerance = 10 / state.view.zoom;
-    for (var li = state.drawing.layers.length - 1; li >= 0; li--) {
-      final layer = state.drawing.layers[li];
-      if (!layer.visible) continue;
-      for (var si = layer.shapes.length - 1; si >= 0; si--) {
-        final shape = layer.shapes[si];
-        if (!shape.visible || !shape.usesVertices) continue;
-        for (var vi = 0; vi < shape.points.length; vi++) {
-          if ((shape.points[vi] - point).distance > tolerance) continue;
-          _bloc.add(ShapeSelectionRequested(li, si, includeGroup: false));
-          _openVertexMenu(event.position, vi);
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  Future<void> _openVertexMenu(Offset global, int index) async {
-    final size = MediaQuery.sizeOf(context);
-    final action = await showMenu<int>(
-      context: context,
-      position: RelativeRect.fromLTRB(
-        global.dx,
-        global.dy,
-        size.width - global.dx,
-        size.height - global.dy,
-      ),
-      items: [
-        PopupMenuItem(value: 0, child: Text(context.l10n.vertexDelete)),
-        PopupMenuItem(value: 1, child: Text(context.l10n.vertexSplit)),
-      ],
-    );
-    if (!mounted || action == null) return;
-    if (action == 0) {
-      _bloc.add(VertexPointDeleted(index));
-    } else {
-      _bloc.add(VertexSegmentSplit(index));
-    }
   }
 
   void _panZoom(PointerPanZoomUpdateEvent e) {

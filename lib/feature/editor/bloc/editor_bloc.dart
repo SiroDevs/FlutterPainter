@@ -18,6 +18,7 @@ import '../../../domain/models/drawing/reference_image.dart';
 import '../../../domain/models/shapes/shape.dart';
 import '../../../domain/models/shapes/shape_gradient.dart';
 import '../../../domain/models/editor/tool.dart';
+import '../../../domain/services/code_import/quick_code_points.dart';
 import '../logic/exports.dart';
 import '../models/editor_seed.dart';
 import '../models/gesture_state.dart';
@@ -27,6 +28,7 @@ import '../models/view_settings.dart';
 part 'editor_document_events.dart';
 part 'editor_event.dart';
 part 'editor_shape_events.dart';
+part 'editor_shape_registrations.dart';
 part 'editor_state.dart';
 part 'editor_style_events.dart';
 
@@ -98,43 +100,6 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _reduce<StrokeToggled>((s, e) => StyleLogic.toggleStroke(s, e.on));
     _reduce<StrokeWidthChanged>((s, e) => StyleLogic.strokeWidth(s, e.width));
     _reduce<RadiusChanged>((s, e) => StyleLogic.radius(s, e.radius));
-  }
-
-  void _registerShapes() {
-    _reduce<ShapeDeleted>((s, e) => ShapeLogic.delete(s));
-    _reduce<ShapeDuplicated>((s, e) => ShapeLogic.duplicate(s));
-    _reduce<SelectAllRequested>((s, e) => ShapeLogic.selectAll(s));
-    _reduce<ShapesGrouped>((s, e) => GroupLogic.group(s));
-    _reduce<ShapesUngrouped>((s, e) => GroupLogic.ungroup(s));
-    _reduce<SelectionScaled>((s, e) => ShapeLogic.scale(s, e.factor));
-    _reduce<SelectionFlipped>(
-      (s, e) => ShapeLogic.flip(s, horizontal: e.horizontal),
-    );
-    _reduce<GroupRenamed>(
-      (s, e) => GroupLogic.rename(s, e.layer, e.groupId, e.name),
-    );
-    _reduce<VertexPointDeleted>((s, e) => VertexLogic.remove(s, e.index));
-    _reduce<VertexSegmentSplit>((s, e) => VertexLogic.split(s, e.index));
-    _reduce<ShapeReordered>(
-      (s, e) => ShapeLogic.reorder(s, e.direction, toExtreme: e.toExtreme),
-    );
-    _reduce<ShapeMovedToLayer>((s, e) => ShapeLogic.moveToLayer(s, e.layer));
-    _reduce<ShapeRenamed>(
-      (s, e) => ShapeLogic.rename(s, e.name, layer: e.layer, index: e.index),
-    );
-    _reduce<ShapeSelectionRequested>(
-      (s, e) =>
-          ShapeLogic.select(s, e.layer, e.index, includeGroup: e.includeGroup),
-    );
-    _reduce<ShapeVisibilityToggled>(
-      (s, e) => ShapeLogic.toggleVisibility(
-        s,
-        e.layer,
-        e.index,
-        includeGroup: e.includeGroup,
-      ),
-    );
-    _reduce<ClosedToggled>((s, e) => VertexLogic.setClosed(s, e.closed));
   }
 
   void _registerLayers() {

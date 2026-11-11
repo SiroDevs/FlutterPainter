@@ -22,6 +22,53 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inlineCodeTooltip => 'Show or hide the inline code view';
 
   @override
+  String get quickCode => 'Quick Code';
+
+  @override
+  String get quickCodeTooltip => 'Edit or paste shape coordinates';
+
+  @override
+  String get quickCodePolygonMenu => 'Code';
+
+  @override
+  String get quickCodeToolMenuHint => 'Right-click or hold for more options';
+
+  @override
+  String get quickCodeCoordinates => 'Coordinates';
+
+  @override
+  String get quickCodeDartCode => 'Dart code';
+
+  @override
+  String get quickCodeFormatTooltip =>
+      'Switch between Dart code and compact coordinates';
+
+  @override
+  String get quickCodeHint =>
+      'Paste Offset(x, y) points or x,y pairs separated by spaces.';
+
+  @override
+  String get quickCodeInvalid => 'Code must be a list of Offset(x, y) points.';
+
+  @override
+  String get quickCodeNeedMorePoints => 'Add enough points for this shape.';
+
+  @override
+  String get quickCodePolygonReady => 'Polygon preview ready.';
+
+  @override
+  String get quickCodeShapeReady => 'Canvas updated from these points.';
+
+  @override
+  String get quickCodeAddPolygon => 'Add polygon';
+
+  @override
+  String get quickCodeAddShapes => 'Add shapes';
+
+  @override
+  String get quickCodeClose => 'Close Quick Code';
+
+  @override
   String get openFullEditor => 'Open the full code editor';
 
   @override
