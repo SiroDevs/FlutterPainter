@@ -8,12 +8,14 @@ class QuickCodeState extends Equatable {
     required this.request,
     required this.status,
     this.shapeKind,
+    this.format = QuickCodeFormat.dartOffsets,
   });
 
   final String content;
   final QuickCodeRequest request;
   final QuickCodeStatus status;
   final ShapeKind? shapeKind;
+  final QuickCodeFormat format;
 
   bool get isPolygon => request.isPolygon;
 
@@ -21,14 +23,16 @@ class QuickCodeState extends Equatable {
     String? content,
     QuickCodeRequest? request,
     QuickCodeStatus? status,
+    QuickCodeFormat? format,
     Object? shapeKind = unset,
   }) => QuickCodeState(
     content: content ?? this.content,
     request: request ?? this.request,
     status: status ?? this.status,
+    format: format ?? this.format,
     shapeKind: keep<ShapeKind>(shapeKind, this.shapeKind),
   );
 
   @override
-  List<Object?> get props => [content, request, status, shapeKind];
+  List<Object?> get props => [content, request, status, shapeKind, format];
 }

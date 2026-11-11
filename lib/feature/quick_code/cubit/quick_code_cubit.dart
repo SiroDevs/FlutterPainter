@@ -81,7 +81,13 @@ class QuickCodeCubit extends Cubit<QuickCodeState> {
 
   void edit(String content) {
     final status = _status(content, state.shapeKind);
-    emit(state.copyWith(content: content, status: status));
+    emit(
+      state.copyWith(
+        content: content,
+        status: status,
+        format: QuickCodePoints.detectFormat(content),
+      ),
+    );
     _pendingPoints = null;
     _previewTimer?.cancel();
     _commitTimer?.cancel();
@@ -113,10 +119,29 @@ class QuickCodeCubit extends Cubit<QuickCodeState> {
     _previewTimer = Timer(const Duration(milliseconds: 100), () {
       _apply(points, commit: false);
     });
-    if (!state.isPolygon) {
-      _commitTimer = Timer(const Duration(milliseconds: 500), () {
-        _apply(points, commit: true);
-      });
+    _commitTimer = Timer(const Duration(milliseconds: 500), () {
+      _apply(points, commit: true);
+    });
+  }
+
+  void toggleFormat() {
+    try {
+      final points = QuickCodePoints.parse(state.content);
+      final next = state.format == QuickCodeFormat.dartOffsets
+          ? QuickCodeFormat.compactCoordinates
+          : QuickCodeFormat.dartOffsets;
+      final content = next == QuickCodeFormat.dartOffsets
+          ? QuickCodePoints.format(points)
+          : QuickCodePoints.formatCompact(points);
+      emit(
+        state.copyWith(
+          content: content,
+          format: next,
+          status: _status(content, state.shapeKind),
+        ),
+      );
+    } catch (_) {
+      return;
     }
   }
 

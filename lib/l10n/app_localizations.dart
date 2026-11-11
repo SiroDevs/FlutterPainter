@@ -146,10 +146,28 @@ abstract class AppLocalizations {
   /// **'Right-click or hold for more options'**
   String get quickCodeToolMenuHint;
 
+  /// No description provided for @quickCodeCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Coordinates'**
+  String get quickCodeCoordinates;
+
+  /// No description provided for @quickCodeDartCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dart code'**
+  String get quickCodeDartCode;
+
+  /// No description provided for @quickCodeFormatTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch between Dart code and compact coordinates'**
+  String get quickCodeFormatTooltip;
+
   /// No description provided for @quickCodeHint.
   ///
   /// In en, this message translates to:
-  /// **'Paste const <Offset>[Offset(x, y), ...] coordinates.'**
+  /// **'Paste Offset(x, y) points or x,y pairs separated by spaces.'**
   String get quickCodeHint;
 
   /// No description provided for @quickCodeInvalid.

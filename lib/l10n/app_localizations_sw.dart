@@ -35,8 +35,18 @@ class AppLocalizationsSw extends AppLocalizations {
       'Bofya kulia au shikilia ili kuona chaguo zaidi';
 
   @override
+  String get quickCodeCoordinates => 'Viwianishi';
+
+  @override
+  String get quickCodeDartCode => 'Msimbo wa Dart';
+
+  @override
+  String get quickCodeFormatTooltip =>
+      'Badili kati ya msimbo wa Dart na viwianishi vifupi';
+
+  @override
   String get quickCodeHint =>
-      'Bandika viwianishi vya const <Offset>[Offset(x, y), ...].';
+      'Bandika nukta za Offset(x, y) au jozi za x,y zilizotenganishwa kwa nafasi.';
 
   @override
   String get quickCodeInvalid => 'Msimbo uwe orodha ya nukta za Offset(x, y).';

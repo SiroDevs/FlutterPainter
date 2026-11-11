@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../core/utils/l10n_ext.dart';
 import '../../../domain/models/export/export_file.dart';
+import '../../../domain/services/code_import/quick_code_points.dart';
 import '../../export/widgets/code_editor.dart';
 import '../../export/widgets/vscode_colors.dart';
 import '../cubit/quick_code_cubit.dart';
@@ -48,24 +49,50 @@ class _QuickCodePanelState extends State<QuickCodePanel> {
     );
   }
 
-  Widget _header(VsCodeColors colors) => Container(
-    height: 42,
-    padding: const EdgeInsets.only(left: 14),
-    color: colors.titleBar,
-    child: Row(
-      children: [
-        Icon(Icons.code, size: 17, color: colors.titleText),
-        const SizedBox(width: 8),
-        Text(context.l10n.quickCode, style: TextStyle(color: colors.titleText)),
-        const Spacer(),
-        IconButton(
-          tooltip: context.l10n.quickCodeClose,
-          onPressed: widget.onClose,
-          icon: Icon(Icons.close, size: 18, color: colors.titleText),
+  Widget _header(VsCodeColors colors) =>
+      BlocBuilder<QuickCodeCubit, QuickCodeState>(
+        buildWhen: (a, b) => a.format != b.format || a.status != b.status,
+        builder: (context, state) => Container(
+          height: 42,
+          padding: const EdgeInsets.only(left: 14),
+          color: colors.titleBar,
+          child: Row(
+            children: [
+              Icon(Icons.code, size: 17, color: colors.titleText),
+              const SizedBox(width: 8),
+              Text(
+                context.l10n.quickCode,
+                style: TextStyle(color: colors.titleText),
+              ),
+              const Spacer(),
+              Tooltip(
+                message: context.l10n.quickCodeFormatTooltip,
+                child: TextButton.icon(
+                  style: TextButton.styleFrom(
+                    foregroundColor: colors.titleText,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  onPressed: state.status == QuickCodeStatus.invalid
+                      ? null
+                      : widget.cubit.toggleFormat,
+                  icon: const Icon(Icons.swap_horiz, size: 17),
+                  label: Text(
+                    state.format == QuickCodeFormat.dartOffsets
+                        ? context.l10n.quickCodeCoordinates
+                        : context.l10n.quickCodeDartCode,
+                  ),
+                ),
+              ),
+              IconButton(
+                tooltip: context.l10n.quickCodeClose,
+                onPressed: widget.onClose,
+                icon: Icon(Icons.close, size: 18, color: colors.titleText),
+              ),
+            ],
+          ),
         ),
-      ],
-    ),
-  );
+      );
 
   Widget _editor(VsCodeColors colors) =>
       BlocBuilder<QuickCodeCubit, QuickCodeState>(

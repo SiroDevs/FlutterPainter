@@ -34,8 +34,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quickCodeToolMenuHint => 'Right-click or hold for more options';
 
   @override
+  String get quickCodeCoordinates => 'Coordinates';
+
+  @override
+  String get quickCodeDartCode => 'Dart code';
+
+  @override
+  String get quickCodeFormatTooltip =>
+      'Switch between Dart code and compact coordinates';
+
+  @override
   String get quickCodeHint =>
-      'Paste const <Offset>[Offset(x, y), ...] coordinates.';
+      'Paste Offset(x, y) points or x,y pairs separated by spaces.';
 
   @override
   String get quickCodeInvalid => 'Code must be a list of Offset(x, y) points.';
