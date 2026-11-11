@@ -65,6 +65,9 @@ class AppLocalizationsSw extends AppLocalizations {
   String get quickCodeAddPolygon => 'Ongeza poligoni';
 
   @override
+  String get quickCodeAddShapes => 'Ongeza maumbo';
+
+  @override
   String get quickCodeClose => 'Funga Msimbo wa Haraka';
 
   @override

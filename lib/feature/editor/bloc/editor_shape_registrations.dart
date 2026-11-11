@@ -36,11 +36,11 @@ extension _EditorShapeRegistrations on EditorBloc {
       ),
     );
     _reduce<ClosedToggled>((s, e) => VertexLogic.setClosed(s, e.closed));
-    _reduce<QuickCodePolygonPreviewChanged>(
-      (s, e) => QuickCodeLogic.previewPolygon(s, e.points),
+    _reduce<QuickCodePreviewsChanged>(
+      (s, e) => QuickCodeLogic.previewShapes(s, e.shapes),
     );
-    _reduce<QuickCodePolygonApplied>(
-      (s, e) => QuickCodeLogic.addPolygon(s, e.points),
+    _reduce<QuickCodePolygonsApplied>(
+      (s, e) => QuickCodeLogic.addPolygons(s, e.shapes),
     );
     _reduce<QuickCodeShapePointsChanged>(
       (s, e) => QuickCodeLogic.changeShapePoints(s, e),

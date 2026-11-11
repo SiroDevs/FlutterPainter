@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Add polygon'**
   String get quickCodeAddPolygon;
 
+  /// No description provided for @quickCodeAddShapes.
+  ///
+  /// In en, this message translates to:
+  /// **'Add shapes'**
+  String get quickCodeAddShapes;
+
   /// No description provided for @quickCodeClose.
   ///
   /// In en, this message translates to:

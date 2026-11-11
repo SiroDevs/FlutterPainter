@@ -17,6 +17,7 @@
   "quickCodePolygonReady": "Polygon preview ready.",
   "quickCodeShapeReady": "Canvas updated from these points.",
   "quickCodeAddPolygon": "Add polygon",
+  "quickCodeAddShapes": "Add shapes",
   "quickCodeClose": "Close Quick Code",
   "openFullEditor": "Open the full code editor",
   "undo": "Undo",

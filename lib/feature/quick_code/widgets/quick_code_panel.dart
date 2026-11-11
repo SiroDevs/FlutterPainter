@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../core/utils/l10n_ext.dart';
 import '../../../domain/models/export/export_file.dart';
-import '../../../domain/services/code_import/quick_code_points.dart';
+import '../../../domain/services/code_import/quick_code_format.dart';
+import '../../../domain/services/code_import/quick_code_validation.dart';
 import '../../export/widgets/code_editor.dart';
 import '../../export/widgets/vscode_colors.dart';
 import '../cubit/quick_code_cubit.dart';
@@ -51,7 +52,10 @@ class _QuickCodePanelState extends State<QuickCodePanel> {
 
   Widget _header(VsCodeColors colors) =>
       BlocBuilder<QuickCodeCubit, QuickCodeState>(
-        buildWhen: (a, b) => a.format != b.format || a.status != b.status,
+        buildWhen: (a, b) =>
+            a.format != b.format ||
+            a.status != b.status ||
+            a.shapeCount != b.shapeCount,
         builder: (context, state) => Container(
           height: 42,
           padding: const EdgeInsets.only(left: 14),
@@ -73,7 +77,7 @@ class _QuickCodePanelState extends State<QuickCodePanel> {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     visualDensity: VisualDensity.compact,
                   ),
-                  onPressed: state.status == QuickCodeStatus.invalid
+                  onPressed: !state.canToggleFormat
                       ? null
                       : widget.cubit.toggleFormat,
                   icon: const Icon(Icons.swap_horiz, size: 17),
@@ -109,7 +113,10 @@ class _QuickCodePanelState extends State<QuickCodePanel> {
 
   Widget _footer(VsCodeColors colors) =>
       BlocBuilder<QuickCodeCubit, QuickCodeState>(
-        buildWhen: (a, b) => a.status != b.status || a.isPolygon != b.isPolygon,
+        buildWhen: (a, b) =>
+            a.status != b.status ||
+            a.isPolygon != b.isPolygon ||
+            a.shapeCount != b.shapeCount,
         builder: (context, state) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           color: colors.statusBar,
@@ -128,7 +135,11 @@ class _QuickCodePanelState extends State<QuickCodePanel> {
                       ? widget.cubit.addPolygon
                       : null,
                   icon: const Icon(Icons.add, size: 17),
-                  label: Text(context.l10n.quickCodeAddPolygon),
+                  label: Text(
+                    state.shapeCount > 1
+                        ? context.l10n.quickCodeAddShapes
+                        : context.l10n.quickCodeAddPolygon,
+                  ),
                 ),
             ],
           ),

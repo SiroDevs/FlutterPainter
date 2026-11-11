@@ -18,6 +18,7 @@ import '../../../domain/models/drawing/reference_image.dart';
 import '../../../domain/models/shapes/shape.dart';
 import '../../../domain/models/shapes/shape_gradient.dart';
 import '../../../domain/models/editor/tool.dart';
+import '../../../domain/services/code_import/quick_code_points.dart';
 import '../logic/exports.dart';
 import '../models/editor_seed.dart';
 import '../models/gesture_state.dart';

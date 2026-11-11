@@ -1,6 +1,5 @@
 // Dart imports:
 import 'dart:async';
-import 'dart:ui';
 
 // Package imports:
 import 'package:equatable/equatable.dart';
@@ -10,19 +9,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/utils/copy_with_util.dart';
 import '../../../domain/models/editor/tool.dart';
 import '../../../domain/models/shapes/shape_kind.dart';
+import '../../../domain/services/code_import/quick_code_format.dart';
 import '../../../domain/services/code_import/quick_code_points.dart';
+import '../../../domain/services/code_import/quick_code_validation.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../editor/logic/drawing/editor_ops.dart';
 import '../quick_code_request.dart';
 
 part 'quick_code_state.dart';
 
-/// Edits polygon coordinates or the points of one selected shape.
+/// Edits named polygon data or the points of one selected shape.
 class QuickCodeCubit extends Cubit<QuickCodeState> {
   QuickCodeCubit(this._editor)
     : super(
         QuickCodeState(
-          content: QuickCodePoints.format(const []),
+          content: QuickCodeFormatters.format(const []),
           request: const QuickCodeRequest.polygon(),
           status: QuickCodeStatus.empty,
         ),
@@ -31,25 +32,19 @@ class QuickCodeCubit extends Cubit<QuickCodeState> {
   final EditorBloc _editor;
   Timer? _previewTimer;
   Timer? _commitTimer;
-  List<Offset>? _pendingPoints;
-  List<Offset>? _previewedPoints;
+  List<QuickCodeShapeData>? _pendingShapes;
+  List<QuickCodeShapeData>? _previewedShapes;
 
   void open(QuickCodeRequest request) {
-    _previewTimer?.cancel();
-    _commitTimer?.cancel();
-    _pendingPoints = null;
-    _previewedPoints = null;
+    _cancelTimers();
+    _pendingShapes = null;
+    _previewedShapes = null;
+    _editor.add(const QuickCodePreviewsChanged([]));
     if (request.isPolygon) {
       _editor
         ..add(const DraftCancelled())
         ..add(const ToolSelected(Tool.polygon));
-      emit(
-        QuickCodeState(
-          content: QuickCodePoints.format(const []),
-          request: request,
-          status: QuickCodeStatus.empty,
-        ),
-      );
+      emit(_emptyState(request));
       return;
     }
     final layer = request.layerIndex;
@@ -68,152 +63,158 @@ class QuickCodeCubit extends Cubit<QuickCodeState> {
       return;
     }
     final shape = shapes[index];
-    final content = QuickCodePoints.format(shape.points);
+    final data = QuickCodeShapeData(
+      points: shape.points,
+      name: shape.name.isEmpty ? null : shape.name,
+      groupName: shape.groupName,
+    );
+    final content = QuickCodeFormatters.formatDartShape(data);
     emit(
       QuickCodeState(
         content: content,
         request: request,
         shapeKind: shape.kind,
-        status: _status(content, shape.kind),
+        status: QuickCodeStatus.ready,
+        shapeCount: 1,
       ),
     );
   }
 
   void edit(String content) {
-    final status = _status(content, state.shapeKind);
+    final parsed = _parse(content);
+    final status = QuickCodeValidation.status(parsed, state.shapeKind);
     emit(
       state.copyWith(
         content: content,
         status: status,
-        format: QuickCodePoints.detectFormat(content),
+        format: QuickCodeFormatters.detectFormat(content),
+        shapeCount: parsed?.length ?? 0,
       ),
     );
-    _pendingPoints = null;
-    _previewTimer?.cancel();
-    _commitTimer?.cancel();
+    _pendingShapes = null;
+    _cancelTimers();
     if (state.isPolygon) {
       if (status == QuickCodeStatus.empty) {
-        _editor.add(const QuickCodePolygonPreviewChanged([]));
-        return;
-      }
-      try {
-        final points = QuickCodePoints.parse(content);
-        if (points.isNotEmpty) {
-          _pendingPoints = points;
-          _previewTimer = Timer(const Duration(milliseconds: 100), () {
-            _apply(points, commit: false);
-          });
-        }
-      } catch (_) {
-        return;
+        _editor.add(const QuickCodePreviewsChanged([]));
+      } else if (parsed != null) {
+        _previewWithDelay(parsed);
       }
       return;
     }
     if (status != QuickCodeStatus.ready) {
-      final previewed = _previewedPoints;
-      if (previewed != null) _apply(previewed, commit: true);
+      final previous = _previewedShapes;
+      if (previous != null) _applyShape(previous.single, commit: true);
       return;
     }
-    final points = QuickCodePoints.parse(content);
-    _pendingPoints = points;
+    if (parsed == null) return;
+    final shape = parsed.single;
+    _pendingShapes = parsed;
     _previewTimer = Timer(const Duration(milliseconds: 100), () {
-      _apply(points, commit: false);
+      _applyShape(shape, commit: false);
     });
     _commitTimer = Timer(const Duration(milliseconds: 500), () {
-      _apply(points, commit: true);
+      _applyShape(shape, commit: true);
     });
   }
 
   void toggleFormat() {
-    try {
-      final points = QuickCodePoints.parse(state.content);
-      final next = state.format == QuickCodeFormat.dartOffsets
-          ? QuickCodeFormat.compactCoordinates
-          : QuickCodeFormat.dartOffsets;
-      final content = next == QuickCodeFormat.dartOffsets
-          ? QuickCodePoints.format(points)
-          : QuickCodePoints.formatCompact(points);
-      emit(
-        state.copyWith(
-          content: content,
-          format: next,
-          status: _status(content, state.shapeKind),
-        ),
-      );
-    } catch (_) {
-      return;
-    }
-  }
-
-  void addPolygon() {
-    if (!state.isPolygon || state.status != QuickCodeStatus.ready) return;
-    _previewTimer?.cancel();
-    _pendingPoints = null;
-    final points = QuickCodePoints.parse(state.content);
-    final layer = _editor.state.layerIndex;
-    final index = _editor.state.layer.shapes.length;
-    _editor.add(QuickCodePolygonApplied(points));
-    final request = QuickCodeRequest.shape(
-      layerIndex: layer,
-      shapeIndex: index,
-    );
+    final parsed = _parse(state.content);
+    if (!state.canToggleFormat || parsed == null) return;
+    final next = state.format == QuickCodeFormat.dartOffsets
+        ? QuickCodeFormat.compactCoordinates
+        : QuickCodeFormat.dartOffsets;
+    final content = next == QuickCodeFormat.dartOffsets
+        ? QuickCodeFormatters.formatDartShapes(parsed)
+        : QuickCodeFormatters.formatCompactShapes(parsed);
     emit(
       state.copyWith(
-        request: request,
-        shapeKind: ShapeKind.polygon,
-        status: QuickCodeStatus.ready,
+        content: content,
+        format: next,
+        status: QuickCodeValidation.status(parsed, state.shapeKind),
       ),
     );
   }
 
-  QuickCodeStatus _status(String content, ShapeKind? kind) {
-    if (content.trim().isEmpty) return QuickCodeStatus.empty;
+  void addPolygon() {
+    final parsed = _parse(state.content);
+    if (!state.isPolygon ||
+        state.status != QuickCodeStatus.ready ||
+        parsed == null ||
+        parsed.isEmpty) {
+      return;
+    }
+    _cancelTimers();
+    _pendingShapes = null;
+    final layer = _editor.state.layerIndex;
+    final index = _editor.state.layer.shapes.length;
+    _editor.add(QuickCodePolygonsApplied(parsed));
+    if (parsed.length == 1) {
+      emit(
+        state.copyWith(
+          request: QuickCodeRequest.shape(layerIndex: layer, shapeIndex: index),
+          shapeKind: ShapeKind.polygon,
+          shapeCount: 1,
+        ),
+      );
+      return;
+    }
+    emit(_emptyState(state.request));
+  }
+
+  void clearPreview() => _editor.add(const QuickCodePreviewsChanged([]));
+  QuickCodeState _emptyState(QuickCodeRequest request) => QuickCodeState(
+    content: QuickCodeFormatters.format(const []),
+    request: request,
+    status: QuickCodeStatus.empty,
+  );
+
+  List<QuickCodeShapeData>? _parse(String content) {
     try {
-      final points = QuickCodePoints.parse(content);
-      if (points.isEmpty) return QuickCodeStatus.empty;
-      final validCount = switch (kind) {
-        ShapeKind.rect || ShapeKind.ellipse => points.length == 2,
-        ShapeKind.line => points.length >= 2,
-        ShapeKind.polygon => points.length >= 3,
-        ShapeKind.freehand => points.length >= 2,
-        null => points.length >= 3,
-      };
-      if (validCount) return QuickCodeStatus.ready;
-      return points.length < 2
-          ? QuickCodeStatus.tooFew
-          : QuickCodeStatus.invalid;
+      return QuickCodePoints.parseShapes(content);
     } catch (_) {
-      return QuickCodeStatus.invalid;
+      return null;
     }
   }
 
-  void _apply(List<Offset> points, {required bool commit}) {
+  void _previewWithDelay(List<QuickCodeShapeData> shapes) {
+    if (shapes.any((shape) => shape.points.isEmpty)) return;
+    _pendingShapes = shapes;
+    _previewTimer = Timer(const Duration(milliseconds: 100), () {
+      _editor.add(QuickCodePreviewsChanged(shapes));
+    });
+  }
+
+  void _applyShape(QuickCodeShapeData shape, {required bool commit}) {
     if (_editor.isClosed) return;
-    if (commit) _pendingPoints = null;
-    if (state.isPolygon) {
-      _editor.add(QuickCodePolygonPreviewChanged(points));
-      return;
-    }
-    _previewedPoints = commit ? null : points;
+    if (commit) _pendingShapes = null;
+    _previewedShapes = commit ? null : [shape];
     final layer = state.request.layerIndex;
-    final shape = state.request.shapeIndex;
-    if (layer == null || shape == null) return;
+    final index = state.request.shapeIndex;
+    if (layer == null || index == null) return;
     _editor.add(
       QuickCodeShapePointsChanged(
         layerIndex: layer,
-        shapeIndex: shape,
-        points: points,
+        shapeIndex: index,
+        points: shape.points,
+        name: shape.name,
         commit: commit,
       ),
     );
   }
 
-  @override
-  Future<void> close() {
+  void _cancelTimers() {
     _previewTimer?.cancel();
     _commitTimer?.cancel();
-    final points = _pendingPoints;
-    if (points != null && !state.isPolygon) _apply(points, commit: true);
+  }
+
+  @override
+  Future<void> close() {
+    _cancelTimers();
+    final pending = _pendingShapes;
+    if (pending != null && !state.isPolygon && pending.length == 1) {
+      _applyShape(pending.single, commit: true);
+    }
+    if (!_editor.isClosed && state.isPolygon) clearPreview();
     return super.close();
   }
 }

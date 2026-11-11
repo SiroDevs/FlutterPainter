@@ -83,7 +83,10 @@ class _QuickCodeHostState extends State<QuickCodeHost> {
                               child: QuickCodePanel(
                                 key: ValueKey(_panelVersion),
                                 cubit: cubit,
-                                onClose: () => widget.open.value = false,
+                                onClose: () {
+                                  cubit.clearPreview();
+                                  widget.open.value = false;
+                                },
                               ),
                             ),
                           ),

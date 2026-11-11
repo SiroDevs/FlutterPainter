@@ -63,6 +63,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quickCodeAddPolygon => 'Add polygon';
 
   @override
+  String get quickCodeAddShapes => 'Add shapes';
+
+  @override
   String get quickCodeClose => 'Close Quick Code';
 
   @override
