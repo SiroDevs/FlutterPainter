@@ -7,7 +7,7 @@ import 'editor_ops.dart';
 abstract class GroupLogic {
   GroupLogic._();
 
-  static EditorState group(EditorState state) {
+  static EditorState group(EditorState state, String Function(int) nameFor) {
     final indices = state.validSelectedIndices;
     if (indices.length < 2) return state;
     final currentGroups = {
@@ -24,7 +24,7 @@ abstract class GroupLogic {
       suffix++;
       id = 'group-$suffix';
     }
-    final groupName = _nextName(state);
+    final groupName = _nextName(state, nameFor);
     final changes = <int, Shape>{
       for (final index in indices)
         index: state.layer.shapes[index].copyWith(
@@ -79,7 +79,7 @@ abstract class GroupLogic {
         .commit();
   }
 
-  static String _nextName(EditorState state) {
+  static String _nextName(EditorState state, String Function(int) nameFor) {
     final usedNames = <String>{};
     var groupNumber = 0;
     for (final layer in state.drawing.layers) {
@@ -88,13 +88,13 @@ abstract class GroupLogic {
         final groupId = shape.groupId;
         if (groupId == null || !seenGroups.add(groupId)) continue;
         groupNumber++;
-        usedNames.add(shape.groupName ?? 'Group $groupNumber');
+        usedNames.add(shape.groupName ?? nameFor(groupNumber));
       }
     }
     var candidate = groupNumber + 1;
-    while (usedNames.contains('Group $candidate')) {
+    while (usedNames.contains(nameFor(candidate))) {
       candidate++;
     }
-    return 'Group $candidate';
+    return nameFor(candidate);
   }
 }

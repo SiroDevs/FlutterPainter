@@ -6,6 +6,7 @@ import 'dart:ui';
 // Project imports:
 import '../../domain/models/drawing/drawing.dart';
 import '../../domain/models/drawing/paint_layer.dart';
+import '../../domain/models/drawing/project_format_exception.dart';
 import '../../domain/models/drawing/reference_image.dart';
 import '../../domain/models/shapes/shape.dart';
 import '../../domain/models/shapes/shape_kind.dart';
@@ -108,7 +109,38 @@ Map<String, dynamic> drawingToMap(Drawing d) => {
   'layers': [for (final l in d.layers) layerToJson(l)],
 };
 
+/// Reads a project map. Throws [ProjectFormatException] when the map is from a
+/// newer version of the format or is not a valid project.
 Drawing drawingFromMap(Map<String, dynamic> j) {
+  final format = j['format'];
+  if (format != null && format != flpFormat) {
+    throw ProjectFormatException(
+      ProjectFormatProblem.damaged,
+      'unknown format "$format"',
+    );
+  }
+  final version = j['version'];
+  if (version is int && version > flpVersion) {
+    throw ProjectFormatException(
+      ProjectFormatProblem.newerVersion,
+      'file version $version, this app reads up to $flpVersion',
+    );
+  }
+  try {
+    return _drawingFromMap(j);
+  } catch (e) {
+    // Hand-edited or truncated files surface as cast, range and name errors.
+    if (e is TypeError ||
+        e is ArgumentError ||
+        e is FormatException ||
+        e is StateError) {
+      throw ProjectFormatException(ProjectFormatProblem.damaged, '$e');
+    }
+    rethrow;
+  }
+}
+
+Drawing _drawingFromMap(Map<String, dynamic> j) {
   final layers = <PaintLayer>[
     for (final l in j['layers'] as List)
       layerFromJson(l as Map<String, dynamic>),
@@ -135,5 +167,19 @@ String drawingToJson(Drawing d, {bool pretty = false}) {
   return pretty ? JsonEncoder.withIndent('  ').convert(map) : jsonEncode(map);
 }
 
-Drawing drawingFromJson(String text) =>
-    drawingFromMap(jsonDecode(text) as Map<String, dynamic>);
+/// Throws [ProjectFormatException] for anything that is not a readable project.
+Drawing drawingFromJson(String text) {
+  final Object? decoded;
+  try {
+    decoded = jsonDecode(text);
+  } on FormatException catch (e) {
+    throw ProjectFormatException(ProjectFormatProblem.damaged, e.message);
+  }
+  if (decoded is! Map<String, dynamic>) {
+    throw const ProjectFormatException(
+      ProjectFormatProblem.damaged,
+      'expected a JSON object',
+    );
+  }
+  return drawingFromMap(decoded);
+}

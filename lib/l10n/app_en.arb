@@ -605,5 +605,48 @@
       }
     }
   },
-  "projectUnavailable": "No active project is available here."
+  "projectUnavailable": "No active project is available here.",
+  "untitledProject": "Untitled",
+  "untitledProjectNumbered": "Untitled {number}",
+  "@untitledProjectNumbered": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultLayerName": "Layer {number}",
+  "@defaultLayerName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultGroupName": "Group {number}",
+  "@defaultGroupName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "projectFileDamaged": "Could not open {path}: the file is damaged or is not a project.",
+  "@projectFileDamaged": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "projectFileTooNew": "{path} was made with a newer version of Flutter Painter. Update the app to open it.",
+  "@projectFileTooNew": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "statusNotBackedUp": "Not backed up",
+  "statusNotBackedUpTooltip": "A recovery copy could not be saved. Save your project to avoid losing work."
 }

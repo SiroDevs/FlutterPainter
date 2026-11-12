@@ -89,6 +89,7 @@ abstract class ImageLogic {
     ReferenceImage ref,
     Image pixels, {
     bool onNewLayer = false,
+    required String Function(int) nameFor,
   }) {
     final fitted = _fitted(s.drawing, ref, pixels);
     final cache = {...s.images, ref.id: pixels};
@@ -100,7 +101,7 @@ abstract class ImageLogic {
     }
     final layers = [
       ...s.drawing.layers,
-      PaintLayer(name: 'Layer ${s.drawing.layers.length + 1}', image: fitted),
+      PaintLayer(name: nameFor(s.drawing.layers.length + 1), image: fitted),
     ];
     return s
         .copyWith(

@@ -59,7 +59,7 @@ class LayersPanel extends StatelessWidget {
                 _btn(
                   Icons.add,
                   context.l10n.layerAdd,
-                  () => bloc.add(const LayerAdded()),
+                  () => bloc.add(LayerAdded(context.l10n.defaultLayerName)),
                 ),
                 _btn(
                   Icons.edit_outlined,

@@ -13,7 +13,7 @@ extension LayerCommands on WorkspaceCommands {
   AppCommand get layerAdd => AppCommand(
     label: context.l10n.layerAdd,
     icon: Icons.add_box_outlined,
-    onPressed: () => send(const LayerAdded()),
+    onPressed: () => send(LayerAdded(context.l10n.defaultLayerName)),
   );
 
   AppCommand get layerDelete => AppCommand(

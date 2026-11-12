@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:developer' as developer;
+
 // Package imports:
 import 'package:injectable/injectable.dart';
 
@@ -17,7 +20,9 @@ class DraftRepo {
 
   final DraftFileSource _source;
 
-  Future<void> save(Draft draft) =>
+  /// Returns false when the side copy could not be written, so the caller can
+  /// warn that the work is not backed up.
+  Future<bool> save(Draft draft) =>
       _source.write(draft.tabId, draftToJson(draft));
 
   Future<void> delete(String tabId) => _source.delete(tabId);
@@ -28,8 +33,14 @@ class DraftRepo {
     for (final text in await _source.readAll()) {
       try {
         out.add(draftFromJson(text));
-      } catch (_) {
+      } catch (e, st) {
         // Skip a damaged draft rather than blocking the others.
+        developer.log(
+          'Skipping damaged draft',
+          name: 'DraftRepo',
+          error: e,
+          stackTrace: st,
+        );
       }
     }
     out.sort((a, b) => a.savedAt.compareTo(b.savedAt));

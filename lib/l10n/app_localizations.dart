@@ -2163,6 +2163,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No active project is available here.'**
   String get projectUnavailable;
+
+  /// No description provided for @untitledProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled'**
+  String get untitledProject;
+
+  /// No description provided for @untitledProjectNumbered.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled {number}'**
+  String untitledProjectNumbered(int number);
+
+  /// No description provided for @defaultLayerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Layer {number}'**
+  String defaultLayerName(int number);
+
+  /// No description provided for @defaultGroupName.
+  ///
+  /// In en, this message translates to:
+  /// **'Group {number}'**
+  String defaultGroupName(int number);
+
+  /// No description provided for @projectFileDamaged.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open {path}: the file is damaged or is not a project.'**
+  String projectFileDamaged(String path);
+
+  /// No description provided for @projectFileTooNew.
+  ///
+  /// In en, this message translates to:
+  /// **'{path} was made with a newer version of Flutter Painter. Update the app to open it.'**
+  String projectFileTooNew(String path);
+
+  /// No description provided for @statusNotBackedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Not backed up'**
+  String get statusNotBackedUp;
+
+  /// No description provided for @statusNotBackedUpTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'A recovery copy could not be saved. Save your project to avoid losing work.'**
+  String get statusNotBackedUpTooltip;
 }
 
 class _AppLocalizationsDelegate

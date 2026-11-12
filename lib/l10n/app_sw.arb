@@ -613,5 +613,48 @@
       }
     }
   },
-  "projectUnavailable": "Hakuna mradi unaotumika unaopatikana hapa."
+  "projectUnavailable": "Hakuna mradi unaotumika unaopatikana hapa.",
+  "untitledProject": "Bila jina",
+  "untitledProjectNumbered": "Bila jina {number}",
+  "@untitledProjectNumbered": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultLayerName": "Tabaka {number}",
+  "@defaultLayerName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultGroupName": "Kundi {number}",
+  "@defaultGroupName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "projectFileDamaged": "Imeshindikana kufungua {path}: faili limeharibika au si mradi.",
+  "@projectFileDamaged": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "projectFileTooNew": "{path} liliundwa na toleo jipya zaidi la Flutter Painter. Sasisha programu ili kulifungua.",
+  "@projectFileTooNew": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "statusNotBackedUp": "Haijahifadhiwa nakala",
+  "statusNotBackedUpTooltip": "Nakala ya kurejesha haikuweza kuhifadhiwa. Hifadhi mradi wako ili kuepuka kupoteza kazi."
 }

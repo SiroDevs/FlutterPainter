@@ -605,5 +605,48 @@
       }
     }
   },
-  "projectUnavailable": "Aucun projet actif n’est disponible ici."
+  "projectUnavailable": "Aucun projet actif n’est disponible ici.",
+  "untitledProject": "Sans titre",
+  "untitledProjectNumbered": "Sans titre {number}",
+  "@untitledProjectNumbered": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultLayerName": "Calque {number}",
+  "@defaultLayerName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultGroupName": "Groupe {number}",
+  "@defaultGroupName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "projectFileDamaged": "Impossible d’ouvrir {path} : le fichier est endommagé ou n’est pas un projet.",
+  "@projectFileDamaged": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "projectFileTooNew": "{path} a été créé avec une version plus récente de Flutter Painter. Mettez l’application à jour pour l’ouvrir.",
+  "@projectFileTooNew": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "statusNotBackedUp": "Non sauvegardé",
+  "statusNotBackedUpTooltip": "La copie de récupération n’a pas pu être enregistrée. Enregistrez votre projet pour ne rien perdre."
 }

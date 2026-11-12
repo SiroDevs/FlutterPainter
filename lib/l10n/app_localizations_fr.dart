@@ -1178,4 +1178,38 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get projectUnavailable => 'Aucun projet actif n’est disponible ici.';
+
+  @override
+  String get untitledProject => 'Sans titre';
+
+  @override
+  String untitledProjectNumbered(int number) {
+    return 'Sans titre $number';
+  }
+
+  @override
+  String defaultLayerName(int number) {
+    return 'Calque $number';
+  }
+
+  @override
+  String defaultGroupName(int number) {
+    return 'Groupe $number';
+  }
+
+  @override
+  String projectFileDamaged(String path) {
+    return 'Impossible d’ouvrir $path : le fichier est endommagé ou n’est pas un projet.';
+  }
+
+  @override
+  String projectFileTooNew(String path) {
+    return '$path a été créé avec une version plus récente de Flutter Painter. Mettez l’application à jour pour l’ouvrir.';
+  }
+
+  @override
+  String get statusNotBackedUp => 'Non sauvegardé';
+
+  @override
+  String get statusNotBackedUpTooltip => 'La copie de récupération n’a pas pu être enregistrée. Enregistrez votre projet pour ne rien perdre.';
 }

@@ -17,7 +17,15 @@ Future<void> chooseLayerImage(
 }) async {
   try {
     final bytes = await getIt<FileDialogs>().pickImageBytes(context.l10n);
-    if (bytes != null) bloc.add(ImageLoaded(bytes, onNewLayer: onNewLayer));
+    if (bytes != null && context.mounted) {
+      bloc.add(
+        ImageLoaded(
+          bytes,
+          onNewLayer: onNewLayer,
+          nameFor: context.l10n.defaultLayerName,
+        ),
+      );
+    }
   } catch (e) {
     if (context.mounted) {
       CustomSnackbar.show(context, context.l10n.imageLoadFailed('$e'));

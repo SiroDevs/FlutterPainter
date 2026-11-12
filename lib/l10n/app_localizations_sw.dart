@@ -1173,4 +1173,38 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get projectUnavailable => 'Hakuna mradi unaotumika unaopatikana hapa.';
+
+  @override
+  String get untitledProject => 'Bila jina';
+
+  @override
+  String untitledProjectNumbered(int number) {
+    return 'Bila jina $number';
+  }
+
+  @override
+  String defaultLayerName(int number) {
+    return 'Tabaka $number';
+  }
+
+  @override
+  String defaultGroupName(int number) {
+    return 'Kundi $number';
+  }
+
+  @override
+  String projectFileDamaged(String path) {
+    return 'Imeshindikana kufungua $path: faili limeharibika au si mradi.';
+  }
+
+  @override
+  String projectFileTooNew(String path) {
+    return '$path liliundwa na toleo jipya zaidi la Flutter Painter. Sasisha programu ili kulifungua.';
+  }
+
+  @override
+  String get statusNotBackedUp => 'Haijahifadhiwa nakala';
+
+  @override
+  String get statusNotBackedUpTooltip => 'Nakala ya kurejesha haikuweza kuhifadhiwa. Hifadhi mradi wako ili kuepuka kupoteza kazi.';
 }

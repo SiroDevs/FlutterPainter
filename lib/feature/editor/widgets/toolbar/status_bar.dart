@@ -9,6 +9,7 @@ import 'package:styled_widget/styled_widget.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/editor/app_settings.dart';
 import '../../../settings/cubit/settings_cubit.dart';
+import '../../../workspace/cubit/workspace_cubit.dart';
 import '../../bloc/editor_bloc.dart';
 import 'tool_hint.dart';
 
@@ -21,6 +22,9 @@ class StatusBar extends StatelessWidget {
     final style = Theme.of(context).textTheme.bodySmall;
     final preview = context.select<SettingsCubit, ColorPreview>(
       (c) => c.state.colorPreview,
+    );
+    final notBackedUp = context.select<WorkspaceCubit, bool>(
+      (c) => c.state.persistFailed,
     );
     return BlocBuilder<EditorBloc, EditorState>(
       buildWhen: (a, b) => a.cursor != b.cursor || a.tool != b.tool,
@@ -40,6 +44,27 @@ class StatusBar extends StatelessWidget {
               style: style,
               overflow: TextOverflow.ellipsis,
             ).expanded(),
+            if (notBackedUp)
+              Tooltip(
+                message: context.l10n.statusNotBackedUpTooltip,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      size: 14,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      context.l10n.statusNotBackedUp,
+                      style: style?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                ),
+              ),
             if (preview != ColorPreview.none)
               Text(
                 context.l10n.statusPreview(_previewLabel(context, preview)),

@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:async';
+import 'dart:developer' as developer;
 
 // Flutter imports:
 import 'package:flutter/widgets.dart';
@@ -13,6 +14,7 @@ import 'package:injectable/injectable.dart';
 import '../../../common/constants/pref_constants.dart';
 import '../../../core/utils/app_util.dart';
 import '../../../core/utils/copy_with_util.dart';
+import '../../../core/utils/default_names.dart';
 import '../../../domain/models/drawing/draft.dart';
 import '../../../domain/models/drawing/drawing.dart';
 import '../../../domain/models/export/export_options.dart';
@@ -54,6 +56,7 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
   final Map<EditorBloc, StreamSubscription<EditorState>> _subs = {};
   final Map<EditorBloc, Timer> _timers = {};
   final Map<EditorBloc, int> _seen = {};
+  final Set<EditorBloc> _failing = {};
   int _untitled = 0;
 
   List<EditorBloc> get editors => List.unmodifiable(_editors);
@@ -111,6 +114,7 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
     _timers.remove(bloc)?.cancel();
     final subscription = _subs.remove(bloc);
     _seen.remove(bloc);
+    _failing.remove(bloc);
     if (_editors.isEmpty) {
       addBlank();
     } else {
@@ -132,7 +136,10 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
 
   String _nextUntitled() {
     _untitled++;
-    return _untitled == 1 ? 'Untitled' : 'Untitled $_untitled';
+    final l10n = appLocalizationsFor(_prefs.getAppSettings().languageCode);
+    return _untitled == 1
+        ? l10n.untitledProject
+        : l10n.untitledProjectNumbered(_untitled);
   }
 
   EditorBloc? _tabFor(String path) {
@@ -195,12 +202,34 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
     _timers.remove(bloc)?.cancel();
     if (!_editors.contains(bloc) || bloc.isClosed) return;
     final s = bloc.state;
-    if (!s.dirty) {
-      await _drafts.delete(s.tabId);
-    } else if (state.autoSave && s.filePath != null && s.overwriteConfirmed) {
-      await commitSave(bloc, s.filePath!);
+    var ok = true;
+    try {
+      if (!s.dirty) {
+        await _drafts.delete(s.tabId);
+      } else if (state.autoSave && s.filePath != null && s.overwriteConfirmed) {
+        await commitSave(bloc, s.filePath!);
+      } else {
+        ok = await _saver.writeDraft(s);
+      }
+    } on Exception catch (e, st) {
+      // Runs from a timer: an error here would otherwise go unreported.
+      developer.log(
+        'Could not persist ${s.tabId}',
+        name: 'WorkspaceCubit',
+        error: e,
+        stackTrace: st,
+      );
+      ok = false;
+    }
+    if (isClosed) return;
+    if (ok) {
+      _failing.remove(bloc);
     } else {
-      await _saver.writeDraft(s);
+      _failing.add(bloc);
+    }
+    final failed = _failing.isNotEmpty;
+    if (failed != state.persistFailed) {
+      emit(state.copyWith(persistFailed: failed));
     }
   }
 

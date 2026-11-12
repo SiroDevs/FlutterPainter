@@ -13,7 +13,10 @@ class SelectAllRequested extends EditorEvent {
 }
 
 class ShapesGrouped extends EditorEvent {
-  const ShapesGrouped();
+  /// [nameFor] turns a group number into its default name.
+  const ShapesGrouped(this.nameFor);
+
+  final String Function(int number) nameFor;
 }
 
 class ShapesUngrouped extends EditorEvent {

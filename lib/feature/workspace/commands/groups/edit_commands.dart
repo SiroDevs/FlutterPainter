@@ -77,7 +77,7 @@ extension EditCommands on WorkspaceCommands {
     label: context.l10n.shapeGroup,
     icon: Icons.group_work_outlined,
     tooltip: context.l10n.shapeGroupTooltip,
-    onPressed: canGroup ? () => send(const ShapesGrouped()) : null,
+    onPressed: canGroup ? () => send(ShapesGrouped(context.l10n.defaultGroupName)) : null,
   );
 
   AppCommand get ungroup => AppCommand(

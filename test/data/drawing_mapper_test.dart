@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_painter/data/mappers/drawing_mapper.dart';
 import 'package:flutter_painter/domain/models/drawing/drawing.dart';
 import 'package:flutter_painter/domain/models/drawing/paint_layer.dart';
+import 'package:flutter_painter/domain/models/drawing/project_format_exception.dart';
 import 'package:flutter_painter/domain/models/drawing/reference_image.dart';
 import 'package:flutter_painter/domain/models/shapes/shape.dart';
 import 'package:flutter_painter/domain/models/shapes/shape_gradient.dart';
@@ -126,8 +127,11 @@ void main() {
       expect(referenceFromJson({'x': 1}), isNull);
     });
 
-    test('unknown shape kinds and bad JSON throw (documents current behaviour)',
-        () {
+    Matcher problem(ProjectFormatProblem p) => throwsA(
+      isA<ProjectFormatException>().having((e) => e.problem, 'problem', p),
+    );
+
+    test('unknown shape kinds are reported as a damaged project', () {
       expect(
         () => drawingFromMap({
           'layers': [
@@ -139,10 +143,63 @@ void main() {
             },
           ],
         }),
-        throwsA(anything),
+        problem(ProjectFormatProblem.damaged),
       );
-      expect(() => drawingFromJson('not json'), throwsFormatException);
-      expect(() => drawingFromJson('{}'), throwsA(anything));
+    });
+
+    test('text that is not JSON is reported as damaged', () {
+      expect(
+        () => drawingFromJson('not json'),
+        problem(ProjectFormatProblem.damaged),
+      );
+    });
+
+    test('JSON that is not an object is reported as damaged', () {
+      expect(
+        () => drawingFromJson('[1, 2]'),
+        problem(ProjectFormatProblem.damaged),
+      );
+    });
+
+    test('a project with no layers is reported as damaged', () {
+      expect(
+        () => drawingFromJson('{}'),
+        problem(ProjectFormatProblem.damaged),
+      );
+    });
+
+    test('wrongly typed fields are reported as damaged', () {
+      expect(
+        () => drawingFromMap({'layers': 'oops'}),
+        problem(ProjectFormatProblem.damaged),
+      );
+    });
+
+    test('another format is refused', () {
+      expect(
+        () => drawingFromMap({'format': 'svg', 'layers': []}),
+        problem(ProjectFormatProblem.damaged),
+      );
+    });
+
+    test('a file from a newer version is refused with its own problem', () {
+      expect(
+        () => drawingFromMap({
+          'format': flpFormat,
+          'version': flpVersion + 1,
+          'layers': [],
+        }),
+        problem(ProjectFormatProblem.newerVersion),
+      );
+    });
+
+    test('the current and older versions still load', () {
+      for (final v in [1, flpVersion]) {
+        expect(
+          drawingFromMap({'format': flpFormat, 'version': v, 'layers': []}),
+          isA<Drawing>(),
+        );
+      }
     });
   });
 }

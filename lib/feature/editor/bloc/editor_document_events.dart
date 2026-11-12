@@ -1,7 +1,10 @@
 part of 'editor_bloc.dart';
 
 class LayerAdded extends EditorEvent {
-  const LayerAdded();
+  /// [nameFor] turns a layer number into its default name, in the user's language.
+  const LayerAdded(this.nameFor);
+
+  final String Function(int number) nameFor;
 }
 
 class LayerDeleted extends EditorEvent {
@@ -56,10 +59,17 @@ class DocumentSaved extends EditorEvent {
 }
 
 class ImageLoaded extends EditorEvent {
-  const ImageLoaded(this.bytes, {this.onNewLayer = false});
+  const ImageLoaded(
+    this.bytes, {
+    this.onNewLayer = false,
+    required this.nameFor,
+  });
 
   final Uint8List bytes;
   final bool onNewLayer;
+
+  /// Names the new layer when [onNewLayer] is set.
+  final String Function(int number) nameFor;
 }
 
 class ImageRemoved extends EditorEvent {

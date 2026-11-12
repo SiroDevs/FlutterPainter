@@ -9,10 +9,10 @@ abstract class LayerLogic {
   static bool _valid(EditorState s, int i) =>
       i >= 0 && i < s.drawing.layers.length;
 
-  static EditorState add(EditorState s) {
+  static EditorState add(EditorState s, String Function(int) nameFor) {
     final layers = [
       ...s.drawing.layers,
-      PaintLayer(name: 'Layer ${s.drawing.layers.length + 1}'),
+      PaintLayer(name: nameFor(s.drawing.layers.length + 1)),
     ];
     return s
         .withLayers(layers)
