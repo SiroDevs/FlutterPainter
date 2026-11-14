@@ -648,5 +648,7 @@
     }
   },
   "statusNotBackedUp": "Not backed up",
-  "statusNotBackedUpTooltip": "A recovery copy could not be saved. Save your project to avoid losing work."
+  "statusNotBackedUpTooltip": "A recovery copy could not be saved. Save your project to avoid losing work.",
+  "layerCopyItem": "Copy item",
+  "layerDragReorder": "Drag to reorder layers"
 }

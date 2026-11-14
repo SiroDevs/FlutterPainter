@@ -1195,5 +1195,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusNotBackedUp => 'Not backed up';
 
   @override
-  String get statusNotBackedUpTooltip => 'A recovery copy could not be saved. Save your project to avoid losing work.';
+  String get statusNotBackedUpTooltip =>
+      'A recovery copy could not be saved. Save your project to avoid losing work.';
+
+  @override
+  String get layerCopyItem => 'Copy item';
+
+  @override
+  String get layerDragReorder => 'Drag to reorder layers';
 }

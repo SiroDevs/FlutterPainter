@@ -1206,5 +1206,12 @@ class AppLocalizationsSw extends AppLocalizations {
   String get statusNotBackedUp => 'Haijahifadhiwa nakala';
 
   @override
-  String get statusNotBackedUpTooltip => 'Nakala ya kurejesha haikuweza kuhifadhiwa. Hifadhi mradi wako ili kuepuka kupoteza kazi.';
+  String get statusNotBackedUpTooltip =>
+      'Nakala ya kurejesha haikuweza kuhifadhiwa. Hifadhi mradi wako ili kuepuka kupoteza kazi.';
+
+  @override
+  String get layerCopyItem => 'Nakili kipengee';
+
+  @override
+  String get layerDragReorder => 'Buruta kupanga upya tabaka';
 }

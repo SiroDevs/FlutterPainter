@@ -33,6 +33,13 @@ class LayerMoved extends EditorEvent {
   final int direction;
 }
 
+class LayerReordered extends EditorEvent {
+  const LayerReordered(this.fromIndex, this.toIndex);
+
+  final int fromIndex;
+  final int toIndex;
+}
+
 class LayerActivated extends EditorEvent {
   const LayerActivated(this.index);
 
@@ -111,9 +118,10 @@ abstract class ProjectTransferEvent extends EditorEvent {
 }
 
 class ProjectContentPasted extends ProjectTransferEvent {
-  const ProjectContentPasted(this.transfer);
+  const ProjectContentPasted(this.transfer, {this.targetLayerIndex});
 
   final ProjectTransfer transfer;
+  final int? targetLayerIndex;
 }
 
 class ProjectLayersImported extends ProjectTransferEvent {

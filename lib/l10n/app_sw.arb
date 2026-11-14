@@ -656,5 +656,7 @@
     }
   },
   "statusNotBackedUp": "Haijahifadhiwa nakala",
-  "statusNotBackedUpTooltip": "Nakala ya kurejesha haikuweza kuhifadhiwa. Hifadhi mradi wako ili kuepuka kupoteza kazi."
+  "statusNotBackedUpTooltip": "Nakala ya kurejesha haikuweza kuhifadhiwa. Hifadhi mradi wako ili kuepuka kupoteza kazi.",
+  "layerCopyItem": "Nakili kipengee",
+  "layerDragReorder": "Buruta kupanga upya tabaka"
 }

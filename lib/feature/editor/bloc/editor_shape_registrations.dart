@@ -2,7 +2,15 @@ part of 'editor_bloc.dart';
 
 extension _EditorShapeRegistrations on EditorBloc {
   void _registerShapes() {
-    _reduce<ShapeDeleted>((s, e) => ShapeLogic.delete(s));
+    _reduce<ShapeDeleted>((s, e) => ShapeDeleteLogic.delete(s));
+    _reduce<ShapeDeletedAt>(
+      (s, e) => ShapeDeleteLogic.deleteAt(
+        s,
+        e.layer,
+        e.index,
+        includeGroup: e.includeGroup,
+      ),
+    );
     _reduce<ShapeDuplicated>((s, e) => ShapeLogic.duplicate(s));
     _reduce<SelectAllRequested>((s, e) => ShapeLogic.selectAll(s));
     _reduce<ShapesGrouped>((s, e) => GroupLogic.group(s, e.nameFor));

@@ -648,5 +648,7 @@
     }
   },
   "statusNotBackedUp": "Non sauvegardé",
-  "statusNotBackedUpTooltip": "La copie de récupération n’a pas pu être enregistrée. Enregistrez votre projet pour ne rien perdre."
+  "statusNotBackedUpTooltip": "La copie de récupération n’a pas pu être enregistrée. Enregistrez votre projet pour ne rien perdre.",
+  "layerCopyItem": "Copier l’élément",
+  "layerDragReorder": "Faire glisser pour réorganiser les calques"
 }

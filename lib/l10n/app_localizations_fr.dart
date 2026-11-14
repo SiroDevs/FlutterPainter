@@ -1211,5 +1211,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get statusNotBackedUp => 'Non sauvegardé';
 
   @override
-  String get statusNotBackedUpTooltip => 'La copie de récupération n’a pas pu être enregistrée. Enregistrez votre projet pour ne rien perdre.';
+  String get statusNotBackedUpTooltip =>
+      'La copie de récupération n’a pas pu être enregistrée. Enregistrez votre projet pour ne rien perdre.';
+
+  @override
+  String get layerCopyItem => 'Copier l’élément';
+
+  @override
+  String get layerDragReorder => 'Faire glisser pour réorganiser les calques';
 }

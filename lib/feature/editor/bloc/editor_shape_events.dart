@@ -4,6 +4,14 @@ class ShapeDeleted extends EditorEvent {
   const ShapeDeleted();
 }
 
+class ShapeDeletedAt extends EditorEvent {
+  const ShapeDeletedAt(this.layer, this.index, {this.includeGroup = false});
+
+  final int layer;
+  final int index;
+  final bool includeGroup;
+}
+
 class ShapeDuplicated extends EditorEvent {
   const ShapeDuplicated();
 }

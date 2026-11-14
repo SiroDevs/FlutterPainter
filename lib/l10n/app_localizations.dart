@@ -2211,6 +2211,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A recovery copy could not be saved. Save your project to avoid losing work.'**
   String get statusNotBackedUpTooltip;
+
+  /// No description provided for @layerCopyItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy item'**
+  String get layerCopyItem;
+
+  /// No description provided for @layerDragReorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder layers'**
+  String get layerDragReorder;
 }
 
 class _AppLocalizationsDelegate

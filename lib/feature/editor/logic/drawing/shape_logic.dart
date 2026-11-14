@@ -5,7 +5,6 @@ import 'dart:ui';
 import '../../../../domain/services/geometry/geometry_utils.dart';
 import '../../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
-import '../canvas/image_logic.dart';
 import 'order_logic.dart';
 import 'style_logic.dart';
 
@@ -39,19 +38,6 @@ abstract class ShapeLogic {
           primary: index,
         )
         .copyWith(style: StyleLogic.adopt(state.style, shapes[index]));
-  }
-
-  /// Deletes the selected shape, or the selected picture.
-  static EditorState delete(EditorState state) {
-    if (state.imageSelected) return ImageLogic.remove(state);
-    final indices = state.validSelectedIndices;
-    if (indices.isEmpty) return state;
-    final deleted = indices.toSet();
-    final shapes = [
-      for (var i = 0; i < state.layer.shapes.length; i++)
-        if (!deleted.contains(i)) state.layer.shapes[i],
-    ];
-    return state.withShapes(shapes).selectIndices(const []).commit();
   }
 
   static EditorState duplicate(EditorState state) {

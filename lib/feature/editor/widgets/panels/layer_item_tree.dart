@@ -8,11 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../../../domain/models/shapes/shape.dart';
-import '../../../../domain/models/shapes/shape_kind.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/drawing/editor_ops.dart';
 import 'group_tree_tile.dart';
-import 'inline_tree_name_editor.dart';
+import 'layer_shape_tile.dart';
+import 'layer_tree_actions.dart';
 
 /// Shows the shapes and picture nested under one layer.
 class LayerItemTree extends StatelessWidget {
@@ -35,7 +35,7 @@ class LayerItemTree extends StatelessWidget {
       children: [
         for (final entry in entries)
           if (entry.groupId == null)
-            _shapeTile(context, entry.indices.single, leftPadding: 32)
+            _shapeTile(context, entry.indices.single, grouped: false)
           else
             _groupTile(context, entry),
         if (layer.image != null) _imageTile(context),
@@ -108,60 +108,34 @@ class LayerItemTree extends StatelessWidget {
           includeGroup: true,
         ),
       ),
+      onContextMenu: (position) => LayerTreeActions.showGroup(
+        context,
+        position,
+        layer: layer,
+        layerIndex: layerIndex,
+        indices: entry.indices,
+        groupId: entry.groupId!,
+        name: entry.name,
+        visible: visible,
+      ),
       children: [
         for (final index in entry.indices)
-          _shapeTile(context, index, leftPadding: 48),
+          _shapeTile(context, index, grouped: true),
       ],
     );
   }
 
-  Widget _shapeTile(
-    BuildContext context,
-    int index, {
-    required double leftPadding,
-  }) {
-    final shape = layer.shapes[index];
-    final selected =
-        layerIndex == state.layerIndex &&
-        state.validSelectedIndices.contains(index);
-    final visible = shape.visible;
-    final tile = ListTile(
-      key: ValueKey('shape-${state.tabId}-$layerIndex-$index'),
-      dense: true,
-      visualDensity: VisualDensity.compact,
-      contentPadding: EdgeInsets.only(left: leftPadding, right: 16),
-      leading: Icon(_shapeIcon(shape.kind), size: 16),
-      trailing: IconButton(
-        tooltip: visible ? context.l10n.layerHide : context.l10n.layerShow,
-        visualDensity: VisualDensity.compact,
-        iconSize: 18,
-        icon: Icon(visible ? Icons.visibility : Icons.visibility_off),
-        onPressed: () => context.read<EditorBloc>().add(
-          ShapeVisibilityToggled(layerIndex, index),
-        ),
-      ),
-      title: InlineTreeNameEditor(
-        name: shape.name.isEmpty
-            ? _shapeLabel(context, shape.kind)
-            : shape.name,
-        tooltip: context.l10n.layerEditItem,
-        style: Theme.of(context).textTheme.bodySmall,
-        allowEmpty: true,
-        onSaved: (name) => context.read<EditorBloc>().add(
-          ShapeRenamed(name, layer: layerIndex, index: index),
-        ),
-      ),
-      selected: selected,
-      onTap: () => context.read<EditorBloc>().add(
-        ShapeSelectionRequested(layerIndex, index, includeGroup: false),
-      ),
-    );
-    if (shape.groupId == null) return tile;
-    return Tooltip(
-      message: context.l10n.canvasSelectGroupMemberHint,
-      child: tile,
-    );
-  }
+  Widget _shapeTile(BuildContext context, int index, {required bool grouped}) =>
+      LayerShapeTile(
+        layer: layer,
+        layerIndex: layerIndex,
+        index: index,
+        tabId: state.tabId,
+        selected:
+            layerIndex == state.layerIndex &&
+            state.validSelectedIndices.contains(index),
+        grouped: grouped,
+      );
 
   Widget _imageTile(BuildContext context) => ListTile(
     dense: true,
@@ -175,22 +149,6 @@ class LayerItemTree extends StatelessWidget {
     selected: layerIndex == state.layerIndex && state.imageSelected,
     onTap: () => context.read<EditorBloc>().add(const ImageSelected()),
   );
-
-  String _shapeLabel(BuildContext context, ShapeKind kind) => switch (kind) {
-    ShapeKind.rect => context.l10n.layerItemRectangle,
-    ShapeKind.ellipse => context.l10n.layerItemEllipse,
-    ShapeKind.line => context.l10n.layerItemLine,
-    ShapeKind.polygon => context.l10n.layerItemPolygon,
-    ShapeKind.freehand => context.l10n.layerItemFreehand,
-  };
-
-  IconData _shapeIcon(ShapeKind kind) => switch (kind) {
-    ShapeKind.rect => Icons.crop_square,
-    ShapeKind.ellipse => Icons.circle_outlined,
-    ShapeKind.line => Icons.horizontal_rule,
-    ShapeKind.polygon => Icons.change_history,
-    ShapeKind.freehand => Icons.brush_outlined,
-  };
 }
 
 class _TreeEntry {

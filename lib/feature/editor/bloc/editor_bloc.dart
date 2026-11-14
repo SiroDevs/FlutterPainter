@@ -110,6 +110,9 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
       (s, e) => LayerLogic.toggleVisible(s, e.index),
     );
     _reduce<LayerMoved>((s, e) => LayerLogic.move(s, e.index, e.direction));
+    _reduce<LayerReordered>(
+      (s, e) => LayerLogic.reorder(s, e.fromIndex, e.toIndex),
+    );
     _reduce<LayerActivated>((s, e) => LayerLogic.activate(s, e.index));
   }
 

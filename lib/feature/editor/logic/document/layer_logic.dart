@@ -59,6 +59,21 @@ abstract class LayerLogic {
     return s.withLayers(layers).copyWith(layerIndex: active).commit();
   }
 
+  static EditorState reorder(EditorState s, int from, int to) {
+    if (!_valid(s, from) || !_valid(s, to) || from == to) return s;
+    final layers = [...s.drawing.layers];
+    final moved = layers.removeAt(from);
+    layers.insert(to, moved);
+    final active = s.layerIndex == from
+        ? to
+        : (from < s.layerIndex && to >= s.layerIndex
+              ? s.layerIndex - 1
+              : (from > s.layerIndex && to <= s.layerIndex
+                    ? s.layerIndex + 1
+                    : s.layerIndex));
+    return s.withLayers(layers).copyWith(layerIndex: active).commit();
+  }
+
   /// Which layer receives new shapes. Not an edit, so no history entry.
   static EditorState activate(EditorState s, int i) {
     if (!_valid(s, i) || i == s.layerIndex) return s;

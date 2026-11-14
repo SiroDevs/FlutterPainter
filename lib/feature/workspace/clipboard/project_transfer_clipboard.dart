@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 // Project imports:
 import '../../../domain/models/drawing/paint_layer.dart';
 import '../../../domain/models/drawing/project_transfer.dart';
+import '../../../domain/models/shapes/shape.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../editor/logic/drawing/editor_ops.dart';
 
@@ -48,9 +49,23 @@ class ProjectTransferClipboard extends ValueNotifier<ProjectTransfer?> {
     final members = state.layer.shapes
         .where((shape) => shape.groupId == groupId)
         .toList();
+    copyGroupMembers(members);
+  }
+
+  void copyItem(Shape shape) {
+    value = ProjectTransfer(
+      kind: ProjectTransferKind.items,
+      shapes: [shape.copyWith(groupId: null, groupName: null)],
+    );
+  }
+
+  void copyGroupMembers(List<Shape> members) {
+    if (members.isEmpty || members.first.groupId == null) return;
+    final groupId = members.first.groupId;
+    if (members.any((shape) => shape.groupId != groupId)) return;
     value = ProjectTransfer(
       kind: ProjectTransferKind.group,
-      shapes: members,
+      shapes: List.unmodifiable(members),
       groupName: members.first.groupName,
     );
   }
@@ -59,8 +74,12 @@ class ProjectTransferClipboard extends ValueNotifier<ProjectTransfer?> {
     value = ProjectTransfer(kind: ProjectTransferKind.layer, layer: layer);
   }
 
-  void pasteInto(EditorBloc target) {
+  void pasteInto(EditorBloc target, {int? targetLayerIndex}) {
     final transfer = value;
-    if (transfer != null) target.add(ProjectContentPasted(transfer));
+    if (transfer != null) {
+      target.add(
+        ProjectContentPasted(transfer, targetLayerIndex: targetLayerIndex),
+      );
+    }
   }
 }
