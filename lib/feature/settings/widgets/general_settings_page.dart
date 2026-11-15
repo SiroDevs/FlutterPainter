@@ -9,6 +9,7 @@ import '../../../core/theme/bloc/theme_bloc.dart';
 import '../../../core/utils/l10n_ext.dart';
 import '../../../domain/models/editor/app_settings.dart';
 import '../cubit/settings_cubit.dart';
+import '../models/supported_language.dart';
 import 'group_methods_setting.dart';
 import 'setting_field.dart';
 
@@ -55,18 +56,11 @@ class GeneralSettingsPage extends StatelessWidget {
           isExpanded: true,
           value: settings.languageCode,
           items: [
-            DropdownMenuItem(
-              value: 'en',
-              child: Text(context.l10n.languageEnglish),
-            ),
-            DropdownMenuItem(
-              value: 'fr',
-              child: Text(context.l10n.languageFrench),
-            ),
-            DropdownMenuItem(
-              value: 'sw',
-              child: Text(context.l10n.languageSwahili),
-            ),
+            for (final language in SupportedLanguage.all)
+              DropdownMenuItem(
+                value: language.locale.languageCode,
+                child: Text(language.nativeName),
+              ),
           ],
           onChanged: (value) {
             if (value != null) context.read<SettingsCubit>().setLanguage(value);
