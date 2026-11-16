@@ -446,7 +446,7 @@ jobs:
       - check-version
       - windows-x64
       - linux
-      # - macos
+      - macos
     if: >
       !cancelled() &&
       github.ref == 'refs/heads/main' &&
