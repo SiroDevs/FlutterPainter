@@ -57,11 +57,9 @@ class _ExportScreenState extends State<ExportScreen> {
     if (_cubit.state.hasEdits) {
       final ok = await confirm(
         context,
-        title: 'Close the code editor?',
-        message:
-            'Your edits to the generated files have not been saved and '
-            'will be lost.',
-        confirmLabel: 'Close',
+        title: context.l10n.exportCloseTitle,
+        message: context.l10n.exportCloseMessage,
+        confirmLabel: context.l10n.exportClose,
       );
       if (!ok || !mounted) return;
     }
@@ -76,11 +74,9 @@ class _ExportScreenState extends State<ExportScreen> {
     if (_cubit.state.hasEdits) {
       final ok = await confirm(
         context,
-        title: 'Regenerate the files?',
-        message:
-            'This rebuilds every file from the drawing and drops your '
-            'edits.',
-        confirmLabel: 'Regenerate',
+        title: context.l10n.exportRegenerateTitle,
+        message: context.l10n.exportRegenerateMessage,
+        confirmLabel: context.l10n.exportRegenerate,
       );
       if (!ok || !mounted) return;
     }
@@ -97,11 +93,11 @@ class _ExportScreenState extends State<ExportScreen> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: const Text(
-            'Export settings changed. Regenerate to apply them (this drops '
-            'your edits).',
+          content: Text(context.l10n.exportSettingsChanged),
+          action: SnackBarAction(
+            label: context.l10n.exportRegenerate,
+            onPressed: _regenerate,
           ),
-          action: SnackBarAction(label: 'Regenerate', onPressed: _regenerate),
         ),
       );
   }
@@ -163,9 +159,14 @@ class _ExportScreenState extends State<ExportScreen> {
                       absorbing: state.isBusy,
                       child: ExportWorkspace(
                         colors: colors,
-                        title: 'Code editor \u2014 ${widget.args.drawing.name}',
+                        title: context.l10n.exportTitle(
+                          widget.args.drawing.name,
+                        ),
+                        projectName: widget.args.drawing.name,
                         modifier: isMac ? '\u2318' : 'Ctrl',
-                        styleLabel: style.label,
+                        styleLabel: style == CodeStyle.refactored
+                            ? context.l10n.codeRefactored
+                            : context.l10n.codeMonolithic,
                         onSaveLocally: () => saveLocally(context, _cubit),
                         onSaveArchive: () => saveArchive(context, _cubit),
                         onCopy: _cubit.copyActive,

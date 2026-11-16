@@ -12,10 +12,11 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
 
   List<_ExportGroup> _buildGroups() {
     final groups = <_ExportGroup>[];
-    final usedNames = {
+    final monolithicNames = <String>{
       _painterClass,
       for (var index = 0; index < _layers.length; index++) _layerClass(index),
     };
+    final namesByLayer = <int, Set<String>>{};
     var defaultNumber = 0;
     for (var layerIndex = 0; layerIndex < _layers.length; layerIndex++) {
       final seenIds = <String>{};
@@ -29,6 +30,12 @@ mixin _DartExporterGroupWriter on _DartExporterBase {
             ? 'Group $defaultNumber'
             : storedName;
         final baseName = pascalCase(name);
+        final usedNames = options.style == CodeStyle.monolithic
+            ? monolithicNames
+            : (namesByLayer[layerIndex] ??= {
+                _painterClass,
+                _layerClass(layerIndex),
+              });
         var className = baseName;
         for (var suffix = 2; !usedNames.add(className); suffix++) {
           className = '$baseName$suffix';

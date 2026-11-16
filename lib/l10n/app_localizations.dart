@@ -5,8 +5,25 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_ar.dart';
+import 'app_localizations_bn.dart';
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fa.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_gn.dart';
+import 'app_localizations_ha.dart';
+import 'app_localizations_hi.dart';
+import 'app_localizations_id.dart';
+import 'app_localizations_ms.dart';
+import 'app_localizations_nl.dart';
+import 'app_localizations_pt.dart';
+import 'app_localizations_ru.dart';
 import 'app_localizations_sw.dart';
+import 'app_localizations_tr.dart';
+import 'app_localizations_ur.dart';
+import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -94,8 +111,25 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
+    Locale('bn'),
+    Locale('de'),
     Locale('en'),
+    Locale('es'),
+    Locale('fa'),
+    Locale('fr'),
+    Locale('gn'),
+    Locale('ha'),
+    Locale('hi'),
+    Locale('id'),
+    Locale('ms'),
+    Locale('nl'),
+    Locale('pt'),
+    Locale('ru'),
     Locale('sw'),
+    Locale('tr'),
+    Locale('ur'),
+    Locale('zh'),
   ];
 
   /// No description provided for @newProject.
@@ -745,6 +779,1482 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not generate the Dart code.'**
   String get exportGenerationFailed;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @settingsGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get settingsGeneral;
+
+  /// No description provided for @settingsProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get settingsProject;
+
+  /// No description provided for @settingsAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settingsAbout;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguage;
+
+  /// No description provided for @settingsLanguageHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the language used by the app.'**
+  String get settingsLanguageHelp;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @languageFrench.
+  ///
+  /// In en, this message translates to:
+  /// **'Français'**
+  String get languageFrench;
+
+  /// No description provided for @languageSwahili.
+  ///
+  /// In en, this message translates to:
+  /// **'Kiswahili'**
+  String get languageSwahili;
+
+  /// No description provided for @previewNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Off (true colours)'**
+  String get previewNone;
+
+  /// No description provided for @previewGrayscale.
+  ///
+  /// In en, this message translates to:
+  /// **'Grayscale'**
+  String get previewGrayscale;
+
+  /// No description provided for @previewProtanopia.
+  ///
+  /// In en, this message translates to:
+  /// **'Protanopia (no red)'**
+  String get previewProtanopia;
+
+  /// No description provided for @previewDeuteranopia.
+  ///
+  /// In en, this message translates to:
+  /// **'Deuteranopia (no green)'**
+  String get previewDeuteranopia;
+
+  /// No description provided for @previewTritanopia.
+  ///
+  /// In en, this message translates to:
+  /// **'Tritanopia (no blue)'**
+  String get previewTritanopia;
+
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearance;
+
+  /// No description provided for @settingsTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get settingsTheme;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeDark;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get themeSystem;
+
+  /// No description provided for @settingsInterface.
+  ///
+  /// In en, this message translates to:
+  /// **'Interface'**
+  String get settingsInterface;
+
+  /// No description provided for @interfaceMinimal.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimal'**
+  String get interfaceMinimal;
+
+  /// No description provided for @interfaceAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get interfaceAdvanced;
+
+  /// No description provided for @interfaceHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced shows the ribbon and side panels. Minimal keeps the canvas, tools and colours visible; commands remain in the menus.'**
+  String get interfaceHelp;
+
+  /// No description provided for @settingsCodeExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Code export'**
+  String get settingsCodeExport;
+
+  /// No description provided for @settingsCodeStructure.
+  ///
+  /// In en, this message translates to:
+  /// **'Code structure'**
+  String get settingsCodeStructure;
+
+  /// No description provided for @codeRefactored.
+  ///
+  /// In en, this message translates to:
+  /// **'Refactored'**
+  String get codeRefactored;
+
+  /// No description provided for @codeMonolithic.
+  ///
+  /// In en, this message translates to:
+  /// **'Monolithic'**
+  String get codeMonolithic;
+
+  /// No description provided for @codeRefactoredHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'A painter, one class per layer in its own file, one function per shape, and a colour palette.'**
+  String get codeRefactoredHelp;
+
+  /// No description provided for @codeMonolithicHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'One code file with a painter class and one method per layer.'**
+  String get codeMonolithicHelp;
+
+  /// No description provided for @settingsColourManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour management'**
+  String get settingsColourManagement;
+
+  /// No description provided for @settingsColourVision.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour vision preview'**
+  String get settingsColourVision;
+
+  /// No description provided for @settingsColourVisionHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Approximates how the canvas may appear to someone with a colour vision difference. It does not change the project or exported code.'**
+  String get settingsColourVisionHelp;
+
+  /// No description provided for @settingsColourFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour format in exported code'**
+  String get settingsColourFormat;
+
+  /// No description provided for @settingsColourFormatHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how colours are written in generated Dart.'**
+  String get settingsColourFormatHelp;
+
+  /// No description provided for @settingsColourConstants.
+  ///
+  /// In en, this message translates to:
+  /// **'Collect colours into named constants'**
+  String get settingsColourConstants;
+
+  /// No description provided for @settingsColourConstantsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Write each distinct colour once as a constant and refer to it from shapes.'**
+  String get settingsColourConstantsHelp;
+
+  /// No description provided for @settingsReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to defaults'**
+  String get settingsReset;
+
+  /// No description provided for @settingsDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get settingsDone;
+
+  /// No description provided for @projectSettingsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage the name and design canvas for this project.'**
+  String get projectSettingsDescription;
+
+  /// No description provided for @projectCurrentName.
+  ///
+  /// In en, this message translates to:
+  /// **'Project name'**
+  String get projectCurrentName;
+
+  /// No description provided for @projectCanvasSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Canvas size'**
+  String get projectCanvasSize;
+
+  /// No description provided for @projectRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename project'**
+  String get projectRename;
+
+  /// No description provided for @projectResizeCanvas.
+  ///
+  /// In en, this message translates to:
+  /// **'Change canvas size'**
+  String get projectResizeCanvas;
+
+  /// No description provided for @projectDimensions.
+  ///
+  /// In en, this message translates to:
+  /// **'{width} × {height} design units'**
+  String projectDimensions(String width, String height);
+
+  /// No description provided for @aboutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A paint studio for creating Flutter custom painters.'**
+  String get aboutDescription;
+
+  /// No description provided for @aboutCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Made by Siro Devs'**
+  String get aboutCredits;
+
+  /// No description provided for @buttonOk.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get buttonOk;
+
+  /// No description provided for @canvasSizeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Canvas size (design units)'**
+  String get canvasSizeTitle;
+
+  /// No description provided for @fieldWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Width'**
+  String get fieldWidth;
+
+  /// No description provided for @fieldHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get fieldHeight;
+
+  /// No description provided for @buttonResize.
+  ///
+  /// In en, this message translates to:
+  /// **'Resize'**
+  String get buttonResize;
+
+  /// No description provided for @saveChangesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes to \"{name}\"?'**
+  String saveChangesTitle(String name);
+
+  /// No description provided for @unsavedChangesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your changes will be lost if you do not save them.'**
+  String get unsavedChangesMessage;
+
+  /// No description provided for @buttonDontSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t save'**
+  String get buttonDontSave;
+
+  /// No description provided for @recoverUnsavedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recover unsaved work?'**
+  String get recoverUnsavedTitle;
+
+  /// No description provided for @recoverUnsavedIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'These projects had unsaved changes when Flutter Painter last closed:'**
+  String get recoverUnsavedIntro;
+
+  /// No description provided for @buttonDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get buttonDiscard;
+
+  /// No description provided for @buttonRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get buttonRestore;
+
+  /// No description provided for @fileNewBlank.
+  ///
+  /// In en, this message translates to:
+  /// **'New blank canvas'**
+  String get fileNewBlank;
+
+  /// No description provided for @fileOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open…'**
+  String get fileOpen;
+
+  /// No description provided for @fileSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get fileSave;
+
+  /// No description provided for @fileSaveAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as…'**
+  String get fileSaveAs;
+
+  /// No description provided for @fileAutoSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-save'**
+  String get fileAutoSave;
+
+  /// No description provided for @fileAutoSaveHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'On: write changes straight into the open .flp file. Off: keep a recovery copy until you save.'**
+  String get fileAutoSaveHelp;
+
+  /// No description provided for @fileExportDart.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Dart…'**
+  String get fileExportDart;
+
+  /// No description provided for @fileCodeEditorTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the code editor'**
+  String get fileCodeEditorTooltip;
+
+  /// No description provided for @fileSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings…'**
+  String get fileSettings;
+
+  /// No description provided for @fileRenameProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename project…'**
+  String get fileRenameProject;
+
+  /// No description provided for @projectNameTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Project name (also used for class names)'**
+  String get projectNameTooltip;
+
+  /// No description provided for @fileCanvasSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Canvas size…'**
+  String get fileCanvasSize;
+
+  /// No description provided for @fileCloseProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Close project'**
+  String get fileCloseProject;
+
+  /// No description provided for @fileExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get fileExit;
+
+  /// No description provided for @aboutMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'About {appName}'**
+  String aboutMenu(String appName);
+
+  /// No description provided for @editRedo.
+  ///
+  /// In en, this message translates to:
+  /// **'Redo'**
+  String get editRedo;
+
+  /// No description provided for @editDeleteTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the selected shape or image'**
+  String get editDeleteTooltip;
+
+  /// No description provided for @editPathClosedTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Close or open the selected polygon or line path'**
+  String get editPathClosedTooltip;
+
+  /// No description provided for @editFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill'**
+  String get editFill;
+
+  /// No description provided for @editOutline.
+  ///
+  /// In en, this message translates to:
+  /// **'Outline'**
+  String get editOutline;
+
+  /// No description provided for @editStrokeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Stroke (outline)'**
+  String get editStrokeTooltip;
+
+  /// No description provided for @imageReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace image…'**
+  String get imageReplace;
+
+  /// No description provided for @imageLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Load image…'**
+  String get imageLoad;
+
+  /// No description provided for @imageLoadNewLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Image on new layer…'**
+  String get imageLoadNewLayer;
+
+  /// No description provided for @imagePutLayerTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Put a picture on this layer'**
+  String get imagePutLayerTooltip;
+
+  /// No description provided for @imageLoadNewLayerTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Load a picture onto a new layer'**
+  String get imageLoadNewLayerTooltip;
+
+  /// No description provided for @imageSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select image'**
+  String get imageSelect;
+
+  /// No description provided for @imageSelectTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Select this layer’s image (shows resize handles)'**
+  String get imageSelectTooltip;
+
+  /// No description provided for @imageMoveResize.
+  ///
+  /// In en, this message translates to:
+  /// **'Move / resize image'**
+  String get imageMoveResize;
+
+  /// No description provided for @imageMoveResizeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Move / resize image tool'**
+  String get imageMoveResizeTooltip;
+
+  /// No description provided for @imageFit.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit image to canvas'**
+  String get imageFit;
+
+  /// No description provided for @imageFitTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit to canvas (resets stretch)'**
+  String get imageFitTooltip;
+
+  /// No description provided for @imageShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show image'**
+  String get imageShow;
+
+  /// No description provided for @imageRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove image'**
+  String get imageRemove;
+
+  /// No description provided for @imageLoadTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Load an image onto a new layer'**
+  String get imageLoadTooltip;
+
+  /// No description provided for @imagePanelShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show'**
+  String get imagePanelShow;
+
+  /// No description provided for @imageOpacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Opacity {value}%'**
+  String imageOpacity(String value);
+
+  /// No description provided for @imageScale.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale {value}'**
+  String imageScale(String value);
+
+  /// No description provided for @imagePanelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Image on “{name}”'**
+  String imagePanelTitle(String name);
+
+  /// No description provided for @imagePanelPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Load a picture onto this layer to trace over or use as a background.'**
+  String get imagePanelPrompt;
+
+  /// No description provided for @viewZoomIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom in'**
+  String get viewZoomIn;
+
+  /// No description provided for @viewZoomOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom out'**
+  String get viewZoomOut;
+
+  /// No description provided for @viewFitWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit to window'**
+  String get viewFitWindow;
+
+  /// No description provided for @viewGrid.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid'**
+  String get viewGrid;
+
+  /// No description provided for @viewSnap.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap to grid'**
+  String get viewSnap;
+
+  /// No description provided for @viewCanvasBackground.
+  ///
+  /// In en, this message translates to:
+  /// **'Canvas background'**
+  String get viewCanvasBackground;
+
+  /// No description provided for @viewCanvasBackgroundTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle the canvas background colour'**
+  String get viewCanvasBackgroundTooltip;
+
+  /// No description provided for @viewLightTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Light theme'**
+  String get viewLightTheme;
+
+  /// No description provided for @viewDarkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark theme'**
+  String get viewDarkTheme;
+
+  /// No description provided for @viewThemeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch between the light and dark theme'**
+  String get viewThemeTooltip;
+
+  /// No description provided for @menuFile.
+  ///
+  /// In en, this message translates to:
+  /// **'File'**
+  String get menuFile;
+
+  /// No description provided for @menuEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get menuEdit;
+
+  /// No description provided for @menuLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Layer'**
+  String get menuLayer;
+
+  /// No description provided for @menuView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get menuView;
+
+  /// No description provided for @menuTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get menuTools;
+
+  /// No description provided for @menuHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get menuHelp;
+
+  /// No description provided for @menuWindow.
+  ///
+  /// In en, this message translates to:
+  /// **'Window'**
+  String get menuWindow;
+
+  /// No description provided for @ribbonExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get ribbonExport;
+
+  /// No description provided for @ribbonExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand the ribbon'**
+  String get ribbonExpand;
+
+  /// No description provided for @ribbonCollapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse the ribbon'**
+  String get ribbonCollapse;
+
+  /// No description provided for @ribbonLayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Layers'**
+  String get ribbonLayers;
+
+  /// No description provided for @ribbonOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get ribbonOrder;
+
+  /// No description provided for @ribbonHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get ribbonHistory;
+
+  /// No description provided for @ribbonStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Style'**
+  String get ribbonStyle;
+
+  /// No description provided for @ribbonNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get ribbonNew;
+
+  /// No description provided for @ribbonOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get ribbonOpen;
+
+  /// No description provided for @ribbonBlankCanvas.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank canvas'**
+  String get ribbonBlankCanvas;
+
+  /// No description provided for @ribbonProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get ribbonProject;
+
+  /// No description provided for @ribbonApp.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get ribbonApp;
+
+  /// No description provided for @ribbonShapes.
+  ///
+  /// In en, this message translates to:
+  /// **'Shapes'**
+  String get ribbonShapes;
+
+  /// No description provided for @ribbonPaths.
+  ///
+  /// In en, this message translates to:
+  /// **'Paths'**
+  String get ribbonPaths;
+
+  /// No description provided for @ribbonPolygon.
+  ///
+  /// In en, this message translates to:
+  /// **'Polygon'**
+  String get ribbonPolygon;
+
+  /// No description provided for @ribbonPictures.
+  ///
+  /// In en, this message translates to:
+  /// **'Pictures'**
+  String get ribbonPictures;
+
+  /// No description provided for @ribbonPicture.
+  ///
+  /// In en, this message translates to:
+  /// **'Picture'**
+  String get ribbonPicture;
+
+  /// No description provided for @ribbonOnNewLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'On new layer'**
+  String get ribbonOnNewLayer;
+
+  /// No description provided for @ribbonLayersGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Layers'**
+  String get ribbonLayersGroup;
+
+  /// No description provided for @ribbonZoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom'**
+  String get ribbonZoom;
+
+  /// No description provided for @ribbonFit.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit'**
+  String get ribbonFit;
+
+  /// No description provided for @ribbonShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show'**
+  String get ribbonShow;
+
+  /// No description provided for @ribbonCanvas.
+  ///
+  /// In en, this message translates to:
+  /// **'Canvas'**
+  String get ribbonCanvas;
+
+  /// No description provided for @ribbonAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get ribbonAppearance;
+
+  /// No description provided for @ribbonLightDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Light / dark'**
+  String get ribbonLightDark;
+
+  /// No description provided for @ribbonArrange.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrange'**
+  String get ribbonArrange;
+
+  /// No description provided for @ribbonAdjust.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust'**
+  String get ribbonAdjust;
+
+  /// No description provided for @toolSelectMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Select / move'**
+  String get toolSelectMove;
+
+  /// No description provided for @toolMoveImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Move / resize layer image'**
+  String get toolMoveImage;
+
+  /// No description provided for @toolRectangle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rectangle'**
+  String get toolRectangle;
+
+  /// No description provided for @toolEllipse.
+  ///
+  /// In en, this message translates to:
+  /// **'Ellipse'**
+  String get toolEllipse;
+
+  /// No description provided for @toolLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Line'**
+  String get toolLine;
+
+  /// No description provided for @toolPolygonPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Polygon / line path'**
+  String get toolPolygonPath;
+
+  /// No description provided for @toolFreehand.
+  ///
+  /// In en, this message translates to:
+  /// **'Freehand'**
+  String get toolFreehand;
+
+  /// No description provided for @propertyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Properties'**
+  String get propertyTitle;
+
+  /// No description provided for @propertyNoSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'No shape selected. These settings apply to the next shape you draw.'**
+  String get propertyNoSelection;
+
+  /// No description provided for @propertyFill.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill'**
+  String get propertyFill;
+
+  /// No description provided for @propertyStroke.
+  ///
+  /// In en, this message translates to:
+  /// **'Stroke'**
+  String get propertyStroke;
+
+  /// No description provided for @propertyClosedShape.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed shape (can be filled)'**
+  String get propertyClosedShape;
+
+  /// No description provided for @propertyRenameShape.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename shape'**
+  String get propertyRenameShape;
+
+  /// No description provided for @propertyCornerRadius.
+  ///
+  /// In en, this message translates to:
+  /// **'Corner radius: {value}'**
+  String propertyCornerRadius(String value);
+
+  /// No description provided for @propertyStrokeWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Stroke width: {value}'**
+  String propertyStrokeWidth(String value);
+
+  /// No description provided for @imageOnLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Image on “{name}”'**
+  String imageOnLayer(Object name);
+
+  /// No description provided for @imagePanelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Load a picture onto this layer to trace over or use as a background.'**
+  String get imagePanelHint;
+
+  /// No description provided for @statusPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview: {value}'**
+  String statusPreview(String value);
+
+  /// No description provided for @statusCtrlWheel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ctrl+wheel zooms.'**
+  String get statusCtrlWheel;
+
+  /// No description provided for @buttonClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get buttonClose;
+
+  /// No description provided for @buttonReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get buttonReplace;
+
+  /// No description provided for @buttonLoad.
+  ///
+  /// In en, this message translates to:
+  /// **'Load'**
+  String get buttonLoad;
+
+  /// No description provided for @buttonUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Use'**
+  String get buttonUse;
+
+  /// No description provided for @buttonNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get buttonNone;
+
+  /// No description provided for @colorFillTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill colour'**
+  String get colorFillTooltip;
+
+  /// No description provided for @colorStrokeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Stroke colour'**
+  String get colorStrokeTooltip;
+
+  /// No description provided for @buttonExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get buttonExport;
+
+  /// No description provided for @interfaceSwitchAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to the advanced interface'**
+  String get interfaceSwitchAdvanced;
+
+  /// No description provided for @toolHintSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Click a shape or image to select it. Drag to move it; drag its handles to resize. Double-click an edge to add a point, Alt-click a point to remove it.'**
+  String get toolHintSelect;
+
+  /// No description provided for @toolHintRectangle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to draw a rectangle. Hold Shift for a square.'**
+  String get toolHintRectangle;
+
+  /// No description provided for @toolHintEllipse.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to draw an ellipse. Hold Shift for a circle.'**
+  String get toolHintEllipse;
+
+  /// No description provided for @toolHintLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to draw a line. Hold Shift for 45° angles.'**
+  String get toolHintLine;
+
+  /// No description provided for @toolHintPolygon.
+  ///
+  /// In en, this message translates to:
+  /// **'Click to add points. Click the first point or double-click to close the shape. Press Enter to leave an open line path; Esc cancels.'**
+  String get toolHintPolygon;
+
+  /// No description provided for @toolHintFreehand.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to draw a smoothed freehand stroke.'**
+  String get toolHintFreehand;
+
+  /// No description provided for @toolHintImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to move this layer’s image; drag a handle to resize it. Corners keep proportions; Shift or an edge handle stretches it.'**
+  String get toolHintImage;
+
+  /// No description provided for @ribbonFile.
+  ///
+  /// In en, this message translates to:
+  /// **'File'**
+  String get ribbonFile;
+
+  /// No description provided for @ribbonHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get ribbonHome;
+
+  /// No description provided for @ribbonInsert.
+  ///
+  /// In en, this message translates to:
+  /// **'Insert'**
+  String get ribbonInsert;
+
+  /// No description provided for @ribbonLayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Layer'**
+  String get ribbonLayer;
+
+  /// No description provided for @ribbonImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get ribbonImage;
+
+  /// No description provided for @ribbonView.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get ribbonView;
+
+  /// No description provided for @viewZoomLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom {value}'**
+  String viewZoomLabel(String value);
+
+  /// No description provided for @statusMousePan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scroll or right-drag pans.'**
+  String get statusMousePan;
+
+  /// No description provided for @fileTypeProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Flutter Painter Project'**
+  String get fileTypeProject;
+
+  /// No description provided for @fileTypeImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Images'**
+  String get fileTypeImages;
+
+  /// No description provided for @fileTypeDart.
+  ///
+  /// In en, this message translates to:
+  /// **'Dart'**
+  String get fileTypeDart;
+
+  /// No description provided for @fileTypeZip.
+  ///
+  /// In en, this message translates to:
+  /// **'Zip archive'**
+  String get fileTypeZip;
+
+  /// No description provided for @fileSaveHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Save here'**
+  String get fileSaveHere;
+
+  /// No description provided for @workspaceInvalidProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a Flutter Painter project: {path}'**
+  String workspaceInvalidProject(String path);
+
+  /// No description provided for @workspaceOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open {path}: {error}'**
+  String workspaceOpenFailed(String path, String error);
+
+  /// No description provided for @workspaceSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {path}'**
+  String workspaceSaved(String path);
+
+  /// No description provided for @workspaceSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save: {error}'**
+  String workspaceSaveFailed(String error);
+
+  /// No description provided for @imageLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load that image: {error}'**
+  String imageLoadFailed(String error);
+
+  /// No description provided for @dropProjectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop a .flp project to open it in a new tab, or an image to put it on the active layer.'**
+  String get dropProjectHint;
+
+  /// No description provided for @exportReplaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace existing files?'**
+  String get exportReplaceTitle;
+
+  /// No description provided for @exportReplaceMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{existing} of {total} files already exist in that folder and will be overwritten.'**
+  String exportReplaceMessage(int existing, int total);
+
+  /// No description provided for @exportReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get exportReplace;
+
+  /// No description provided for @exportSavedFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {count} file(s) to {path}'**
+  String exportSavedFolder(int count, String path);
+
+  /// No description provided for @exportSavedArchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved {count} file(s) to {path}'**
+  String exportSavedArchive(int count, String path);
+
+  /// No description provided for @exportSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save: {error}'**
+  String exportSaveFailed(String error);
+
+  /// No description provided for @exportCloseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Close the code editor?'**
+  String get exportCloseTitle;
+
+  /// No description provided for @exportCloseMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your edits to the generated files have not been saved and will be lost.'**
+  String get exportCloseMessage;
+
+  /// No description provided for @exportClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get exportClose;
+
+  /// No description provided for @exportRegenerateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Regenerate the files?'**
+  String get exportRegenerateTitle;
+
+  /// No description provided for @exportRegenerateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This rebuilds every file from the drawing and drops your edits.'**
+  String get exportRegenerateMessage;
+
+  /// No description provided for @exportRegenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Regenerate'**
+  String get exportRegenerate;
+
+  /// No description provided for @exportSettingsChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Export settings changed. Regenerate to apply them (this drops your edits).'**
+  String get exportSettingsChanged;
+
+  /// No description provided for @exportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Code editor — {name}'**
+  String exportTitle(String name);
+
+  /// No description provided for @exportSaveFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Save locally'**
+  String get exportSaveFolder;
+
+  /// No description provided for @exportSaveFolderTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Save all files into a folder ({modifier}+S)'**
+  String exportSaveFolderTooltip(String modifier);
+
+  /// No description provided for @exportSaveArchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as an archive'**
+  String get exportSaveArchive;
+
+  /// No description provided for @exportSaveArchiveTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Save all files as one .zip ({modifier}+Shift+S)'**
+  String exportSaveArchiveTooltip(String modifier);
+
+  /// No description provided for @exportCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get exportCopy;
+
+  /// No description provided for @exportCopyTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy the open file to the clipboard'**
+  String get exportCopyTooltip;
+
+  /// No description provided for @exportFormatDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Format document'**
+  String get exportFormatDocument;
+
+  /// No description provided for @exportFormatTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Format the open file (Shift+Alt+F)'**
+  String get exportFormatTooltip;
+
+  /// No description provided for @exportBuildAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Build again'**
+  String get exportBuildAgain;
+
+  /// No description provided for @exportBuildAgainTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Build the files again from the drawing (drops your edits)'**
+  String get exportBuildAgainTooltip;
+
+  /// No description provided for @exportBackToDrawing.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to the drawing'**
+  String get exportBackToDrawing;
+
+  /// No description provided for @exportSelectFileHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a file in the explorer to open it'**
+  String get exportSelectFileHint;
+
+  /// No description provided for @exportExplorer.
+  ///
+  /// In en, this message translates to:
+  /// **'Explorer'**
+  String get exportExplorer;
+
+  /// No description provided for @exportSettingsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get exportSettingsLabel;
+
+  /// No description provided for @exportCloseTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get exportCloseTab;
+
+  /// No description provided for @projectTabCloseTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Close (Ctrl+W)'**
+  String get projectTabCloseTooltip;
+
+  /// No description provided for @projectTabNotSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Not saved yet'**
+  String get projectTabNotSaved;
+
+  /// No description provided for @layerDefaultGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Group {number}'**
+  String layerDefaultGroup(int number);
+
+  /// No description provided for @editorCaret.
+  ///
+  /// In en, this message translates to:
+  /// **'Ln {line}, Col {column}'**
+  String editorCaret(int line, int column);
+
+  /// No description provided for @editorCaretSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Ln {line}, Col {column} ({selected} selected)'**
+  String editorCaretSelection(int line, int column, int selected);
+
+  /// No description provided for @editorLineCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 line} other{{count} lines}}'**
+  String editorLineCount(int count);
+
+  /// No description provided for @editorSpaceCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Spaces: {count}'**
+  String editorSpaceCount(int count);
+
+  /// No description provided for @exportRegenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} file(s) regenerated'**
+  String exportRegenerated(int count);
+
+  /// No description provided for @exportFormatted.
+  ///
+  /// In en, this message translates to:
+  /// **'Formatted {name}'**
+  String exportFormatted(String name);
+
+  /// No description provided for @exportCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied {name} to the clipboard'**
+  String exportCopied(String name);
+
+  /// No description provided for @projectUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No active project is available here.'**
+  String get projectUnavailable;
+
+  /// No description provided for @untitledProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled'**
+  String get untitledProject;
+
+  /// No description provided for @untitledProjectNumbered.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled {number}'**
+  String untitledProjectNumbered(int number);
+
+  /// No description provided for @defaultLayerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Layer {number}'**
+  String defaultLayerName(int number);
+
+  /// No description provided for @defaultGroupName.
+  ///
+  /// In en, this message translates to:
+  /// **'Group {number}'**
+  String defaultGroupName(int number);
+
+  /// No description provided for @projectFileDamaged.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open {path}: the file is damaged or is not a project.'**
+  String projectFileDamaged(String path);
+
+  /// No description provided for @projectFileTooNew.
+  ///
+  /// In en, this message translates to:
+  /// **'{path} was made with a newer version of Flutter Painter. Update the app to open it.'**
+  String projectFileTooNew(String path);
+
+  /// No description provided for @statusNotBackedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Not backed up'**
+  String get statusNotBackedUp;
+
+  /// No description provided for @statusNotBackedUpTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'A recovery copy could not be saved. Save your project to avoid losing work.'**
+  String get statusNotBackedUpTooltip;
+
+  /// No description provided for @layerCopyItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy item'**
+  String get layerCopyItem;
+
+  /// No description provided for @layerDragReorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder layers'**
+  String get layerDragReorder;
 }
 
 class _AppLocalizationsDelegate
@@ -757,8 +2267,27 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'sw'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'ar',
+    'bn',
+    'de',
+    'en',
+    'es',
+    'fa',
+    'fr',
+    'gn',
+    'ha',
+    'hi',
+    'id',
+    'ms',
+    'nl',
+    'pt',
+    'ru',
+    'sw',
+    'tr',
+    'ur',
+    'zh',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -767,10 +2296,44 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'ar':
+      return AppLocalizationsAr();
+    case 'bn':
+      return AppLocalizationsBn();
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fa':
+      return AppLocalizationsFa();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'gn':
+      return AppLocalizationsGn();
+    case 'ha':
+      return AppLocalizationsHa();
+    case 'hi':
+      return AppLocalizationsHi();
+    case 'id':
+      return AppLocalizationsId();
+    case 'ms':
+      return AppLocalizationsMs();
+    case 'nl':
+      return AppLocalizationsNl();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
     case 'sw':
       return AppLocalizationsSw();
+    case 'tr':
+      return AppLocalizationsTr();
+    case 'ur':
+      return AppLocalizationsUr();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(

@@ -49,23 +49,27 @@ class ExportStatusBar extends StatelessWidget {
                 valueListenable: caret,
                 builder: (context, c, _) => Text(
                   c.selected > 0
-                      ? 'Ln ${c.line}, Col ${c.column} (${c.selected} selected)'
-                      : 'Ln ${c.line}, Col ${c.column}',
+                      ? context.l10n.editorCaretSelection(
+                          c.line,
+                          c.column,
+                          c.selected,
+                        )
+                      : context.l10n.editorCaret(c.line, c.column),
                   style: style,
                 ),
               ),
               gap(),
-              Text('$lines lines', style: style),
+              Text(context.l10n.editorLineCount(lines), style: style),
               gap(),
             ],
             Text(
               state.generationFailed
                   ? context.l10n.exportGenerationFailed
-                  : state.status,
+                  : _localizedStatus(context, state.status),
               overflow: TextOverflow.ellipsis,
               style: style,
             ).expanded(),
-            Text('Spaces: 2', style: style),
+            Text(context.l10n.editorSpaceCount(2), style: style),
             gap(),
             Text('UTF-8', style: style),
             gap(),
@@ -78,5 +82,25 @@ class ExportStatusBar extends StatelessWidget {
         );
       },
     ).padding(horizontal: 12).backgroundColor(colors.statusBar).height(22);
+  }
+
+  String _localizedStatus(BuildContext context, String status) {
+    final regenerated = RegExp(r'^Regenerated (\d+)').firstMatch(status);
+    if (regenerated != null) {
+      return context.l10n.exportRegenerated(int.parse(regenerated.group(1)!));
+    }
+    if (status.startsWith('Formatted ')) {
+      return context.l10n.exportFormatted(
+        status.substring('Formatted '.length),
+      );
+    }
+    if (status.startsWith('Copied ') && status.endsWith(' to the clipboard')) {
+      final name = status.substring(
+        'Copied '.length,
+        status.length - ' to the clipboard'.length,
+      );
+      return context.l10n.exportCopied(name);
+    }
+    return status;
   }
 }

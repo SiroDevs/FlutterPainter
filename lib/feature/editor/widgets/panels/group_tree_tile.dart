@@ -16,6 +16,7 @@ class GroupTreeTile extends StatefulWidget {
     required this.onToggleVisibility,
     required this.onRename,
     required this.onSelect,
+    required this.onContextMenu,
     required this.children,
   });
 
@@ -27,6 +28,7 @@ class GroupTreeTile extends StatefulWidget {
   final VoidCallback onToggleVisibility;
   final ValueChanged<String> onRename;
   final VoidCallback onSelect;
+  final ValueChanged<Offset> onContextMenu;
   final List<Widget> children;
 
   @override
@@ -40,41 +42,45 @@ class _GroupTreeTileState extends State<GroupTreeTile> {
   Widget build(BuildContext context) => Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      ListTile(
-        dense: true,
-        visualDensity: VisualDensity.compact,
-        contentPadding: const EdgeInsets.only(left: 24, right: 8),
-        leading: const Icon(Icons.folder_outlined, size: 18),
-        title: InlineTreeNameEditor(
-          name: widget.name,
-          tooltip: widget.tooltip,
-          style: widget.selected
-              ? TextStyle(color: Theme.of(context).colorScheme.primary)
-              : null,
-          onSaved: widget.onRename,
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              tooltip: widget.visibilityTooltip,
-              iconSize: 18,
-              visualDensity: VisualDensity.compact,
-              icon: Icon(
-                widget.visible ? Icons.visibility : Icons.visibility_off,
+      GestureDetector(
+        onSecondaryTapUp: (details) =>
+            widget.onContextMenu(details.globalPosition),
+        child: ListTile(
+          dense: true,
+          visualDensity: VisualDensity.compact,
+          contentPadding: const EdgeInsets.only(left: 24, right: 8),
+          leading: const Icon(Icons.folder_outlined, size: 18),
+          title: InlineTreeNameEditor(
+            name: widget.name,
+            tooltip: widget.tooltip,
+            style: widget.selected
+                ? TextStyle(color: Theme.of(context).colorScheme.primary)
+                : null,
+            onSaved: widget.onRename,
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                tooltip: widget.visibilityTooltip,
+                iconSize: 18,
+                visualDensity: VisualDensity.compact,
+                icon: Icon(
+                  widget.visible ? Icons.visibility : Icons.visibility_off,
+                ),
+                onPressed: widget.onToggleVisibility,
               ),
-              onPressed: widget.onToggleVisibility,
-            ),
-            IconButton(
-              iconSize: 18,
-              visualDensity: VisualDensity.compact,
-              icon: Icon(_expanded ? Icons.expand_more : Icons.chevron_right),
-              onPressed: () => setState(() => _expanded = !_expanded),
-            ),
-          ],
+              IconButton(
+                iconSize: 18,
+                visualDensity: VisualDensity.compact,
+                icon: Icon(_expanded ? Icons.expand_more : Icons.chevron_right),
+                onPressed: () => setState(() => _expanded = !_expanded),
+              ),
+            ],
+          ),
+          selected: widget.selected,
+          onTap: widget.onSelect,
         ),
-        selected: widget.selected,
-        onTap: widget.onSelect,
       ),
       if (_expanded) ...widget.children,
     ],

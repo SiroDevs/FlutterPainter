@@ -1,108 +1,662 @@
 {
-    "@@locale": "sw",
-    "feedback": "Feedback",
-    "@feedback": {
-        "description": "Label for feedback section or button"
-    },
-
-    "appName": "Flutter Painter",
-    "@appName": {
+  "@@locale": "sw",
+  "feedback": "Feedback",
+  "@feedback": {
+    "description": "Label for feedback section or button"
+  },
+  "appName": "Flutter Painter",
+  "@appName": {
     "description": "The name of the application"
-    },
-
-    "shapeGroup": "Unganisha",
-    "quickCode": "Msimbo wa Haraka",
-    "quickCodeTooltip": "Hariri au bandika viwianishi vya umbo",
-    "quickCodePolygonMenu": "Msimbo",
-    "quickCodeCoordinates": "Viwianishi",
-    "quickCodeDartCode": "Msimbo wa Dart",
-    "quickCodeFormatTooltip": "Badili kati ya msimbo wa Dart na viwianishi vifupi",
-    "quickCodeToolMenuHint": "Bofya kulia au shikilia ili kuona chaguo zaidi",
-    "quickCodeHint": "Bandika nukta za Offset(x, y) au jozi za x,y zilizotenganishwa kwa nafasi.",
-    "quickCodeInvalid": "Msimbo uwe orodha ya nukta za Offset(x, y).",
-    "quickCodeNeedMorePoints": "Ongeza nukta za kutosha kwa umbo hili.",
-    "quickCodePolygonReady": "Muhtasari wa poligoni uko tayari.",
-    "quickCodeShapeReady": "Turubai imesasishwa kwa nukta hizi.",
-    "quickCodeAddPolygon": "Ongeza poligoni",
-    "quickCodeAddShapes": "Ongeza maumbo",
-    "quickCodeClose": "Funga Msimbo wa Haraka",
-    "shapeUngroup": "Tenganisha",
-    "shapeGroupTooltip": "Unganisha maumbo yaliyochaguliwa ili yahame pamoja",
-    "shapeUngroupTooltip": "Tenganisha maumbo yaliyochaguliwa",
-    "shapeActionsPanelTitle": "Vitendo vya umbo",
-    "shapeActionsPanelEmpty": "Chagua umbo ili kuona vitendo vyake.",
-    "paintBucketTool": "Ndoo ya rangi",
-    "paintBucketHint": "Bofya ndani ya umbo lililofungwa kulijaza kwa rangi ya sasa ya kujaza.",
-    "shapeSelectionCount": "{count, plural, =1{Umbo 1 limechaguliwa} other{Maumbo {count} yamechaguliwa}}",
-    "@shapeSelectionCount": {
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
-    },
-    "shapeRotateHint": "Buruta kishikio cha duara ili kuzungusha. Shikilia Shift ili kuruka kwa kila 15°.",
-    "vertexDelete": "Futa nukta hii",
-    "vertexSplit": "Gawa nukta hii",
-    "shapeDuplicate": "Nakili",
-    "shapeCopyGroup": "Nakili kikundi",
-    "shapePasteGroup": "Bandika kikundi",
-    "shapeDelete": "Futa",
-    "shapeForward": "Peleka mbele",
-    "shapeBack": "Rudisha nyuma",
-    "shapeBringToFront": "Peleka mbele kabisa",
-    "shapeSendToBack": "Rudisha nyuma kabisa",
-    "shapeBringForward": "Peleka mbele",
-    "shapeSendBackward": "Rudisha nyuma",
-    "shapeOrderGroup": "Mpangilio",
-    "shapeMoveToLayer": "Hamisha kwenye tabaka",
-    "shapeToLayer": "Kwa tabaka",
-    "layersTitle": "Tabaka",
-    "layerAdd": "Ongeza tabaka",
-    "layerRename": "Badilisha jina la tabaka",
-    "layerMoveUp": "Peleka tabaka juu",
-    "layerMoveDown": "Peleka tabaka chini",
-    "layerDelete": "Futa tabaka",
-    "layerHide": "Ficha",
-    "layerShow": "Onyesha",
-    "layerGroup": "Kikundi",
-    "layerPicture": "Picha",
-    "layerItemRectangle": "Mstatili",
-    "layerItemEllipse": "Duara bapa",
-    "layerItemLine": "Mstari",
-    "layerItemPolygon": "Poligoni",
-    "layerItemFreehand": "Mchoro huru",
-    "layerEditItem": "Hariri jina la kitu",
-    "canvasSelectGroupMemberHint": "Bonyeza Ctrl na ubofye ili kuchagua kipengee hiki pekee kutoka kwenye kundi lake",
-    "layerEditGroup": "Hariri jina la kikundi",
-    "shapeScaleDown": "Punguza ukubwa kwa 10%",
-    "ribbonArrangeTab": "Panga",
-    "projectTransferGroup": "Hamisha kati ya miradi",
-    "projectCopySelection": "Nakili vilivyochaguliwa",
-    "projectCopyLayer": "Nakili tabaka",
-    "projectPaste": "Bandika",
-    "projectImportGroup": "Leta",
-    "projectImport": "Leta mradi…",
-    "projectImportComplete": "Tabaka {count} yameletwa.",
-    "@projectImportComplete": {
-        "placeholders": {
-            "count": { "type": "int" }
-        }
-    },
-    "projectImportFailed": "Imeshindwa kuleta {path}.",
-    "@projectImportFailed": {
-        "placeholders": {
-            "path": { "type": "String" }
-        }
-    },
-    "shapeTransformGroup": "Badilisha umbo",
-    "shapeSelectionGroup": "Chaguo",
-    "shapeFlipHorizontal": "Geuza mlalo",
-    "shapeFlipVertical": "Geuza wima",
-    "shapeClosedPath": "Njia iliyofungwa",
-    "groupMethodsPublic": "Onyesha mbinu za maumbo ya kikundi",
-    "groupMethodsPublicHelp": "Ikiwashwa, tabaka huita mbinu ya kila umbo moja kwa moja. Ikizimwa, kikundi huwa na mbinu moja ya paint() na mbinu za maumbo hubaki za ndani.",
-    "exportGenerating": "Inatengeneza msimbo wa Dart…",
-    "exportSaving": "Inaandaa faili la nje…",
-    "exportGenerationFailed": "Imeshindwa kutengeneza msimbo wa Dart."
+  },
+  "shapeGroup": "Unganisha",
+  "quickCode": "Msimbo wa Haraka",
+  "quickCodeTooltip": "Hariri au bandika viwianishi vya umbo",
+  "quickCodePolygonMenu": "Msimbo",
+  "quickCodeCoordinates": "Viwianishi",
+  "quickCodeDartCode": "Msimbo wa Dart",
+  "quickCodeFormatTooltip": "Badili kati ya msimbo wa Dart na viwianishi vifupi",
+  "quickCodeToolMenuHint": "Bofya kulia au shikilia ili kuona chaguo zaidi",
+  "quickCodeHint": "Bandika nukta za Offset(x, y) au jozi za x,y zilizotenganishwa kwa nafasi.",
+  "quickCodeInvalid": "Msimbo uwe orodha ya nukta za Offset(x, y).",
+  "quickCodeNeedMorePoints": "Ongeza nukta za kutosha kwa umbo hili.",
+  "quickCodePolygonReady": "Muhtasari wa poligoni uko tayari.",
+  "quickCodeShapeReady": "Turubai imesasishwa kwa nukta hizi.",
+  "quickCodeAddPolygon": "Ongeza poligoni",
+  "quickCodeAddShapes": "Ongeza maumbo",
+  "quickCodeClose": "Funga Msimbo wa Haraka",
+  "shapeUngroup": "Tenganisha",
+  "shapeGroupTooltip": "Unganisha maumbo yaliyochaguliwa ili yahame pamoja",
+  "shapeUngroupTooltip": "Tenganisha maumbo yaliyochaguliwa",
+  "shapeActionsPanelTitle": "Vitendo vya umbo",
+  "shapeActionsPanelEmpty": "Chagua umbo ili kuona vitendo vyake.",
+  "paintBucketTool": "Ndoo ya rangi",
+  "paintBucketHint": "Bofya ndani ya umbo lililofungwa kulijaza kwa rangi ya sasa ya kujaza.",
+  "shapeSelectionCount": "{count, plural, =1{Umbo 1 limechaguliwa} other{Maumbo {count} yamechaguliwa}}",
+  "@shapeSelectionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shapeRotateHint": "Buruta kishikio cha duara ili kuzungusha. Shikilia Shift ili kuruka kwa kila 15°.",
+  "vertexDelete": "Futa nukta hii",
+  "vertexSplit": "Gawa nukta hii",
+  "shapeDuplicate": "Nakili",
+  "shapeCopyGroup": "Nakili kikundi",
+  "shapePasteGroup": "Bandika kikundi",
+  "shapeDelete": "Futa",
+  "shapeForward": "Peleka mbele",
+  "shapeBack": "Rudisha nyuma",
+  "shapeBringToFront": "Peleka mbele kabisa",
+  "shapeSendToBack": "Rudisha nyuma kabisa",
+  "shapeBringForward": "Peleka mbele",
+  "shapeSendBackward": "Rudisha nyuma",
+  "shapeOrderGroup": "Mpangilio",
+  "shapeMoveToLayer": "Hamisha kwenye tabaka",
+  "shapeToLayer": "Kwa tabaka",
+  "layersTitle": "Tabaka",
+  "layerAdd": "Ongeza tabaka",
+  "layerRename": "Badilisha jina la tabaka",
+  "layerMoveUp": "Peleka tabaka juu",
+  "layerMoveDown": "Peleka tabaka chini",
+  "layerDelete": "Futa tabaka",
+  "layerHide": "Ficha",
+  "layerShow": "Onyesha",
+  "layerGroup": "Kikundi",
+  "layerPicture": "Picha",
+  "layerItemRectangle": "Mstatili",
+  "layerItemEllipse": "Duara bapa",
+  "layerItemLine": "Mstari",
+  "layerItemPolygon": "Poligoni",
+  "layerItemFreehand": "Mchoro huru",
+  "layerEditItem": "Hariri jina la kitu",
+  "canvasSelectGroupMemberHint": "Bonyeza Ctrl na ubofye ili kuchagua kipengee hiki pekee kutoka kwenye kundi lake",
+  "layerEditGroup": "Hariri jina la kikundi",
+  "shapeScaleDown": "Punguza ukubwa kwa 10%",
+  "ribbonArrangeTab": "Panga",
+  "projectTransferGroup": "Hamisha kati ya miradi",
+  "projectCopySelection": "Nakili vilivyochaguliwa",
+  "projectCopyLayer": "Nakili tabaka",
+  "projectPaste": "Bandika",
+  "projectImportGroup": "Leta",
+  "projectImport": "Leta mradi…",
+  "projectImportComplete": "Tabaka {count} yameletwa.",
+  "@projectImportComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "projectImportFailed": "Imeshindwa kuleta {path}.",
+  "@projectImportFailed": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "shapeTransformGroup": "Badilisha umbo",
+  "shapeSelectionGroup": "Chaguo",
+  "shapeFlipHorizontal": "Geuza mlalo",
+  "shapeFlipVertical": "Geuza wima",
+  "shapeClosedPath": "Njia iliyofungwa",
+  "groupMethodsPublic": "Onyesha mbinu za maumbo ya kikundi",
+  "groupMethodsPublicHelp": "Ikiwashwa, tabaka huita mbinu ya kila umbo moja kwa moja. Ikizimwa, kikundi huwa na mbinu moja ya paint() na mbinu za maumbo hubaki za ndani.",
+  "exportGenerating": "Inatengeneza msimbo wa Dart…",
+  "exportSaving": "Inaandaa faili la nje…",
+  "exportGenerationFailed": "Imeshindwa kutengeneza msimbo wa Dart.",
+  "newProject": "Mradi Mpya",
+  "newProjectTooltip": "Anzisha mradi mpya (Ctrl+N)",
+  "inlineCode": "Msimbo wa Ndani",
+  "inlineCodeTooltip": "Onyesha au ficha mwonekano wa msimbo wa ndani",
+  "openFullEditor": "Fungua kihariri kamili cha msimbo",
+  "undo": "Tendua",
+  "removeFileTooltip": "Ondoa faili hili na maumbo yake",
+  "statusIdle": "Hariri msimbo ili turubai ifuate",
+  "statusRendered": "Turubai imesasishwa kutoka kwenye msimbo",
+  "statusUnreadable": "Msimbo huu hauwezi kusomwa bado; turubai haijabadilika",
+  "statusSkipped": "{count, plural, =1{Kauli 1 imerukwa} other{Kauli {count} zimerukwa}}",
+  "@statusSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "colorMoreTooltip": "Fungua kichagua rangi",
+  "colorPickerTitle": "Kichagua rangi",
+  "colorSolid": "Rangi moja",
+  "colorGradient": "Mchanganyiko wa rangi",
+  "colorWheel": "Gurudumu",
+  "colorSquare": "Mraba",
+  "colorHexCode": "Msimbo wa Hex",
+  "colorBrightness": "Mwangaza",
+  "colorOpacity": "Uwazi",
+  "gradientLinear": "Mstari",
+  "gradientRadial": "Duara",
+  "gradientSweep": "Mzunguko",
+  "gradientAngle": "Pembe",
+  "gradientRadius": "Kipenyo",
+  "gradientAddStop": "Ongeza kikomo",
+  "gradientRemoveStop": "Ondoa kikomo",
+  "gradientStopPosition": "Nafasi",
+  "apply": "Tumia",
+  "cancel": "Ghairi",
+  "settingsTitle": "Mipangilio",
+  "settingsGeneral": "Jumla",
+  "settingsProject": "Mradi",
+  "settingsAbout": "Kuhusu",
+  "settingsLanguage": "Lugha",
+  "settingsLanguageHelp": "Chagua lugha itakayotumiwa na programu.",
+  "languageEnglish": "English",
+  "languageFrench": "Français",
+  "languageSwahili": "Kiswahili",
+  "previewNone": "Zima (rangi halisi)",
+  "previewGrayscale": "Vivuli vya kijivu",
+  "previewProtanopia": "Protanopia (bila nyekundu)",
+  "previewDeuteranopia": "Deuteranopia (bila kijani)",
+  "previewTritanopia": "Tritanopia (bila bluu)",
+  "settingsAppearance": "Mwonekano",
+  "settingsTheme": "Mandhari",
+  "themeLight": "Nyepesi",
+  "themeDark": "Giza",
+  "themeSystem": "Mfumo",
+  "settingsInterface": "Kiolesura",
+  "interfaceMinimal": "Rahisi",
+  "interfaceAdvanced": "Kina",
+  "interfaceHelp": "Mwonekano wa kina huonyesha utepe na paneli za pembeni. Mwonekano rahisi huacha turubai, zana na rangi; amri hubaki kwenye menyu.",
+  "settingsCodeExport": "Utoaji wa msimbo",
+  "settingsCodeStructure": "Muundo wa msimbo",
+  "codeRefactored": "Uliopangwa upya",
+  "codeMonolithic": "Faili moja",
+  "codeRefactoredHelp": "Mchoraji, darasa moja kwa kila tabaka kwenye faili lake, kitendaji kimoja kwa kila umbo, na paleti ya rangi.",
+  "codeMonolithicHelp": "Faili moja ya msimbo yenye darasa la mchoraji na mbinu moja kwa kila tabaka.",
+  "settingsColourManagement": "Udhibiti wa rangi",
+  "settingsColourVision": "Muhtasari wa uoni wa rangi",
+  "settingsColourVisionHelp": "Hukadiria jinsi turubai inaweza kuonekana kwa mtu mwenye tofauti ya uoni wa rangi. Haibadilishi mradi wala msimbo unaotolewa.",
+  "settingsColourFormat": "Muundo wa rangi kwenye msimbo unaotolewa",
+  "settingsColourFormatHelp": "Chagua jinsi rangi zinavyoandikwa kwenye Dart inayozalishwa.",
+  "settingsColourConstants": "Kusanya rangi kwenye vigezo vyenye majina",
+  "settingsColourConstantsHelp": "Andika kila rangi tofauti mara moja kama kigezo, kisha maumbo yataitumia.",
+  "settingsReset": "Rejesha chaguo-msingi",
+  "settingsDone": "Imekamilika",
+  "projectSettingsDescription": "Dhibiti jina na turubai ya muundo wa mradi huu.",
+  "projectCurrentName": "Jina la mradi",
+  "projectCanvasSize": "Ukubwa wa turubai",
+  "projectRename": "Badilisha jina la mradi",
+  "projectResizeCanvas": "Badilisha ukubwa wa turubai",
+  "projectDimensions": "{width} × {height} vipimo vya usanifu",
+  "@projectDimensions": {
+    "placeholders": {
+      "width": {
+        "type": "String"
+      },
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutDescription": "Studio ya uchoraji ya kuunda wachoraji maalum wa Flutter.",
+  "aboutCredits": "Imetengenezwa na Siro Devs",
+  "buttonOk": "Sawa",
+  "canvasSizeTitle": "Ukubwa wa turubai (vipimo vya usanifu)",
+  "fieldWidth": "Upana",
+  "fieldHeight": "Urefu",
+  "buttonResize": "Badilisha ukubwa",
+  "saveChangesTitle": "Hifadhi mabadiliko ya \"{name}\"?",
+  "@saveChangesTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unsavedChangesMessage": "Mabadiliko yako yatapotea usipoyahifadhi.",
+  "buttonDontSave": "Usihifadhi",
+  "recoverUnsavedTitle": "Rejesha kazi ambayo haijahifadhiwa?",
+  "recoverUnsavedIntro": "Miradi hii ilikuwa na mabadiliko ambayo hayakuhifadhiwa Flutter Painter ilipofungwa mara ya mwisho:",
+  "buttonDiscard": "Tupa",
+  "buttonRestore": "Rejesha",
+  "fileNewBlank": "Nouveau turubai tupu",
+  "fileOpen": "Fungua…",
+  "fileSave": "Hifadhi",
+  "fileSaveAs": "Hifadhi kama…",
+  "fileAutoSave": "Hifadhi kiotomatiki",
+  "fileAutoSaveHelp": "Ikiwashwa: andika mabadiliko moja kwa moja kwenye faili la .flp lililofunguliwa. Ikizimwa: hifadhi nakala ya kurejesha hadi uhifadhi.",
+  "fileExportDart": "Hamisha Dart…",
+  "fileCodeEditorTooltip": "Fungua kihariri cha msimbo",
+  "fileSettings": "Mipangilio…",
+  "fileRenameProject": "Badilisha jina la mradi…",
+  "projectNameTooltip": "Jina la mradi (pia hutumika kwa majina ya madarasa)",
+  "fileCanvasSize": "Ukubwa wa turubai…",
+  "fileCloseProject": "Funga mradi",
+  "fileExit": "Toka",
+  "aboutMenu": "Kuhusu {appName}",
+  "editRedo": "Rudia",
+  "editDeleteTooltip": "Futa umbo au picha iliyochaguliwa",
+  "editPathClosedTooltip": "Funga au fungua njia ya poligoni au mstari iliyochaguliwa",
+  "editFill": "Jaza",
+  "editOutline": "Muhtasari",
+  "editStrokeTooltip": "Mstari wa nje",
+  "imageReplace": "Badilisha picha…",
+  "imageLoad": "Pakia picha…",
+  "imageLoadNewLayer": "Picha kwenye tabaka jipya…",
+  "imagePutLayerTooltip": "Weka picha kwenye tabaka hili",
+  "imageLoadNewLayerTooltip": "Pakia picha kwenye tabaka jipya",
+  "imageSelect": "Chagua picha",
+  "imageSelectTooltip": "Chagua picha ya tabaka hili (huonyesha vishikio vya kubadilisha ukubwa)",
+  "imageMoveResize": "Sogeza / badilisha ukubwa wa picha",
+  "imageMoveResizeTooltip": "Zana ya kusogeza / kubadilisha ukubwa wa picha",
+  "imageFit": "Tosheleza picha kwenye turubai",
+  "imageFitTooltip": "Tosheleza turubai (weka upya unyooshaji)",
+  "imageShow": "Onyesha picha",
+  "imageRemove": "Ondoa picha",
+  "imageLoadTooltip": "Pakia picha kwenye tabaka jipya",
+  "imagePanelShow": "Onyesha",
+  "imageOpacity": "Uwazi {value}%",
+  "imageScale": "Kipimo {value}",
+  "imagePanelTitle": "Picha kwenye “{name}”",
+  "imagePanelPrompt": "Pakia picha kwenye tabaka hili ili uchore juu yake au uitumie kama mandharinyuma.",
+  "viewZoomIn": "Kuza",
+  "viewZoomOut": "Punguza ukubwa",
+  "viewFitWindow": "Tosheleza dirisha",
+  "viewGrid": "Gridi",
+  "viewSnap": "Shikiza kwenye gridi",
+  "viewCanvasBackground": "Mandharinyuma ya turubai",
+  "viewCanvasBackgroundTooltip": "Badili rangi ya mandharinyuma ya turubai",
+  "viewLightTheme": "Mandhari nyepesi",
+  "viewDarkTheme": "Mandhari ya giza",
+  "viewThemeTooltip": "Badili kati ya mandhari nyepesi na ya giza",
+  "menuFile": "Faili",
+  "menuEdit": "Hariri",
+  "menuLayer": "Tabaka",
+  "menuView": "Tazama",
+  "menuTools": "Zana",
+  "menuHelp": "Msaada",
+  "menuWindow": "Dirisha",
+  "ribbonExport": "Hamisha",
+  "ribbonExpand": "Panua utepe",
+  "ribbonCollapse": "Kunja utepe",
+  "ribbonLayers": "Tabaka",
+  "ribbonOrder": "Mpangilio",
+  "ribbonHistory": "Historia",
+  "ribbonStyle": "Mtindo",
+  "ribbonNew": "Mpya",
+  "ribbonOpen": "Fungua",
+  "ribbonBlankCanvas": "Turubai tupu",
+  "ribbonProject": "Mradi",
+  "ribbonApp": "Programu",
+  "ribbonShapes": "Maumbo",
+  "ribbonPaths": "Njia",
+  "ribbonPolygon": "Poligoni",
+  "ribbonPictures": "Picha",
+  "ribbonPicture": "Picha",
+  "ribbonOnNewLayer": "Kwenye tabaka jipya",
+  "ribbonLayersGroup": "Tabaka",
+  "ribbonZoom": "Kuza",
+  "ribbonFit": "Tosheleza",
+  "ribbonShow": "Onyesha",
+  "ribbonCanvas": "Turubai",
+  "ribbonAppearance": "Mwonekano",
+  "ribbonLightDark": "Nyepesi / giza",
+  "ribbonArrange": "Panga",
+  "ribbonAdjust": "Rekebisha",
+  "toolSelectMove": "Chagua / sogeza",
+  "toolMoveImage": "Sogeza / badilisha ukubwa wa picha ya tabaka",
+  "toolRectangle": "Mstatili",
+  "toolEllipse": "Duara bapa",
+  "toolLine": "Mstari",
+  "toolPolygonPath": "Njia ya poligoni / mstari",
+  "toolFreehand": "Mchoro huru",
+  "propertyTitle": "Sifa",
+  "propertyNoSelection": "Hakuna umbo lililochaguliwa. Mipangilio hii itatumika kwa umbo linalofuata utakalochora.",
+  "propertyFill": "Jaza",
+  "propertyStroke": "Mstari wa mpaka",
+  "propertyClosedShape": "Umbo lililofungwa (linaweza kujazwa)",
+  "propertyRenameShape": "Badili jina la umbo",
+  "propertyCornerRadius": "Mviringo wa kona: {value}",
+  "propertyStrokeWidth": "Upana wa mpaka: {value}",
+  "imageOnLayer": "Picha kwenye “{name}”",
+  "imagePanelHint": "Pakia picha kwenye tabaka hili ili kuichorea juu yake au kuitumia kama mandharinyuma.",
+  "statusPreview": "Onyesho la awali: {value}",
+  "statusCtrlWheel": "Ctrl + gurudumu la kipanya hukuza.",
+  "buttonClose": "Funga",
+  "buttonReplace": "Badilisha",
+  "buttonLoad": "Pakia",
+  "buttonUse": "Tumia",
+  "buttonNone": "Hakuna",
+  "colorFillTooltip": "Rangi ya kujaza",
+  "colorStrokeTooltip": "Rangi ya mpaka",
+  "buttonExport": "Hamisha",
+  "interfaceSwitchAdvanced": "Badili kwenda kiolesura cha kina",
+  "toolHintSelect": "Bofya umbo au picha ili kuichagua. Buruta ili kuisogeza, au buruta vishikio ili kubadilisha ukubwa. Bofya mara mbili kwenye ukingo kuongeza nukta, au Alt-bofya nukta ili kuiondoa.",
+  "toolHintRectangle": "Buruta kuchora mstatili. Shikilia Shift kupata mraba.",
+  "toolHintEllipse": "Buruta kuchora duara bapa. Shikilia Shift kupata duara.",
+  "toolHintLine": "Buruta kuchora mstari. Shikilia Shift kupata pembe za 45°.",
+  "toolHintPolygon": "Bofya kuongeza nukta. Bofya nukta ya kwanza au bofya mara mbili kufunga umbo. Bonyeza Enter kuacha njia ya mstari wazi; Esc kughairi.",
+  "toolHintFreehand": "Buruta kuchora mstari laini wa mkono huru.",
+  "toolHintImage": "Buruta picha ya tabaka hili ili kuisogeza; buruta kishikio kubadilisha ukubwa. Kona huhifadhi uwiano; Shift au kishikio cha ukingo hunyoosha.",
+  "@aboutMenu": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "@imageOpacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@imageScale": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@imagePanelTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@propertyCornerRadius": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@propertyStrokeWidth": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@statusPreview": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "ribbonFile": "Faili",
+  "ribbonHome": "Nyumbani",
+  "ribbonInsert": "Ingiza",
+  "ribbonLayer": "Tabaka",
+  "ribbonImage": "Picha",
+  "ribbonView": "Tazama",
+  "viewZoomLabel": "Kuza {value}",
+  "@viewZoomLabel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statusMousePan": "Tembeza au buruta kwa kitufe cha kulia kusogeza mwonekano.",
+  "fileTypeProject": "Mradi wa Flutter Painter",
+  "fileTypeImages": "Picha",
+  "fileTypeDart": "Dart",
+  "fileTypeZip": "Kumbukumbu ya ZIP",
+  "fileSaveHere": "Hifadhi hapa",
+  "workspaceInvalidProject": "Hii si miradi wa Flutter Painter: {path}",
+  "workspaceOpenFailed": "Imeshindwa kufungua {path}: {error}",
+  "workspaceSaved": "Imehifadhiwa {path}",
+  "workspaceSaveFailed": "Imeshindwa kuhifadhi: {error}",
+  "imageLoadFailed": "Imeshindwa kupakia picha hiyo: {error}",
+  "dropProjectHint": "Dondosha mradi wa .flp kuufungua kwenye kichupo kipya, au picha kuiweka kwenye tabaka linalotumika.",
+  "exportReplaceTitle": "Badilisha faili zilizopo?",
+  "exportReplaceMessage": "Faili {existing} kati ya {total} tayari zipo kwenye folda hiyo na zitabadilishwa.",
+  "exportReplace": "Badilisha",
+  "exportSavedFolder": "Faili {count} zimehifadhiwa kwenye {path}",
+  "exportSavedArchive": "Faili {count} zimehifadhiwa kwenye {path}",
+  "exportSaveFailed": "Imeshindwa kuhifadhi: {error}",
+  "exportCloseTitle": "Funga kihariri cha msimbo?",
+  "exportCloseMessage": "Mabadiliko yako kwenye faili zilizozalishwa hayajahifadhiwa na yatapotea.",
+  "exportClose": "Funga",
+  "exportRegenerateTitle": "Tengeneza faili upya?",
+  "exportRegenerateMessage": "Hii itaunda kila faili upya kutoka kwenye mchoro na kufuta mabadiliko yako.",
+  "exportRegenerate": "Tengeneza upya",
+  "exportSettingsChanged": "Mipangilio ya uhamishaji imebadilika. Tengeneza upya ili kuitumia (mabadiliko yako yatafutwa).",
+  "exportTitle": "Kihariri cha msimbo — {name}",
+  "exportSaveFolder": "Hifadhi kwenye folda",
+  "exportSaveFolderTooltip": "Hifadhi faili zote kwenye folda ({modifier}+S)",
+  "exportSaveArchive": "Hifadhi kama kumbukumbu",
+  "exportSaveArchiveTooltip": "Hifadhi faili zote kama .zip moja ({modifier}+Shift+S)",
+  "exportCopy": "Nakili",
+  "exportCopyTooltip": "Nakili faili lililofunguliwa kwenye ubao wa kunakili",
+  "exportFormatDocument": "Panga hati",
+  "exportFormatTooltip": "Panga faili lililofunguliwa (Shift+Alt+F)",
+  "exportBuildAgain": "Tengeneza tena",
+  "exportBuildAgainTooltip": "Tengeneza faili upya kutoka kwenye mchoro (hufuta mabadiliko yako)",
+  "exportBackToDrawing": "Rudi kwenye mchoro",
+  "exportSelectFileHint": "Chagua faili kwenye kichunguzi ili uifungue",
+  "exportExplorer": "Kichunguzi",
+  "exportSettingsLabel": "Mipangilio",
+  "exportCloseTab": "Funga",
+  "projectTabCloseTooltip": "Funga (Ctrl+W)",
+  "projectTabNotSaved": "Bado haijahifadhiwa",
+  "@workspaceInvalidProject": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@workspaceOpenFailed": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      },
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@workspaceSaved": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@workspaceSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@imageLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportReplaceMessage": {
+    "placeholders": {
+      "existing": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@exportSavedFolder": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSavedArchive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSaveFolderTooltip": {
+    "placeholders": {
+      "modifier": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSaveArchiveTooltip": {
+    "placeholders": {
+      "modifier": {
+        "type": "String"
+      }
+    }
+  },
+  "layerDefaultGroup": "Kikundi {number}",
+  "@layerDefaultGroup": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "editorCaret": "Mst {line}, Safu {column}",
+  "editorCaretSelection": "Mst {line}, Safu {column} ({selected} zimechaguliwa)",
+  "editorLineCount": "{count, plural, =1{mstari 1} other{mistari {count}}}",
+  "editorSpaceCount": "Nafasi: {count}",
+  "exportRegenerated": "Faili {count} zimetengenezwa upya",
+  "exportFormatted": "Imepangiliwa {name}",
+  "exportCopied": "Imenakili {name} kwenye ubao wa kunakili",
+  "@editorCaret": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      },
+      "column": {
+        "type": "int"
+      }
+    }
+  },
+  "@editorCaretSelection": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      },
+      "column": {
+        "type": "int"
+      },
+      "selected": {
+        "type": "int"
+      }
+    }
+  },
+  "@editorLineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@editorSpaceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@exportRegenerated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@exportFormatted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportCopied": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "projectUnavailable": "Hakuna mradi unaotumika unaopatikana hapa.",
+  "untitledProject": "Bila jina",
+  "untitledProjectNumbered": "Bila jina {number}",
+  "@untitledProjectNumbered": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultLayerName": "Tabaka {number}",
+  "@defaultLayerName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultGroupName": "Kundi {number}",
+  "@defaultGroupName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "projectFileDamaged": "Imeshindikana kufungua {path}: faili limeharibika au si mradi.",
+  "@projectFileDamaged": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "projectFileTooNew": "{path} liliundwa na toleo jipya zaidi la Flutter Painter. Sasisha programu ili kulifungua.",
+  "@projectFileTooNew": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "statusNotBackedUp": "Haijahifadhiwa nakala",
+  "statusNotBackedUpTooltip": "Nakala ya kurejesha haikuweza kuhifadhiwa. Hifadhi mradi wako ili kuepuka kupoteza kazi.",
+  "layerCopyItem": "Nakili kipengee",
+  "layerDragReorder": "Buruta kupanga upya tabaka"
 }

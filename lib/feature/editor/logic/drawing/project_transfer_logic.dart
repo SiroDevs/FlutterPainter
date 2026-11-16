@@ -1,6 +1,3 @@
-// Dart imports:
-import 'dart:ui';
-
 // Project imports:
 import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../../../domain/models/drawing/project_transfer.dart';
@@ -13,13 +10,25 @@ abstract class ProjectTransferLogic {
 
   static EditorState apply(EditorState state, ProjectTransferEvent event) =>
       event is ProjectContentPasted
-      ? paste(state, event.transfer)
+      ? paste(state, event.transfer, targetLayerIndex: event.targetLayerIndex)
       : importLayers(state, (event as ProjectLayersImported).layers);
 
-  static EditorState paste(EditorState state, ProjectTransfer transfer) {
+  static EditorState paste(
+    EditorState state,
+    ProjectTransfer transfer, {
+    int? targetLayerIndex,
+  }) {
     return switch (transfer.kind) {
-      ProjectTransferKind.items => _pasteItems(state, transfer.shapes),
-      ProjectTransferKind.group => _pasteGroup(state, transfer),
+      ProjectTransferKind.items => _pasteItems(
+        state,
+        transfer.shapes,
+        targetLayerIndex,
+      ),
+      ProjectTransferKind.group => _pasteGroup(
+        state,
+        transfer,
+        targetLayerIndex,
+      ),
       ProjectTransferKind.layer => _pasteLayer(state, transfer.layer),
     };
   }
@@ -37,42 +46,56 @@ abstract class ProjectTransferLogic {
     return _appendLayers(state, additions);
   }
 
-  static EditorState _pasteItems(EditorState state, List<Shape> copied) {
+  static EditorState _pasteItems(
+    EditorState state,
+    List<Shape> copied,
+    int? targetLayerIndex,
+  ) {
     if (copied.isEmpty) return state;
     return _appendShapes(state, [
       for (final shape in copied)
-        _offset(shape).copyWith(groupId: null, groupName: null),
-    ]);
+        shape.copyWith(groupId: null, groupName: null),
+    ], targetLayerIndex: targetLayerIndex);
   }
 
-  static EditorState _pasteGroup(EditorState state, ProjectTransfer transfer) {
+  static EditorState _pasteGroup(
+    EditorState state,
+    ProjectTransfer transfer,
+    int? targetLayerIndex,
+  ) {
     if (transfer.shapes.isEmpty) return state;
     final groupId = _uniqueGroupId(state);
     return _appendShapes(state, [
       for (final shape in transfer.shapes)
-        _offset(shape)
-            .copyWith(groupId: groupId, groupName: transfer.groupName),
-    ]);
+        shape.copyWith(groupId: groupId, groupName: transfer.groupName),
+    ], targetLayerIndex: targetLayerIndex);
   }
 
   static EditorState _pasteLayer(EditorState state, PaintLayer? copied) {
     if (copied == null) return state;
-    final usedNames = state.drawing.layers.map((layer) => layer.name).toSet();
-    return _appendLayers(state, [
-      copied.copyWith(name: _uniqueName(copied.name, usedNames)),
-    ]);
+    return _appendLayers(state, [copied]);
   }
 
-  static EditorState _appendShapes(EditorState state, List<Shape> additions) {
-    final firstIndex = state.layer.shapes.length;
-    final updatedLayer = state.layer.copyWith(
+  static EditorState _appendShapes(
+    EditorState state,
+    List<Shape> additions, {
+    int? targetLayerIndex,
+  }) {
+    final layerIndex =
+        targetLayerIndex != null &&
+            targetLayerIndex >= 0 &&
+            targetLayerIndex < state.drawing.layers.length
+        ? targetLayerIndex
+        : state.layerIndex;
+    final targetLayer = state.drawing.layers[layerIndex];
+    final firstIndex = targetLayer.shapes.length;
+    final updatedLayer = targetLayer.copyWith(
       visible: true,
-      shapes: [...state.layer.shapes, ...additions],
+      shapes: [...targetLayer.shapes, ...additions],
     );
     return state
-        .withLayers(
-          replacedAt(state.drawing.layers, state.layerIndex, updatedLayer),
-        )
+        .withLayers(replacedAt(state.drawing.layers, layerIndex, updatedLayer))
+        .copyWith(layerIndex: layerIndex)
         .selectIndices([
           for (
             var index = firstIndex;
@@ -94,10 +117,6 @@ abstract class ProjectTransferLogic {
         .copyWith(layerIndex: layers.length - 1, selected: null)
         .commit();
   }
-
-  static Shape _offset(Shape shape) => shape.copyWith(
-    points: [for (final point in shape.points) point + const Offset(3, 3)],
-  );
 
   static String _uniqueGroupId(EditorState state) {
     final usedIds = {

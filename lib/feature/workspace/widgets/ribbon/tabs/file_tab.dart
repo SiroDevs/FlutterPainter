@@ -9,12 +9,14 @@ import '../ribbon_parts.dart';
 // The groups of the File tab.
 List<Widget> fileTabGroups(WorkspaceCommands c) => [
   RibbonGroup(
-    label: 'New',
-    children: [RibbonButton.large(c.newBlank, label: 'Blank canvas')],
+    label: c.context.l10n.ribbonNew,
+    children: [
+      RibbonButton.large(c.newBlank, label: c.context.l10n.ribbonBlankCanvas),
+    ],
   ),
   RibbonGroup(
-    label: 'Open',
-    children: [RibbonButton.large(c.open, label: 'Open')],
+    label: c.context.l10n.ribbonOpen,
+    children: [RibbonButton.large(c.open, label: c.context.l10n.ribbonOpen)],
   ),
   RibbonGroup(
     label: c.context.l10n.projectImportGroup,
@@ -23,7 +25,7 @@ List<Widget> fileTabGroups(WorkspaceCommands c) => [
     ],
   ),
   RibbonGroup(
-    label: 'Save',
+    label: c.context.l10n.fileSave,
     children: [
       RibbonButton.large(c.save),
       RibbonStack(
@@ -35,11 +37,13 @@ List<Widget> fileTabGroups(WorkspaceCommands c) => [
     ],
   ),
   RibbonGroup(
-    label: 'Export',
-    children: [RibbonButton.large(c.exportDart, label: 'Export Dart')],
+    label: c.context.l10n.ribbonExport,
+    children: [
+      RibbonButton.large(c.exportDart, label: c.context.l10n.fileExportDart),
+    ],
   ),
   RibbonGroup(
-    label: 'Project',
+    label: c.context.l10n.ribbonProject,
     children: [
       RibbonStack(
         children: [
@@ -50,5 +54,8 @@ List<Widget> fileTabGroups(WorkspaceCommands c) => [
       ),
     ],
   ),
-  RibbonGroup(label: 'App', children: [RibbonButton.large(c.settings)]),
+  RibbonGroup(
+    label: c.context.l10n.ribbonApp,
+    children: [RibbonButton.large(c.settings)],
+  ),
 ];

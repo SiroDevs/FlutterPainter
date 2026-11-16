@@ -10,6 +10,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
 import '../../../../common/widgets/inputs/labeled_slider.dart';
+import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../flows/image_flow.dart';
@@ -41,12 +42,12 @@ class ImagePanel extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    'Image on "${state.layer.name}"',
+                    context.l10n.imagePanelTitle(state.layer.name),
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleSmall,
                   ).expanded(),
                   IconButton(
-                    tooltip: 'Load an image onto a new layer',
+                    tooltip: context.l10n.imageLoadTooltip,
                     iconSize: 18,
                     visualDensity: VisualDensity.compact,
                     icon: const Icon(Icons.library_add_outlined),
@@ -62,15 +63,17 @@ class ImagePanel extends StatelessWidget {
                       Icons.add_photo_alternate_outlined,
                       size: 18,
                     ),
-                    label: Text(r == null ? 'Load' : 'Replace'),
+                    label: Text(
+                      r == null
+                          ? context.l10n.buttonLoad
+                          : context.l10n.buttonReplace,
+                    ),
                   ),
                 ],
               ),
               if (r == null)
                 Text(
-                  'Load a picture onto this layer to trace over or use as a '
-                  'backdrop. Add layers for more pictures, or drop an image '
-                  'file onto the window.',
+                  context.l10n.imagePanelPrompt,
                   style: Theme.of(context).textTheme.bodySmall,
                 )
               else ...[
@@ -81,29 +84,29 @@ class ImagePanel extends StatelessWidget {
                       onChanged: (v) =>
                           bloc.add(ImageVisibilityChanged(v ?? true)),
                     ),
-                    const Text('Show'),
+                    Text(context.l10n.imagePanelShow),
                     const Spacer(),
                     IconButton(
-                      tooltip: 'Select image (shows resize handles)',
+                      tooltip: context.l10n.imageSelectTooltip,
                       iconSize: 18,
                       icon: const Icon(Icons.crop_free),
                       onPressed: () => bloc.add(const ImageSelected()),
                     ),
                     IconButton(
-                      tooltip: 'Move / resize image (tool)',
+                      tooltip: context.l10n.imageMoveResizeTooltip,
                       iconSize: 18,
                       icon: const Icon(Icons.open_with),
                       onPressed: () =>
                           bloc.add(const ToolSelected(Tool.reference)),
                     ),
                     IconButton(
-                      tooltip: 'Fit to canvas (resets stretch)',
+                      tooltip: context.l10n.imageFitTooltip,
                       iconSize: 18,
                       icon: const Icon(Icons.fit_screen),
                       onPressed: () => bloc.add(const ImageFitted()),
                     ),
                     IconButton(
-                      tooltip: 'Remove image',
+                      tooltip: context.l10n.imageRemove,
                       iconSize: 18,
                       icon: const Icon(Icons.delete_outline),
                       onPressed: () => bloc.add(const ImageRemoved()),
@@ -118,7 +121,9 @@ class ImagePanel extends StatelessWidget {
                   ),
                 LabeledSlider(
                   compact: true,
-                  label: 'Opacity ${(r.opacity * 100).round()}%',
+                  label: context.l10n.imageOpacity(
+                    (r.opacity * 100).round().toString(),
+                  ),
                   value: r.opacity,
                   min: 0.05,
                   max: 1,
@@ -127,7 +132,7 @@ class ImagePanel extends StatelessWidget {
                 ),
                 LabeledSlider(
                   compact: true,
-                  label: 'Scale ${r.scaleX.toStringAsFixed(3)}',
+                  label: context.l10n.imageScale(r.scaleX.toStringAsFixed(3)),
                   value: r.scaleX,
                   min: math.min(0.01, r.scaleX),
                   max: math.max(4.0, r.scaleX * 1.5),

@@ -63,7 +63,8 @@ class ProjectSaver {
     return '$parent${Platform.pathSeparator}$child';
   }
 
-  Future<void> writeDraft(EditorState s) => _drafts.save(
+  /// False when the side copy could not be written.
+  Future<bool> writeDraft(EditorState s) => _drafts.save(
     Draft(
       tabId: s.tabId,
       path: s.filePath,

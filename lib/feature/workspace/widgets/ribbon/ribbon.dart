@@ -90,9 +90,7 @@ class _TabRow extends StatelessWidget {
               children: [
                 for (final t in RibbonTab.values)
                   _TabLabel(
-                    title: t == RibbonTab.arrange
-                        ? context.l10n.ribbonArrangeTab
-                        : t.title,
+                    title: t.localizedTitle(context),
                     selected: t == controller.tab.value && !collapsed,
                     onTap: () {
                       controller.tab.value = t;
@@ -123,11 +121,13 @@ class _TabRow extends StatelessWidget {
             style: FilledButton.styleFrom(visualDensity: VisualDensity.compact),
             onPressed: commands.exportDart.onPressed,
             icon: const Icon(Icons.code, size: 18),
-            label: const Text('Export'),
+            label: Text(context.l10n.ribbonExport),
           ),
           CommandIconButton(commands.settings),
           IconButton(
-            tooltip: collapsed ? 'Expand the ribbon' : 'Collapse the ribbon',
+            tooltip: collapsed
+                ? context.l10n.ribbonExpand
+                : context.l10n.ribbonCollapse,
             iconSize: 20,
             visualDensity: VisualDensity.compact,
             icon: Icon(collapsed ? Icons.expand_more : Icons.expand_less),

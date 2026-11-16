@@ -1,0 +1,654 @@
+{
+  "@@locale": "ru",
+  "newProject": "New Project",
+  "newProjectTooltip": "Start a new project (Ctrl+N)",
+  "inlineCode": "Inline Code",
+  "inlineCodeTooltip": "Show or hide the inline code view",
+  "quickCode": "Quick Code",
+  "quickCodeTooltip": "Edit or paste shape coordinates",
+  "quickCodePolygonMenu": "Code",
+  "quickCodeToolMenuHint": "Right-click or hold for more options",
+  "quickCodeCoordinates": "Coordinates",
+  "quickCodeDartCode": "Dart code",
+  "quickCodeFormatTooltip": "Switch between Dart code and compact coordinates",
+  "quickCodeHint": "Paste Offset(x, y) points or x,y pairs separated by spaces.",
+  "quickCodeInvalid": "Code must be a list of Offset(x, y) points.",
+  "quickCodeNeedMorePoints": "Add enough points for this shape.",
+  "quickCodePolygonReady": "Polygon preview ready.",
+  "quickCodeShapeReady": "Canvas updated from these points.",
+  "quickCodeAddPolygon": "Add polygon",
+  "quickCodeAddShapes": "Add shapes",
+  "quickCodeClose": "Close Quick Code",
+  "openFullEditor": "Open the full code editor",
+  "undo": "Undo",
+  "removeFileTooltip": "Remove this file and its shapes",
+  "statusIdle": "Edit the code and the canvas follows",
+  "statusRendered": "Canvas updated from the code",
+  "statusUnreadable": "Cannot read this code yet; the canvas is unchanged",
+  "statusSkipped": "{count, plural, =1{1 statement was skipped} other{{count} statements were skipped}}",
+  "@statusSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "colorMoreTooltip": "Open the color picker",
+  "paintBucketTool": "Paint bucket",
+  "paintBucketHint": "Click inside a closed shape to fill it with the active fill color.",
+  "colorPickerTitle": "Color picker",
+  "colorSolid": "Solid",
+  "colorGradient": "Gradient",
+  "colorWheel": "Wheel",
+  "colorSquare": "Square",
+  "colorHexCode": "Hex code",
+  "colorBrightness": "Brightness",
+  "colorOpacity": "Opacity",
+  "gradientLinear": "Linear",
+  "gradientRadial": "Radial",
+  "gradientSweep": "Sweep",
+  "gradientAngle": "Angle",
+  "gradientRadius": "Radius",
+  "gradientAddStop": "Add stop",
+  "gradientRemoveStop": "Remove stop",
+  "gradientStopPosition": "Position",
+  "apply": "Apply",
+  "cancel": "Cancel",
+  "shapeGroup": "Group",
+  "shapeUngroup": "Ungroup",
+  "shapeGroupTooltip": "Group selected shapes so they move together",
+  "shapeUngroupTooltip": "Ungroup selected shapes",
+  "shapeActionsPanelTitle": "Shape actions",
+  "shapeActionsPanelEmpty": "Select a shape to see its actions.",
+  "shapeSelectionCount": "{count, plural, =1{1 shape selected} other{{count} shapes selected}}",
+  "@shapeSelectionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shapeRotateHint": "Drag the round handle to rotate. Hold Shift to snap every 15°.",
+  "vertexDelete": "Delete this point",
+  "vertexSplit": "Split this point",
+  "shapeDuplicate": "Duplicate",
+  "shapeCopyGroup": "Copy group",
+  "shapePasteGroup": "Paste group",
+  "shapeDelete": "Delete",
+  "shapeForward": "Forward",
+  "shapeBack": "Back",
+  "shapeBringToFront": "Bring to front",
+  "shapeSendToBack": "Send to back",
+  "shapeBringForward": "Bring forward",
+  "shapeSendBackward": "Send backward",
+  "shapeOrderGroup": "Order",
+  "shapeMoveToLayer": "Move to layer",
+  "shapeToLayer": "To layer",
+  "layersTitle": "Layers",
+  "layerAdd": "Add layer",
+  "layerRename": "Rename layer",
+  "layerMoveUp": "Move layer up",
+  "layerMoveDown": "Move layer down",
+  "layerDelete": "Delete layer",
+  "layerHide": "Hide",
+  "layerShow": "Show",
+  "layerGroup": "Group",
+  "layerPicture": "Picture",
+  "layerItemRectangle": "Rectangle",
+  "layerItemEllipse": "Ellipse",
+  "layerItemLine": "Line",
+  "layerItemPolygon": "Polygon",
+  "layerItemFreehand": "Freehand",
+  "layerEditItem": "Edit item name",
+  "canvasSelectGroupMemberHint": "Ctrl-click to select only this item from its group",
+  "layerEditGroup": "Edit group name",
+  "shapeScaleDown": "Scale down 10%",
+  "ribbonArrangeTab": "Arrange",
+  "projectTransferGroup": "Project transfer",
+  "projectCopySelection": "Copy selection",
+  "projectCopyLayer": "Copy layer",
+  "projectPaste": "Paste",
+  "projectImportGroup": "Import",
+  "projectImport": "Import project…",
+  "projectImportComplete": "Imported {count} layers.",
+  "@projectImportComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "projectImportFailed": "Could not import {path}.",
+  "@projectImportFailed": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "shapeTransformGroup": "Transform",
+  "shapeSelectionGroup": "Selection",
+  "shapeFlipHorizontal": "Flip horizontal",
+  "shapeFlipVertical": "Flip vertical",
+  "shapeClosedPath": "Closed path",
+  "groupMethodsPublic": "Expose group shape methods",
+  "groupMethodsPublicHelp": "On: the layer calls each public shape method. Off: the group exposes one paint() method and keeps shape methods private.",
+  "exportGenerating": "Generating Dart code…",
+  "exportSaving": "Preparing export…",
+  "exportGenerationFailed": "Could not generate the Dart code.",
+  "settingsTitle": "Settings",
+  "settingsGeneral": "General",
+  "settingsProject": "Project",
+  "settingsAbout": "About",
+  "settingsLanguage": "Language",
+  "settingsLanguageHelp": "Choose the language used by the app.",
+  "languageEnglish": "English",
+  "languageFrench": "Français",
+  "languageSwahili": "Kiswahili",
+  "previewNone": "Off (true colours)",
+  "previewGrayscale": "Grayscale",
+  "previewProtanopia": "Protanopia (no red)",
+  "previewDeuteranopia": "Deuteranopia (no green)",
+  "previewTritanopia": "Tritanopia (no blue)",
+  "settingsAppearance": "Appearance",
+  "settingsTheme": "Theme",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeSystem": "System",
+  "settingsInterface": "Interface",
+  "interfaceMinimal": "Minimal",
+  "interfaceAdvanced": "Advanced",
+  "interfaceHelp": "Advanced shows the ribbon and side panels. Minimal keeps the canvas, tools and colours visible; commands remain in the menus.",
+  "settingsCodeExport": "Code export",
+  "settingsCodeStructure": "Code structure",
+  "codeRefactored": "Refactored",
+  "codeMonolithic": "Monolithic",
+  "codeRefactoredHelp": "A painter, one class per layer in its own file, one function per shape, and a colour palette.",
+  "codeMonolithicHelp": "One code file with a painter class and one method per layer.",
+  "settingsColourManagement": "Colour management",
+  "settingsColourVision": "Colour vision preview",
+  "settingsColourVisionHelp": "Approximates how the canvas may appear to someone with a colour vision difference. It does not change the project or exported code.",
+  "settingsColourFormat": "Colour format in exported code",
+  "settingsColourFormatHelp": "Choose how colours are written in generated Dart.",
+  "settingsColourConstants": "Collect colours into named constants",
+  "settingsColourConstantsHelp": "Write each distinct colour once as a constant and refer to it from shapes.",
+  "settingsReset": "Reset to defaults",
+  "settingsDone": "Done",
+  "projectSettingsDescription": "Manage the name and design canvas for this project.",
+  "projectCurrentName": "Project name",
+  "projectCanvasSize": "Canvas size",
+  "projectRename": "Rename project",
+  "projectResizeCanvas": "Change canvas size",
+  "projectDimensions": "{width} × {height} design units",
+  "@projectDimensions": {
+    "placeholders": {
+      "width": {
+        "type": "String"
+      },
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutDescription": "A paint studio for creating Flutter custom painters.",
+  "aboutCredits": "Made by Siro Devs",
+  "buttonOk": "OK",
+  "canvasSizeTitle": "Canvas size (design units)",
+  "fieldWidth": "Width",
+  "fieldHeight": "Height",
+  "buttonResize": "Resize",
+  "saveChangesTitle": "Save changes to \"{name}\"?",
+  "@saveChangesTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unsavedChangesMessage": "Your changes will be lost if you do not save them.",
+  "buttonDontSave": "Don't save",
+  "recoverUnsavedTitle": "Recover unsaved work?",
+  "recoverUnsavedIntro": "These projects had unsaved changes when Flutter Painter last closed:",
+  "buttonDiscard": "Discard",
+  "buttonRestore": "Restore",
+  "fileNewBlank": "New blank canvas",
+  "fileOpen": "Open…",
+  "fileSave": "Save",
+  "fileSaveAs": "Save as…",
+  "fileAutoSave": "Auto-save",
+  "fileAutoSaveHelp": "On: write changes straight into the open .flp file. Off: keep a recovery copy until you save.",
+  "fileExportDart": "Export Dart…",
+  "fileCodeEditorTooltip": "Open the code editor",
+  "fileSettings": "Settings…",
+  "fileRenameProject": "Rename project…",
+  "projectNameTooltip": "Project name (also used for class names)",
+  "fileCanvasSize": "Canvas size…",
+  "fileCloseProject": "Close project",
+  "fileExit": "Exit",
+  "aboutMenu": "About {appName}",
+  "editRedo": "Redo",
+  "editDeleteTooltip": "Delete the selected shape or image",
+  "editPathClosedTooltip": "Close or open the selected polygon or line path",
+  "editFill": "Fill",
+  "editOutline": "Outline",
+  "editStrokeTooltip": "Stroke (outline)",
+  "imageReplace": "Replace image…",
+  "imageLoad": "Load image…",
+  "imageLoadNewLayer": "Image on new layer…",
+  "imagePutLayerTooltip": "Put a picture on this layer",
+  "imageLoadNewLayerTooltip": "Load a picture onto a new layer",
+  "imageSelect": "Select image",
+  "imageSelectTooltip": "Select this layer’s image (shows resize handles)",
+  "imageMoveResize": "Move / resize image",
+  "imageMoveResizeTooltip": "Move / resize image tool",
+  "imageFit": "Fit image to canvas",
+  "imageFitTooltip": "Fit to canvas (resets stretch)",
+  "imageShow": "Show image",
+  "imageRemove": "Remove image",
+  "imageLoadTooltip": "Load an image onto a new layer",
+  "imagePanelShow": "Show",
+  "imageOpacity": "Opacity {value}%",
+  "imageScale": "Scale {value}",
+  "imagePanelTitle": "Image on “{name}”",
+  "imagePanelPrompt": "Load a picture onto this layer to trace over or use as a background.",
+  "viewZoomIn": "Zoom in",
+  "viewZoomOut": "Zoom out",
+  "viewFitWindow": "Fit to window",
+  "viewGrid": "Grid",
+  "viewSnap": "Snap to grid",
+  "viewCanvasBackground": "Canvas background",
+  "viewCanvasBackgroundTooltip": "Cycle the canvas background colour",
+  "viewLightTheme": "Light theme",
+  "viewDarkTheme": "Dark theme",
+  "viewThemeTooltip": "Switch between the light and dark theme",
+  "menuFile": "File",
+  "menuEdit": "Edit",
+  "menuLayer": "Layer",
+  "menuView": "View",
+  "menuTools": "Tools",
+  "menuHelp": "Help",
+  "menuWindow": "Window",
+  "ribbonExport": "Export",
+  "ribbonExpand": "Expand the ribbon",
+  "ribbonCollapse": "Collapse the ribbon",
+  "ribbonLayers": "Layers",
+  "ribbonOrder": "Order",
+  "ribbonHistory": "History",
+  "ribbonStyle": "Style",
+  "ribbonNew": "New",
+  "ribbonOpen": "Open",
+  "ribbonBlankCanvas": "Blank canvas",
+  "ribbonProject": "Project",
+  "ribbonApp": "App",
+  "ribbonShapes": "Shapes",
+  "ribbonPaths": "Paths",
+  "ribbonPolygon": "Polygon",
+  "ribbonPictures": "Pictures",
+  "ribbonPicture": "Picture",
+  "ribbonOnNewLayer": "On new layer",
+  "ribbonLayersGroup": "Layers",
+  "ribbonZoom": "Zoom",
+  "ribbonFit": "Fit",
+  "ribbonShow": "Show",
+  "ribbonCanvas": "Canvas",
+  "ribbonAppearance": "Appearance",
+  "ribbonLightDark": "Light / dark",
+  "ribbonArrange": "Arrange",
+  "ribbonAdjust": "Adjust",
+  "toolSelectMove": "Select / move",
+  "toolMoveImage": "Move / resize layer image",
+  "toolRectangle": "Rectangle",
+  "toolEllipse": "Ellipse",
+  "toolLine": "Line",
+  "toolPolygonPath": "Polygon / line path",
+  "toolFreehand": "Freehand",
+  "propertyTitle": "Properties",
+  "propertyNoSelection": "No shape selected. These settings apply to the next shape you draw.",
+  "propertyFill": "Fill",
+  "propertyStroke": "Stroke",
+  "propertyClosedShape": "Closed shape (can be filled)",
+  "propertyRenameShape": "Rename shape",
+  "propertyCornerRadius": "Corner radius: {value}",
+  "propertyStrokeWidth": "Stroke width: {value}",
+  "imageOnLayer": "Image on “{name}”",
+  "imagePanelHint": "Load a picture onto this layer to trace over or use as a background.",
+  "statusPreview": "Preview: {value}",
+  "statusCtrlWheel": "Ctrl+wheel zooms.",
+  "buttonClose": "Close",
+  "buttonReplace": "Replace",
+  "buttonLoad": "Load",
+  "buttonUse": "Use",
+  "buttonNone": "None",
+  "colorFillTooltip": "Fill colour",
+  "colorStrokeTooltip": "Stroke colour",
+  "buttonExport": "Export",
+  "interfaceSwitchAdvanced": "Switch to the advanced interface",
+  "toolHintSelect": "Click a shape or image to select it. Drag to move it; drag its handles to resize. Double-click an edge to add a point, Alt-click a point to remove it.",
+  "toolHintRectangle": "Drag to draw a rectangle. Hold Shift for a square.",
+  "toolHintEllipse": "Drag to draw an ellipse. Hold Shift for a circle.",
+  "toolHintLine": "Drag to draw a line. Hold Shift for 45° angles.",
+  "toolHintPolygon": "Click to add points. Click the first point or double-click to close the shape. Press Enter to leave an open line path; Esc cancels.",
+  "toolHintFreehand": "Drag to draw a smoothed freehand stroke.",
+  "toolHintImage": "Drag to move this layer’s image; drag a handle to resize it. Corners keep proportions; Shift or an edge handle stretches it.",
+  "@aboutMenu": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "@imageOpacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@imageScale": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@imagePanelTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@propertyCornerRadius": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@propertyStrokeWidth": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@statusPreview": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "ribbonFile": "File",
+  "ribbonHome": "Home",
+  "ribbonInsert": "Insert",
+  "ribbonLayer": "Layer",
+  "ribbonImage": "Image",
+  "ribbonView": "View",
+  "viewZoomLabel": "Zoom {value}",
+  "@viewZoomLabel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statusMousePan": "Scroll or right-drag pans.",
+  "fileTypeProject": "Flutter Painter Project",
+  "fileTypeImages": "Images",
+  "fileTypeDart": "Dart",
+  "fileTypeZip": "Zip archive",
+  "fileSaveHere": "Save here",
+  "workspaceInvalidProject": "Not a Flutter Painter project: {path}",
+  "workspaceOpenFailed": "Could not open {path}: {error}",
+  "workspaceSaved": "Saved {path}",
+  "workspaceSaveFailed": "Could not save: {error}",
+  "imageLoadFailed": "Could not load that image: {error}",
+  "dropProjectHint": "Drop a .flp project to open it in a new tab, or an image to put it on the active layer.",
+  "exportReplaceTitle": "Replace existing files?",
+  "exportReplaceMessage": "{existing} of {total} files already exist in that folder and will be overwritten.",
+  "exportReplace": "Replace",
+  "exportSavedFolder": "Saved {count} file(s) to {path}",
+  "exportSavedArchive": "Saved {count} file(s) to {path}",
+  "exportSaveFailed": "Could not save: {error}",
+  "exportCloseTitle": "Close the code editor?",
+  "exportCloseMessage": "Your edits to the generated files have not been saved and will be lost.",
+  "exportClose": "Close",
+  "exportRegenerateTitle": "Regenerate the files?",
+  "exportRegenerateMessage": "This rebuilds every file from the drawing and drops your edits.",
+  "exportRegenerate": "Regenerate",
+  "exportSettingsChanged": "Export settings changed. Regenerate to apply them (this drops your edits).",
+  "exportTitle": "Code editor — {name}",
+  "exportSaveFolder": "Save locally",
+  "exportSaveFolderTooltip": "Save all files into a folder ({modifier}+S)",
+  "exportSaveArchive": "Save as an archive",
+  "exportSaveArchiveTooltip": "Save all files as one .zip ({modifier}+Shift+S)",
+  "exportCopy": "Copy",
+  "exportCopyTooltip": "Copy the open file to the clipboard",
+  "exportFormatDocument": "Format document",
+  "exportFormatTooltip": "Format the open file (Shift+Alt+F)",
+  "exportBuildAgain": "Build again",
+  "exportBuildAgainTooltip": "Build the files again from the drawing (drops your edits)",
+  "exportBackToDrawing": "Back to the drawing",
+  "exportSelectFileHint": "Select a file in the explorer to open it",
+  "exportExplorer": "Explorer",
+  "exportSettingsLabel": "Settings",
+  "exportCloseTab": "Close",
+  "projectTabCloseTooltip": "Close (Ctrl+W)",
+  "projectTabNotSaved": "Not saved yet",
+  "@workspaceInvalidProject": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@workspaceOpenFailed": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      },
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@workspaceSaved": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@workspaceSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@imageLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportReplaceMessage": {
+    "placeholders": {
+      "existing": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@exportSavedFolder": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSavedArchive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSaveFolderTooltip": {
+    "placeholders": {
+      "modifier": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSaveArchiveTooltip": {
+    "placeholders": {
+      "modifier": {
+        "type": "String"
+      }
+    }
+  },
+  "layerDefaultGroup": "Group {number}",
+  "@layerDefaultGroup": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "editorCaret": "Ln {line}, Col {column}",
+  "editorCaretSelection": "Ln {line}, Col {column} ({selected} selected)",
+  "editorLineCount": "{count, plural, =1{1 line} other{{count} lines}}",
+  "editorSpaceCount": "Spaces: {count}",
+  "exportRegenerated": "{count} file(s) regenerated",
+  "exportFormatted": "Formatted {name}",
+  "exportCopied": "Copied {name} to the clipboard",
+  "@editorCaret": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      },
+      "column": {
+        "type": "int"
+      }
+    }
+  },
+  "@editorCaretSelection": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      },
+      "column": {
+        "type": "int"
+      },
+      "selected": {
+        "type": "int"
+      }
+    }
+  },
+  "@editorLineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@editorSpaceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@exportRegenerated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@exportFormatted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportCopied": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "projectUnavailable": "No active project is available here.",
+  "untitledProject": "Untitled",
+  "untitledProjectNumbered": "Untitled {number}",
+  "@untitledProjectNumbered": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultLayerName": "Layer {number}",
+  "@defaultLayerName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultGroupName": "Group {number}",
+  "@defaultGroupName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "projectFileDamaged": "Could not open {path}: the file is damaged or is not a project.",
+  "@projectFileDamaged": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "projectFileTooNew": "{path} was made with a newer version of Flutter Painter. Update the app to open it.",
+  "@projectFileTooNew": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "statusNotBackedUp": "Not backed up",
+  "statusNotBackedUpTooltip": "A recovery copy could not be saved. Save your project to avoid losing work.",
+  "layerCopyItem": "Copy item",
+  "layerDragReorder": "Drag to reorder layers"
+}

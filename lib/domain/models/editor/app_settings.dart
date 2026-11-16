@@ -57,6 +57,7 @@ enum ColorFormat {
 /// between launches.
 class AppSettings extends Equatable {
   const AppSettings({
+    this.languageCode = 'en',
     this.interfaceMode = InterfaceMode.advanced,
     this.codeStyle = CodeStyle.refactored,
     this.colorPreview = ColorPreview.none,
@@ -65,6 +66,7 @@ class AppSettings extends Equatable {
     this.groupMethodsPublic = false,
   });
 
+  final String languageCode;
   final InterfaceMode interfaceMode;
   final CodeStyle codeStyle;
   final ColorPreview colorPreview;
@@ -78,6 +80,7 @@ class AppSettings extends Equatable {
   final bool groupMethodsPublic;
 
   AppSettings copyWith({
+    String? languageCode,
     InterfaceMode? interfaceMode,
     CodeStyle? codeStyle,
     ColorPreview? colorPreview,
@@ -85,6 +88,7 @@ class AppSettings extends Equatable {
     bool? colorConstants,
     bool? groupMethodsPublic,
   }) => AppSettings(
+    languageCode: languageCode ?? this.languageCode,
     interfaceMode: interfaceMode ?? this.interfaceMode,
     codeStyle: codeStyle ?? this.codeStyle,
     colorPreview: colorPreview ?? this.colorPreview,
@@ -95,6 +99,7 @@ class AppSettings extends Equatable {
 
   @override
   List<Object?> get props => [
+    languageCode,
     interfaceMode,
     codeStyle,
     colorPreview,

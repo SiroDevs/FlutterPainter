@@ -9,6 +9,7 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
+import '../../core/utils/l10n_ext.dart';
 import '../editor/bloc/editor_bloc.dart';
 import '../editor/editor_screen.dart';
 import '../inline_code/widgets/inline_code_host.dart';
@@ -185,7 +186,7 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
                     );
                   },
                 ),
-                if (_dragging) _dropOverlay(),
+                if (_dragging) _dropOverlay(context),
               ],
             ),
           ),
@@ -194,14 +195,13 @@ class _WorkspaceScreenState extends State<WorkspaceScreen> {
     );
   }
 
-  Widget _dropOverlay() => Positioned.fill(
+  Widget _dropOverlay(BuildContext context) => Positioned.fill(
     child: IgnorePointer(
       child: Container(
         color: const Color(0x99000000),
         alignment: Alignment.center,
-        child: const Text(
-          'Drop a .flp project to open it in a new tab,\n'
-          'or an image to put on the active layer',
+        child: Text(
+          context.l10n.dropProjectHint,
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),

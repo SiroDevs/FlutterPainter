@@ -2,13 +2,14 @@
 import 'package:flutter/widgets.dart';
 
 // Project imports:
+import '../../../../../core/utils/l10n_ext.dart';
 import '../../../commands/workspace_commands.dart';
 import '../ribbon_parts.dart';
 
 // The groups of the Layer tab.
 List<Widget> layerTabGroups(WorkspaceCommands c) => [
   RibbonGroup(
-    label: 'Layers',
+    label: c.context.l10n.ribbonLayers,
     children: [
       RibbonButton.large(c.layerAdd),
       RibbonButton.small(c.copyLayer),
@@ -22,7 +23,7 @@ List<Widget> layerTabGroups(WorkspaceCommands c) => [
     ],
   ),
   RibbonGroup(
-    label: 'Order',
+    label: c.context.l10n.ribbonOrder,
     children: [
       RibbonStack(
         children: [

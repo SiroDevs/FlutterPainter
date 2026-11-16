@@ -14,6 +14,9 @@ class SettingsCubit extends Cubit<AppSettings> {
 
   final PrefsRepo _prefs;
 
+  void setLanguage(String languageCode) =>
+      update((s) => s.copyWith(languageCode: languageCode));
+
   void update(AppSettings Function(AppSettings current) change) {
     final next = change(state);
     if (next == state) return;

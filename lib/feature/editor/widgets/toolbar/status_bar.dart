@@ -6,8 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
+import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/editor/app_settings.dart';
 import '../../../settings/cubit/settings_cubit.dart';
+import '../../../workspace/cubit/workspace_cubit.dart';
 import '../../bloc/editor_bloc.dart';
 import 'tool_hint.dart';
 
@@ -21,27 +23,65 @@ class StatusBar extends StatelessWidget {
     final preview = context.select<SettingsCubit, ColorPreview>(
       (c) => c.state.colorPreview,
     );
+    final notBackedUp = context.select<WorkspaceCubit, bool>(
+      (c) => c.state.persistFailed,
+    );
     return BlocBuilder<EditorBloc, EditorState>(
       buildWhen: (a, b) => a.cursor != b.cursor || a.tool != b.tool,
       builder: (context, state) {
         final p = state.cursor;
-        return Row(children: [
-          Text(
-            p == null
-                ? 'x -   y -'
-                : 'x ${p.dx.toStringAsFixed(1)}   y ${p.dy.toStringAsFixed(1)}',
-            style: style,
-          ).width(150),
-          Text(
-            '${state.tool.localizedHint(context)}   Scroll or right-drag pans, '
-            'Ctrl+wheel zooms.',
-            style: style,
-            overflow: TextOverflow.ellipsis,
-          ).expanded(),
-          if (preview != ColorPreview.none)
-            Text('Preview: ${preview.label}', style: style),
-        ]).padding(horizontal: 12, vertical: 4);
+        return Row(
+          children: [
+            Text(
+              p == null
+                  ? 'x -   y -'
+                  : 'x ${p.dx.toStringAsFixed(1)}   y ${p.dy.toStringAsFixed(1)}',
+              style: style,
+            ).width(150),
+            Text(
+              '${state.tool.localizedHint(context)}   ${context.l10n.statusMousePan} '
+              '${context.l10n.statusCtrlWheel}',
+              style: style,
+              overflow: TextOverflow.ellipsis,
+            ).expanded(),
+            if (notBackedUp)
+              Tooltip(
+                message: context.l10n.statusNotBackedUpTooltip,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      size: 14,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      context.l10n.statusNotBackedUp,
+                      style: style?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                ),
+              ),
+            if (preview != ColorPreview.none)
+              Text(
+                context.l10n.statusPreview(_previewLabel(context, preview)),
+                style: style,
+              ),
+          ],
+        ).padding(horizontal: 12, vertical: 4);
       },
     );
   }
+
+  String _previewLabel(BuildContext context, ColorPreview preview) =>
+      switch (preview) {
+        ColorPreview.none => context.l10n.previewNone,
+        ColorPreview.grayscale => context.l10n.previewGrayscale,
+        ColorPreview.protanopia => context.l10n.previewProtanopia,
+        ColorPreview.deuteranopia => context.l10n.previewDeuteranopia,
+        ColorPreview.tritanopia => context.l10n.previewTritanopia,
+      };
 }

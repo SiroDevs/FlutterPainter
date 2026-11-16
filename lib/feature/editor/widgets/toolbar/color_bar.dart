@@ -52,7 +52,9 @@ class ColorBar extends StatelessWidget {
                         decoration: InputDecoration(
                           isDense: true,
                           border: const OutlineInputBorder(),
-                          labelText: st.editFill ? 'Fill' : 'Stroke',
+                          labelText: st.editFill
+                              ? context.l10n.propertyFill
+                              : context.l10n.propertyStroke,
                         ),
                         onFieldSubmitted: (v) {
                           final parsed = parseHex(v);
@@ -75,7 +77,11 @@ class ColorBar extends StatelessWidget {
                               activeOn ? Icons.block : Icons.check,
                               size: 16,
                             ),
-                            label: Text(activeOn ? 'None' : 'Use'),
+                            label: Text(
+                              activeOn
+                                  ? context.l10n.buttonNone
+                                  : context.l10n.buttonUse,
+                            ),
                           ),
                           const Spacer(),
                           IconButton(
@@ -152,7 +158,9 @@ class _Swatches extends StatelessWidget {
     final bloc = context.read<EditorBloc>();
 
     Widget box(bool isFill, int color, bool on) => Tooltip(
-      message: isFill ? 'Fill colour' : 'Stroke colour',
+      message: isFill
+          ? context.l10n.colorFillTooltip
+          : context.l10n.colorStrokeTooltip,
       child: GestureDetector(
         onTap: () => bloc.add(StyleTargetChanged(isFill)),
         child: Container(

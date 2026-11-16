@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
+import '../../../core/utils/l10n_ext.dart';
 import '../cubit/export_cubit.dart';
 import 'code_editor.dart';
 import 'editor_tabs.dart';
+import 'activity_bar.dart';
 import 'explorer_sidebar.dart';
 import 'export_status_bar.dart';
 import 'export_top_bar.dart';
@@ -17,6 +19,7 @@ class ExportWorkspace extends StatefulWidget {
     super.key,
     required this.colors,
     required this.title,
+    required this.projectName,
     required this.modifier,
     required this.styleLabel,
     required this.onSaveLocally,
@@ -29,6 +32,7 @@ class ExportWorkspace extends StatefulWidget {
 
   final VsCodeColors colors;
   final String title;
+  final String projectName;
   final String modifier;
   final String styleLabel;
   final VoidCallback onSaveLocally;
@@ -72,7 +76,7 @@ class _ExportWorkspaceState extends State<ExportWorkspace> {
         Expanded(
           child: Row(
             children: [
-              ActivityBar(colors: colors),
+              ActivityBar(colors: colors, projectName: widget.projectName),
               SizedBox(
                 width: _sidebarWidth,
                 child: ExplorerSidebar(colors: colors),
@@ -171,7 +175,7 @@ class _ExportWorkspaceState extends State<ExportWorkspace> {
         Icon(Icons.code, size: 72, color: colors.border),
         const SizedBox(height: 12),
         Text(
-          'Select a file in the explorer to open it',
+          context.l10n.exportSelectFileHint,
           style: TextStyle(color: colors.tabInactiveText),
         ),
       ],

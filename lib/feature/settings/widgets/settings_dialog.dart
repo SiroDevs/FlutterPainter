@@ -1,214 +1,194 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
-// Package imports:
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../core/theme/bloc/theme_bloc.dart';
-import '../../../domain/models/editor/app_settings.dart';
+import '../../../core/utils/l10n_ext.dart';
 import '../cubit/settings_cubit.dart';
-import 'group_methods_setting.dart';
-import 'setting_field.dart';
+import '../../editor/bloc/editor_bloc.dart';
+import 'about_settings_page.dart';
+import 'general_settings_page.dart';
+import 'project_settings_page.dart';
 
-/// Opens the settings window. Every change applies and is saved at once.
-Future<void> showSettingsDialog(BuildContext context) =>
-    showDialog<void>(context: context, builder: (_) => const SettingsDialog());
+enum SettingsSection { general, project, about }
 
-class SettingsDialog extends StatelessWidget {
-  const SettingsDialog({super.key});
+/// Opens the application and active-project settings window.
+Future<void> showSettingsDialog(
+  BuildContext context, {
+  SettingsSection initialSection = SettingsSection.general,
+  String? projectName,
+}) {
+  EditorBloc? editor;
+  try {
+    editor = BlocProvider.of<EditorBloc>(context, listen: false);
+  } on ProviderNotFoundException {
+    editor = null;
+  }
+  return showDialog<void>(
+    context: context,
+    builder: (_) => SettingsDialog(
+      editor: editor,
+      projectName: projectName,
+      initialSection: initialSection,
+    ),
+  );
+}
+
+class SettingsDialog extends StatefulWidget {
+  const SettingsDialog({
+    super.key,
+    this.editor,
+    this.projectName,
+    this.initialSection = SettingsSection.general,
+  });
+
+  final EditorBloc? editor;
+  final String? projectName;
+  final SettingsSection initialSection;
+
+  @override
+  State<SettingsDialog> createState() => _SettingsDialogState();
+}
+
+class _SettingsDialogState extends State<SettingsDialog> {
+  late SettingsSection _section = widget.initialSection;
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.read<SettingsCubit>();
-    final theme = context.read<ThemeBloc>();
-    return AlertDialog(
-      title: const Row(
-        children: [
-          Icon(Icons.settings_outlined),
-          SizedBox(width: 12),
-          Text('Settings'),
-        ],
-      ),
-      content: SizedBox(
-        width: 580,
-        child: SingleChildScrollView(
-          child: BlocBuilder<ThemeBloc, ThemeMode>(
-            builder: (context, themeMode) =>
-                BlocBuilder<SettingsCubit, AppSettings>(
-                  builder: (context, s) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const _Section('Appearance'),
-                      SettingField(
-                        label: 'Theme',
-                        help:
-                            'System follows your operating system\'s light or '
-                            'dark setting.',
-                        child: SegmentedButton<ThemeMode>(
-                          showSelectedIcon: false,
-                          segments: const [
-                            ButtonSegment(
-                              value: ThemeMode.light,
-                              icon: Icon(Icons.light_mode_outlined),
-                              label: Text('Light'),
-                            ),
-                            ButtonSegment(
-                              value: ThemeMode.dark,
-                              icon: Icon(Icons.dark_mode_outlined),
-                              label: Text('Dark'),
-                            ),
-                            ButtonSegment(
-                              value: ThemeMode.system,
-                              icon: Icon(Icons.brightness_auto_outlined),
-                              label: Text('System'),
-                            ),
-                          ],
-                          selected: {themeMode},
-                          onSelectionChanged: (v) =>
-                              theme.add(ThemeModeChanged(v.first)),
-                        ),
-                      ),
-                      SettingField(
-                        label: 'Interface',
-                        help:
-                            'Advanced shows the ribbon and the layer, image and '
-                            'properties panels. Minimal keeps just the canvas, '
-                            'tools and colours; every command is still in the '
-                            'menus.',
-                        child: SegmentedButton<InterfaceMode>(
-                          showSelectedIcon: false,
-                          segments: const [
-                            ButtonSegment(
-                              value: InterfaceMode.minimal,
-                              icon: Icon(Icons.crop_free),
-                              label: Text('Minimal'),
-                            ),
-                            ButtonSegment(
-                              value: InterfaceMode.advanced,
-                              icon: Icon(Icons.dashboard_outlined),
-                              label: Text('Advanced'),
-                            ),
-                          ],
-                          selected: {s.interfaceMode},
-                          onSelectionChanged: (v) =>
-                              settings.setInterfaceMode(v.first),
-                        ),
-                      ),
-                      const _Section('Code export'),
-                      SettingField(
-                        label: 'Code structure',
-                        help: s.codeStyle == CodeStyle.refactored
-                            ? 'Refactored: a painter, one class per layer in its '
-                                  'own file with one function per shape, and a '
-                                  'colour palette.'
-                            : 'Monolithic: everything in one file, one painter '
-                                  'class with a method per layer.',
-                        child: SegmentedButton<CodeStyle>(
-                          showSelectedIcon: false,
-                          segments: const [
-                            ButtonSegment(
-                              value: CodeStyle.refactored,
-                              icon: Icon(Icons.account_tree_outlined),
-                              label: Text('Refactored'),
-                            ),
-                            ButtonSegment(
-                              value: CodeStyle.monolithic,
-                              icon: Icon(Icons.article_outlined),
-                              label: Text('Monolithic'),
-                            ),
-                          ],
-                          selected: {s.codeStyle},
-                          onSelectionChanged: (v) =>
-                              settings.setCodeStyle(v.first),
-                        ),
-                      ),
-                      GroupMethodsSetting(enabled: s.groupMethodsPublic),
-                      const _Section('Colour management'),
-                      SettingField(
-                        label: 'Colour vision preview',
-                        help:
-                            'Shows the canvas as someone with a colour-vision '
-                            'difference might see it (an approximation). It only '
-                            'changes the screen, never the project or the '
-                            'exported code.',
-                        child: DropdownButton<ColorPreview>(
-                          isExpanded: true,
-                          value: s.colorPreview,
-                          items: [
-                            for (final v in ColorPreview.values)
-                              DropdownMenuItem(value: v, child: Text(v.label)),
-                          ],
-                          onChanged: (v) {
-                            if (v != null) settings.setColorPreview(v);
-                          },
-                        ),
-                      ),
-                      SettingField(
-                        label: 'Colour format in exported code',
-                        help:
-                            'How each colour is written in the generated Dart.',
-                        child: DropdownButton<ColorFormat>(
-                          isExpanded: true,
-                          value: s.colorFormat,
-                          items: [
-                            for (final v in ColorFormat.values)
-                              DropdownMenuItem(value: v, child: Text(v.label)),
-                          ],
-                          onChanged: (v) {
-                            if (v != null) settings.setColorFormat(v);
-                          },
-                        ),
-                      ),
-                      SwitchListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: const Text(
-                          'Collect colours into named constants',
-                        ),
-                        subtitle: const Text(
-                          'Each distinct colour is written once, as a constant '
-                          '(a palette), and the shapes refer to it.',
-                        ),
-                        value: s.colorConstants,
-                        onChanged: settings.setColorConstants,
-                      ),
-                    ],
-                  ),
-                ),
-          ),
+    final size = MediaQuery.sizeOf(context);
+    return Dialog(
+      child: SizedBox(
+        width: math.min(980, size.width - 64),
+        height: math.min(700, size.height - 64),
+        child: Row(
+          children: [
+            SizedBox(width: 230, child: _sidebar(context)),
+            const VerticalDivider(width: 1),
+            Expanded(child: _page(context)),
+          ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            settings.resetToDefaults();
-            theme.add(const ThemeModeChanged(ThemeMode.system));
-          },
-          child: const Text('Reset to defaults'),
-        ),
-        FilledButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Done'),
-        ),
-      ],
     );
   }
-}
 
-class _Section extends StatelessWidget {
-  const _Section(this.title);
+  Widget _sidebar(BuildContext context) => widget.editor == null
+      ? _sidebarContent(context)
+      : BlocBuilder<EditorBloc, EditorState>(
+          bloc: widget.editor,
+          builder: (context, _) => _sidebarContent(context),
+        );
 
-  final String title;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: 12, bottom: 4),
-    child: Text(
-      title.toUpperCase(),
-      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-        color: Theme.of(context).colorScheme.primary,
-        letterSpacing: 0.8,
-      ),
+  Widget _sidebarContent(BuildContext context) => ColoredBox(
+    color: Theme.of(context).colorScheme.surfaceContainerLow,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(18, 22, 12, 18),
+          child: Text(
+            context.l10n.settingsTitle,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
+        _navigationItem(context, SettingsSection.general),
+        _navigationItem(context, SettingsSection.project),
+        _navigationItem(context, SettingsSection.about),
+      ],
     ),
   );
+
+  Widget _navigationItem(BuildContext context, SettingsSection section) {
+    final label = switch (section) {
+      SettingsSection.general => context.l10n.settingsGeneral,
+      SettingsSection.project => context.l10n.settingsProject,
+      SettingsSection.about => context.l10n.settingsAbout,
+    };
+    final icon = switch (section) {
+      SettingsSection.general => Icons.tune,
+      SettingsSection.project => Icons.folder_outlined,
+      SettingsSection.about => Icons.info_outline,
+    };
+    final projectName =
+        widget.editor?.state.drawing.name ??
+        widget.projectName ??
+        context.l10n.projectUnavailable;
+    return ListTile(
+      selected: _section == section,
+      leading: Icon(icon),
+      title: Text(label),
+      subtitle: section == SettingsSection.project
+          ? Text(projectName, maxLines: 1, overflow: TextOverflow.ellipsis)
+          : null,
+      onTap: () => setState(() => _section = section),
+    );
+  }
+
+  Widget _page(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(24, 14, 12, 14),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                _pageTitle(context),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            IconButton(
+              tooltip: context.l10n.settingsDone,
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.close),
+            ),
+          ],
+        ),
+      ),
+      const Divider(height: 1),
+      Expanded(
+        child: IndexedStack(
+          index: _section.index,
+          children: [
+            const GeneralSettingsPage(),
+            ProjectSettingsPage(
+              editor: widget.editor,
+              projectName: widget.projectName,
+            ),
+            const AboutSettingsPage(),
+          ],
+        ),
+      ),
+      const Divider(height: 1),
+      Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            TextButton(
+              onPressed: () {
+                context.read<SettingsCubit>().resetToDefaults();
+                context.read<ThemeBloc>().add(
+                  const ThemeModeChanged(ThemeMode.system),
+                );
+              },
+              child: Text(context.l10n.settingsReset),
+            ),
+            const Spacer(),
+            FilledButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(context.l10n.settingsDone),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+
+  String _pageTitle(BuildContext context) => switch (_section) {
+    SettingsSection.general => context.l10n.settingsGeneral,
+    SettingsSection.project => context.l10n.settingsProject,
+    SettingsSection.about => context.l10n.settingsAbout,
+  };
 }

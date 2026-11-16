@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SettingField extends StatelessWidget {
-  const SettingField({required this.label, required this.child, this.help});
+  const SettingField({
+    super.key,
+    required this.label,
+    required this.child,
+    this.help,
+  });
 
   final String label;
   final String? help;

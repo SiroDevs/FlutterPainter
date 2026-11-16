@@ -174,14 +174,17 @@ mixin _DartExporterLayoutWriter on _DartExporterBase {
   @override
   List<_ShapeFunction> _shapeFunctions(PaintLayer layer) {
     _resetShader = _hasGradient(layer);
-    final taken = <String>{};
-    final perKind = <ShapeKind, int>{};
+    final takenByScope = <String?, Set<String>>{};
+    final perKindByScope = <String?, Map<ShapeKind, int>>{};
     final functions = <_ShapeFunction>[];
     for (var shapeIndex = 0; shapeIndex < layer.shapes.length; shapeIndex++) {
       final shape = layer.shapes[shapeIndex];
       if (!shape.visible) continue;
       final body = _shape(shape, comment: false);
       if (body.isEmpty) continue;
+      final scope = shape.groupId;
+      final taken = takenByScope.putIfAbsent(scope, () => <String>{});
+      final perKind = perKindByScope.putIfAbsent(scope, () => {});
       final usableName = RegExp(r'[A-Za-z0-9]').hasMatch(shape.name);
       final baseName = usableName
           ? pascalCase(shape.name)

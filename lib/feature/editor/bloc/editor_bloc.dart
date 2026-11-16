@@ -103,13 +103,16 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
   }
 
   void _registerLayers() {
-    _reduce<LayerAdded>((s, e) => LayerLogic.add(s));
+    _reduce<LayerAdded>((s, e) => LayerLogic.add(s, e.nameFor));
     _reduce<LayerDeleted>((s, e) => LayerLogic.delete(s, e.index));
     _reduce<LayerRenamed>((s, e) => LayerLogic.rename(s, e.index, e.name));
     _reduce<LayerVisibilityToggled>(
       (s, e) => LayerLogic.toggleVisible(s, e.index),
     );
     _reduce<LayerMoved>((s, e) => LayerLogic.move(s, e.index, e.direction));
+    _reduce<LayerReordered>(
+      (s, e) => LayerLogic.reorder(s, e.fromIndex, e.toIndex),
+    );
     _reduce<LayerActivated>((s, e) => LayerLogic.activate(s, e.index));
   }
 
@@ -151,7 +154,15 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
       if (cached == null) pixels.dispose();
       return;
     }
-    emit(ImageLogic.loaded(state, ref, pixels, onNewLayer: event.onNewLayer));
+    emit(
+      ImageLogic.loaded(
+        state,
+        ref,
+        pixels,
+        onNewLayer: event.onNewLayer,
+        nameFor: event.nameFor,
+      ),
+    );
   }
 
   /// Decodes the picture of every layer that has one not decoded yet, e.g.

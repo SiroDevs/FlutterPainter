@@ -4,6 +4,14 @@ class ShapeDeleted extends EditorEvent {
   const ShapeDeleted();
 }
 
+class ShapeDeletedAt extends EditorEvent {
+  const ShapeDeletedAt(this.layer, this.index, {this.includeGroup = false});
+
+  final int layer;
+  final int index;
+  final bool includeGroup;
+}
+
 class ShapeDuplicated extends EditorEvent {
   const ShapeDuplicated();
 }
@@ -13,7 +21,10 @@ class SelectAllRequested extends EditorEvent {
 }
 
 class ShapesGrouped extends EditorEvent {
-  const ShapesGrouped();
+  /// [nameFor] turns a group number into its default name.
+  const ShapesGrouped(this.nameFor);
+
+  final String Function(int number) nameFor;
 }
 
 class ShapesUngrouped extends EditorEvent {

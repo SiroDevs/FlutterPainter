@@ -1,0 +1,654 @@
+{
+  "@@locale": "fr",
+  "newProject": "Nouveau projet",
+  "newProjectTooltip": "Démarrer un nouveau projet (Ctrl+N)",
+  "inlineCode": "Code intégré",
+  "inlineCodeTooltip": "Afficher ou masquer le code intégré",
+  "quickCode": "Code rapide",
+  "quickCodeTooltip": "Modifier ou coller les coordonnées d’une forme",
+  "quickCodePolygonMenu": "Code",
+  "quickCodeToolMenuHint": "Clic droit ou appui prolongé pour plus d’options",
+  "quickCodeCoordinates": "Coordonnées",
+  "quickCodeDartCode": "Code Dart",
+  "quickCodeFormatTooltip": "Basculer entre le code Dart et les coordonnées compactes",
+  "quickCodeHint": "Collez des points Offset(x, y) ou des paires x,y séparées par des espaces.",
+  "quickCodeInvalid": "Le code doit être une liste de points Offset(x, y).",
+  "quickCodeNeedMorePoints": "Ajoutez suffisamment de points pour cette forme.",
+  "quickCodePolygonReady": "Aperçu du polygone prêt.",
+  "quickCodeShapeReady": "Le canevas a été mis à jour avec ces points.",
+  "quickCodeAddPolygon": "Ajouter le polygone",
+  "quickCodeAddShapes": "Ajouter les formes",
+  "quickCodeClose": "Fermer le Code rapide",
+  "openFullEditor": "Ouvrir l’éditeur de code complet",
+  "undo": "Annuler",
+  "removeFileTooltip": "Supprimer ce fichier et ses formes",
+  "statusIdle": "Modifiez le code pour mettre à jour le canevas",
+  "statusRendered": "Canevas mis à jour depuis le code",
+  "statusUnreadable": "Impossible de lire ce code pour le moment ; le canevas est inchangé",
+  "statusSkipped": "{count, plural, =1{1 instruction ignorée} other{{count} instructions ignorées}}",
+  "@statusSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "colorMoreTooltip": "Ouvrir le sélecteur de couleur",
+  "paintBucketTool": "Pot de peinture",
+  "paintBucketHint": "Cliquez dans une forme fermée pour la remplir avec la couleur de remplissage active.",
+  "colorPickerTitle": "Sélecteur de couleur",
+  "colorSolid": "Uni",
+  "colorGradient": "Dégradé",
+  "colorWheel": "Roue",
+  "colorSquare": "Carré",
+  "colorHexCode": "Code hexadécimal",
+  "colorBrightness": "Luminosité",
+  "colorOpacity": "Opacité",
+  "gradientLinear": "Linéaire",
+  "gradientRadial": "Radial",
+  "gradientSweep": "Balayage",
+  "gradientAngle": "Angle",
+  "gradientRadius": "Rayon",
+  "gradientAddStop": "Ajouter un point",
+  "gradientRemoveStop": "Supprimer le point",
+  "gradientStopPosition": "Position",
+  "apply": "Appliquer",
+  "cancel": "Annuler",
+  "shapeGroup": "Grouper",
+  "shapeUngroup": "Dissocier",
+  "shapeGroupTooltip": "Grouper les formes sélectionnées pour les déplacer ensemble",
+  "shapeUngroupTooltip": "Dissocier les formes sélectionnées",
+  "shapeActionsPanelTitle": "Actions sur les formes",
+  "shapeActionsPanelEmpty": "Sélectionnez une forme pour afficher ses actions.",
+  "shapeSelectionCount": "{count, plural, =1{1 forme sélectionnée} other{{count} formes sélectionnées}}",
+  "@shapeSelectionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shapeRotateHint": "Faites glisser la poignée ronde pour pivoter. Maintenez Maj pour un incrément de 15°.",
+  "vertexDelete": "Supprimer ce point",
+  "vertexSplit": "Scinder ce point",
+  "shapeDuplicate": "Dupliquer",
+  "shapeCopyGroup": "Copier le groupe",
+  "shapePasteGroup": "Coller le groupe",
+  "shapeDelete": "Supprimer",
+  "shapeForward": "Avancer",
+  "shapeBack": "Reculer",
+  "shapeBringToFront": "Mettre tout devant",
+  "shapeSendToBack": "Envoyer tout derrière",
+  "shapeBringForward": "Avancer d’un rang",
+  "shapeSendBackward": "Reculer d’un rang",
+  "shapeOrderGroup": "Ordre",
+  "shapeMoveToLayer": "Déplacer vers le calque",
+  "shapeToLayer": "Vers le calque",
+  "layersTitle": "Calques",
+  "layerAdd": "Ajouter un calque",
+  "layerRename": "Renommer le calque",
+  "layerMoveUp": "Monter le calque",
+  "layerMoveDown": "Descendre le calque",
+  "layerDelete": "Supprimer le calque",
+  "layerHide": "Masquer",
+  "layerShow": "Afficher",
+  "layerGroup": "Groupe",
+  "layerPicture": "Image",
+  "layerItemRectangle": "Rectangle",
+  "layerItemEllipse": "Ellipse",
+  "layerItemLine": "Ligne",
+  "layerItemPolygon": "Polygone",
+  "layerItemFreehand": "Dessin à main levée",
+  "layerEditItem": "Modifier le nom de l’élément",
+  "canvasSelectGroupMemberHint": "Ctrl-clic pour sélectionner uniquement cet élément du groupe",
+  "layerEditGroup": "Modifier le nom du groupe",
+  "shapeScaleDown": "Réduire de 10 %",
+  "ribbonArrangeTab": "Disposition",
+  "projectTransferGroup": "Transfert entre projets",
+  "projectCopySelection": "Copier la sélection",
+  "projectCopyLayer": "Copier le calque",
+  "projectPaste": "Coller",
+  "projectImportGroup": "Importer",
+  "projectImport": "Importer un projet…",
+  "projectImportComplete": "{count} calques importés.",
+  "@projectImportComplete": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "projectImportFailed": "Impossible d’importer {path}.",
+  "@projectImportFailed": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "shapeTransformGroup": "Transformation",
+  "shapeSelectionGroup": "Sélection",
+  "shapeFlipHorizontal": "Retourner horizontalement",
+  "shapeFlipVertical": "Retourner verticalement",
+  "shapeClosedPath": "Tracé fermé",
+  "groupMethodsPublic": "Exposer les méthodes des formes du groupe",
+  "groupMethodsPublicHelp": "Activé : le calque appelle chaque méthode publique de forme. Désactivé : le groupe expose une méthode paint() et garde ses méthodes de forme privées.",
+  "exportGenerating": "Génération du code Dart…",
+  "exportSaving": "Préparation de l’exportation…",
+  "exportGenerationFailed": "Impossible de générer le code Dart.",
+  "settingsTitle": "Paramètres",
+  "settingsGeneral": "Général",
+  "settingsProject": "Projet",
+  "settingsAbout": "À propos",
+  "settingsLanguage": "Langue",
+  "settingsLanguageHelp": "Choisissez la langue de l’application.",
+  "languageEnglish": "English",
+  "languageFrench": "Français",
+  "languageSwahili": "Kiswahili",
+  "previewNone": "Désactivé (couleurs réelles)",
+  "previewGrayscale": "Niveaux de gris",
+  "previewProtanopia": "Protanopie (sans rouge)",
+  "previewDeuteranopia": "Deutéranopie (sans vert)",
+  "previewTritanopia": "Tritanopie (sans bleu)",
+  "settingsAppearance": "Apparence",
+  "settingsTheme": "Thème",
+  "themeLight": "Clair",
+  "themeDark": "Sombre",
+  "themeSystem": "Système",
+  "settingsInterface": "Interface",
+  "interfaceMinimal": "Minimale",
+  "interfaceAdvanced": "Avancée",
+  "interfaceHelp": "Le mode avancé affiche le ruban et les panneaux latéraux. Le mode minimal garde le canevas, les outils et les couleurs ; les commandes restent dans les menus.",
+  "settingsCodeExport": "Exportation du code",
+  "settingsCodeStructure": "Structure du code",
+  "codeRefactored": "Modulaire",
+  "codeMonolithic": "Monolithique",
+  "codeRefactoredHelp": "Un peintre, une classe par calque dans son propre fichier, une fonction par forme et une palette de couleurs.",
+  "codeMonolithicHelp": "Un seul fichier de code avec une classe de peintre et une méthode par calque.",
+  "settingsColourManagement": "Gestion des couleurs",
+  "settingsColourVision": "Aperçu de la vision des couleurs",
+  "settingsColourVisionHelp": "Approxime l’apparence du canevas pour une personne ayant une différence de vision des couleurs. Cela ne modifie ni le projet ni le code exporté.",
+  "settingsColourFormat": "Format des couleurs dans le code exporté",
+  "settingsColourFormatHelp": "Choisissez comment les couleurs sont écrites dans le code Dart généré.",
+  "settingsColourConstants": "Regrouper les couleurs dans des constantes nommées",
+  "settingsColourConstantsHelp": "Écrire chaque couleur distincte une seule fois comme constante et la référencer depuis les formes.",
+  "settingsReset": "Rétablir les valeurs par défaut",
+  "settingsDone": "Terminé",
+  "projectSettingsDescription": "Gérer le nom et le canevas de conception de ce projet.",
+  "projectCurrentName": "Nom du projet",
+  "projectCanvasSize": "Taille du canevas",
+  "projectRename": "Renommer le projet",
+  "projectResizeCanvas": "Modifier la taille du canevas",
+  "projectDimensions": "{width} × {height} unités de conception",
+  "@projectDimensions": {
+    "placeholders": {
+      "width": {
+        "type": "String"
+      },
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutDescription": "Un atelier de dessin pour créer des peintres personnalisés Flutter.",
+  "aboutCredits": "Créé par Siro Devs",
+  "buttonOk": "OK",
+  "canvasSizeTitle": "Taille du canevas (unités de conception)",
+  "fieldWidth": "Largeur",
+  "fieldHeight": "Hauteur",
+  "buttonResize": "Redimensionner",
+  "saveChangesTitle": "Enregistrer les modifications de « {name} » ?",
+  "@saveChangesTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unsavedChangesMessage": "Vos modifications seront perdues si vous ne les enregistrez pas.",
+  "buttonDontSave": "Ne pas enregistrer",
+  "recoverUnsavedTitle": "Récupérer le travail non enregistré ?",
+  "recoverUnsavedIntro": "Ces projets contenaient des modifications non enregistrées lors de la dernière fermeture de Flutter Painter :",
+  "buttonDiscard": "Abandonner",
+  "buttonRestore": "Restaurer",
+  "fileNewBlank": "Nouveau canevas vierge",
+  "fileOpen": "Ouvrir…",
+  "fileSave": "Enregistrer",
+  "fileSaveAs": "Enregistrer sous…",
+  "fileAutoSave": "Enregistrement automatique",
+  "fileAutoSaveHelp": "Activé : écrire les modifications directement dans le fichier .flp ouvert. Désactivé : garder une copie de récupération jusqu’à l’enregistrement.",
+  "fileExportDart": "Exporter le code Dart…",
+  "fileCodeEditorTooltip": "Ouvrir l’éditeur de code",
+  "fileSettings": "Paramètres…",
+  "fileRenameProject": "Renommer le projet…",
+  "projectNameTooltip": "Nom du projet (également utilisé pour les noms de classes)",
+  "fileCanvasSize": "Taille du canevas…",
+  "fileCloseProject": "Fermer le projet",
+  "fileExit": "Quitter",
+  "aboutMenu": "À propos de {appName}",
+  "editRedo": "Rétablir",
+  "editDeleteTooltip": "Supprimer la forme ou l’image sélectionnée",
+  "editPathClosedTooltip": "Fermer ou ouvrir le tracé de polygone ou de ligne sélectionné",
+  "editFill": "Remplissage",
+  "editOutline": "Contour",
+  "editStrokeTooltip": "Contour",
+  "imageReplace": "Remplacer l’image…",
+  "imageLoad": "Charger une image…",
+  "imageLoadNewLayer": "Image sur un nouveau calque…",
+  "imagePutLayerTooltip": "Ajouter une image à ce calque",
+  "imageLoadNewLayerTooltip": "Charger une image sur un nouveau calque",
+  "imageSelect": "Sélectionner l’image",
+  "imageSelectTooltip": "Sélectionner l’image de ce calque (affiche les poignées de redimensionnement)",
+  "imageMoveResize": "Déplacer / redimensionner l’image",
+  "imageMoveResizeTooltip": "Outil de déplacement / redimensionnement de l’image",
+  "imageFit": "Adapter l’image au canevas",
+  "imageFitTooltip": "Adapter au canevas (réinitialise l’étirement)",
+  "imageShow": "Afficher l’image",
+  "imageRemove": "Supprimer l’image",
+  "imageLoadTooltip": "Charger une image sur un nouveau calque",
+  "imagePanelShow": "Afficher",
+  "imageOpacity": "Opacité {value} %",
+  "imageScale": "Échelle {value}",
+  "imagePanelTitle": "Image sur « {name} »",
+  "imagePanelPrompt": "Chargez une image sur ce calque pour la décalquer ou l’utiliser comme arrière-plan.",
+  "viewZoomIn": "Zoom avant",
+  "viewZoomOut": "Zoom arrière",
+  "viewFitWindow": "Ajuster à la fenêtre",
+  "viewGrid": "Grille",
+  "viewSnap": "Aligner sur la grille",
+  "viewCanvasBackground": "Arrière-plan du canevas",
+  "viewCanvasBackgroundTooltip": "Faire défiler les couleurs d’arrière-plan du canevas",
+  "viewLightTheme": "Thème clair",
+  "viewDarkTheme": "Thème sombre",
+  "viewThemeTooltip": "Basculer entre les thèmes clair et sombre",
+  "menuFile": "Fichier",
+  "menuEdit": "Édition",
+  "menuLayer": "Calque",
+  "menuView": "Affichage",
+  "menuTools": "Outils",
+  "menuHelp": "Aide",
+  "menuWindow": "Fenêtre",
+  "ribbonExport": "Exporter",
+  "ribbonExpand": "Développer le ruban",
+  "ribbonCollapse": "Réduire le ruban",
+  "ribbonLayers": "Calques",
+  "ribbonOrder": "Ordre",
+  "ribbonHistory": "Historique",
+  "ribbonStyle": "Style",
+  "ribbonNew": "Nouveau",
+  "ribbonOpen": "Ouvrir",
+  "ribbonBlankCanvas": "Canevas vierge",
+  "ribbonProject": "Projet",
+  "ribbonApp": "Application",
+  "ribbonShapes": "Formes",
+  "ribbonPaths": "Tracés",
+  "ribbonPolygon": "Polygone",
+  "ribbonPictures": "Images",
+  "ribbonPicture": "Image",
+  "ribbonOnNewLayer": "Sur un nouveau calque",
+  "ribbonLayersGroup": "Calques",
+  "ribbonZoom": "Zoom",
+  "ribbonFit": "Ajuster",
+  "ribbonShow": "Afficher",
+  "ribbonCanvas": "Canevas",
+  "ribbonAppearance": "Apparence",
+  "ribbonLightDark": "Clair / sombre",
+  "ribbonArrange": "Disposition",
+  "ribbonAdjust": "Ajuster",
+  "toolSelectMove": "Sélectionner / déplacer",
+  "toolMoveImage": "Déplacer / redimensionner l’image du calque",
+  "toolRectangle": "Rectangle",
+  "toolEllipse": "Ellipse",
+  "toolLine": "Ligne",
+  "toolPolygonPath": "Tracé polygonal / ligne",
+  "toolFreehand": "Main levée",
+  "propertyTitle": "Propriétés",
+  "propertyNoSelection": "Aucune forme sélectionnée. Ces paramètres s’appliqueront à la prochaine forme dessinée.",
+  "propertyFill": "Remplissage",
+  "propertyStroke": "Contour",
+  "propertyClosedShape": "Forme fermée (peut être remplie)",
+  "propertyRenameShape": "Renommer la forme",
+  "propertyCornerRadius": "Rayon des coins : {value}",
+  "propertyStrokeWidth": "Épaisseur du contour : {value}",
+  "imageOnLayer": "Image sur « {name} »",
+  "imagePanelHint": "Chargez une image sur ce calque pour la décalquer ou l’utiliser comme arrière-plan.",
+  "statusPreview": "Aperçu : {value}",
+  "statusCtrlWheel": "Ctrl + molette : zoomer.",
+  "buttonClose": "Fermer",
+  "buttonReplace": "Remplacer",
+  "buttonLoad": "Charger",
+  "buttonUse": "Utiliser",
+  "buttonNone": "Aucun",
+  "colorFillTooltip": "Couleur de remplissage",
+  "colorStrokeTooltip": "Couleur du contour",
+  "buttonExport": "Exporter",
+  "interfaceSwitchAdvanced": "Passer à l’interface avancée",
+  "toolHintSelect": "Cliquez sur une forme ou une image pour la sélectionner. Faites-la glisser pour la déplacer, ou faites glisser ses poignées pour la redimensionner. Double-cliquez sur un bord pour ajouter un point ou faites Alt-clic sur un point pour le supprimer.",
+  "toolHintRectangle": "Faites glisser pour dessiner un rectangle. Maintenez Maj pour obtenir un carré.",
+  "toolHintEllipse": "Faites glisser pour dessiner une ellipse. Maintenez Maj pour obtenir un cercle.",
+  "toolHintLine": "Faites glisser pour dessiner une ligne. Maintenez Maj pour des angles de 45°.",
+  "toolHintPolygon": "Cliquez pour ajouter des points. Cliquez sur le premier point ou double-cliquez pour fermer la forme. Appuyez sur Entrée pour garder un tracé ouvert ; Échap annule.",
+  "toolHintFreehand": "Faites glisser pour tracer un trait à main levée lissé.",
+  "toolHintImage": "Faites glisser l’image de ce calque pour la déplacer, ou une poignée pour la redimensionner. Les coins conservent les proportions ; Maj ou une poignée de bord étire l’image.",
+  "@aboutMenu": {
+    "placeholders": {
+      "appName": {
+        "type": "String"
+      }
+    }
+  },
+  "@imageOpacity": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@imageScale": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@imagePanelTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@propertyCornerRadius": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@propertyStrokeWidth": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@statusPreview": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "ribbonFile": "Fichier",
+  "ribbonHome": "Accueil",
+  "ribbonInsert": "Insertion",
+  "ribbonLayer": "Calque",
+  "ribbonImage": "Image",
+  "ribbonView": "Affichage",
+  "viewZoomLabel": "Zoom {value}",
+  "@viewZoomLabel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "statusMousePan": "Faites défiler ou faites glisser avec le bouton droit pour déplacer la vue.",
+  "fileTypeProject": "Projet Flutter Painter",
+  "fileTypeImages": "Images",
+  "fileTypeDart": "Dart",
+  "fileTypeZip": "Archive ZIP",
+  "fileSaveHere": "Enregistrer ici",
+  "workspaceInvalidProject": "Ce fichier n’est pas un projet Flutter Painter : {path}",
+  "workspaceOpenFailed": "Impossible d’ouvrir {path} : {error}",
+  "workspaceSaved": "Enregistré : {path}",
+  "workspaceSaveFailed": "Impossible d’enregistrer : {error}",
+  "imageLoadFailed": "Impossible de charger cette image : {error}",
+  "dropProjectHint": "Déposez un projet .flp pour l’ouvrir dans un nouvel onglet, ou une image pour la placer sur le calque actif.",
+  "exportReplaceTitle": "Remplacer les fichiers existants ?",
+  "exportReplaceMessage": "{existing} fichiers sur {total} existent déjà dans ce dossier et seront remplacés.",
+  "exportReplace": "Remplacer",
+  "exportSavedFolder": "{count} fichier(s) enregistré(s) dans {path}",
+  "exportSavedArchive": "{count} fichier(s) enregistré(s) dans {path}",
+  "exportSaveFailed": "Impossible d’enregistrer : {error}",
+  "exportCloseTitle": "Fermer l’éditeur de code ?",
+  "exportCloseMessage": "Vos modifications des fichiers générés ne sont pas enregistrées et seront perdues.",
+  "exportClose": "Fermer",
+  "exportRegenerateTitle": "Régénérer les fichiers ?",
+  "exportRegenerateMessage": "Cette action recrée chaque fichier à partir du dessin et supprime vos modifications.",
+  "exportRegenerate": "Régénérer",
+  "exportSettingsChanged": "Les paramètres d’exportation ont changé. Régénérez pour les appliquer (vos modifications seront supprimées).",
+  "exportTitle": "Éditeur de code — {name}",
+  "exportSaveFolder": "Enregistrer dans un dossier",
+  "exportSaveFolderTooltip": "Enregistrer tous les fichiers dans un dossier ({modifier}+S)",
+  "exportSaveArchive": "Enregistrer dans une archive",
+  "exportSaveArchiveTooltip": "Enregistrer tous les fichiers dans un seul .zip ({modifier}+Maj+S)",
+  "exportCopy": "Copier",
+  "exportCopyTooltip": "Copier le fichier ouvert dans le presse-papiers",
+  "exportFormatDocument": "Formater le document",
+  "exportFormatTooltip": "Formater le fichier ouvert (Maj+Alt+F)",
+  "exportBuildAgain": "Reconstruire",
+  "exportBuildAgainTooltip": "Reconstruire les fichiers depuis le dessin (supprime vos modifications)",
+  "exportBackToDrawing": "Retour au dessin",
+  "exportSelectFileHint": "Sélectionnez un fichier dans l’explorateur pour l’ouvrir",
+  "exportExplorer": "Explorateur",
+  "exportSettingsLabel": "Paramètres",
+  "exportCloseTab": "Fermer",
+  "projectTabCloseTooltip": "Fermer (Ctrl+W)",
+  "projectTabNotSaved": "Pas encore enregistré",
+  "@workspaceInvalidProject": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@workspaceOpenFailed": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      },
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@workspaceSaved": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@workspaceSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@imageLoadFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportReplaceMessage": {
+    "placeholders": {
+      "existing": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@exportSavedFolder": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSavedArchive": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSaveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSaveFolderTooltip": {
+    "placeholders": {
+      "modifier": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportSaveArchiveTooltip": {
+    "placeholders": {
+      "modifier": {
+        "type": "String"
+      }
+    }
+  },
+  "layerDefaultGroup": "Groupe {number}",
+  "@layerDefaultGroup": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "editorCaret": "Lig. {line}, Col. {column}",
+  "editorCaretSelection": "Lig. {line}, Col. {column} ({selected} sélectionnés)",
+  "editorLineCount": "{count, plural, =1{1 ligne} other{{count} lignes}}",
+  "editorSpaceCount": "Espaces : {count}",
+  "exportRegenerated": "{count} fichier(s) régénéré(s)",
+  "exportFormatted": "{name} formaté",
+  "exportCopied": "{name} copié dans le presse-papiers",
+  "@editorCaret": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      },
+      "column": {
+        "type": "int"
+      }
+    }
+  },
+  "@editorCaretSelection": {
+    "placeholders": {
+      "line": {
+        "type": "int"
+      },
+      "column": {
+        "type": "int"
+      },
+      "selected": {
+        "type": "int"
+      }
+    }
+  },
+  "@editorLineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@editorSpaceCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@exportRegenerated": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@exportFormatted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@exportCopied": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "projectUnavailable": "Aucun projet actif n’est disponible ici.",
+  "untitledProject": "Sans titre",
+  "untitledProjectNumbered": "Sans titre {number}",
+  "@untitledProjectNumbered": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultLayerName": "Calque {number}",
+  "@defaultLayerName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "defaultGroupName": "Groupe {number}",
+  "@defaultGroupName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "projectFileDamaged": "Impossible d’ouvrir {path} : le fichier est endommagé ou n’est pas un projet.",
+  "@projectFileDamaged": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "projectFileTooNew": "{path} a été créé avec une version plus récente de Flutter Painter. Mettez l’application à jour pour l’ouvrir.",
+  "@projectFileTooNew": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "statusNotBackedUp": "Non sauvegardé",
+  "statusNotBackedUpTooltip": "La copie de récupération n’a pas pu être enregistrée. Enregistrez votre projet pour ne rien perdre.",
+  "layerCopyItem": "Copier l’élément",
+  "layerDragReorder": "Faire glisser pour réorganiser les calques"
+}

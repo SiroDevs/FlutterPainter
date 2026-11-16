@@ -6,8 +6,10 @@ import '../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../common/widgets/progress/custom_snackbar.dart';
 import '../../../core/di/injectable.dart';
 import '../../../core/platform/file_dialogs.dart';
+import '../../../core/utils/default_names.dart';
 import '../../../core/utils/l10n_ext.dart';
 import '../../../core/utils/path_util.dart';
+import '../../../domain/models/drawing/project_format_exception.dart';
 import '../../../domain/repos/project_repo.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../editor/logic/drawing/editor_ops.dart';
@@ -19,7 +21,7 @@ import '../cubit/workspace_cubit.dart';
 FileDialogs get _dialogs => getIt<FileDialogs>();
 
 Future<void> openProjectDialog(BuildContext context, WorkspaceCubit ws) async {
-  final paths = await _dialogs.pickProjectPaths();
+  final paths = await _dialogs.pickProjectPaths(context.l10n);
   for (final path in paths) {
     if (!context.mounted) return;
     await openPath(context, ws, path);
@@ -30,7 +32,7 @@ Future<void> importProjectDialog(
   BuildContext context,
   EditorBloc target,
 ) async {
-  final paths = await _dialogs.pickProjectPaths();
+  final paths = await _dialogs.pickProjectPaths(context.l10n);
   var importedCount = 0;
   for (final path in paths) {
     if (!context.mounted) return;
@@ -38,9 +40,13 @@ Future<void> importProjectDialog(
       final drawing = await getIt<ProjectRepo>().open(path);
       target.add(ProjectLayersImported(drawing.layers));
       importedCount += drawing.layers.length;
-    } catch (_) {
+    } catch (e) {
       if (context.mounted) {
-        CustomSnackbar.show(context, context.l10n.projectImportFailed(path));
+        CustomSnackbar.show(
+          context,
+          _formatMessage(context, path, e) ??
+              context.l10n.projectImportFailed(path),
+        );
       }
     }
   }
@@ -51,6 +57,16 @@ Future<void> importProjectDialog(
       isSuccess: true,
     );
   }
+}
+
+/// A readable message for a project file that cannot be understood, or null
+/// when [error] is something else.
+String? _formatMessage(BuildContext context, String path, Object error) {
+  if (error is! ProjectFormatException) return null;
+  return switch (error.problem) {
+    ProjectFormatProblem.damaged => context.l10n.projectFileDamaged(path),
+    ProjectFormatProblem.newerVersion => context.l10n.projectFileTooNew(path),
+  };
 }
 
 /// Opens a dropped or chosen file: a project opens in its own tab (or switches
@@ -64,16 +80,27 @@ Future<void> openPath(
   try {
     if (isImageFile(path)) {
       final bytes = await _dialogs.readBytes(path);
+      if (!context.mounted) return;
       final bloc = ws.current;
-      bloc.add(ImageLoaded(bytes, onNewLayer: bloc.state.layer.image != null));
+      bloc.add(
+        ImageLoaded(
+          bytes,
+          onNewLayer: bloc.state.layer.image != null,
+          nameFor: context.l10n.defaultLayerName,
+        ),
+      );
     } else if (isProjectFile(path)) {
       await ws.openProject(path);
     } else if (context.mounted) {
-      CustomSnackbar.show(context, 'Not a Flutter Painter project: $path');
+      CustomSnackbar.show(context, context.l10n.workspaceInvalidProject(path));
     }
   } catch (e) {
     if (context.mounted) {
-      CustomSnackbar.show(context, 'Could not open $path: $e');
+      CustomSnackbar.show(
+        context,
+        _formatMessage(context, path, e) ??
+            context.l10n.workspaceOpenFailed(path, '$e'),
+      );
     }
   }
 }
@@ -91,23 +118,28 @@ Future<bool> saveTab(
   final s = bloc.state;
   String? target = s.filePath;
   if (saveAs || target == null) {
-    target = await _dialogs.pickSavePath();
+    target = await _dialogs.pickSavePath(context.l10n);
   }
   if (target == null) return false;
   try {
-    final firstSave =
-        s.filePath == null && s.drawing.name.startsWith('Untitled');
+    final firstSave = s.filePath == null && isDefaultProjectName(s.drawing.name);
     final savedPath = await ws.commitSave(
       bloc,
       target,
       name: firstSave ? baseNameOf(target) : null,
     );
     if (context.mounted) {
-      CustomSnackbar.show(context, 'Saved $savedPath', isSuccess: true);
+      CustomSnackbar.show(
+        context,
+        context.l10n.workspaceSaved(savedPath),
+        isSuccess: true,
+      );
     }
     return true;
   } catch (e) {
-    if (context.mounted) CustomSnackbar.show(context, 'Could not save: $e');
+    if (context.mounted) {
+      CustomSnackbar.show(context, context.l10n.workspaceSaveFailed('$e'));
+    }
     return false;
   }
 }

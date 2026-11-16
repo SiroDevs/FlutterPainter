@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
+import '../../../core/utils/l10n_ext.dart';
 import '../cubit/export_cubit.dart';
 import 'vscode_colors.dart';
 
@@ -73,42 +74,60 @@ class _Tab extends StatelessWidget {
       child: InkWell(
         onTap: onSelect,
         hoverColor: colors.hover,
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(Icons.flutter_dash, size: 16, color: Color(0xFF42A5F5)),
-          const SizedBox(width: 6),
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: 13,
-              color: fg,
-              fontStyle: modified ? FontStyle.italic : FontStyle.normal,
-            ),
-          ),
-          if (modified) ...[
-            const SizedBox(width: 6),
-            const Icon(Icons.circle, size: 8, color: Color(0xFFE2C08D)),
-          ],
-          const SizedBox(width: 4),
-          Tooltip(
-            message: 'Close',
-            child: InkResponse(
-              onTap: onClose,
-              radius: 12,
-              child: Icon(Icons.close, size: 16, color: fg).padding(all: 4),
-            ),
-          ),
-        ])
-            .padding(left: 12, right: 4)
-            .decorated(
-              color: active ? colors.editorBg : colors.tabInactive,
-              border: Border(
-                top: BorderSide(
-                  color: active ? colors.accent : Colors.transparent,
-                  width: 1,
+        child:
+            Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.flutter_dash,
+                      size: 16,
+                      color: Color(0xFF42A5F5),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: fg,
+                        fontStyle: modified
+                            ? FontStyle.italic
+                            : FontStyle.normal,
+                      ),
+                    ),
+                    if (modified) ...[
+                      const SizedBox(width: 6),
+                      const Icon(
+                        Icons.circle,
+                        size: 8,
+                        color: Color(0xFFE2C08D),
+                      ),
+                    ],
+                    const SizedBox(width: 4),
+                    Tooltip(
+                      message: context.l10n.exportCloseTab,
+                      child: InkResponse(
+                        onTap: onClose,
+                        radius: 12,
+                        child: Icon(
+                          Icons.close,
+                          size: 16,
+                          color: fg,
+                        ).padding(all: 4),
+                      ),
+                    ),
+                  ],
+                )
+                .padding(left: 12, right: 4)
+                .decorated(
+                  color: active ? colors.editorBg : colors.tabInactive,
+                  border: Border(
+                    top: BorderSide(
+                      color: active ? colors.accent : Colors.transparent,
+                      width: 1,
+                    ),
+                    right: BorderSide(color: colors.border),
+                  ),
                 ),
-                right: BorderSide(color: colors.border),
-              ),
-            ),
       ),
     );
   }

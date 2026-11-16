@@ -36,6 +36,7 @@ class WorkspaceState extends Equatable {
     this.tabs = const <TabInfo>[],
     this.active = 0,
     this.autoSave = false,
+    this.persistFailed = false,
   });
 
   final List<TabInfo> tabs;
@@ -44,17 +45,23 @@ class WorkspaceState extends Equatable {
   /// Write edits straight into the open file instead of only to a side copy.
   final bool autoSave;
 
+  /// True while some tab's work could not be written to disk (side copy or
+  /// auto-save), so the user should save by hand.
+  final bool persistFailed;
+
   WorkspaceState copyWith({
     List<TabInfo>? tabs,
     int? active,
     bool? autoSave,
+    bool? persistFailed,
   }) =>
       WorkspaceState(
         tabs: tabs ?? this.tabs,
         active: active ?? this.active,
         autoSave: autoSave ?? this.autoSave,
+        persistFailed: persistFailed ?? this.persistFailed,
       );
 
   @override
-  List<Object?> get props => [tabs, active, autoSave];
+  List<Object?> get props => [tabs, active, autoSave, persistFailed];
 }

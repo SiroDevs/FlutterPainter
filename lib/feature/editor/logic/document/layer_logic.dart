@@ -9,10 +9,10 @@ abstract class LayerLogic {
   static bool _valid(EditorState s, int i) =>
       i >= 0 && i < s.drawing.layers.length;
 
-  static EditorState add(EditorState s) {
+  static EditorState add(EditorState s, String Function(int) nameFor) {
     final layers = [
       ...s.drawing.layers,
-      PaintLayer(name: 'Layer ${s.drawing.layers.length + 1}'),
+      PaintLayer(name: nameFor(s.drawing.layers.length + 1)),
     ];
     return s
         .withLayers(layers)
@@ -56,6 +56,21 @@ abstract class LayerLogic {
     final active = s.layerIndex == i
         ? j
         : (s.layerIndex == j ? i : s.layerIndex);
+    return s.withLayers(layers).copyWith(layerIndex: active).commit();
+  }
+
+  static EditorState reorder(EditorState s, int from, int to) {
+    if (!_valid(s, from) || !_valid(s, to) || from == to) return s;
+    final layers = [...s.drawing.layers];
+    final moved = layers.removeAt(from);
+    layers.insert(to, moved);
+    final active = s.layerIndex == from
+        ? to
+        : (from < s.layerIndex && to >= s.layerIndex
+              ? s.layerIndex - 1
+              : (from > s.layerIndex && to <= s.layerIndex
+                    ? s.layerIndex + 1
+                    : s.layerIndex));
     return s.withLayers(layers).copyWith(layerIndex: active).commit();
   }
 

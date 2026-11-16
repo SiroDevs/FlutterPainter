@@ -10,8 +10,8 @@ import 'code_values.dart';
 import 'expression_parser.dart';
 import 'shape_collector.dart';
 
-// What reading one file of code produced. [error] is set when the file cannot
-// be read at all yet (for example while a bracket is still open).
+// What reading one file of code produced. [unbalanced] is set when the file
+// cannot be read at all yet because a bracket is still open.
 class FileImport {
   const FileImport({
     this.shapes = const [],
@@ -19,7 +19,7 @@ class FileImport {
     this.notes = const [],
     this.hasPaintCode = false,
     this.layerName = '',
-    this.error,
+    this.unbalanced = false,
   });
 
   final List<Shape> shapes;
@@ -27,9 +27,9 @@ class FileImport {
   final List<String> notes;
   final bool hasPaintCode;
   final String layerName;
-  final String? error;
+  final bool unbalanced;
 
-  bool get isReadable => error == null;
+  bool get isReadable => !unbalanced;
 }
 
 final _paletteEntry = RegExp(r'static\s+const\s+Color\s+(\w+)\s*=\s*([^;]+);');
@@ -60,7 +60,7 @@ FileImport importCode(
 }) {
   final source = stripComments(content);
   if (!hasBalancedBrackets(source)) {
-    return const FileImport(error: 'The brackets do not match yet');
+    return const FileImport(unbalanced: true);
   }
   final shapeNames = {
     for (final match in _shapeDoc.allMatches(content))

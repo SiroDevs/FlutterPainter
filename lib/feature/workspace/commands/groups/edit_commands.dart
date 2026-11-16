@@ -11,14 +11,14 @@ import '../workspace_commands.dart';
 
 extension EditCommands on WorkspaceCommands {
   AppCommand get undo => AppCommand(
-    label: 'Undo',
+    label: context.l10n.undo,
     icon: Icons.undo,
     shortcut: primaryShortcut(LogicalKeyboardKey.keyZ),
     onPressed: state.canUndo ? () => send(const UndoRequested()) : null,
   );
 
   AppCommand get redo => AppCommand(
-    label: 'Redo',
+    label: context.l10n.editRedo,
     icon: Icons.redo,
     shortcut: isMacOS
         ? primaryShortcut(LogicalKeyboardKey.keyZ, shift: true)
@@ -36,7 +36,7 @@ extension EditCommands on WorkspaceCommands {
   AppCommand get delete => AppCommand(
     label: context.l10n.shapeDelete,
     icon: Icons.delete_outline,
-    tooltip: 'Delete the selected shape or image',
+    tooltip: context.l10n.editDeleteTooltip,
     keys: 'Del',
     onPressed: (hasShape || state.imageSelected)
         ? () => send(const ShapeDeleted())
@@ -77,7 +77,7 @@ extension EditCommands on WorkspaceCommands {
     label: context.l10n.shapeGroup,
     icon: Icons.group_work_outlined,
     tooltip: context.l10n.shapeGroupTooltip,
-    onPressed: canGroup ? () => send(const ShapesGrouped()) : null,
+    onPressed: canGroup ? () => send(ShapesGrouped(context.l10n.defaultGroupName)) : null,
   );
 
   AppCommand get ungroup => AppCommand(
@@ -92,7 +92,7 @@ extension EditCommands on WorkspaceCommands {
     return AppCommand(
       label: context.l10n.shapeClosedPath,
       icon: Icons.polyline_outlined,
-      tooltip: 'Close or open the selected polygon / line path',
+      tooltip: context.l10n.editPathClosedTooltip,
       checked: shape?.isClosed ?? false,
       onPressed:
           (shape != null &&
@@ -112,16 +112,16 @@ extension EditCommands on WorkspaceCommands {
   );
 
   AppCommand get fillOn => AppCommand(
-    label: 'Fill',
+    label: context.l10n.editFill,
     icon: Icons.format_color_fill,
     checked: state.style.fillOn,
     onPressed: () => send(FillToggled(!state.style.fillOn)),
   );
 
   AppCommand get strokeOn => AppCommand(
-    label: 'Outline',
+    label: context.l10n.editOutline,
     icon: Icons.border_color,
-    tooltip: 'Stroke (outline)',
+    tooltip: context.l10n.editStrokeTooltip,
     checked: state.style.strokeOn,
     onPressed: () => send(StrokeToggled(!state.style.strokeOn)),
   );
