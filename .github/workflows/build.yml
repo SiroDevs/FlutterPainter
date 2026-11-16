@@ -368,9 +368,9 @@ jobs:
           path: out/*
           if-no-files-found: error
 
-============================================================
-MACOS (signed with Developer ID, notarized, stapled)
-============================================================
+# ============================================================
+# MACOS (signed with Developer ID, notarized, stapled)
+# ============================================================
 
   macos:
     name: macOS ${{ matrix.arch }}
