@@ -1296,7 +1296,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get model3dPreview => 'Preview on canvas';
 
   @override
-  String get model3dPreviewNote => 'Drawing and selecting are paused while previewing.';
+  String get model3dPreviewNote =>
+      'Drawing and selecting are paused while previewing.';
 
   @override
   String get model3dViews => 'Views';
@@ -1407,7 +1408,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get model3dParts => 'Parts';
 
   @override
-  String get model3dPartsNone => 'No parts yet. Group shapes to move them as one part.';
+  String get model3dPartsNone =>
+      'No parts yet. Group shapes to move them as one part.';
 
   @override
   String get model3dPartJoint => 'Joint';
