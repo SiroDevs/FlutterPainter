@@ -2,6 +2,7 @@
 import '../../models/drawing/paint_layer.dart';
 import '../../models/model3d/view_angle.dart';
 import '../../models/shapes/shape.dart';
+import 'part_transform.dart';
 import 'shape_projection.dart';
 import 'tyre_projection.dart';
 import 'view_transform.dart';
@@ -21,20 +22,28 @@ List<Shape> projectLayer(PaintLayer layer, ViewAngle view) {
     if (!shape.visible) continue;
     groups.putIfAbsent(shape.groupId ?? 'shape-$index', () => []).add(shape);
   }
-  for (final members in groups.values) {
+  for (final entry in groups.entries) {
+    if (view.hidden.contains(entry.key)) continue;
+    final posed = transform.forPart(
+      PartTransform.forPart(entry.key, model, view),
+    );
     parts.add((
-      depth: _averageDepth(members),
+      depth: _averageDepth(entry.value),
       order: parts.length,
       shapes: [
-        for (final member in members) ...projectShape(member, transform),
+        for (final member in entry.value) ...projectShape(member, posed),
       ],
     ));
   }
   for (final tyre in model.tyres) {
+    if (view.hidden.contains(tyre.partId)) continue;
     parts.add((
       depth: tyre.centre.dz,
       order: parts.length,
-      shapes: TyreProjection(tyre, transform).build(),
+      shapes: TyreProjection(
+        tyre,
+        transform.forPart(PartTransform.forPart(tyre.partId, model, view)),
+      ).build(),
     ));
   }
   parts.sort(_farFirst);

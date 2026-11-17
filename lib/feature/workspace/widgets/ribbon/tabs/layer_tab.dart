@@ -23,6 +23,17 @@ List<Widget> layerTabGroups(WorkspaceCommands c) => [
     ],
   ),
   RibbonGroup(
+    label: c.context.l10n.ribbon3d,
+    children: [
+      RibbonStack(
+        children: [
+          RibbonButton.small(c.layerMake3d),
+          RibbonButton.small(c.layerRemove3d),
+        ],
+      ),
+    ],
+  ),
+  RibbonGroup(
     label: c.context.l10n.ribbonOrder,
     children: [
       RibbonStack(

@@ -22,6 +22,8 @@ class EditorState extends Equatable {
     this.view = const ViewSettings(),
     this.gesture = const GestureState(),
     this.images = const <String, Image>{},
+    this.previewView,
+    this.ghostLayer,
   });
 
   factory EditorState.fromSeed(EditorSeed seed) => EditorState(
@@ -72,6 +74,13 @@ class EditorState extends Equatable {
   /// used by any layer (or any undo step).
   final Map<String, Image> images;
 
+  /// Index of the 3D view the canvas previews, or null when the preview is
+  /// off. Not part of the document, so it never reaches the undo history.
+  final int? previewView;
+
+  /// Index of the layer drawn faded over the 3D preview for comparison.
+  final int? ghostLayer;
+
   /// Nullable fields ([filePath], [selected], [draft], [hover], [cursor]) can
   /// be cleared by passing `null` explicitly.
   EditorState copyWith({
@@ -93,6 +102,8 @@ class EditorState extends Equatable {
     ViewSettings? view,
     GestureState? gesture,
     Map<String, Image>? images,
+    Object? previewView = unset,
+    Object? ghostLayer = unset,
   }) {
     final nextSelected = keep<int>(selected, this.selected);
     final nextSelectedIndices =
@@ -121,6 +132,8 @@ class EditorState extends Equatable {
       view: view ?? this.view,
       gesture: gesture ?? this.gesture,
       images: images ?? this.images,
+      previewView: keep<int>(previewView, this.previewView),
+      ghostLayer: keep<int>(ghostLayer, this.ghostLayer),
     );
   }
 
@@ -144,5 +157,7 @@ class EditorState extends Equatable {
     view,
     gesture,
     images,
+    previewView,
+    ghostLayer,
   ];
 }

@@ -15,9 +15,10 @@ import '../../../domain/models/drawing/edit_history.dart';
 import '../../../domain/models/drawing/paint_layer.dart';
 import '../../../domain/models/drawing/project_transfer.dart';
 import '../../../domain/models/drawing/reference_image.dart';
-import '../../../domain/models/editor/tool.dart';
+import '../../../domain/models/model3d/model3d.dart';
 import '../../../domain/models/shapes/shape.dart';
 import '../../../domain/models/shapes/shape_gradient.dart';
+import '../../../domain/models/editor/tool.dart';
 import '../../../domain/services/code_import/quick_code_points.dart';
 import '../logic/exports.dart';
 import '../models/editor_seed.dart';
@@ -27,6 +28,7 @@ import '../models/view_settings.dart';
 
 part 'editor_document_events.dart';
 part 'editor_event.dart';
+part 'editor_model3d_events.dart';
 part 'editor_shape_events.dart';
 part 'editor_shape_registrations.dart';
 part 'editor_state.dart';
@@ -45,6 +47,7 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     _registerLayers();
     _registerDocument();
     _registerImages();
+    _registerModel3d();
     if (seed.drawing.layers.any((layer) => layer.image != null)) {
       add(const ImageSyncRequested());
     }

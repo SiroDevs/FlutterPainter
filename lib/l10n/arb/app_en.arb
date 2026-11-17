@@ -672,5 +672,97 @@
   "statusNotBackedUp": "Not backed up",
   "statusNotBackedUpTooltip": "A recovery copy could not be saved. Save your project to avoid losing work.",
   "layerCopyItem": "Copy item",
-  "layerDragReorder": "Drag to reorder layers"
+  "layerDragReorder": "Drag to reorder layers",
+  "ribbon3d": "3D",
+  "layerMake3d": "Make 3D layer",
+  "layerRemove3d": "Back to flat layer",
+  "model3dViewStraight": "Straight",
+  "model3dViewLeft": "Left",
+  "model3dViewRight": "Right",
+  "model3dTabModel": "3D",
+  "model3dTabImage": "Image",
+  "model3dTitle": "3D setup of “{name}”",
+  "model3dPreview": "Preview on canvas",
+  "model3dPreviewNote": "Drawing and selecting are paused while previewing.",
+  "model3dViews": "Views",
+  "model3dViewAdd": "Add view",
+  "model3dViewRename": "Rename view",
+  "model3dViewDelete": "Delete view",
+  "model3dDefaultViewName": "View {number}",
+  "model3dTurn": "Turn",
+  "model3dTilt": "Tilt",
+  "model3dZoom": "Zoom",
+  "model3dValue": "{name}: {value}",
+  "model3dShape": "Selected shapes",
+  "model3dNoShape": "Select a shape to set its depth and thickness.",
+  "model3dDepth": "Depth",
+  "model3dThickness": "Thickness",
+  "model3dPivot": "Turning point",
+  "model3dAcross": "Across",
+  "model3dDown": "Down",
+  "model3dTyres": "Tyres",
+  "model3dTyreAdd": "Add tyre",
+  "model3dTyreRename": "Rename tyre",
+  "model3dTyreDelete": "Delete tyre",
+  "model3dDefaultTyreName": "Tyre {number}",
+  "model3dTyreNone": "No tyres yet. Add one to build a round part.",
+  "model3dRadius": "Radius",
+  "model3dWidth": "Width",
+  "model3dTreads": "Treads",
+  "model3dSpin": "Spin",
+  "model3dShoulder": "Round edges",
+  "model3dSidewall": "Sidewall size",
+  "model3dHub": "Hub size",
+  "model3dColorBody": "Body",
+  "model3dColorTread": "Tread lines",
+  "model3dColorSidewall": "Sidewall",
+  "model3dColorHub": "Hub",
+  "@model3dTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@model3dDefaultViewName": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "@model3dValue": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "@model3dDefaultTyreName": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "model3dParts": "Parts",
+  "model3dPartsNone": "No parts yet. Group shapes to move them as one part.",
+  "model3dPartJoint": "Joint",
+  "model3dPartParent": "Attached to",
+  "model3dPartParentNone": "Nothing",
+  "model3dPartPose": "Pose in “{view}”",
+  "model3dLean": "Lean",
+  "@model3dPartPose": {
+    "placeholders": {
+      "view": {
+        "type": "String"
+      }
+    }
+  },
+  "model3dGhost": "Compare with",
+  "model3dGhostNone": "Nothing",
+  "model3dPartVisible": "Visible in this view"
 }

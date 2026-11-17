@@ -12,7 +12,7 @@ import '../../domain/models/editor/app_settings.dart';
 import '../quick_code/quick_code_request.dart';
 import '../settings/cubit/settings_cubit.dart';
 import 'widgets/canvas/canvas_view.dart';
-import 'widgets/panels/image_panel.dart';
+import 'widgets/panels/inspector_lower_panel.dart';
 import 'widgets/panels/layers_panel.dart';
 import 'widgets/panels/panel_resize_handle.dart';
 import 'widgets/panels/properties_panel.dart';
@@ -169,7 +169,7 @@ class _EditorScreenState extends State<EditorScreen> {
               }
             }),
           ),
-          Expanded(flex: imageFlex, child: const ImagePanel()),
+          Expanded(flex: imageFlex, child: const InspectorLowerPanel()),
         ],
       );
     },

@@ -46,6 +46,7 @@ class CommandsBuilder extends StatelessWidget {
         a.drawing.layers.length != b.drawing.layers.length ||
         a.layer.name != b.layer.name ||
         a.layer.visible != b.layer.visible ||
+        (a.layer.model == null) != (b.layer.model == null) ||
         (ai == null) != (bi == null) ||
         ai?.visible != bi?.visible ||
         a.selectedShape?.isClosed != b.selectedShape?.isClosed ||

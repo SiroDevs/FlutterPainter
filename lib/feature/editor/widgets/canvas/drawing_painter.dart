@@ -15,6 +15,7 @@ import '../../bloc/editor_bloc.dart';
 import '../../logic/drawing/editor_ops.dart';
 import '../../logic/interaction/selection_transform_logic.dart';
 import '../../models/gesture_state.dart';
+import 'preview_shapes.dart';
 import 'shape_painter.dart';
 
 /// Paints the workspace: canvas box, grid, every visible layer (its picture
@@ -39,14 +40,16 @@ class DrawingPainter extends CustomPainter {
     if (v.grid) _grid(canvas, box);
 
     final paint = Paint()..isAntiAlias = true;
-    for (final layer in d.layers) {
-      if (!layer.visible) continue;
+    for (var index = 0; index < d.layers.length; index++) {
+      final layer = d.layers[index];
+      if (!layer.visible || hiddenByPreview(state, index)) continue;
       _image(canvas, layer.image);
-      for (final shape in layer.shapes) {
+      for (final shape in shapesToPaint(state, index)) {
         if (!shape.visible) continue;
         paintShape(canvas, shape, paint);
       }
     }
+    paintComparison(canvas, state, paint);
     for (final shape in state.quickCodePreviews) {
       paintShape(canvas, shape, paint);
     }
@@ -59,9 +62,11 @@ class DrawingPainter extends CustomPainter {
         ..strokeWidth = 1 / v.zoom
         ..color = ThemeColors.canvasEdge,
     );
-    _selection(canvas);
-    _imageSelection(canvas);
-    _marquee(canvas);
+    if (state.previewAngle == null) {
+      _selection(canvas);
+      _imageSelection(canvas);
+      _marquee(canvas);
+    }
     canvas.restore();
   }
 

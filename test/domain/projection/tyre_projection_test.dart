@@ -1,13 +1,10 @@
-// Package imports:
-import 'package:flutter_test/flutter_test.dart';
-
-// Project imports:
 import 'package:flutter_painter/domain/models/model3d/point3.dart';
 import 'package:flutter_painter/domain/models/model3d/tyre_spec.dart';
 import 'package:flutter_painter/domain/models/model3d/view_angle.dart';
 import 'package:flutter_painter/domain/models/shapes/shape.dart';
 import 'package:flutter_painter/domain/services/projection/tyre_projection.dart';
 import 'package:flutter_painter/domain/services/projection/view_transform.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 const _pivot = Point3(61.35, 166, 0);
 

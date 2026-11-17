@@ -16,18 +16,26 @@ List<Shape> projectShape(Shape shape, ViewTransform transform) {
   if (outline.length < 2) return const [];
   final half = shape.thickness / 2;
   final nearFace = _place(outline, shape.depth - half, transform);
-  final face = shape.copyWith(
-    kind: shape.isClosed ? ShapeKind.polygon : shape.kind,
-    points: nearFace,
-    rotation: 0,
-    radius: 0,
-    depth: 0,
-    thickness: 0,
-  );
-  if (!shape.isClosed || shape.thickness <= 0) return [face];
+  if (!shape.isClosed || shape.thickness <= 0) {
+    return [_face(shape, nearFace)];
+  }
   final farFace = _place(outline, shape.depth + half, transform);
-  return [..._sides(shape, outline, nearFace, farFace, transform), face];
+  // A part turned past the side shows its back cap instead of its front.
+  final showsNear = transform.turn(const Point3(0, 0, -1)).dz <= 0;
+  return [
+    ..._sides(shape, outline, nearFace, farFace, transform),
+    _face(shape, showsNear ? nearFace : farFace),
+  ];
 }
+
+Shape _face(Shape shape, List<Offset> points) => shape.copyWith(
+  kind: shape.isClosed ? ShapeKind.polygon : shape.kind,
+  points: points,
+  rotation: 0,
+  radius: 0,
+  depth: 0,
+  thickness: 0,
+);
 
 List<Offset> _place(List<Offset> outline, double depth, ViewTransform view) => [
   for (final point in outline) view.flat(Point3(point.dx, point.dy, depth)),

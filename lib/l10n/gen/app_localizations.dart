@@ -2327,6 +2327,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Drag to reorder layers'**
   String get layerDragReorder;
+
+  /// No description provided for @ribbon3d.
+  ///
+  /// In en, this message translates to:
+  /// **'3D'**
+  String get ribbon3d;
+
+  /// No description provided for @layerMake3d.
+  ///
+  /// In en, this message translates to:
+  /// **'Make 3D layer'**
+  String get layerMake3d;
+
+  /// No description provided for @layerRemove3d.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to flat layer'**
+  String get layerRemove3d;
+
+  /// No description provided for @model3dViewStraight.
+  ///
+  /// In en, this message translates to:
+  /// **'Straight'**
+  String get model3dViewStraight;
+
+  /// No description provided for @model3dViewLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get model3dViewLeft;
+
+  /// No description provided for @model3dViewRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get model3dViewRight;
+
+  /// No description provided for @model3dTabModel.
+  ///
+  /// In en, this message translates to:
+  /// **'3D'**
+  String get model3dTabModel;
+
+  /// No description provided for @model3dTabImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get model3dTabImage;
+
+  /// No description provided for @model3dTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3D setup of “{name}”'**
+  String model3dTitle(String name);
+
+  /// No description provided for @model3dPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview on canvas'**
+  String get model3dPreview;
+
+  /// No description provided for @model3dPreviewNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Drawing and selecting are paused while previewing.'**
+  String get model3dPreviewNote;
+
+  /// No description provided for @model3dViews.
+  ///
+  /// In en, this message translates to:
+  /// **'Views'**
+  String get model3dViews;
+
+  /// No description provided for @model3dViewAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add view'**
+  String get model3dViewAdd;
+
+  /// No description provided for @model3dViewRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename view'**
+  String get model3dViewRename;
+
+  /// No description provided for @model3dViewDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete view'**
+  String get model3dViewDelete;
+
+  /// No description provided for @model3dDefaultViewName.
+  ///
+  /// In en, this message translates to:
+  /// **'View {number}'**
+  String model3dDefaultViewName(String number);
+
+  /// No description provided for @model3dTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn'**
+  String get model3dTurn;
+
+  /// No description provided for @model3dTilt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tilt'**
+  String get model3dTilt;
+
+  /// No description provided for @model3dZoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Zoom'**
+  String get model3dZoom;
+
+  /// No description provided for @model3dValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {value}'**
+  String model3dValue(String name, String value);
+
+  /// No description provided for @model3dShape.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected shapes'**
+  String get model3dShape;
+
+  /// No description provided for @model3dNoShape.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a shape to set its depth and thickness.'**
+  String get model3dNoShape;
+
+  /// No description provided for @model3dDepth.
+  ///
+  /// In en, this message translates to:
+  /// **'Depth'**
+  String get model3dDepth;
+
+  /// No description provided for @model3dThickness.
+  ///
+  /// In en, this message translates to:
+  /// **'Thickness'**
+  String get model3dThickness;
+
+  /// No description provided for @model3dPivot.
+  ///
+  /// In en, this message translates to:
+  /// **'Turning point'**
+  String get model3dPivot;
+
+  /// No description provided for @model3dAcross.
+  ///
+  /// In en, this message translates to:
+  /// **'Across'**
+  String get model3dAcross;
+
+  /// No description provided for @model3dDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Down'**
+  String get model3dDown;
+
+  /// No description provided for @model3dTyres.
+  ///
+  /// In en, this message translates to:
+  /// **'Tyres'**
+  String get model3dTyres;
+
+  /// No description provided for @model3dTyreAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add tyre'**
+  String get model3dTyreAdd;
+
+  /// No description provided for @model3dTyreRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename tyre'**
+  String get model3dTyreRename;
+
+  /// No description provided for @model3dTyreDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete tyre'**
+  String get model3dTyreDelete;
+
+  /// No description provided for @model3dDefaultTyreName.
+  ///
+  /// In en, this message translates to:
+  /// **'Tyre {number}'**
+  String model3dDefaultTyreName(String number);
+
+  /// No description provided for @model3dTyreNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No tyres yet. Add one to build a round part.'**
+  String get model3dTyreNone;
+
+  /// No description provided for @model3dRadius.
+  ///
+  /// In en, this message translates to:
+  /// **'Radius'**
+  String get model3dRadius;
+
+  /// No description provided for @model3dWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Width'**
+  String get model3dWidth;
+
+  /// No description provided for @model3dTreads.
+  ///
+  /// In en, this message translates to:
+  /// **'Treads'**
+  String get model3dTreads;
+
+  /// No description provided for @model3dSpin.
+  ///
+  /// In en, this message translates to:
+  /// **'Spin'**
+  String get model3dSpin;
+
+  /// No description provided for @model3dShoulder.
+  ///
+  /// In en, this message translates to:
+  /// **'Round edges'**
+  String get model3dShoulder;
+
+  /// No description provided for @model3dSidewall.
+  ///
+  /// In en, this message translates to:
+  /// **'Sidewall size'**
+  String get model3dSidewall;
+
+  /// No description provided for @model3dHub.
+  ///
+  /// In en, this message translates to:
+  /// **'Hub size'**
+  String get model3dHub;
+
+  /// No description provided for @model3dColorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Body'**
+  String get model3dColorBody;
+
+  /// No description provided for @model3dColorTread.
+  ///
+  /// In en, this message translates to:
+  /// **'Tread lines'**
+  String get model3dColorTread;
+
+  /// No description provided for @model3dColorSidewall.
+  ///
+  /// In en, this message translates to:
+  /// **'Sidewall'**
+  String get model3dColorSidewall;
+
+  /// No description provided for @model3dColorHub.
+  ///
+  /// In en, this message translates to:
+  /// **'Hub'**
+  String get model3dColorHub;
+
+  /// No description provided for @model3dParts.
+  ///
+  /// In en, this message translates to:
+  /// **'Parts'**
+  String get model3dParts;
+
+  /// No description provided for @model3dPartsNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No parts yet. Group shapes to move them as one part.'**
+  String get model3dPartsNone;
+
+  /// No description provided for @model3dPartJoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Joint'**
+  String get model3dPartJoint;
+
+  /// No description provided for @model3dPartParent.
+  ///
+  /// In en, this message translates to:
+  /// **'Attached to'**
+  String get model3dPartParent;
+
+  /// No description provided for @model3dPartParentNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing'**
+  String get model3dPartParentNone;
+
+  /// No description provided for @model3dPartPose.
+  ///
+  /// In en, this message translates to:
+  /// **'Pose in “{view}”'**
+  String model3dPartPose(String view);
+
+  /// No description provided for @model3dLean.
+  ///
+  /// In en, this message translates to:
+  /// **'Lean'**
+  String get model3dLean;
+
+  /// No description provided for @model3dGhost.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare with'**
+  String get model3dGhost;
+
+  /// No description provided for @model3dGhostNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing'**
+  String get model3dGhostNone;
+
+  /// No description provided for @model3dPartVisible.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible in this view'**
+  String get model3dPartVisible;
 }
 
 class _AppLocalizationsDelegate

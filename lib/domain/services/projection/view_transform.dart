@@ -5,10 +5,11 @@ import 'dart:ui';
 // Project imports:
 import '../../models/model3d/point3.dart';
 import '../../models/model3d/view_angle.dart';
+import 'part_transform.dart';
 
 /// Turns object-space points and directions into the flat view.
 class ViewTransform {
-  ViewTransform(ViewAngle angle, this.pivot)
+  ViewTransform(this.angle, this.pivot, {this.part = PartTransform.none})
     : scale = angle.scale,
       _yawCos = math.cos(_limited(angle.yaw)),
       _yawSin = math.sin(_limited(angle.yaw)),
@@ -17,7 +18,9 @@ class ViewTransform {
 
   static const double _limit = 1.48;
 
+  final ViewAngle angle;
   final Point3 pivot;
+  final PartTransform part;
   final double scale;
   final double _yawCos;
   final double _yawSin;
@@ -27,8 +30,14 @@ class ViewTransform {
   static double _limited(double radians) =>
       radians.clamp(-_limit, _limit).toDouble();
 
+  /// The same camera, seeing a part that moves by [movement] first.
+  ViewTransform forPart(PartTransform movement) =>
+      ViewTransform(angle, pivot, part: movement);
+
   /// Rotates a direction; its depth is negative when it faces the viewer.
-  Point3 turn(Point3 direction) {
+  Point3 turn(Point3 direction) => _rotate(part.turn(direction));
+
+  Point3 _rotate(Point3 direction) {
     final turnedAcross =
         direction.dx * _yawCos + direction.dz * _yawSin;
     final turnedAway =
@@ -42,7 +51,7 @@ class ViewTransform {
 
   /// Projects a point around the pivot, keeping its depth.
   Point3 project(Point3 point) {
-    final turned = turn(point - pivot);
+    final turned = _rotate(part.apply(point) - pivot);
     return Point3(
       pivot.dx + turned.dx * scale,
       pivot.dy + turned.dy * scale,
