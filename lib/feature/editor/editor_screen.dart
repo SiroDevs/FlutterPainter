@@ -12,8 +12,9 @@ import '../../domain/models/editor/app_settings.dart';
 import '../quick_code/quick_code_request.dart';
 import '../settings/cubit/settings_cubit.dart';
 import 'widgets/canvas/canvas_view.dart';
-import 'widgets/panels/inspector_lower_panel.dart';
+import 'widgets/panels/image_panel.dart';
 import 'widgets/panels/layers_panel.dart';
+import 'widgets/panels/model3d/model3d_side_panel.dart';
 import 'widgets/panels/panel_resize_handle.dart';
 import 'widgets/panels/properties_panel.dart';
 import 'widgets/toolbar/color_bar.dart';
@@ -37,6 +38,7 @@ class EditorScreen extends StatefulWidget {
 
 class _EditorScreenState extends State<EditorScreen> {
   double _toolWidth = 52;
+  double _modelWidth = 300;
   double _inspectorWidth = 340;
   double? _propertiesWidth;
   double _layersFraction = 0.75;
@@ -61,6 +63,11 @@ class _EditorScreenState extends State<EditorScreen> {
           math.min(180.0, constraints.maxWidth - inspectorWidth - 250),
         );
         final toolWidth = _toolWidth.clamp(52.0, toolMaximum).toDouble();
+        final modelMaximum = math.max(
+          240.0,
+          constraints.maxWidth - toolWidth - inspectorWidth - 250,
+        );
+        final modelWidth = _modelWidth.clamp(240.0, modelMaximum).toDouble();
         final propertiesMaximum = math.max(220.0, constraints.maxWidth - 520);
         final propertiesWidth = (_propertiesWidth ?? constraints.maxWidth / 2)
             .clamp(220.0, propertiesMaximum)
@@ -83,6 +90,14 @@ class _EditorScreenState extends State<EditorScreen> {
                     }),
                   ),
                   const VerticalDivider(width: 1),
+                  Model3dSidePanel(
+                    width: modelWidth,
+                    onResize: (delta) => setState(() {
+                      _modelWidth = (modelWidth + delta)
+                          .clamp(240.0, modelMaximum)
+                          .toDouble();
+                    }),
+                  ),
                   Expanded(
                     child: CanvasView(
                       focus: widget.canvasFocus,
@@ -169,7 +184,7 @@ class _EditorScreenState extends State<EditorScreen> {
               }
             }),
           ),
-          Expanded(flex: imageFlex, child: const InspectorLowerPanel()),
+          Expanded(flex: imageFlex, child: const ImagePanel()),
         ],
       );
     },
