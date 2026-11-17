@@ -8,7 +8,7 @@ import 'package:injectable/injectable.dart';
 
 // Project imports:
 import '../../common/constants/app_constants.dart';
-import '../../l10n/app_localizations.dart';
+import '../../l10n/gen/app_localizations.dart';
 
 /// Native open/save dialogs and raw file reads, behind one injectable class so
 /// the rest of the app (and its tests) never touches the platform directly.

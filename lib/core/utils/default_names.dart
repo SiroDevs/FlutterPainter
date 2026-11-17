@@ -2,7 +2,7 @@
 import 'package:flutter/widgets.dart';
 
 // Project imports:
-import '../../l10n/app_localizations.dart';
+import '../../l10n/gen/app_localizations.dart';
 
 /// The localizations for [languageCode] without needing a [BuildContext];
 /// English when the code is not supported.

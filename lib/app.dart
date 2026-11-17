@@ -14,7 +14,7 @@ import 'core/theme/bloc/theme_bloc.dart';
 import 'core/theme/theme_data.dart';
 import 'feature/settings/cubit/settings_cubit.dart';
 import 'feature/workspace/cubit/workspace_cubit.dart';
-import 'l10n/app_localizations.dart';
+import 'l10n/gen/app_localizations.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, this.initialPaths = const []});
