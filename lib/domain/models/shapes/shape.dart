@@ -33,6 +33,8 @@ class Shape extends Equatable {
     this.groupName,
     this.rotation = 0,
     this.visible = true,
+    this.depth = 0,
+    this.thickness = 0,
   });
 
   final ShapeKind kind;
@@ -50,6 +52,12 @@ class Shape extends Equatable {
   final double rotation;
   final bool visible;
 
+  /// Distance behind the drawing plane, used by 3D layers only.
+  final double depth;
+
+  /// How far the shape is extruded around [depth], used by 3D layers only.
+  final double thickness;
+
   Shape copyWith({
     ShapeKind? kind,
     List<Offset>? points,
@@ -63,6 +71,8 @@ class Shape extends Equatable {
     Object? groupName = unset,
     double? rotation,
     bool? visible,
+    double? depth,
+    double? thickness,
   }) => Shape(
     kind: kind ?? this.kind,
     points: points ?? this.points,
@@ -76,6 +86,8 @@ class Shape extends Equatable {
     groupName: keep<String>(groupName, this.groupName),
     rotation: rotation ?? this.rotation,
     visible: visible ?? this.visible,
+    depth: depth ?? this.depth,
+    thickness: thickness ?? this.thickness,
   );
 
   @override
@@ -92,6 +104,8 @@ class Shape extends Equatable {
     groupName,
     rotation,
     visible,
+    depth,
+    thickness,
   ];
 
   bool get isClosed => kind != ShapeKind.line && kind != ShapeKind.freehand;

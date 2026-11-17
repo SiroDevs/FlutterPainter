@@ -6,6 +6,7 @@ import '../../models/export/export_options.dart';
 import '../../models/drawing/paint_layer.dart';
 import '../../models/shapes/shape.dart';
 import '../../models/shapes/shape_kind.dart';
+import '../projection/model_baker.dart';
 import 'code_format.dart';
 import 'gradient_code.dart';
 
@@ -19,7 +20,10 @@ class DartExporter extends _DartExporterBase
         _DartExporterShapeWriter,
         _DartExporterGroupWriter,
         _DartExporterLayoutWriter {
-  DartExporter(super.drawing, {super.options});
+  DartExporter(
+    Drawing drawing, {
+    ExportOptions options = const ExportOptions(),
+  }) : super(bakeModelLayers(drawing), options: options);
 
   List<ExportFile> generate() {
     _usedColors.clear();

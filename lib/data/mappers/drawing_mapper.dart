@@ -11,11 +11,13 @@ import '../../domain/models/drawing/reference_image.dart';
 import '../../domain/models/shapes/shape.dart';
 import '../../domain/models/shapes/shape_kind.dart';
 import 'gradient_mapper.dart';
+import 'model3d_mapper.dart';
 
 /// The .flp file format: JSON, with colours as 0xAARRGGBB integers and any
 /// background image embedded as base64. See the README for the full schema.
 const flpFormat = 'flp';
-const flpVersion = 2;
+const flpVersion = 3;
+const flpPlainVersion = 2;
 
 Map<String, dynamic> shapeToJson(Shape s) => {
   'kind': s.kind.name,
@@ -32,6 +34,8 @@ Map<String, dynamic> shapeToJson(Shape s) => {
   if (s.groupId != null && s.groupName != null) 'groupName': s.groupName,
   if (s.rotation != 0) 'rotation': s.rotation,
   if (!s.visible) 'visible': false,
+  if (s.depth != 0) 'depth': s.depth,
+  if (s.thickness != 0) 'thickness': s.thickness,
 };
 
 Shape shapeFromJson(Map<String, dynamic> j) => Shape(
@@ -50,6 +54,8 @@ Shape shapeFromJson(Map<String, dynamic> j) => Shape(
   groupName: j['groupName'] as String?,
   rotation: ((j['rotation'] as num?) ?? 0).toDouble(),
   visible: (j['visible'] as bool?) ?? true,
+  depth: ((j['depth'] as num?) ?? 0).toDouble(),
+  thickness: ((j['thickness'] as num?) ?? 0).toDouble(),
 );
 
 Map<String, dynamic> layerToJson(PaintLayer l) => {
@@ -57,6 +63,7 @@ Map<String, dynamic> layerToJson(PaintLayer l) => {
   'visible': l.visible,
   'shapes': [for (final s in l.shapes) shapeToJson(s)],
   if (l.image != null) 'image': referenceToJson(l.image!),
+  if (l.model != null) 'model3d': model3dToJson(l.model!),
 };
 
 PaintLayer layerFromJson(Map<String, dynamic> j) => PaintLayer(
@@ -69,6 +76,9 @@ PaintLayer layerFromJson(Map<String, dynamic> j) => PaintLayer(
   image: j['image'] == null
       ? null
       : referenceFromJson(j['image'] as Map<String, dynamic>),
+  model: j['model3d'] == null
+      ? null
+      : model3dFromJson(j['model3d'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> referenceToJson(ReferenceImage r) => {
@@ -102,7 +112,10 @@ ReferenceImage? referenceFromJson(Map<String, dynamic> j) {
 
 Map<String, dynamic> drawingToMap(Drawing d) => {
   'format': flpFormat,
-  'version': flpVersion,
+  // Files without a 3D layer stay readable by older versions of the app.
+  'version': d.layers.any((layer) => layer.model != null)
+      ? flpVersion
+      : flpPlainVersion,
   'name': d.name,
   'width': d.width,
   'height': d.height,

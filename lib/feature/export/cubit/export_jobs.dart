@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import '../../../core/utils/zip_writer.dart';
 import '../../../data/mappers/drawing_mapper.dart';
 import '../../../domain/models/drawing/drawing.dart';
-import '../../../domain/models/drawing/paint_layer.dart';
 import '../../../domain/models/editor/app_settings.dart';
 import '../../../domain/models/export/export_file.dart';
 import '../../../domain/models/export/export_options.dart';
@@ -22,14 +21,7 @@ Future<GeneratedExport> generateExportFiles(
   ExportOptions options,
 ) async {
   final exportDrawing = drawing.copyWith(
-    layers: [
-      for (final layer in drawing.layers)
-        PaintLayer(
-          name: layer.name,
-          visible: layer.visible,
-          shapes: layer.shapes,
-        ),
-    ],
+    layers: [for (final layer in drawing.layers) layer.copyWith(image: null)],
   );
   final result = await compute<Map<String, Object>, Map<String, Object>>(
     _generateExport,
