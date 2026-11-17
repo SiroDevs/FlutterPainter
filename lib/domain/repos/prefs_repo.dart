@@ -106,6 +106,9 @@ class PrefsRepoImp implements PrefsRepo {
           sharedPrefs.getString(PrefConstants.colorConstantsKey) != 'false',
       groupMethodsPublic:
           sharedPrefs.getString(PrefConstants.groupMethodsPublicKey) == 'true',
+      autoDownloadUpdates:
+          sharedPrefs.getString(PrefConstants.autoDownloadUpdatesKey) !=
+          'false',
     );
   }
 
@@ -133,6 +136,10 @@ class PrefsRepoImp implements PrefsRepo {
       PrefConstants.groupMethodsPublicKey,
       settings.groupMethodsPublic.toString(),
     );
+    sharedPrefs.setString(
+      PrefConstants.autoDownloadUpdatesKey,
+      settings.autoDownloadUpdates.toString(),
+    );
   }
 
   @override
@@ -146,6 +153,9 @@ class PrefsRepoImp implements PrefsRepo {
     sharedPrefs.remove(PrefConstants.colorConstantsKey);
     sharedPrefs.remove(PrefConstants.groupMethodsPublicKey);
     sharedPrefs.remove(PrefConstants.languageCodeKey);
+    sharedPrefs.remove(PrefConstants.autoDownloadUpdatesKey);
+    sharedPrefs.remove(PrefConstants.lastNotifiedUpdateKey);
+    sharedPrefs.remove(PrefConstants.dismissedUpdateKey);
   }
 
   @override

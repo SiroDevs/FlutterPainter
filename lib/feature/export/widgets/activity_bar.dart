@@ -1,5 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
 import '../../../core/utils/l10n_ext.dart';
 import '../../settings/widgets/settings_dialog.dart';
 import 'vscode_colors.dart';

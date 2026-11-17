@@ -1,17 +1,19 @@
 name: flutter_painter
 description: A paint studio for your Flutter App
 publish_to: 'none'
-version: 1.0.19
+version: 1.0.20
 
 environment:
   sdk: ^3.13.5
 
 dependencies:
   bloc: ^9.1.0                         # Core BLoC state management library
+  crypto: ^3.0.7                       # Verifies downloaded release assets
   cupertino_icons: ^1.0.8              # iOS-style icon pack
   desktop_drop: ^0.8.1                 # Drag-and-drop file handling on desktop
   equatable: ^2.0.7                    # Simplifies value equality comparisons
   file_selector: ^1.0.3                # Native file and directory selection dialogs
+  flutter_local_notifications: ^23.0.2 # Shows update alerts in the desktop notification center
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1                 # Flutter widgets and utilities for BLoC
@@ -21,6 +23,7 @@ dependencies:
   go_router: ^18.0.2                   # Declarative routing and navigation
   injectable: ^2.5.2                   # Code generation for dependency injection
   intl: ^0.20.2                        # Date, number, and message formatting
+  package_info_plus: ^8.3.1            # Reads the installed application version
   path_provider: ^2.1.5                # Accesses common application directories
   shared_preferences: ^2.5.3           # Lightweight key-value storage
   styled_widget: ^0.4.1                # Chainable widget styling and composition

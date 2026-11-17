@@ -13,8 +13,8 @@ import '../editor/logic/drawing/editor_ops.dart';
 import '../editor/widgets/toolbar/tool_info.dart';
 import '../export/export_args.dart';
 import '../settings/widgets/settings_dialog.dart';
-import 'cubit/workspace_cubit.dart';
 import 'clipboard/project_transfer_clipboard.dart';
+import 'cubit/workspace_cubit.dart';
 import 'flows/tab_flows.dart';
 
 /// Shortcuts available while the workspace has keyboard focus.

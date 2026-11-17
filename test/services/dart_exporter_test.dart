@@ -1,6 +1,10 @@
+// Dart imports:
 import 'dart:ui';
 
+// Package imports:
 import 'package:flutter_test/flutter_test.dart';
+
+// Project imports:
 import 'package:flutter_painter/domain/models/drawing/drawing.dart';
 import 'package:flutter_painter/domain/models/drawing/paint_layer.dart';
 import 'package:flutter_painter/domain/models/editor/app_settings.dart';

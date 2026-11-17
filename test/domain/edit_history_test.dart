@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:flutter_test/flutter_test.dart';
+
+// Project imports:
 import 'package:flutter_painter/domain/models/drawing/drawing.dart';
 import 'package:flutter_painter/domain/models/drawing/edit_history.dart';
 

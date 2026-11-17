@@ -2,9 +2,9 @@
 import 'dart:ui';
 
 // Project imports:
+import '../../../../domain/models/editor/tool.dart';
 import '../../../../domain/models/shapes/shape.dart';
 import '../../../../domain/models/shapes/shape_kind.dart';
-import '../../../../domain/models/editor/tool.dart';
 import '../../../../domain/services/geometry/geometry_utils.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';

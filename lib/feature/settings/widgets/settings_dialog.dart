@@ -1,14 +1,17 @@
-// Flutter imports:
+// Dart imports:
 import 'dart:math' as math;
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../core/theme/bloc/theme_bloc.dart';
 import '../../../core/utils/l10n_ext.dart';
-import '../cubit/settings_cubit.dart';
 import '../../editor/bloc/editor_bloc.dart';
+import '../cubit/settings_cubit.dart';
 import 'about_settings_page.dart';
 import 'general_settings_page.dart';
 import 'project_settings_page.dart';

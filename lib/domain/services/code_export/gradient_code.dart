@@ -3,8 +3,8 @@ import 'dart:ui';
 
 // Project imports:
 import '../../models/shapes/shape_gradient.dart';
-import 'code_format.dart';
 import '../geometry/gradient_geometry.dart';
+import 'code_format.dart';
 
 // The statements that make `_paint` fill with [gradient] over [bounds].
 // [colorRef] writes one colour the way the rest of the export does.

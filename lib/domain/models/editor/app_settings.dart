@@ -64,6 +64,7 @@ class AppSettings extends Equatable {
     this.colorFormat = ColorFormat.hex,
     this.colorConstants = true,
     this.groupMethodsPublic = false,
+    this.autoDownloadUpdates = true,
   });
 
   final String languageCode;
@@ -79,6 +80,8 @@ class AppSettings extends Equatable {
   /// Expose each grouped shape method instead of one public group painter.
   final bool groupMethodsPublic;
 
+  final bool autoDownloadUpdates;
+
   AppSettings copyWith({
     String? languageCode,
     InterfaceMode? interfaceMode,
@@ -87,6 +90,7 @@ class AppSettings extends Equatable {
     ColorFormat? colorFormat,
     bool? colorConstants,
     bool? groupMethodsPublic,
+    bool? autoDownloadUpdates,
   }) => AppSettings(
     languageCode: languageCode ?? this.languageCode,
     interfaceMode: interfaceMode ?? this.interfaceMode,
@@ -95,6 +99,7 @@ class AppSettings extends Equatable {
     colorFormat: colorFormat ?? this.colorFormat,
     colorConstants: colorConstants ?? this.colorConstants,
     groupMethodsPublic: groupMethodsPublic ?? this.groupMethodsPublic,
+    autoDownloadUpdates: autoDownloadUpdates ?? this.autoDownloadUpdates,
   );
 
   @override
@@ -106,5 +111,6 @@ class AppSettings extends Equatable {
     colorFormat,
     colorConstants,
     groupMethodsPublic,
+    autoDownloadUpdates,
   ];
 }

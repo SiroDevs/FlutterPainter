@@ -1,8 +1,12 @@
+// Dart imports:
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
+// Package imports:
 import 'package:flutter_test/flutter_test.dart';
+
+// Project imports:
 import 'package:flutter_painter/data/mappers/drawing_mapper.dart';
 import 'package:flutter_painter/domain/models/drawing/drawing.dart';
 import 'package:flutter_painter/domain/models/drawing/paint_layer.dart';

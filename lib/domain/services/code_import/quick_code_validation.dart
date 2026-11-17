@@ -1,3 +1,4 @@
+// Project imports:
 import '../../models/shapes/shape_kind.dart';
 import 'quick_code_points.dart';
 

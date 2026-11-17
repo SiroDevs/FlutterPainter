@@ -1,3 +1,4 @@
+// Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../editor/widgets/toolbar/tool_info.dart';
 import '../../commands/app_command.dart';

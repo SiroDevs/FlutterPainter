@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:flutter_test/flutter_test.dart';
+
+// Project imports:
 import 'package:flutter_painter/core/utils/default_names.dart';
 
 void main() {

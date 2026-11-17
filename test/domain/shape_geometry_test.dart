@@ -1,7 +1,11 @@
+// Dart imports:
 import 'dart:math' as math;
 import 'dart:ui';
 
+// Package imports:
 import 'package:flutter_test/flutter_test.dart';
+
+// Project imports:
 import 'package:flutter_painter/domain/models/shapes/shape.dart';
 import 'package:flutter_painter/domain/models/shapes/shape_kind.dart';
 import 'package:flutter_painter/domain/services/geometry/shape_geometry.dart';
