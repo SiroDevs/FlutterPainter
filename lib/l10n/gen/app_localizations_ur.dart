@@ -1246,4 +1246,176 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get layerDragReorder => 'Drag to reorder layers';
+
+  @override
+  String get ribbon3d => '3D';
+
+  @override
+  String get layerMake3d => 'Make 3D layer';
+
+  @override
+  String get layerRemove3d => 'Back to flat layer';
+
+  @override
+  String get model3dViewStraight => 'Straight';
+
+  @override
+  String get model3dViewLeft => 'Left';
+
+  @override
+  String get model3dViewRight => 'Right';
+
+  @override
+  String get model3dTabModel => '3D';
+
+  @override
+  String get model3dTabImage => 'Image';
+
+  @override
+  String model3dTitle(String name) {
+    return '3D setup of “$name”';
+  }
+
+  @override
+  String get model3dPreview => 'Preview on canvas';
+
+  @override
+  String get model3dPreviewNote => 'Drawing and selecting are paused while previewing.';
+
+  @override
+  String get model3dViews => 'Views';
+
+  @override
+  String get model3dViewAdd => 'Add view';
+
+  @override
+  String get model3dViewRename => 'Rename view';
+
+  @override
+  String get model3dViewDelete => 'Delete view';
+
+  @override
+  String model3dDefaultViewName(String number) {
+    return 'View $number';
+  }
+
+  @override
+  String get model3dTurn => 'Turn';
+
+  @override
+  String get model3dTilt => 'Tilt';
+
+  @override
+  String get model3dZoom => 'Zoom';
+
+  @override
+  String model3dValue(String name, String value) {
+    return '$name: $value';
+  }
+
+  @override
+  String get model3dShape => 'Selected shapes';
+
+  @override
+  String get model3dNoShape => 'Select a shape to set its depth and thickness.';
+
+  @override
+  String get model3dDepth => 'Depth';
+
+  @override
+  String get model3dThickness => 'Thickness';
+
+  @override
+  String get model3dPivot => 'Turning point';
+
+  @override
+  String get model3dAcross => 'Across';
+
+  @override
+  String get model3dDown => 'Down';
+
+  @override
+  String get model3dTyres => 'Tyres';
+
+  @override
+  String get model3dTyreAdd => 'Add tyre';
+
+  @override
+  String get model3dTyreRename => 'Rename tyre';
+
+  @override
+  String get model3dTyreDelete => 'Delete tyre';
+
+  @override
+  String model3dDefaultTyreName(String number) {
+    return 'Tyre $number';
+  }
+
+  @override
+  String get model3dTyreNone => 'No tyres yet. Add one to build a round part.';
+
+  @override
+  String get model3dRadius => 'Radius';
+
+  @override
+  String get model3dWidth => 'Width';
+
+  @override
+  String get model3dTreads => 'Treads';
+
+  @override
+  String get model3dSpin => 'Spin';
+
+  @override
+  String get model3dShoulder => 'Round edges';
+
+  @override
+  String get model3dSidewall => 'Sidewall size';
+
+  @override
+  String get model3dHub => 'Hub size';
+
+  @override
+  String get model3dColorBody => 'Body';
+
+  @override
+  String get model3dColorTread => 'Tread lines';
+
+  @override
+  String get model3dColorSidewall => 'Sidewall';
+
+  @override
+  String get model3dColorHub => 'Hub';
+
+  @override
+  String get model3dParts => 'Parts';
+
+  @override
+  String get model3dPartsNone => 'No parts yet. Group shapes to move them as one part.';
+
+  @override
+  String get model3dPartJoint => 'Joint';
+
+  @override
+  String get model3dPartParent => 'Attached to';
+
+  @override
+  String get model3dPartParentNone => 'Nothing';
+
+  @override
+  String model3dPartPose(String view) {
+    return 'Pose in “$view”';
+  }
+
+  @override
+  String get model3dLean => 'Lean';
+
+  @override
+  String get model3dGhost => 'Compare with';
+
+  @override
+  String get model3dGhostNone => 'Nothing';
+
+  @override
+  String get model3dPartVisible => 'Visible in this view';
 }

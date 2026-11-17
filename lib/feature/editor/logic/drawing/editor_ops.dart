@@ -5,8 +5,9 @@ import 'dart:ui';
 import '../../../../domain/models/drawing/drawing.dart';
 import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../../../domain/models/drawing/reference_image.dart';
-import '../../../../domain/models/editor/tool.dart';
+import '../../../../domain/models/model3d/view_angle.dart';
 import '../../../../domain/models/shapes/shape.dart';
+import '../../../../domain/models/editor/tool.dart';
 import '../../../../domain/services/geometry/geometry_utils.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
@@ -79,6 +80,15 @@ extension EditorStateOps on EditorState {
         ? null
         : valid.last;
     return copyWith(selected: chosen, selectedIndices: valid);
+  }
+
+  /// The 3D view the canvas previews, or null when the preview is off or the
+  /// active layer has no views to show.
+  ViewAngle? get previewAngle {
+    final index = previewView;
+    final views = layer.model?.views;
+    if (index == null || views == null || views.isEmpty) return null;
+    return views[index.clamp(0, views.length - 1).toInt()];
   }
 
   /// The picture on the active layer, if any.

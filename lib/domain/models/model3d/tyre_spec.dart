@@ -46,6 +46,9 @@ class TyreSpec extends Equatable {
   final double spin;
   final TyreStyle style;
 
+  /// The id that rigs and poses use for this tyre.
+  String get partId => 'tyre-$name';
+
   TyreSpec copyWith({
     String? name,
     Point3? centre,

@@ -56,6 +56,28 @@ extension LayerCommands on WorkspaceCommands {
         : null,
   );
 
+  AppCommand get layerMake3d => AppCommand(
+    label: context.l10n.layerMake3d,
+    icon: Icons.view_in_ar_outlined,
+    onPressed: state.layer.model == null
+        ? () => send(
+            Model3dCreated(
+              straight: context.l10n.model3dViewStraight,
+              left: context.l10n.model3dViewLeft,
+              right: context.l10n.model3dViewRight,
+            ),
+          )
+        : null,
+  );
+
+  AppCommand get layerRemove3d => AppCommand(
+    label: context.l10n.layerRemove3d,
+    icon: Icons.layers_outlined,
+    onPressed: state.layer.model != null
+        ? () => send(const Model3dRemoved())
+        : null,
+  );
+
   AppCommand get layerVisible => AppCommand(
     label: state.layer.visible
         ? context.l10n.layerHide

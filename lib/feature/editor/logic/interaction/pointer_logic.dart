@@ -6,6 +6,7 @@ import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../canvas/image_logic.dart';
+import '../drawing/editor_ops.dart';
 import '../drawing/draw_logic.dart';
 import 'paint_bucket_logic.dart';
 import 'select_logic.dart';
@@ -16,6 +17,8 @@ abstract class PointerLogic {
 
   static EditorState pressed(EditorState s, PointerPressed e) {
     final next = s.copyWith(cursor: e.point);
+    // Editing is paused while the 3D preview is showing.
+    if (s.previewAngle != null) return next;
     switch (s.tool) {
       case Tool.select:
         return SelectLogic.pressed(

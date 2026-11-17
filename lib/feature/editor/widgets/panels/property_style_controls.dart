@@ -1,11 +1,10 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
+import '../../../../common/widgets/color/color_swatch_button.dart';
 import '../../../../common/widgets/inputs/labeled_slider.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../bloc/editor_bloc.dart';
@@ -76,17 +75,7 @@ class PropertyStyleControls extends StatelessWidget {
         ),
         Text(label),
         const SizedBox(width: 6),
-        GestureDetector(
-          onTap: pick,
-          child: Container(
-            width: 28,
-            height: 20,
-            decoration: BoxDecoration(
-              color: Color(color),
-              border: Border.all(color: Colors.white54),
-            ),
-          ),
-        ),
+        ColorSwatchButton(color: Color(color), onTap: pick),
       ],
     ),
   );

@@ -30,7 +30,7 @@ class TyreProjection {
     spec.radius,
   );
 
-  String get _groupId => 'tyre-${spec.name}';
+  String get _groupId => spec.partId;
 
   String get _groupName => spec.groupName ?? spec.name;
 

@@ -1,5 +1,7 @@
 // Project imports:
 import '../../domain/models/model3d/model3d.dart';
+import '../../domain/models/model3d/part_pose.dart';
+import '../../domain/models/model3d/part_rig.dart';
 import '../../domain/models/model3d/point3.dart';
 import '../../domain/models/model3d/tyre_spec.dart';
 import '../../domain/models/model3d/tyre_style.dart';
@@ -20,11 +22,29 @@ Point3 point3FromJson(Object? json, Point3 fallback) {
 double _number(Object? value, double fallback) =>
     value is num ? value.toDouble() : fallback;
 
+Map<String, dynamic> poseToJson(PartPose pose) => {
+  'yaw': pose.yaw,
+  'pitch': pose.pitch,
+  'roll': pose.roll,
+};
+
+PartPose poseFromJson(Map<String, dynamic> json) => PartPose(
+  yaw: _number(json['yaw'], 0),
+  pitch: _number(json['pitch'], 0),
+  roll: _number(json['roll'], 0),
+);
+
 Map<String, dynamic> viewToJson(ViewAngle view) => {
   'name': view.name,
   'yaw': view.yaw,
   'pitch': view.pitch,
   if (view.scale != 1) 'scale': view.scale,
+  if (view.hidden.isNotEmpty) 'hidden': view.hidden.toList(),
+  if (view.poses.isNotEmpty)
+    'poses': {
+      for (final entry in view.poses.entries)
+        entry.key: poseToJson(entry.value),
+    },
 };
 
 ViewAngle viewFromJson(Map<String, dynamic> json) => ViewAngle(
@@ -32,6 +52,22 @@ ViewAngle viewFromJson(Map<String, dynamic> json) => ViewAngle(
   yaw: _number(json['yaw'], 0),
   pitch: _number(json['pitch'], 0),
   scale: _number(json['scale'], 1),
+  hidden: {for (final id in (json['hidden'] as List?) ?? const []) id as String},
+  poses: {
+    for (final entry
+        in ((json['poses'] as Map<String, dynamic>?) ?? const {}).entries)
+      entry.key: poseFromJson(entry.value as Map<String, dynamic>),
+  },
+);
+
+Map<String, dynamic> rigToJson(PartRig rig) => {
+  'pivot': point3ToJson(rig.pivot),
+  if (rig.parentId != null) 'parent': rig.parentId,
+};
+
+PartRig rigFromJson(Map<String, dynamic> json) => PartRig(
+  pivot: point3FromJson(json['pivot'], Point3.zero),
+  parentId: json['parent'] as String?,
 );
 
 Map<String, dynamic> tyreStyleToJson(TyreStyle style) => {
@@ -119,6 +155,11 @@ Map<String, dynamic> model3dToJson(Model3d model) => {
   'pivot': point3ToJson(model.pivot),
   'views': [for (final view in model.views) viewToJson(view)],
   'tyres': [for (final tyre in model.tyres) tyreToJson(tyre)],
+  if (model.rigs.isNotEmpty)
+    'rigs': {
+      for (final entry in model.rigs.entries)
+        entry.key: rigToJson(entry.value),
+    },
 };
 
 Model3d model3dFromJson(Map<String, dynamic> json) => Model3d(
@@ -131,4 +172,9 @@ Model3d model3dFromJson(Map<String, dynamic> json) => Model3d(
     for (final tyre in (json['tyres'] as List?) ?? const [])
       tyreFromJson(tyre as Map<String, dynamic>),
   ],
+  rigs: {
+    for (final entry
+        in ((json['rigs'] as Map<String, dynamic>?) ?? const {}).entries)
+      entry.key: rigFromJson(entry.value as Map<String, dynamic>),
+  },
 );
