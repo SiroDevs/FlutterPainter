@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../bloc/editor_bloc.dart';
+import '../../../logic/drawing/editor_ops.dart';
 import '../panel_resize_handle.dart';
 import 'model3d_panel.dart';
 

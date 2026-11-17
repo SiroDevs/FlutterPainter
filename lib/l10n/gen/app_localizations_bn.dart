@@ -256,7 +256,44 @@ class AppLocalizationsBn extends AppLocalizations {
   String get layerMoveDown => 'Move layer down';
 
   @override
+  String get layerReorderEnable => 'Enable layer reordering';
+
+  @override
+  String get layerReorderDisable => 'Stop reordering layers';
+
+  @override
   String get layerDelete => 'Delete layer';
+
+  @override
+  String layerItemCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+      zero: '0 items',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String layerContentCount(int itemCount, int groupCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      itemCount,
+      locale: localeName,
+      other: '$itemCount items',
+      one: '1 item',
+      zero: '0 items',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      groupCount,
+      locale: localeName,
+      other: '$groupCount groups',
+      one: '1 group',
+      zero: '0 groups',
+    );
+    return '$_temp0 · $_temp1';
+  }
 
   @override
   String get layerHide => 'Hide';
@@ -1264,6 +1301,12 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get model3dViewRight => 'Right';
+
+  @override
+  String get model3dTabModel => '3D';
+
+  @override
+  String get model3dTabImage => 'Image';
 
   @override
   String model3dTitle(String name) {

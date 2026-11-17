@@ -582,11 +582,35 @@ abstract class AppLocalizations {
   /// **'Move layer down'**
   String get layerMoveDown;
 
+  /// No description provided for @layerReorderEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable layer reordering'**
+  String get layerReorderEnable;
+
+  /// No description provided for @layerReorderDisable.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop reordering layers'**
+  String get layerReorderDisable;
+
   /// No description provided for @layerDelete.
   ///
   /// In en, this message translates to:
   /// **'Delete layer'**
   String get layerDelete;
+
+  /// No description provided for @layerItemCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{0 items} =1{1 item} other{{count} items}}'**
+  String layerItemCount(int count);
+
+  /// No description provided for @layerContentCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{itemCount, plural, =0{0 items} =1{1 item} other{{itemCount} items}} · {groupCount, plural, =0{0 groups} =1{1 group} other{{groupCount} groups}}'**
+  String layerContentCount(int itemCount, int groupCount);
 
   /// No description provided for @layerHide.
   ///
@@ -2363,6 +2387,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Right'**
   String get model3dViewRight;
+
+  /// No description provided for @model3dTabModel.
+  ///
+  /// In en, this message translates to:
+  /// **'3D'**
+  String get model3dTabModel;
+
+  /// No description provided for @model3dTabImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get model3dTabImage;
 
   /// No description provided for @model3dTitle.
   ///
