@@ -12,7 +12,10 @@ import 'common/constants/app_constants.dart';
 import 'core/di/injectable.dart';
 import 'core/theme/bloc/theme_bloc.dart';
 import 'core/theme/theme_data.dart';
+import 'domain/repos/prefs_repo.dart';
 import 'feature/settings/cubit/settings_cubit.dart';
+import 'feature/update/services/update_service.dart';
+import 'feature/update/widgets/update_prompt_host.dart';
 import 'feature/workspace/cubit/workspace_cubit.dart';
 import 'l10n/gen/app_localizations.dart';
 
@@ -39,10 +42,12 @@ class AppView extends StatefulWidget {
 class AppViewState extends State<AppView> {
   late final GoRouter _router =
       widget.router ?? AppRouter.create(initialPaths: widget.initialPaths);
+  final UpdateService _updateService = UpdateService();
 
   @override
   void dispose() {
     if (widget.router == null) _router.dispose();
+    _updateService.dispose();
     super.dispose();
   }
 
@@ -58,6 +63,12 @@ class AppViewState extends State<AppView> {
         builder: (context, themeMode) => MaterialApp.router(
           title: AppConstants.appTitle,
           routerConfig: _router,
+          builder: (context, child) => UpdatePromptHost(
+            service: _updateService,
+            preferences: getIt<PrefsRepo>(),
+            settings: getIt<SettingsCubit>(),
+            child: child ?? const SizedBox.shrink(),
+          ),
           locale: Locale(
             context.select<SettingsCubit, String>(
               (settings) => settings.state.languageCode,

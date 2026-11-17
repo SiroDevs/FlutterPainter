@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../commands/workspace_commands.dart';
-import 'tabs/file_tab.dart';
 import 'tabs/arrange_tab.dart';
+import 'tabs/file_tab.dart';
 import 'tabs/home_tab.dart';
 import 'tabs/image_tab.dart';
 import 'tabs/insert_tab.dart';

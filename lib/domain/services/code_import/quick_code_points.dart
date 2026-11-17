@@ -3,8 +3,8 @@ import 'dart:ui';
 
 // Project imports:
 import 'code_text.dart';
-import 'expression_parser.dart';
 import 'code_values.dart';
+import 'expression_parser.dart';
 
 class QuickCodeShapeData {
   const QuickCodeShapeData({required this.points, this.name, this.groupName});

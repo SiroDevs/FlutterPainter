@@ -1,11 +1,15 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// Project imports:
 import '../../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/drawing/paint_layer.dart';
-import '../../bloc/editor_bloc.dart';
 import '../../../workspace/clipboard/project_transfer_clipboard.dart';
+import '../../bloc/editor_bloc.dart';
 import 'tree_context_menu.dart';
 
 /// Runs context-menu actions for items, groups, and layers in the tree.

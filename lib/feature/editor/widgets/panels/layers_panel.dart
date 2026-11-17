@@ -1,7 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+// Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../bloc/editor_bloc.dart';

@@ -1,12 +1,16 @@
+// Dart imports:
 import 'dart:ui';
 
+// Package imports:
+import 'package:flutter_test/flutter_test.dart';
+
+// Project imports:
 import 'package:flutter_painter/domain/models/model3d/point3.dart';
 import 'package:flutter_painter/domain/models/model3d/view_angle.dart';
 import 'package:flutter_painter/domain/models/shapes/shape.dart';
 import 'package:flutter_painter/domain/models/shapes/shape_kind.dart';
 import 'package:flutter_painter/domain/services/projection/shape_projection.dart';
 import 'package:flutter_painter/domain/services/projection/view_transform.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 const _pivot = Point3(0, 0, 0);
 

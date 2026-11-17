@@ -996,6 +996,78 @@ abstract class AppLocalizations {
   /// **'Write each distinct colour once as a constant and refer to it from shapes.'**
   String get settingsColourConstantsHelp;
 
+  /// No description provided for @settingsUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates'**
+  String get settingsUpdates;
+
+  /// No description provided for @settingsAutoDownloadUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Download updates automatically'**
+  String get settingsAutoDownloadUpdates;
+
+  /// No description provided for @settingsAutoDownloadUpdatesHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates when Flutter Painter starts and while it is open. When enabled, download the matching installer and ask before installing it.'**
+  String get settingsAutoDownloadUpdatesHelp;
+
+  /// No description provided for @updateNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Flutter Painter update available'**
+  String get updateNotificationTitle;
+
+  /// No description provided for @updateOpenReleaseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open release page'**
+  String get updateOpenReleaseAction;
+
+  /// No description provided for @updateNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version} is available. Select to open its release page.'**
+  String updateNotificationBody(String version);
+
+  /// No description provided for @updateInstallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update ready to install'**
+  String get updateInstallTitle;
+
+  /// No description provided for @updateInstallBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Flutter Painter {version} has been downloaded. Save your work before installing it.'**
+  String updateInstallBody(String version);
+
+  /// No description provided for @updateInstallAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Install'**
+  String get updateInstallAction;
+
+  /// No description provided for @updateLaterAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get updateLaterAction;
+
+  /// No description provided for @updateDownloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The update could not be downloaded. Flutter Painter will try again later.'**
+  String get updateDownloadFailed;
+
+  /// No description provided for @updateInstallerFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Flutter Painter could not open the installer. Try opening the downloaded file from your system\'s app support folder.'**
+  String get updateInstallerFailed;
+
   /// No description provided for @settingsReset.
   ///
   /// In en, this message translates to:

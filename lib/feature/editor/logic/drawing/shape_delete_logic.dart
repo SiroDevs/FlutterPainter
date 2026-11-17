@@ -1,3 +1,4 @@
+// Project imports:
 import '../../bloc/editor_bloc.dart';
 import '../canvas/image_logic.dart';
 import 'editor_ops.dart';

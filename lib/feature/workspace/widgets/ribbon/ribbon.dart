@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
+import '../../../../core/utils/l10n_ext.dart';
 import '../../commands/commands_builder.dart';
 import '../../commands/workspace_commands.dart';
-import '../../../../core/utils/l10n_ext.dart';
 import 'command_icon_button.dart';
 import 'ribbon_tabs.dart';
 

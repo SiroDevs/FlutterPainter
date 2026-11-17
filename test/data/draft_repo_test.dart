@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:flutter_test/flutter_test.dart';
+
+// Project imports:
 import 'package:flutter_painter/data/sources/draft_file_source.dart';
 import 'package:flutter_painter/domain/models/drawing/draft.dart';
 import 'package:flutter_painter/domain/models/drawing/drawing.dart';

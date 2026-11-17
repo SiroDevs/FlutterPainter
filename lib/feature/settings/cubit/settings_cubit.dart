@@ -41,5 +41,8 @@ class SettingsCubit extends Cubit<AppSettings> {
   void setGroupMethodsPublic(bool v) =>
       update((s) => s.copyWith(groupMethodsPublic: v));
 
+  void setAutoDownloadUpdates(bool value) =>
+      update((settings) => settings.copyWith(autoDownloadUpdates: value));
+
   void resetToDefaults() => update((_) => const AppSettings());
 }

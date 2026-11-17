@@ -475,6 +475,49 @@ class AppLocalizationsTr extends AppLocalizations {
       'Write each distinct colour once as a constant and refer to it from shapes.';
 
   @override
+  String get settingsUpdates => 'Updates';
+
+  @override
+  String get settingsAutoDownloadUpdates => 'Download updates automatically';
+
+  @override
+  String get settingsAutoDownloadUpdatesHelp =>
+      'Check for updates when Flutter Painter starts and while it is open. When enabled, download the matching installer and ask before installing it.';
+
+  @override
+  String get updateNotificationTitle => 'Flutter Painter update available';
+
+  @override
+  String get updateOpenReleaseAction => 'Open release page';
+
+  @override
+  String updateNotificationBody(String version) {
+    return 'Version $version is available. Select to open its release page.';
+  }
+
+  @override
+  String get updateInstallTitle => 'Update ready to install';
+
+  @override
+  String updateInstallBody(String version) {
+    return 'Flutter Painter $version has been downloaded. Save your work before installing it.';
+  }
+
+  @override
+  String get updateInstallAction => 'Install';
+
+  @override
+  String get updateLaterAction => 'Later';
+
+  @override
+  String get updateDownloadFailed =>
+      'The update could not be downloaded. Flutter Painter will try again later.';
+
+  @override
+  String get updateInstallerFailed =>
+      'Flutter Painter could not open the installer. Try opening the downloaded file from your system\'s app support folder.';
+
+  @override
   String get settingsReset => 'Reset to defaults';
 
   @override

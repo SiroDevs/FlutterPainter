@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/bloc/theme_bloc.dart';
 import '../../../core/utils/l10n_ext.dart';
 import '../../../domain/models/editor/app_settings.dart';
+import '../../update/widgets/auto_update_setting.dart';
 import '../cubit/settings_cubit.dart';
 import '../models/supported_language.dart';
 import 'group_methods_setting.dart';
@@ -42,6 +43,8 @@ class GeneralSettingsPage extends StatelessWidget {
               value: settings.colorConstants,
               onChanged: context.read<SettingsCubit>().setColorConstants,
             ),
+            _Section(context.l10n.settingsUpdates),
+            AutoUpdateSetting(settings: settings),
           ],
         ),
       ),

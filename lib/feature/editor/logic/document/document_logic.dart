@@ -1,8 +1,8 @@
 // Project imports:
 import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../bloc/editor_bloc.dart';
-import '../drawing/editor_ops.dart';
 import '../canvas/view_logic.dart';
+import '../drawing/editor_ops.dart';
 
 /// Whole-document operations: name, canvas size, and saving.
 abstract class DocumentLogic {

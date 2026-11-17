@@ -1,5 +1,10 @@
+// Dart imports:
 import 'dart:ui';
 
+// Package imports:
+import 'package:flutter_test/flutter_test.dart';
+
+// Project imports:
 import 'package:flutter_painter/data/mappers/drawing_mapper.dart';
 import 'package:flutter_painter/domain/models/drawing/drawing.dart';
 import 'package:flutter_painter/domain/models/drawing/paint_layer.dart';
@@ -11,7 +16,6 @@ import 'package:flutter_painter/domain/models/shapes/shape.dart';
 import 'package:flutter_painter/domain/models/shapes/shape_kind.dart';
 import 'package:flutter_painter/domain/services/code_export/dart_exporter.dart';
 import 'package:flutter_painter/domain/services/projection/model_baker.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 final _model = Model3d(
   pivot: const Point3(61.35, 166, 0),

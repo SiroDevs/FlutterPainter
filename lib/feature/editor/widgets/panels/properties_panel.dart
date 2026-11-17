@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../common/widgets/inputs/labeled_slider.dart';
 import '../../../../core/utils/l10n_ext.dart';
+import '../../../../domain/models/editor/tool.dart';
 import '../../../../domain/models/shapes/shape.dart';
 import '../../../../domain/models/shapes/shape_kind.dart';
-import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../logic/drawing/editor_ops.dart';
 import 'property_selection_info.dart';

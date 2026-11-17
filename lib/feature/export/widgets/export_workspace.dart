@@ -1,13 +1,15 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../core/utils/l10n_ext.dart';
 import '../cubit/export_cubit.dart';
+import 'activity_bar.dart';
 import 'code_editor.dart';
 import 'editor_tabs.dart';
-import 'activity_bar.dart';
 import 'explorer_sidebar.dart';
 import 'export_status_bar.dart';
 import 'export_top_bar.dart';
