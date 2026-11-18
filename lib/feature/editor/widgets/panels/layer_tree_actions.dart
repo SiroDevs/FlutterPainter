@@ -35,6 +35,8 @@ abstract class LayerTreeActions {
         TreeContextAction.visibility,
         shape.visible ? context.l10n.layerHide : context.l10n.layerShow,
       ),
+      if (shape.groupId != null)
+        (TreeContextAction.ungroup, context.l10n.shapeUngroup),
       (TreeContextAction.delete, context.l10n.shapeDelete),
     ]);
     if (!context.mounted || action == null) return;
@@ -58,6 +60,8 @@ abstract class LayerTreeActions {
         }
       case TreeContextAction.visibility:
         bloc.add(ShapeVisibilityToggled(layerIndex, index));
+      case TreeContextAction.ungroup:
+        bloc.add(ShapeUngroupedAt(layerIndex, index));
       case TreeContextAction.delete:
         bloc.add(ShapeDeletedAt(layerIndex, index));
       case TreeContextAction.moveUp || TreeContextAction.moveDown:
@@ -114,6 +118,8 @@ abstract class LayerTreeActions {
         bloc.add(
           ShapeVisibilityToggled(layerIndex, indices.first, includeGroup: true),
         );
+      case TreeContextAction.ungroup:
+        break;
       case TreeContextAction.delete:
         bloc.add(ShapeDeletedAt(layerIndex, indices.first, includeGroup: true));
       case TreeContextAction.moveUp || TreeContextAction.moveDown:
@@ -162,6 +168,8 @@ abstract class LayerTreeActions {
         }
       case TreeContextAction.visibility:
         bloc.add(LayerVisibilityToggled(layerIndex));
+      case TreeContextAction.ungroup:
+        break;
       case TreeContextAction.moveUp:
         bloc.add(LayerMoved(layerIndex, 1));
       case TreeContextAction.moveDown:

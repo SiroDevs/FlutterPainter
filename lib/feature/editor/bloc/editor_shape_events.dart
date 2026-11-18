@@ -31,6 +31,13 @@ class ShapesUngrouped extends EditorEvent {
   const ShapesUngrouped();
 }
 
+class ShapeUngroupedAt extends EditorEvent {
+  const ShapeUngroupedAt(this.layer, this.index);
+
+  final int layer;
+  final int index;
+}
+
 class SelectionScaled extends EditorEvent {
   const SelectionScaled(this.factor);
 

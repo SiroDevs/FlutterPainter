@@ -10,6 +10,31 @@ abstract class GroupLogic {
   static EditorState group(EditorState state, String Function(int) nameFor) {
     final indices = state.validSelectedIndices;
     if (indices.length < 2) return state;
+    final selectedGroupIds = {
+      for (final index in indices)
+        if (state.layer.shapes[index].groupId case final String groupId)
+          groupId,
+    };
+    final ungroupedIndices = [
+      for (final index in indices)
+        if (state.layer.shapes[index].groupId == null) index,
+    ];
+    if (selectedGroupIds.length == 1 && ungroupedIndices.isNotEmpty) {
+      final groupId = selectedGroupIds.single;
+      final groupName = state.layer.shapes
+          .firstWhere((shape) => shape.groupId == groupId)
+          .groupName;
+      return state
+          .withShapeChanges({
+            for (final index in ungroupedIndices)
+              index: state.layer.shapes[index].copyWith(
+                groupId: groupId,
+                groupName: groupName,
+              ),
+          })
+          .selectIndices(indices)
+          .commit();
+    }
     final currentGroups = {
       for (final index in indices) state.layer.shapes[index].groupId,
     };
@@ -38,6 +63,9 @@ abstract class GroupLogic {
   static EditorState ungroup(EditorState state) {
     final indices = state.validSelectedIndices;
     if (indices.isEmpty) return state;
+    if (indices.length == 1) {
+      return ungroupItem(state, state.layerIndex, indices.single);
+    }
     final ids = {
       for (final index in indices)
         if (state.layer.shapes[index].groupId != null)
@@ -53,6 +81,26 @@ abstract class GroupLogic {
           ),
     };
     return state.withShapeChanges(changes).selectIndices(indices).commit();
+  }
+
+  static EditorState ungroupItem(EditorState state, int layerIndex, int index) {
+    final layers = state.drawing.layers;
+    if (layerIndex < 0 || layerIndex >= layers.length) return state;
+    final layer = layers[layerIndex];
+    if (index < 0 || index >= layer.shapes.length) return state;
+    final shape = layer.shapes[index];
+    if (shape.groupId == null) return state;
+
+    final updatedLayer = layer.copyWith(
+      shapes: replacedAt(
+        layer.shapes,
+        index,
+        shape.copyWith(groupId: null, groupName: null),
+      ),
+    );
+    var next = state.withLayers(replacedAt(layers, layerIndex, updatedLayer));
+    if (layerIndex == state.layerIndex) next = next.selectIndices([index]);
+    return next.commit();
   }
 
   static EditorState rename(

@@ -85,6 +85,7 @@ class LayerItemTree extends StatelessWidget {
     return GroupTreeTile(
       key: ValueKey('group-${state.tabId}-$layerIndex-${entry.groupId}'),
       name: entry.name,
+      itemCount: entry.indices.length,
       tooltip: context.l10n.layerEditGroup,
       selected: selected,
       visible: visible,

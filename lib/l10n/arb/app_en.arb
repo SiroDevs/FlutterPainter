@@ -89,7 +89,28 @@
   "layerRename": "Rename layer",
   "layerMoveUp": "Move layer up",
   "layerMoveDown": "Move layer down",
+  "layerReorderEnable": "Enable layer reordering",
+  "layerReorderDisable": "Stop reordering layers",
   "layerDelete": "Delete layer",
+  "layerItemCount": "{count, plural, =0{0 items} =1{1 item} other{{count} items}}",
+  "@layerItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "layerContentCount": "{itemCount, plural, =0{0 items} =1{1 item} other{{itemCount} items}} · {groupCount, plural, =0{0 groups} =1{1 group} other{{groupCount} groups}}",
+  "@layerContentCount": {
+    "placeholders": {
+      "itemCount": {
+        "type": "int"
+      },
+      "groupCount": {
+        "type": "int"
+      }
+    }
+  },
   "layerHide": "Hide",
   "layerShow": "Show",
   "layerGroup": "Group",

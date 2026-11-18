@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -79,6 +80,8 @@ class AppViewState extends State<AppView> {
           darkTheme: AppTheme.darkTheme(),
           localizationsDelegates: const [
             AppLocalizations.delegate,
+            _HausaMaterialLocalizationsDelegate(),
+            _HausaCupertinoLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
@@ -89,4 +92,36 @@ class AppViewState extends State<AppView> {
       ),
     );
   }
+}
+
+/// Loads English Material labels for Hausa locales.
+class _HausaMaterialLocalizationsDelegate
+    extends LocalizationsDelegate<MaterialLocalizations> {
+  const _HausaMaterialLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == 'ha';
+
+  @override
+  Future<MaterialLocalizations> load(Locale locale) =>
+      GlobalMaterialLocalizations.delegate.load(const Locale('en'));
+
+  @override
+  bool shouldReload(_HausaMaterialLocalizationsDelegate old) => false;
+}
+
+/// Loads English Cupertino labels for Hausa locales.
+class _HausaCupertinoLocalizationsDelegate
+    extends LocalizationsDelegate<CupertinoLocalizations> {
+  const _HausaCupertinoLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == 'ha';
+
+  @override
+  Future<CupertinoLocalizations> load(Locale locale) =>
+      GlobalCupertinoLocalizations.delegate.load(const Locale('en'));
+
+  @override
+  bool shouldReload(_HausaCupertinoLocalizationsDelegate old) => false;
 }
