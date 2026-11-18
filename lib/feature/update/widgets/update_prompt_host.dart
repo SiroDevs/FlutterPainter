@@ -84,7 +84,7 @@ class _UpdatePromptHostState extends State<UpdatePromptHost> {
       await _initialization;
       final update = await widget.service.checkForUpdate();
       if (update == null || !mounted) return;
-      if (widget.settings.state.autoDownloadUpdates) {
+      if (widget.settings.state.autoDownloadUpdates && update.sha256 != null) {
         await _downloadAndPrompt(update);
       } else {
         await _notifyIfNew(update);
