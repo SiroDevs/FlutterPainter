@@ -56,17 +56,19 @@ jobs:
             echo "::error::Expected x.y.z+build-number in pubspec.yaml (got '$PUBSPEC_VERSION')"
             exit 1
           fi
-          RELEASE_VERSION="${VERSION}+${BUILD_NUMBER}"
+          RELEASE_VERSION="${VERSION}.${BUILD_NUMBER}"
 
-          # Highest published version/build pair; old tags without build numbers count as build 0.
+          # Normalize legacy plus-separated tags to the dotted release format.
           LATEST=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --exclude-drafts \
                      --json tagName --jq '.[].tagName' | sed 's/^v//' \
-                     | awk '/^[0-9]+\.[0-9]+\.[0-9]+(\+[0-9]+)?$/ { print }' \
+                     | awk '/^[0-9]+\.[0-9]+\.[0-9]+([.+][0-9]+)?$/ { gsub(/\+/, "."); print }' \
                      | sort -V | tail -n1)
-          LATEST_VERSION="${LATEST%%+*}"
           LATEST_BUILD_NUMBER=0
-          if [[ "$LATEST" == *+* ]]; then
-            LATEST_BUILD_NUMBER="${LATEST##*+}"
+          if [[ "$LATEST" =~ ^([0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)$ ]]; then
+            LATEST_VERSION="${BASH_REMATCH[1]}"
+            LATEST_BUILD_NUMBER="${BASH_REMATCH[2]}"
+          else
+            LATEST_VERSION="$LATEST"
           fi
 
           SHOULD_RELEASE=false
