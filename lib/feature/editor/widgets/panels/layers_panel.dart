@@ -14,8 +14,15 @@ import 'layer_tree_actions.dart';
 import 'layers_panel_header.dart';
 
 /// Lists layers top first and lets the active layer receive new shapes.
-class LayersPanel extends StatelessWidget {
+class LayersPanel extends StatefulWidget {
   const LayersPanel({super.key});
+
+  @override
+  State<LayersPanel> createState() => _LayersPanelState();
+}
+
+class _LayersPanelState extends State<LayersPanel> {
+  bool _reorderEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +39,13 @@ class LayersPanel extends StatelessWidget {
         final storageKeys = _storageKeys(state.tabId, layers);
         return Column(
           children: [
-            LayersPanelHeader(bloc: bloc, state: state),
+            LayersPanelHeader(
+              bloc: bloc,
+              state: state,
+              reorderEnabled: _reorderEnabled,
+              onReorderToggled: () =>
+                  setState(() => _reorderEnabled = !_reorderEnabled),
+            ),
             ReorderableListView.builder(
               key: PageStorageKey<String>('layer-list-${state.tabId}'),
               itemCount: layers.length,
@@ -88,6 +101,7 @@ class LayersPanel extends StatelessWidget {
                       index,
                       row,
                       isActive,
+                      _reorderEnabled,
                     ),
                     children: [
                       LayerItemTree(
@@ -113,57 +127,76 @@ class LayersPanel extends StatelessWidget {
     int index,
     int row,
     bool isActive,
-  ) => Row(
-    children: [
-      ReorderableDragStartListener(
-        index: row,
-        child: Tooltip(
-          message: context.l10n.layerDragReorder,
-          child: const Icon(Icons.drag_handle, size: 18),
-        ),
-      ),
-      const SizedBox(width: 4),
-      Expanded(
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            if (index != bloc.state.layerIndex) bloc.add(LayerActivated(index));
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  layer.name,
-                  style: TextStyle(
-                    color: isActive
-                        ? Theme.of(context).colorScheme.primary
-                        : null,
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (layer.image != null)
-                      const Icon(
-                        Icons.image_outlined,
-                        size: 14,
-                      ).padding(right: 6),
-                    Text(
-                      '${layer.shapes.length}',
-                      style: Theme.of(context).textTheme.bodySmall,
+    bool reorderEnabled,
+  ) {
+    final groupCount = layer.shapes
+        .map((shape) => shape.groupId)
+        .whereType<String>()
+        .toSet()
+        .length;
+    return Row(
+      children: [
+        if (reorderEnabled) ...[
+          ReorderableDragStartListener(
+            index: row,
+            child: Tooltip(
+              message: context.l10n.layerDragReorder,
+              child: const Icon(Icons.drag_handle, size: 18),
+            ),
+          ),
+          const SizedBox(width: 4),
+        ],
+        Expanded(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              if (index != bloc.state.layerIndex)
+                bloc.add(LayerActivated(index));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    layer.name,
+                    style: TextStyle(
+                      color: isActive
+                          ? Theme.of(context).colorScheme.primary
+                          : null,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  if (layer.shapes.isNotEmpty)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (layer.image != null)
+                          const Icon(
+                            Icons.image_outlined,
+                            size: 14,
+                          ).padding(right: 6),
+                        Flexible(
+                          child: Text(
+                            context.l10n.layerContentCount(
+                              layer.shapes.length,
+                              groupCount,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 
   List<String> _storageKeys(String tabId, List<PaintLayer> layers) {
     final occurrences = <String, int>{};

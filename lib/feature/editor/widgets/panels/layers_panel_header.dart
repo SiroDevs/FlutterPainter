@@ -12,10 +12,18 @@ import '../../logic/drawing/editor_ops.dart';
 
 /// Displays the common layer controls above the layer list.
 class LayersPanelHeader extends StatelessWidget {
-  const LayersPanelHeader({super.key, required this.bloc, required this.state});
+  const LayersPanelHeader({
+    super.key,
+    required this.bloc,
+    required this.state,
+    required this.reorderEnabled,
+    required this.onReorderToggled,
+  });
 
   final EditorBloc bloc;
   final EditorState state;
+  final bool reorderEnabled;
+  final VoidCallback onReorderToggled;
 
   Future<void> _rename(BuildContext context) async {
     final name = await promptText(
@@ -47,17 +55,16 @@ class LayersPanelHeader extends StatelessWidget {
           context.l10n.layerRename,
           () => _rename(context),
         ),
-        _button(
-          Icons.arrow_upward,
-          context.l10n.layerMoveUp,
-          () => bloc.add(LayerMoved(active, 1)),
-          enabled: active < layers.length - 1,
-        ),
-        _button(
-          Icons.arrow_downward,
-          context.l10n.layerMoveDown,
-          () => bloc.add(LayerMoved(active, -1)),
-          enabled: active > 0,
+        IconButton(
+          tooltip: reorderEnabled
+              ? context.l10n.layerReorderDisable
+              : context.l10n.layerReorderEnable,
+          iconSize: 18,
+          visualDensity: VisualDensity.compact,
+          isSelected: reorderEnabled,
+          icon: const Icon(Icons.drag_handle),
+          selectedIcon: const Icon(Icons.drag_handle),
+          onPressed: onReorderToggled,
         ),
         _button(
           Icons.delete_outline,
