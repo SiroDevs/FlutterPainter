@@ -9,6 +9,7 @@ import 'package:styled_widget/styled_widget.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../bloc/editor_bloc.dart';
+import '../../logic/drawing/editor_ops.dart';
 import 'layer_item_tree.dart';
 import 'layer_tree_actions.dart';
 import 'layers_panel_header.dart';
