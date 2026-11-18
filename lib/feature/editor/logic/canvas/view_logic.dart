@@ -19,14 +19,18 @@ abstract class ViewLogic {
     final v = s.view;
     final next = (v.zoom * factor).clamp(0.5, 60.0).toDouble();
     return s.copyWith(
-      view: v.copyWith(pan: focal - (focal - v.pan) * (next / v.zoom), zoom: next),
+      view: v.copyWith(
+        pan: focal - (focal - v.pan) * (next / v.zoom),
+        zoom: next,
+      ),
     );
   }
 
   /// Called whenever the canvas area changes size.
   static EditorState viewport(EditorState s, Size size) {
+    if (!size.width.isFinite || !size.height.isFinite) return s;
     var v = s.view.copyWith(viewport: size);
-    if (v.needsFit) v = fitted(v, s.drawing);
+    if (v.needsFit || s.view.viewport.isEmpty) v = fitted(v, s.drawing);
     return s.copyWith(view: v);
   }
 
@@ -38,7 +42,10 @@ abstract class ViewLogic {
   static ViewSettings fitted(ViewSettings v, Drawing d, {bool force = false}) {
     if (v.viewport.isEmpty) return force ? v.copyWith(needsFit: true) : v;
     final zoom = math
-        .min((v.viewport.width - 60) / d.width, (v.viewport.height - 60) / d.height)
+        .min(
+          (v.viewport.width - 60) / d.width,
+          (v.viewport.height - 60) / d.height,
+        )
         .clamp(0.5, 60.0)
         .toDouble();
     return v.copyWith(
