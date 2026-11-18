@@ -10,6 +10,31 @@ abstract class GroupLogic {
   static EditorState group(EditorState state, String Function(int) nameFor) {
     final indices = state.validSelectedIndices;
     if (indices.length < 2) return state;
+    final selectedGroupIds = {
+      for (final index in indices)
+        if (state.layer.shapes[index].groupId case final String groupId)
+          groupId,
+    };
+    final ungroupedIndices = [
+      for (final index in indices)
+        if (state.layer.shapes[index].groupId == null) index,
+    ];
+    if (selectedGroupIds.length == 1 && ungroupedIndices.isNotEmpty) {
+      final groupId = selectedGroupIds.single;
+      final groupName = state.layer.shapes
+          .firstWhere((shape) => shape.groupId == groupId)
+          .groupName;
+      return state
+          .withShapeChanges({
+            for (final index in ungroupedIndices)
+              index: state.layer.shapes[index].copyWith(
+                groupId: groupId,
+                groupName: groupName,
+              ),
+          })
+          .selectIndices(indices)
+          .commit();
+    }
     final currentGroups = {
       for (final index in indices) state.layer.shapes[index].groupId,
     };
