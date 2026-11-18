@@ -12,6 +12,12 @@ import '../models/update_release.dart';
 import 'update_asset_selector.dart';
 import 'update_notification_service.dart';
 
+typedef _ReleaseVersion = ({
+  String version,
+  int buildNumber,
+  String assetVersion,
+});
+
 /// Checks GitHub releases and downloads verified installers.
 class UpdateService {
   static final Uri _latestReleaseUri = Uri.https(
@@ -32,13 +38,15 @@ class UpdateService {
   /// Returns a newer release when this system has a published installer.
   Future<UpdateRelease?> checkForUpdate() async {
     final release = await _getJson(_latestReleaseUri);
-    final version = _releaseVersion(release['tag_name'] as String?);
-    if (version == null || !await _isNewer(version)) return null;
+    final releaseVersion = _releaseVersion(release['tag_name'] as String?);
+    if (releaseVersion == null || !await _isNewer(releaseVersion)) return null;
 
     final assets = (release['assets'] as List<dynamic>? ?? [])
         .whereType<Map<String, dynamic>>()
         .toList();
-    final assetName = await UpdateAssetSelector.select(version);
+    final assetName = await UpdateAssetSelector.select(
+      releaseVersion.assetVersion,
+    );
     if (assetName == null) return null;
     final asset = _findAsset(assets, assetName);
     final checksums = _findAsset(assets, 'SHA256SUMS.txt');
@@ -57,7 +65,7 @@ class UpdateService {
       return null;
     }
     return UpdateRelease(
-      version: version,
+      version: releaseVersion.assetVersion,
       releaseUrl:
           release['html_url'] as String? ??
           'https://github.com/SiroDevs/FlutterPainter/releases',
@@ -119,10 +127,7 @@ class UpdateService {
         as Map<String, dynamic>;
   }
 
-  Future<String?> _checksumFor(
-    Uri checksumUri,
-    String assetName,
-  ) async {
+  Future<String?> _checksumFor(Uri checksumUri, String assetName) async {
     if (checksumUri.scheme != 'https' || checksumUri.host != 'github.com') {
       return null;
     }
@@ -152,18 +157,25 @@ class UpdateService {
     return null;
   }
 
-  String? _releaseVersion(String? tag) {
+  _ReleaseVersion? _releaseVersion(String? tag) {
     if (tag == null) return null;
-    final match = RegExp(r'^v?(\d+\.\d+\.\d+)$').firstMatch(tag);
-    return match?.group(1);
+    final match = RegExp(r'^v?(\d+\.\d+\.\d+)(?:\+(\d+))?$').firstMatch(tag);
+    if (match == null) return null;
+    final buildNumber = int.tryParse(match.group(2) ?? '0');
+    if (buildNumber == null) return null;
+    return (
+      version: match.group(1)!,
+      buildNumber: buildNumber,
+      assetVersion: tag.replaceFirst(RegExp(r'^v'), ''),
+    );
   }
 
-  Future<bool> _isNewer(String version) async {
-    final installed = (await PackageInfo.fromPlatform()).version
-        .split('+')
-        .first;
+  Future<bool> _isNewer(_ReleaseVersion release) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    final installed = packageInfo.version.split('+').first;
+    final installedBuildNumber = int.tryParse(packageInfo.buildNumber) ?? 0;
     final installedParts = installed.split('.').map(int.tryParse).toList();
-    final releaseParts = version.split('.').map(int.tryParse).toList();
+    final releaseParts = release.version.split('.').map(int.tryParse).toList();
     if (installedParts.length != 3 ||
         releaseParts.length != 3 ||
         installedParts.contains(null) ||
@@ -174,6 +186,6 @@ class UpdateService {
       final comparison = releaseParts[index]!.compareTo(installedParts[index]!);
       if (comparison != 0) return comparison > 0;
     }
-    return false;
+    return release.buildNumber > installedBuildNumber;
   }
 }

@@ -34,6 +34,8 @@ jobs:
     outputs:
       should_release: ${{ steps.compare.outputs.should_release }}
       version: ${{ steps.compare.outputs.version }}
+      build_number: ${{ steps.compare.outputs.build_number }}
+      release_version: ${{ steps.compare.outputs.release_version }}
 
     steps:
       - name: Checkout
@@ -46,35 +48,49 @@ jobs:
         run: |
           set -euo pipefail
 
-          # 1.0.3+4 -> 1.0.3
-          VERSION=$(awk '/^version:/ {print $2; exit}' pubspec.yaml | tr -d "\"'\r")
-          VERSION="${VERSION%%+*}"
-          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Could not parse a x.y.z version from pubspec.yaml (got '$VERSION')"
+          PUBSPEC_VERSION=$(awk '/^version:/ {print $2; exit}' pubspec.yaml | tr -d "\"'\r")
+          if [[ "$PUBSPEC_VERSION" =~ ^([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)$ ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+            BUILD_NUMBER="${BASH_REMATCH[2]}"
+          else
+            echo "::error::Expected x.y.z+build-number in pubspec.yaml (got '$PUBSPEC_VERSION')"
             exit 1
           fi
+          RELEASE_VERSION="${VERSION}+${BUILD_NUMBER}"
 
-          # Highest version among all published (non-draft) releases, "v" prefix stripped
+          # Highest published version/build pair; old tags without build numbers count as build 0.
           LATEST=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --exclude-drafts \
-                     --json tagName --jq '.[].tagName' | sed 's/^v//' | sort -V | tail -n1)
+                     --json tagName --jq '.[].tagName' | sed 's/^v//' \
+                     | awk '/^[0-9]+\.[0-9]+\.[0-9]+(\+[0-9]+)?$/ { print }' \
+                     | sort -V | tail -n1)
+          LATEST_VERSION="${LATEST%%+*}"
+          LATEST_BUILD_NUMBER=0
+          if [[ "$LATEST" == *+* ]]; then
+            LATEST_BUILD_NUMBER="${LATEST##*+}"
+          fi
 
           SHOULD_RELEASE=false
           if [ -z "$LATEST" ]; then
             SHOULD_RELEASE=true
-          elif [ "$VERSION" != "$LATEST" ] && \
-               [ "$(printf '%s\n%s\n' "$LATEST" "$VERSION" | sort -V | tail -n1)" = "$VERSION" ]; then
+          elif [ "$VERSION" != "$LATEST_VERSION" ] && \
+               [ "$(printf '%s\n%s\n' "$LATEST_VERSION" "$VERSION" | sort -V | tail -n1)" = "$VERSION" ]; then
+            SHOULD_RELEASE=true
+          elif [ "$VERSION" = "$LATEST_VERSION" ] && \
+               [ "$BUILD_NUMBER" -gt "$LATEST_BUILD_NUMBER" ]; then
             SHOULD_RELEASE=true
           fi
 
           echo "version=$VERSION"                 >> "$GITHUB_OUTPUT"
+          echo "build_number=$BUILD_NUMBER"       >> "$GITHUB_OUTPUT"
+          echo "release_version=$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
           echo "should_release=$SHOULD_RELEASE"   >> "$GITHUB_OUTPUT"
 
           {
             echo "### Version check"
-            echo "- pubspec.yaml: \`$VERSION\`"
+            echo "- pubspec.yaml: \`$RELEASE_VERSION\`"
             echo "- Latest release: \`${LATEST:-none}\`"
             if [ "$SHOULD_RELEASE" = true ]; then
-              echo "- Result: ✅ newer, building and releasing **v$VERSION**"
+              echo "- Result: ✅ newer, building and releasing **v$RELEASE_VERSION**"
             else
               echo "- Result: ⏭️ not newer, skipping build and release"
             fi
@@ -96,6 +112,8 @@ jobs:
     env:
       CL: /D_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS
       VERSION: ${{ needs.check-version.outputs.version }}
+      BUILD_NUMBER: ${{ needs.check-version.outputs.build_number }}
+      RELEASE_VERSION: ${{ needs.check-version.outputs.release_version }}
       RELEASE_DIR: build/windows/x64/runner/Release
 
     steps:
@@ -211,6 +229,7 @@ jobs:
 
           & $iscc `
             "/DMyAppVersion=$env:VERSION" `
+            "/DMyAppBuildNumber=$env:BUILD_NUMBER" `
             "/DSourceDir=$source" `
             "/DRepoRoot=$env:GITHUB_WORKSPACE" `
             "/DOutputDir=$output" `
@@ -226,7 +245,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: unsigned-installer
-          path: dist/${{ env.APP_NAME }}_${{ env.VERSION }}_x64.exe
+          path: dist/${{ env.APP_NAME }}_${{ env.RELEASE_VERSION }}_x64.exe
           retention-days: 1
 
       - name: Sign installer (SignPath)
@@ -246,7 +265,7 @@ jobs:
         if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
         shell: pwsh
         run: |
-          $name = "$($env:APP_NAME)_$($env:VERSION)_x64.exe"
+          $name = "$($env:APP_NAME)_$($env:RELEASE_VERSION)_x64.exe"
           if (-not (Test-Path "signed/installer/$name")) { Get-ChildItem signed -Recurse; throw "Signed installer missing" }
           Copy-Item "signed/installer/$name" "dist/$name" -Force
           Get-AuthenticodeSignature "dist/$name" | Format-List
@@ -256,7 +275,7 @@ jobs:
         run: |
           Compress-Archive `
             -Path "$env:RELEASE_DIR/*" `
-            -DestinationPath "dist/$($env:APP_NAME)_$($env:VERSION)_x64.zip"
+            -DestinationPath "dist/$($env:APP_NAME)_$($env:RELEASE_VERSION)_x64.zip"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -275,7 +294,7 @@ jobs:
     if: needs.check-version.outputs.should_release == 'true'
     runs-on: ${{ matrix.runner }}
     env:
-      VERSION: ${{ needs.check-version.outputs.version }}
+      RELEASE_VERSION: ${{ needs.check-version.outputs.release_version }}
 
     strategy:
       fail-fast: false
@@ -350,15 +369,15 @@ jobs:
           RPM=$(find dist -type f -name "*.rpm" | head -1)
           [ -n "$DEB" ] || { echo "DEB not produced"; find dist -type f || true; exit 1; }
           [ -n "$RPM" ] || { echo "RPM not produced"; find dist -type f || true; exit 1; }
-          cp "$DEB" "out/${APP_NAME}_${VERSION}_${{ matrix.arch }}.deb"
-          cp "$RPM" "out/${APP_NAME}_${VERSION}_${{ matrix.arch }}.rpm"
+          cp "$DEB" "out/${APP_NAME}_${RELEASE_VERSION}_${{ matrix.arch }}.deb"
+          cp "$RPM" "out/${APP_NAME}_${RELEASE_VERSION}_${{ matrix.arch }}.rpm"
 
       - name: Build tar.gz
         run: |
           BUNDLE="build/linux/${{ matrix.arch }}/release/bundle"
           mkdir -p stage
           cp -r "$BUNDLE" "stage/${APP_NAME}"
-          tar -czf "out/${APP_NAME}_${VERSION}_${{ matrix.arch }}.tar.gz" -C stage "${APP_NAME}"
+          tar -czf "out/${APP_NAME}_${RELEASE_VERSION}_${{ matrix.arch }}.tar.gz" -C stage "${APP_NAME}"
           ls -lh out
 
       - name: Upload artifacts
@@ -378,7 +397,7 @@ jobs:
     if: needs.check-version.outputs.should_release == 'true'
     runs-on: ${{ matrix.runner }}
     env:
-      VERSION: ${{ needs.check-version.outputs.version }}
+      RELEASE_VERSION: ${{ needs.check-version.outputs.release_version }}
 
     strategy:
       fail-fast: false
@@ -421,7 +440,7 @@ jobs:
         uses: ./.github/actions/macos-package
         with:
           arch: ${{ matrix.arch }}
-          version: ${{ env.VERSION }}
+          version: ${{ env.RELEASE_VERSION }}
           app-name: ${{ env.APP_NAME }}
           certificate-base64: ${{ secrets.MACOS_CERTIFICATE }}
           certificate-password: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
@@ -476,7 +495,7 @@ jobs:
       - name: Build release notes from the last merged PR
         env:
           GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ needs.check-version.outputs.version }}
+          RELEASE_VERSION: ${{ needs.check-version.outputs.release_version }}
         run: |
           set -euo pipefail
 
@@ -491,13 +510,13 @@ jobs:
           fi
 
           {
-            echo "## v$VERSION"
+            echo "## v$RELEASE_VERSION"
             echo
             if [ -n "${PR:-}" ]; then
               gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json title,body,url \
                 --jq '"### " + .title + "\n\n" + (.body // "") + "\n\n" + .url'
             else
-              echo "Release v$VERSION"
+              echo "Release v$RELEASE_VERSION"
             fi
           } > release-notes.md
 
@@ -506,8 +525,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ needs.check-version.outputs.version }}
+          tag_name: v${{ needs.check-version.outputs.release_version }}
           target_commitish: ${{ github.sha }}
-          name: v${{ needs.check-version.outputs.version }}
+          name: v${{ needs.check-version.outputs.release_version }}
           body_path: release-notes.md
           files: artifacts/*
