@@ -1,0 +1,27 @@
+name: Retry failed release build
+
+on:
+  workflow_run:
+    workflows: ["Build & Release FlutterPainter"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  actions: write
+
+jobs:
+  retry-failed-jobs:
+    name: Retry failed jobs once
+    if: >
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.run_attempt == 1
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Re-run failed jobs and dependents
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          gh api --method POST \
+            "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID/rerun-failed-jobs"
