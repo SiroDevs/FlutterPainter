@@ -27,98 +27,110 @@ class _LayersPanelState extends State<LayersPanel> {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<EditorBloc>();
-    return BlocBuilder<EditorBloc, EditorState>(
-      buildWhen: (before, after) =>
-          before.layerIndex != after.layerIndex ||
-          before.selected != after.selected ||
-          before.selectedIndices != after.selectedIndices ||
-          before.drawing.layers != after.drawing.layers,
-      builder: (context, state) {
-        final layers = state.drawing.layers;
-        final active = state.layerIndex;
-        final storageKeys = _storageKeys(state.tabId, layers);
-        return Column(
-          children: [
-            LayersPanelHeader(
-              bloc: bloc,
-              state: state,
-              reorderEnabled: _reorderEnabled,
-              onReorderToggled: () =>
-                  setState(() => _reorderEnabled = !_reorderEnabled),
-            ),
-            ReorderableListView.builder(
-              key: PageStorageKey<String>('layer-list-${state.tabId}'),
-              itemCount: layers.length,
-              buildDefaultDragHandles: false,
-              onReorderItem: (oldRow, newRow) {
-                final from = layers.length - 1 - oldRow;
-                final to = layers.length - 1 - newRow;
-                bloc.add(LayerReordered(from, to));
-              },
-              itemBuilder: (context, row) {
-                final index = layers.length - 1 - row;
-                final layer = layers[index];
-                final isActive = index == active;
-                final activeColor = isActive
-                    ? Theme.of(context).colorScheme.primaryContainer
-                          .withAlpha(90)
-                    : null;
-                return GestureDetector(
-                  key: ValueKey<String>('layer-row-${storageKeys[index]}'),
-                  onSecondaryTapUp: (details) => LayerTreeActions.showLayer(
-                    context,
-                    details.globalPosition,
-                    layer: layer,
-                    layerIndex: index,
-                    layerCount: layers.length,
-                  ),
-                  child: ExpansionTile(
-                    key: PageStorageKey<String>(storageKeys[index]),
-                    initiallyExpanded: isActive,
-                    dense: true,
-                    tilePadding: const EdgeInsets.only(left: 8, right: 16),
-                    backgroundColor: activeColor,
-                    collapsedBackgroundColor: activeColor,
-                    onExpansionChanged: (expanded) {
-                      if (expanded && index != bloc.state.layerIndex) {
-                        bloc.add(LayerActivated(index));
-                      }
-                    },
-                    leading: IconButton(
-                      tooltip: layer.visible
-                          ? context.l10n.layerHide
-                          : context.l10n.layerShow,
-                      icon: Icon(
-                        layer.visible ? Icons.visibility : Icons.visibility_off,
-                        size: 18,
-                      ),
-                      onPressed: () => bloc.add(LayerVisibilityToggled(index)),
-                    ),
-                    title: _layerTitle(
+    return BlocListener<EditorBloc, EditorState>(
+      listenWhen: (_, state) => !_canReorder(state) && _reorderEnabled,
+      listener: (_, __) => setState(() => _reorderEnabled = false),
+      child: BlocBuilder<EditorBloc, EditorState>(
+        buildWhen: (before, after) =>
+            before.layerIndex != after.layerIndex ||
+            before.selected != after.selected ||
+            before.selectedIndices != after.selectedIndices ||
+            before.drawing.layers != after.drawing.layers,
+        builder: (context, state) {
+          final layers = state.drawing.layers;
+          final canReorder = _canReorder(state);
+          final reorderEnabled = _reorderEnabled && canReorder;
+          final storageKeys = _storageKeys(state.tabId, layers);
+          return Column(
+            children: [
+              LayersPanelHeader(
+                bloc: bloc,
+                state: state,
+                canReorder: canReorder,
+                reorderEnabled: reorderEnabled,
+                onReorderToggled: () =>
+                    setState(() => _reorderEnabled = !_reorderEnabled),
+              ),
+              ReorderableListView.builder(
+                key: PageStorageKey<String>('layer-list-${state.tabId}'),
+                itemCount: layers.length,
+                buildDefaultDragHandles: false,
+                onReorderItem: (oldRow, newRow) {
+                  final from = layers.length - 1 - oldRow;
+                  final to = layers.length - 1 - newRow;
+                  bloc.add(LayerReordered(from, to));
+                },
+                itemBuilder: (context, row) {
+                  final index = layers.length - 1 - row;
+                  final layer = layers[index];
+                  final isActive = index == state.layerIndex;
+                  final activeColor = isActive
+                      ? Theme.of(context).colorScheme.primaryContainer
+                            .withAlpha(90)
+                      : null;
+                  return GestureDetector(
+                    key: ValueKey<String>('layer-row-${storageKeys[index]}'),
+                    onSecondaryTapUp: (details) => LayerTreeActions.showLayer(
                       context,
-                      bloc,
-                      layer,
-                      index,
-                      row,
-                      isActive,
-                      _reorderEnabled,
+                      details.globalPosition,
+                      layer: layer,
+                      layerIndex: index,
+                      layerCount: layers.length,
                     ),
-                    children: [
-                      LayerItemTree(
-                        layer: layer,
-                        layerIndex: index,
-                        state: state,
+                    child: ExpansionTile(
+                      key: PageStorageKey<String>(storageKeys[index]),
+                      initiallyExpanded: isActive,
+                      dense: true,
+                      tilePadding: const EdgeInsets.only(left: 8, right: 16),
+                      backgroundColor: activeColor,
+                      collapsedBackgroundColor: activeColor,
+                      onExpansionChanged: (expanded) {
+                        if (expanded && index != bloc.state.layerIndex) {
+                          bloc.add(LayerActivated(index));
+                        }
+                      },
+                      leading: IconButton(
+                        tooltip: layer.visible
+                            ? context.l10n.layerHide
+                            : context.l10n.layerShow,
+                        icon: Icon(
+                          layer.visible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          size: 18,
+                        ),
+                        onPressed: () =>
+                            bloc.add(LayerVisibilityToggled(index)),
                       ),
-                    ],
-                  ),
-                );
-              },
-            ).expanded(),
-          ],
-        );
-      },
+                      title: _layerTitle(
+                        context,
+                        bloc,
+                        layer,
+                        index,
+                        row,
+                        isActive,
+                        reorderEnabled,
+                      ),
+                      children: [
+                        LayerItemTree(
+                          layer: layer,
+                          layerIndex: index,
+                          state: state,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ).expanded(),
+            ],
+          );
+        },
+      ),
     );
   }
+
+  bool _canReorder(EditorState state) =>
+      state.drawing.layers.length > 1 || state.layer.shapes.length > 1;
 
   Widget _layerTitle(
     BuildContext context,

@@ -16,12 +16,14 @@ class LayersPanelHeader extends StatelessWidget {
     super.key,
     required this.bloc,
     required this.state,
+    required this.canReorder,
     required this.reorderEnabled,
     required this.onReorderToggled,
   });
 
   final EditorBloc bloc;
   final EditorState state;
+  final bool canReorder;
   final bool reorderEnabled;
   final VoidCallback onReorderToggled;
 
@@ -61,10 +63,10 @@ class LayersPanelHeader extends StatelessWidget {
               : context.l10n.layerReorderEnable,
           iconSize: 18,
           visualDensity: VisualDensity.compact,
-          isSelected: reorderEnabled,
+          isSelected: canReorder && reorderEnabled,
           icon: const Icon(Icons.drag_handle),
           selectedIcon: const Icon(Icons.drag_handle),
-          onPressed: onReorderToggled,
+          onPressed: canReorder ? onReorderToggled : null,
         ),
         _button(
           Icons.delete_outline,
