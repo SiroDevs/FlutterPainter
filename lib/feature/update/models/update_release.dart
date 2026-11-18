@@ -5,12 +5,12 @@ class UpdateRelease {
     required this.releaseUrl,
     required this.assetName,
     required this.assetUrl,
-    required this.checksumUrl,
+    required this.sha256,
   });
 
   final String version;
   final String releaseUrl;
   final String assetName;
   final String assetUrl;
-  final String checksumUrl;
+  final String? sha256;
 }

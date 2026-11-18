@@ -1,14 +1,11 @@
 ; FlutterPainter installer – CI-friendly. Values are injected with ISCC /D switches:
-;   /DMyAppVersion=1.0.0  /DMyAppBuildNumber=1
+;   /DMyAppVersion=1.0.0
 ;   /DSourceDir=<Release folder>  /DRepoRoot=<repo root>
 ;   /DOutputDir=<dist>    /DArch=x64|arm64
 ; Defaults below let you still compile locally from windows\packaging.
 
 #ifndef MyAppVersion
   #define MyAppVersion "1.0.0"
-#endif
-#ifndef MyAppBuildNumber
-  #define MyAppBuildNumber "1"
 #endif
 #ifndef Arch
   #define Arch "x64"
@@ -32,7 +29,7 @@
 ; Must stay different from SongLib's {884424F7-F8DD-4CF6-8BC3-5E8126A7893D}
 AppId={{9B6E2B7D-7B3B-4E9E-9E2F-2E7B7B6B7B3F}
 AppName={#MyAppName}
-AppVersion={#MyAppVersion}+{#MyAppBuildNumber}
+AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -47,7 +44,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 #endif
 OutputDir={#OutputDir}
-OutputBaseFilename={#MyAppName}_{#MyAppVersion}+{#MyAppBuildNumber}_{#Arch}
+OutputBaseFilename={#MyAppName}_{#MyAppVersion}_{#Arch}
 ; One installer: defaults to a per-user install, and offers
 ; "Install for all users" (UAC prompt) at the start of the wizard.
 PrivilegesRequired=lowest

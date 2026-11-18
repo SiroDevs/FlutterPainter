@@ -30,8 +30,8 @@ class Model3dSlider extends StatelessWidget {
   final ValueChanged<double> onChanged;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    width: 260,
+  Widget build(BuildContext context) => ConstrainedBox(
+    constraints: const BoxConstraints(maxWidth: 260),
     child: LabeledSlider(
       compact: true,
       label: context.l10n.model3dValue(name, valueText),

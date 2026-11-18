@@ -34,7 +34,6 @@ jobs:
     outputs:
       should_release: ${{ steps.compare.outputs.should_release }}
       version: ${{ steps.compare.outputs.version }}
-      build_number: ${{ steps.compare.outputs.build_number }}
       release_version: ${{ steps.compare.outputs.release_version }}
 
     steps:
@@ -56,45 +55,55 @@ jobs:
             echo "::error::Expected x.y.z+build-number in pubspec.yaml (got '$PUBSPEC_VERSION')"
             exit 1
           fi
-          RELEASE_VERSION="${VERSION}.${BUILD_NUMBER}"
+          RELEASE_VERSION="$VERSION"
 
-          # Normalize legacy plus-separated tags to the dotted release format.
-          LATEST=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --exclude-drafts \
-                     --json tagName --jq '.[].tagName' | sed 's/^v//' \
-                     | awk '/^[0-9]+\.[0-9]+\.[0-9]+([.+][0-9]+)?$/ { gsub(/\+/, "."); print }' \
-                     | sort -V | tail -n1)
-          LATEST_BUILD_NUMBER=0
-          if [[ "$LATEST" =~ ^([0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)$ ]]; then
-            LATEST_VERSION="${BASH_REMATCH[1]}"
-            LATEST_BUILD_NUMBER="${BASH_REMATCH[2]}"
-          else
-            LATEST_VERSION="$LATEST"
+          # Accept legacy build suffixes while publishing one release per app version.
+          RELEASE_TAGS=$(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --exclude-drafts \
+                           --json tagName --jq '.[].tagName')
+          LATEST_VERSION=$(printf '%s\n' "$RELEASE_TAGS" |
+            sed 's/^v//' |
+            awk '
+              /^[0-9]+\.[0-9]+\.[0-9]+([.+][0-9]+)?$/ {
+                version = $0
+                sub(/[.+][0-9]+$/, "", version)
+                print version
+              }
+            ' |
+            sort -V |
+            tail -n1)
+          CANONICAL_RELEASE_EXISTS=false
+          if printf '%s\n' "$RELEASE_TAGS" | sed 's/^v//' | grep -Fxq "$VERSION"; then
+            CANONICAL_RELEASE_EXISTS=true
           fi
 
           SHOULD_RELEASE=false
-          if [ -z "$LATEST" ]; then
+          if [ -z "$LATEST_VERSION" ]; then
             SHOULD_RELEASE=true
-          elif [ "$VERSION" != "$LATEST_VERSION" ] && \
+          elif [ "$VERSION" != "$LATEST_VERSION" ] &&
                [ "$(printf '%s\n%s\n' "$LATEST_VERSION" "$VERSION" | sort -V | tail -n1)" = "$VERSION" ]; then
             SHOULD_RELEASE=true
-          elif [ "$VERSION" = "$LATEST_VERSION" ] && \
-               [ "$BUILD_NUMBER" -gt "$LATEST_BUILD_NUMBER" ]; then
+          elif [ "$VERSION" = "$LATEST_VERSION" ] &&
+               [ "$CANONICAL_RELEASE_EXISTS" = false ]; then
             SHOULD_RELEASE=true
           fi
 
+          LATEST_LABEL=none
+          if [ -n "$LATEST_VERSION" ]; then
+            LATEST_LABEL="v$LATEST_VERSION"
+          fi
           echo "version=$VERSION"                 >> "$GITHUB_OUTPUT"
-          echo "build_number=$BUILD_NUMBER"       >> "$GITHUB_OUTPUT"
           echo "release_version=$RELEASE_VERSION" >> "$GITHUB_OUTPUT"
           echo "should_release=$SHOULD_RELEASE"   >> "$GITHUB_OUTPUT"
 
           {
             echo "### Version check"
-            echo "- pubspec.yaml: \`$RELEASE_VERSION\`"
-            echo "- Latest release: \`${LATEST:-none}\`"
+            echo "- pubspec.yaml: $PUBSPEC_VERSION"
+            echo "- Release version: v$RELEASE_VERSION"
+            echo "- Latest release: $LATEST_LABEL"
             if [ "$SHOULD_RELEASE" = true ]; then
-              echo "- Result: ✅ newer, building and releasing **v$RELEASE_VERSION**"
+              echo "- Result: publishing v$RELEASE_VERSION"
             else
-              echo "- Result: ⏭️ not newer, skipping build and release"
+              echo "- Result: not newer, skipping build and release"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -114,7 +123,6 @@ jobs:
     env:
       CL: /D_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS
       VERSION: ${{ needs.check-version.outputs.version }}
-      BUILD_NUMBER: ${{ needs.check-version.outputs.build_number }}
       RELEASE_VERSION: ${{ needs.check-version.outputs.release_version }}
       RELEASE_DIR: build/windows/x64/runner/Release
 
@@ -231,7 +239,6 @@ jobs:
 
           & $iscc `
             "/DMyAppVersion=$env:VERSION" `
-            "/DMyAppBuildNumber=$env:BUILD_NUMBER" `
             "/DSourceDir=$source" `
             "/DRepoRoot=$env:GITHUB_WORKSPACE" `
             "/DOutputDir=$output" `
@@ -487,12 +494,6 @@ jobs:
           path: artifacts
           pattern: release-*      # skips the temporary unsigned-* artifacts
           merge-multiple: true
-
-      - name: Generate checksums
-        run: |
-          cd artifacts
-          sha256sum * > SHA256SUMS.txt
-          cat SHA256SUMS.txt
 
       - name: Build release notes from the last merged PR
         env:
