@@ -16,6 +16,8 @@ generated `dart:ui` painter in a Flutter project.
 - Keep artwork organized with layers and an expandable item tree. Rename items
   and groups inline, select a group or an individual member, and edit or delete
   its members separately.
+- Turn layered artwork into 3D objects by extruding shapes and adjusting their
+  depth in the 3D inspector.
 - Refine polygon and line-path points by dragging, adding points on an edge, or
   using the point context menu.
 - Trace over an image on any layer. The image is stored with the project.
@@ -100,6 +102,23 @@ Load an image from the image panel or drop a PNG, JPG, WebP, BMP or GIF onto the
 window. Adjust its opacity, visibility, position and size while tracing. Fit
 to canvas resets its placement. Reference images are embedded in the `.flp`
 project and are not included in Dart code.
+
+## Creating 3D objects
+
+1. Draw the object's shapes on a layer. Group shapes that should move together
+   as one part.
+2. Select the layer in the Layers panel, open the Layer tab, and choose **Make
+   3D layer**.
+3. In the lower-right inspector, open the **3D** tab and turn on **Preview on
+   canvas**.
+4. Select a shape and increase **Thickness** to extrude it. Adjust **Depth** to
+   place it farther forward or back.
+5. Inspect the model with the **Straight**, **Left**, and **Right** views, then
+   adjust **Turn**, **Tilt**, and **Zoom**. Add round components from the
+   **Tyres** section.
+
+Turn off **Preview on canvas** when you want to return to drawing and selecting
+shapes.
 
 ## Projects, saving and recovery
 
