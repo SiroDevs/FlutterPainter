@@ -99,6 +99,15 @@ abstract class SelectionTransformLogic {
       case GestureMode.imageMove:
       case GestureMode.imageScale:
         return state;
+      case GestureMode.orbit:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case GestureMode.depth:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case GestureMode.tilt:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
   }
 
@@ -169,7 +178,7 @@ abstract class SelectionTransformLogic {
             area.height >= 2 / state.view.zoom)) {
       for (var index = 0; index < state.layer.shapes.length; index++) {
         final shape = state.layer.shapes[index];
-        if (!shape.visible) continue;
+        if (!shape.visible || !state.canEdit(shape, state.layerIndex)) continue;
         final bounds = shape.bounds.inflate(2 / state.view.zoom);
         if (bounds.overlaps(area) || area.contains(bounds.center)) {
           selected.add(index);

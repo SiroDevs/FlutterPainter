@@ -9,13 +9,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../../../domain/models/model3d/model3d.dart';
-import '../../../../../domain/models/model3d/tyre_spec.dart';
 import '../../../../../domain/models/model3d/view_angle.dart';
 import '../../../bloc/editor_bloc.dart';
 import '../../../logic/drawing/editor_ops.dart';
 
-/// How far in front of or behind the drawing plane sliders can reach.
-const double kDepthRange = 120;
+export '../../../../../domain/models/model3d/depth_range.dart';
 
 /// Sends a change to the active layer's 3D setup. [record] also makes it one
 /// undo step; sliders pass false while dragging and commit when they let go.
@@ -37,17 +35,6 @@ Model3d updateView(
 ) => index >= 0 && index < model.views.length
     ? model.copyWith(
         views: replacedAt(model.views, index, change(model.views[index])),
-      )
-    : model;
-
-/// Applies [change] to the tyre at [index], if it still exists.
-Model3d updateTyre(
-  Model3d model,
-  int index,
-  TyreSpec Function(TyreSpec tyre) change,
-) => index >= 0 && index < model.tyres.length
-    ? model.copyWith(
-        tyres: replacedAt(model.tyres, index, change(model.tyres[index])),
       )
     : model;
 

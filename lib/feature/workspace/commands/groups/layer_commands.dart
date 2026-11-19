@@ -62,7 +62,7 @@ extension LayerCommands on WorkspaceCommands {
     onPressed: state.layer.model == null
         ? () => send(
             Model3dCreated(
-              straight: context.l10n.model3dViewStraight,
+              front: context.l10n.model3dViewFront,
               left: context.l10n.model3dViewLeft,
               right: context.l10n.model3dViewRight,
             ),

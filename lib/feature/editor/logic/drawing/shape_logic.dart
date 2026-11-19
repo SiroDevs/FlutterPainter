@@ -64,7 +64,9 @@ abstract class ShapeLogic {
     state.layer.visible
         ? [
             for (var index = 0; index < state.layer.shapes.length; index++)
-              if (state.layer.shapes[index].visible) index,
+              if (state.layer.shapes[index].visible &&
+                  state.canEdit(state.layer.shapes[index], state.layerIndex))
+                index,
           ]
         : const [],
   );

@@ -85,10 +85,26 @@ extension EditorStateOps on EditorState {
   /// The 3D view the canvas previews, or null when the preview is off or the
   /// active layer has no views to show.
   ViewAngle? get previewAngle {
+    if (workingPart != null || layer.model == null) return null;
+    if (camera != null) return camera;
     final index = previewView;
     final views = layer.model?.views;
     if (index == null || views == null || views.isEmpty) return null;
     return views[index.clamp(0, views.length - 1).toInt()];
+  }
+
+  /// The part being worked on, if the active layer is 3D and still has it.
+  String? get workingPart {
+    final id = workPart;
+    if (id == null || layer.model == null) return null;
+    return layer.shapes.any((shape) => shape.groupId == id) ? id : null;
+  }
+
+  /// Whether tools may touch [shape] of the layer at [layerIndex]. Working on
+  /// a part limits them to that part's shapes.
+  bool canEdit(Shape shape, int layerIndex) {
+    final id = workingPart;
+    return id == null || (layerIndex == this.layerIndex && shape.groupId == id);
   }
 
   /// The picture on the active layer, if any.

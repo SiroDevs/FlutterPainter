@@ -7,7 +7,6 @@ enum TreeContextAction {
   duplicate,
   rename,
   delete,
-  ungroup,
   visibility,
   moveUp,
   moveDown,

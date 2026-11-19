@@ -5,7 +5,7 @@ String fmt(double v) {
   return s == '-0.0' ? '0.0' : s;
 }
 
-/// "rider body" -> "RiderBody". Always a valid class-name fragment.
+/// "side panel" -> "SidePanel". Always a valid class-name fragment.
 String pascalCase(String s) {
   final parts = s.split(RegExp(r'[^A-Za-z0-9]+')).where((p) => p.isNotEmpty);
   var out = parts.map((p) => p[0].toUpperCase() + p.substring(1)).join();
@@ -27,7 +27,7 @@ String fmtN(double v, int decimals) {
   return s;
 }
 
-/// "RiderBody" -> "rider_body", "Layer2" -> "layer2": a file-name fragment.
+/// "SidePanel" -> "side_panel", "Layer2" -> "layer2": a file-name fragment.
 String snakeCase(String pascal) {
   final out = StringBuffer();
   for (var i = 0; i < pascal.length; i++) {

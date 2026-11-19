@@ -1,7 +1,7 @@
 // Project imports:
 import '../../common/constants/app_constants.dart';
 
-/// "C:\art\rider.flp" -> "rider".
+/// "C:\art\crate.flp" -> "crate".
 String baseNameOf(String path) {
   final file = path.split(RegExp(r'[\\/]')).last;
   final dot = file.lastIndexOf('.');

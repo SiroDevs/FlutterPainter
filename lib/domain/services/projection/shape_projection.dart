@@ -1,31 +1,54 @@
 // Dart imports:
+import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
+import '../../models/model3d/part_pose.dart';
 import '../../models/model3d/point3.dart';
+import '../../models/model3d/section_profile.dart';
 import '../../models/shapes/shape.dart';
 import '../../models/shapes/shape_kind.dart';
+import 'section_depths.dart';
 import 'shape_outline.dart';
+import 'shape_tilt.dart';
 import 'view_transform.dart';
 
 typedef _Side = ({double depth, Shape shape});
 
+const double _sectionSteps = 40;
+
 /// Projects one drawn shape: its visible sides first, then its face.
 List<Shape> projectShape(Shape shape, ViewTransform transform) {
-  final outline = outlineOf(shape);
+  final tilt = ShapeTilt.of(shape);
+  final shaped =
+      shape.isClosed && shape.thickness > 0 && !shape.section.isBox;
+  final drawn = outlineOf(shape);
+  final outline = transform.part.bends || shaped
+      ? densify(
+          drawn,
+          closed: shape.isClosed,
+          maxSegment: shaped ? _sectionSegment(shape) : 3,
+        )
+      : drawn;
   if (outline.length < 2) return const [];
-  final half = shape.thickness / 2;
-  final nearFace = _place(outline, shape.depth - half, transform);
+  final depths = sectionDepths(shape, outline);
+  final nearFace = _place(outline, depths.near, tilt, transform);
   if (!shape.isClosed || shape.thickness <= 0) {
     return [_face(shape, nearFace)];
   }
-  final farFace = _place(outline, shape.depth + half, transform);
+  final farFace = _place(outline, depths.far, tilt, transform);
   // A part turned past the side shows its back cap instead of its front.
-  final showsNear = transform.turn(const Point3(0, 0, -1)).dz <= 0;
+  final showsNear =
+      transform.turn(tilt.turn(const Point3(0, 0, -1))).dz <= 0;
   return [
-    ..._sides(shape, outline, nearFace, farFace, transform),
+    ..._sides(shape, outline, nearFace, farFace, tilt, transform),
     _face(shape, showsNear ? nearFace : farFace),
   ];
+}
+
+double _sectionSegment(Shape shape) {
+  final bounds = shape.unrotatedBounds;
+  return math.max(1.0, math.max(bounds.width, bounds.height) / _sectionSteps);
 }
 
 Shape _face(Shape shape, List<Offset> points) => shape.copyWith(
@@ -35,10 +58,20 @@ Shape _face(Shape shape, List<Offset> points) => shape.copyWith(
   radius: 0,
   depth: 0,
   thickness: 0,
+  tilt: PartPose.rest,
+  section: SectionProfile.box,
 );
 
-List<Offset> _place(List<Offset> outline, double depth, ViewTransform view) => [
-  for (final point in outline) view.flat(Point3(point.dx, point.dy, depth)),
+List<Offset> _place(
+  List<Offset> outline,
+  List<double> depths,
+  ShapeTilt tilt,
+  ViewTransform view,
+) => [
+  for (var index = 0; index < outline.length; index++)
+    view.flat(
+      tilt.apply(Point3(outline[index].dx, outline[index].dy, depths[index])),
+    ),
 ];
 
 List<Shape> _sides(
@@ -46,6 +79,7 @@ List<Shape> _sides(
   List<Offset> outline,
   List<Offset> nearFace,
   List<Offset> farFace,
+  ShapeTilt tilt,
   ViewTransform transform,
 ) {
   final orientation = _signedArea(outline).sign;
@@ -54,10 +88,12 @@ List<Shape> _sides(
     final next = (index + 1) % outline.length;
     final edge = outline[next] - outline[index];
     final outward = Point3(edge.dy * orientation, -edge.dx * orientation, 0);
-    if (transform.turn(outward).dz >= 0) continue;
+    if (transform.turn(tilt.turn(outward)).dz >= 0) continue;
     final middle = (outline[index] + outline[next]) / 2;
     sides.add((
-      depth: transform.project(Point3(middle.dx, middle.dy, shape.depth)).dz,
+      depth: transform
+          .project(tilt.apply(Point3(middle.dx, middle.dy, shape.depth)))
+          .dz,
       shape: Shape(
         kind: ShapeKind.polygon,
         points: [

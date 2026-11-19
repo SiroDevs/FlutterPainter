@@ -10,13 +10,14 @@ import '../../../../../core/utils/l10n_ext.dart';
 import '../../../bloc/editor_bloc.dart';
 import '../../../logic/drawing/editor_ops.dart';
 import 'model3d_edits.dart';
+import 'model3d_form_section.dart';
+import 'model3d_live_section.dart';
 import 'model3d_parts.dart';
 import 'model3d_parts_section.dart';
 import 'model3d_shape_section.dart';
-import 'model3d_tyres_section.dart';
 import 'model3d_views_section.dart';
 
-/// The 3D setup of the active layer: preview, views, depth, tyres and pivot.
+/// The 3D setup of the active layer: preview, views, parts, depth and pivot.
 class Model3dPanel extends StatefulWidget {
   const Model3dPanel({super.key});
 
@@ -26,7 +27,6 @@ class Model3dPanel extends StatefulWidget {
 
 class _Model3dPanelState extends State<Model3dPanel> {
   int _viewIndex = 0;
-  int _tyreIndex = 0;
   int _partIndex = 0;
 
   @override
@@ -37,6 +37,8 @@ class _Model3dPanelState extends State<Model3dPanel> {
           before.layerIndex != after.layerIndex ||
           before.previewView != after.previewView ||
           before.ghostLayer != after.ghostLayer ||
+          before.workPart != after.workPart ||
+          (before.camera == null) != (after.camera == null) ||
           before.selectedIndices != after.selectedIndices,
       builder: (context, state) {
         final model = state.layer.model;
@@ -53,7 +55,8 @@ class _Model3dPanelState extends State<Model3dPanel> {
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              _previewToggle(context, state, viewIndex),
+              Model3dLiveSection(camera: state.camera, model: model),
+              if (!state.liveMode) _previewToggle(context, state, viewIndex),
               const SizedBox(height: 8),
               Model3dViewsSection(
                 model: model,
@@ -64,6 +67,8 @@ class _Model3dPanelState extends State<Model3dPanel> {
               Model3dPartsSection(
                 model: model,
                 parts: parts,
+                shapes: state.layer.shapes,
+                workingPart: state.workingPart,
                 selected: clampedIndex(_partIndex, parts.length),
                 viewIndex: viewIndex,
                 canvasSize: canvasSize,
@@ -72,12 +77,7 @@ class _Model3dPanelState extends State<Model3dPanel> {
               const SizedBox(height: 8),
               Model3dShapeSection(shape: state.selectedShape),
               const SizedBox(height: 8),
-              Model3dTyresSection(
-                model: model,
-                selected: clampedIndex(_tyreIndex, model.tyres.length),
-                canvasSize: canvasSize,
-                onSelected: (index) => setState(() => _tyreIndex = index),
-              ),
+              Model3dFormSection(shape: state.selectedShape),
               const SizedBox(height: 8),
               Model3dPivotSection(model: model, canvasSize: canvasSize),
             ],

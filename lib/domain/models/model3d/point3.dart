@@ -17,6 +17,11 @@ class Point3 extends Equatable {
   Point3 operator -(Point3 other) =>
       Point3(dx - other.dx, dy - other.dy, dz - other.dz);
 
+  Point3 operator *(double factor) =>
+      Point3(dx * factor, dy * factor, dz * factor);
+
+  double dot(Point3 other) => dx * other.dx + dy * other.dy + dz * other.dz;
+
   @override
   List<Object?> get props => [dx, dy, dz];
 }

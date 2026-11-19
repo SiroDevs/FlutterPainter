@@ -24,6 +24,8 @@ class EditorState extends Equatable {
     this.images = const <String, Image>{},
     this.previewView,
     this.ghostLayer,
+    this.workPart,
+    this.camera,
   });
 
   factory EditorState.fromSeed(EditorSeed seed) => EditorState(
@@ -81,6 +83,16 @@ class EditorState extends Equatable {
   /// Index of the layer drawn faded over the 3D preview for comparison.
   final int? ghostLayer;
 
+  /// Id of the 3D part being worked on, or null. While set, the canvas looks
+  /// straight at that part and tools only touch and add to its shapes.
+  final String? workPart;
+
+  /// The live 3D camera, or null when it is off. Not part of the document.
+  final ViewAngle? camera;
+
+  /// Whether the live 3D camera drives the canvas and the pointer.
+  bool get liveMode => camera != null && previewAngle != null;
+
   /// Nullable fields ([filePath], [selected], [draft], [hover], [cursor]) can
   /// be cleared by passing `null` explicitly.
   EditorState copyWith({
@@ -104,6 +116,8 @@ class EditorState extends Equatable {
     Map<String, Image>? images,
     Object? previewView = unset,
     Object? ghostLayer = unset,
+    Object? workPart = unset,
+    Object? camera = unset,
   }) {
     final nextSelected = keep<int>(selected, this.selected);
     final nextSelectedIndices =
@@ -134,6 +148,8 @@ class EditorState extends Equatable {
       images: images ?? this.images,
       previewView: keep<int>(previewView, this.previewView),
       ghostLayer: keep<int>(ghostLayer, this.ghostLayer),
+      workPart: keep<String>(workPart, this.workPart),
+      camera: keep<ViewAngle>(camera, this.camera),
     );
   }
 
@@ -159,5 +175,7 @@ class EditorState extends Equatable {
     images,
     previewView,
     ghostLayer,
+    workPart,
+    camera,
   ];
 }

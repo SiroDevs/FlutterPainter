@@ -582,35 +582,11 @@ abstract class AppLocalizations {
   /// **'Move layer down'**
   String get layerMoveDown;
 
-  /// No description provided for @layerReorderEnable.
-  ///
-  /// In en, this message translates to:
-  /// **'Enable layer reordering'**
-  String get layerReorderEnable;
-
-  /// No description provided for @layerReorderDisable.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop reordering layers'**
-  String get layerReorderDisable;
-
   /// No description provided for @layerDelete.
   ///
   /// In en, this message translates to:
   /// **'Delete layer'**
   String get layerDelete;
-
-  /// No description provided for @layerItemCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{0 items} =1{1 item} other{{count} items}}'**
-  String layerItemCount(int count);
-
-  /// No description provided for @layerContentCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{itemCount, plural, =0{0 items} =1{1 item} other{{itemCount} items}} · {groupCount, plural, =0{0 groups} =1{1 group} other{{groupCount} groups}}'**
-  String layerContentCount(int itemCount, int groupCount);
 
   /// No description provided for @layerHide.
   ///
@@ -2370,12 +2346,6 @@ abstract class AppLocalizations {
   /// **'Back to flat layer'**
   String get layerRemove3d;
 
-  /// No description provided for @model3dViewStraight.
-  ///
-  /// In en, this message translates to:
-  /// **'Straight'**
-  String get model3dViewStraight;
-
   /// No description provided for @model3dViewLeft.
   ///
   /// In en, this message translates to:
@@ -2387,18 +2357,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Right'**
   String get model3dViewRight;
-
-  /// No description provided for @model3dTabModel.
-  ///
-  /// In en, this message translates to:
-  /// **'3D'**
-  String get model3dTabModel;
-
-  /// No description provided for @model3dTabImage.
-  ///
-  /// In en, this message translates to:
-  /// **'Image'**
-  String get model3dTabImage;
 
   /// No description provided for @model3dTitle.
   ///
@@ -2514,108 +2472,6 @@ abstract class AppLocalizations {
   /// **'Down'**
   String get model3dDown;
 
-  /// No description provided for @model3dTyres.
-  ///
-  /// In en, this message translates to:
-  /// **'Tyres'**
-  String get model3dTyres;
-
-  /// No description provided for @model3dTyreAdd.
-  ///
-  /// In en, this message translates to:
-  /// **'Add tyre'**
-  String get model3dTyreAdd;
-
-  /// No description provided for @model3dTyreRename.
-  ///
-  /// In en, this message translates to:
-  /// **'Rename tyre'**
-  String get model3dTyreRename;
-
-  /// No description provided for @model3dTyreDelete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete tyre'**
-  String get model3dTyreDelete;
-
-  /// No description provided for @model3dDefaultTyreName.
-  ///
-  /// In en, this message translates to:
-  /// **'Tyre {number}'**
-  String model3dDefaultTyreName(String number);
-
-  /// No description provided for @model3dTyreNone.
-  ///
-  /// In en, this message translates to:
-  /// **'No tyres yet. Add one to build a round part.'**
-  String get model3dTyreNone;
-
-  /// No description provided for @model3dRadius.
-  ///
-  /// In en, this message translates to:
-  /// **'Radius'**
-  String get model3dRadius;
-
-  /// No description provided for @model3dWidth.
-  ///
-  /// In en, this message translates to:
-  /// **'Width'**
-  String get model3dWidth;
-
-  /// No description provided for @model3dTreads.
-  ///
-  /// In en, this message translates to:
-  /// **'Treads'**
-  String get model3dTreads;
-
-  /// No description provided for @model3dSpin.
-  ///
-  /// In en, this message translates to:
-  /// **'Spin'**
-  String get model3dSpin;
-
-  /// No description provided for @model3dShoulder.
-  ///
-  /// In en, this message translates to:
-  /// **'Round edges'**
-  String get model3dShoulder;
-
-  /// No description provided for @model3dSidewall.
-  ///
-  /// In en, this message translates to:
-  /// **'Sidewall size'**
-  String get model3dSidewall;
-
-  /// No description provided for @model3dHub.
-  ///
-  /// In en, this message translates to:
-  /// **'Hub size'**
-  String get model3dHub;
-
-  /// No description provided for @model3dColorBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Body'**
-  String get model3dColorBody;
-
-  /// No description provided for @model3dColorTread.
-  ///
-  /// In en, this message translates to:
-  /// **'Tread lines'**
-  String get model3dColorTread;
-
-  /// No description provided for @model3dColorSidewall.
-  ///
-  /// In en, this message translates to:
-  /// **'Sidewall'**
-  String get model3dColorSidewall;
-
-  /// No description provided for @model3dColorHub.
-  ///
-  /// In en, this message translates to:
-  /// **'Hub'**
-  String get model3dColorHub;
-
   /// No description provided for @model3dParts.
   ///
   /// In en, this message translates to:
@@ -2675,6 +2531,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Visible in this view'**
   String get model3dPartVisible;
+
+  /// No description provided for @model3dViewFront.
+  ///
+  /// In en, this message translates to:
+  /// **'Front'**
+  String get model3dViewFront;
+
+  /// No description provided for @model3dFold.
+  ///
+  /// In en, this message translates to:
+  /// **'Fold'**
+  String get model3dFold;
+
+  /// No description provided for @model3dBend.
+  ///
+  /// In en, this message translates to:
+  /// **'Bend'**
+  String get model3dBend;
+
+  /// No description provided for @model3dAxis.
+  ///
+  /// In en, this message translates to:
+  /// **'Fold line angle'**
+  String get model3dAxis;
+
+  /// No description provided for @model3dFoldHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Positive folds and bends the part away from you.'**
+  String get model3dFoldHint;
+
+  /// No description provided for @model3dLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Live 3D'**
+  String get model3dLive;
+
+  /// No description provided for @model3dLiveNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag empty space to turn the view. Drag a shape to move it in depth, or hold Alt and drag to tilt it.'**
+  String get model3dLiveNote;
+
+  /// No description provided for @model3dLiveSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save angle as view'**
+  String get model3dLiveSave;
+
+  /// No description provided for @model3dForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Shape form'**
+  String get model3dForm;
+
+  /// No description provided for @model3dFormThicknessNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Give the shape a thickness to see its form.'**
+  String get model3dFormThicknessNote;
+
+  /// No description provided for @model3dSectionBox.
+  ///
+  /// In en, this message translates to:
+  /// **'Box'**
+  String get model3dSectionBox;
+
+  /// No description provided for @model3dSectionEllipse.
+  ///
+  /// In en, this message translates to:
+  /// **'Ellipse'**
+  String get model3dSectionEllipse;
+
+  /// No description provided for @model3dSectionPolygon.
+  ///
+  /// In en, this message translates to:
+  /// **'Polygon'**
+  String get model3dSectionPolygon;
+
+  /// No description provided for @model3dSectionSides.
+  ///
+  /// In en, this message translates to:
+  /// **'Sides'**
+  String get model3dSectionSides;
+
+  /// No description provided for @model3dSectionAcrossWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Across width'**
+  String get model3dSectionAcrossWidth;
+
+  /// No description provided for @model3dSectionAcrossHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Across height'**
+  String get model3dSectionAcrossHeight;
+
+  /// No description provided for @model3dShapeTilt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tilt (3D only)'**
+  String get model3dShapeTilt;
+
+  /// No description provided for @model3dWorkStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Work on this part'**
+  String get model3dWorkStart;
+
+  /// No description provided for @model3dWorkStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop working on this part'**
+  String get model3dWorkStop;
+
+  /// No description provided for @model3dWorkNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Working on “{part}”. Other parts are shown faded.'**
+  String model3dWorkNote(String part);
+
+  /// No description provided for @model3dAddFaceOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a face on'**
+  String get model3dAddFaceOn;
+
+  /// No description provided for @model3dAddFace.
+  ///
+  /// In en, this message translates to:
+  /// **'Add face'**
+  String get model3dAddFace;
+
+  /// No description provided for @model3dEdgeTop.
+  ///
+  /// In en, this message translates to:
+  /// **'Top edge'**
+  String get model3dEdgeTop;
+
+  /// No description provided for @model3dEdgeRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Right edge'**
+  String get model3dEdgeRight;
+
+  /// No description provided for @model3dEdgeBottom.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom edge'**
+  String get model3dEdgeBottom;
+
+  /// No description provided for @model3dEdgeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Left edge'**
+  String get model3dEdgeLeft;
+
+  /// No description provided for @model3dEdgeNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Edge {number}'**
+  String model3dEdgeNumber(String number);
+
+  /// No description provided for @model3dFaceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Face {number}'**
+  String model3dFaceName(String number);
 }
 
 class _AppLocalizationsDelegate

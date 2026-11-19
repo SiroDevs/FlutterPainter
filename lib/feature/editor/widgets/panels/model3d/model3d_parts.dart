@@ -7,10 +7,13 @@ import '../../../../../domain/models/model3d/point3.dart';
 import '../../../../../domain/models/shapes/shape.dart';
 import 'model3d_edits.dart';
 
+/// Changes one value of a joint, given the new angle in radians.
+typedef PartRigChange = PartRig Function(PartRig rig, double radians);
+
 /// A part that can move on its own, and where its joint starts out.
 typedef PartEntry = ({String id, String name, Point3 pivot});
 
-/// The parts of a 3D layer: its groups, then its tyres.
+/// The parts of a 3D layer: its groups, in drawing order.
 List<PartEntry> listParts(PaintLayer layer, Model3d model) {
   final groups = <String, List<Shape>>{};
   for (final shape in layer.shapes) {
@@ -24,8 +27,6 @@ List<PartEntry> listParts(PaintLayer layer, Model3d model) {
         name: entry.value.first.groupName ?? entry.key,
         pivot: _centreOf(entry.value),
       ),
-    for (final tyre in model.tyres)
-      (id: tyre.partId, name: tyre.name, pivot: tyre.centre),
   ];
 }
 

@@ -8,6 +8,8 @@ import '../../domain/models/drawing/drawing.dart';
 import '../../domain/models/drawing/paint_layer.dart';
 import '../../domain/models/drawing/project_format_exception.dart';
 import '../../domain/models/drawing/reference_image.dart';
+import '../../domain/models/model3d/part_pose.dart';
+import '../../domain/models/model3d/section_profile.dart';
 import '../../domain/models/shapes/shape.dart';
 import '../../domain/models/shapes/shape_kind.dart';
 import 'gradient_mapper.dart';
@@ -36,6 +38,8 @@ Map<String, dynamic> shapeToJson(Shape s) => {
   if (!s.visible) 'visible': false,
   if (s.depth != 0) 'depth': s.depth,
   if (s.thickness != 0) 'thickness': s.thickness,
+  if (!s.tilt.isRest) 'tilt': poseToJson(s.tilt),
+  if (!s.section.isBox) 'section': sectionToJson(s.section),
 };
 
 Shape shapeFromJson(Map<String, dynamic> j) => Shape(
@@ -56,6 +60,12 @@ Shape shapeFromJson(Map<String, dynamic> j) => Shape(
   visible: (j['visible'] as bool?) ?? true,
   depth: ((j['depth'] as num?) ?? 0).toDouble(),
   thickness: ((j['thickness'] as num?) ?? 0).toDouble(),
+  tilt: j['tilt'] is Map<String, dynamic>
+      ? poseFromJson(j['tilt'] as Map<String, dynamic>)
+      : PartPose.rest,
+  section: j['section'] is Map<String, dynamic>
+      ? sectionFromJson(j['section'] as Map<String, dynamic>)
+      : SectionProfile.box,
 );
 
 Map<String, dynamic> layerToJson(PaintLayer l) => {

@@ -8,6 +8,7 @@ import '../../models/gesture_state.dart';
 import '../canvas/image_logic.dart';
 import '../drawing/editor_ops.dart';
 import '../drawing/draw_logic.dart';
+import 'live3d_logic.dart';
 import 'paint_bucket_logic.dart';
 import 'select_logic.dart';
 
@@ -17,7 +18,8 @@ abstract class PointerLogic {
 
   static EditorState pressed(EditorState s, PointerPressed e) {
     final next = s.copyWith(cursor: e.point);
-    // Editing is paused while the 3D preview is showing.
+    if (s.liveMode) return Live3dLogic.pressed(next, e.point, alt: e.alt);
+    // Editing is paused while a saved view is previewed.
     if (s.previewAngle != null) return next;
     switch (s.tool) {
       case Tool.select:
@@ -56,6 +58,10 @@ abstract class PointerLogic {
       case GestureMode.imageMove:
       case GestureMode.imageScale:
         return ImageLogic.dragged(next, e.point, e.shift);
+      case GestureMode.orbit:
+      case GestureMode.depth:
+      case GestureMode.tilt:
+        return Live3dLogic.moved(next, e.point);
       case GestureMode.none:
         return next;
     }
@@ -74,6 +80,10 @@ abstract class PointerLogic {
       case GestureMode.imageMove:
       case GestureMode.imageScale:
         return ImageLogic.released(s);
+      case GestureMode.orbit:
+      case GestureMode.depth:
+      case GestureMode.tilt:
+        return Live3dLogic.released(s);
       case GestureMode.none:
         return s;
     }

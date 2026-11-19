@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import '../../../../core/utils/l10n_ext.dart';
 import 'inline_tree_name_editor.dart';
 
 /// Shows a selectable group with an independent collapse control.
@@ -10,7 +9,6 @@ class GroupTreeTile extends StatefulWidget {
   const GroupTreeTile({
     super.key,
     required this.name,
-    required this.itemCount,
     required this.tooltip,
     required this.selected,
     required this.visible,
@@ -23,7 +21,6 @@ class GroupTreeTile extends StatefulWidget {
   });
 
   final String name;
-  final int itemCount;
   final String tooltip;
   final bool selected;
   final bool visible;
@@ -60,10 +57,6 @@ class _GroupTreeTileState extends State<GroupTreeTile> {
                 ? TextStyle(color: Theme.of(context).colorScheme.primary)
                 : null,
             onSaved: widget.onRename,
-          ),
-          subtitle: Text(
-            context.l10n.layerItemCount(widget.itemCount),
-            style: Theme.of(context).textTheme.bodySmall,
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,

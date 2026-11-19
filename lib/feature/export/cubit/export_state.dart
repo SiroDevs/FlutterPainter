@@ -13,7 +13,7 @@ class ExportState extends Equatable {
     this.generationFailed = false,
   });
 
-  /// The project folder the files belong to, e.g. `rider`.
+  /// The project folder the files belong to, e.g. `crate`.
   final String folderName;
 
   /// Every file, with the user's edits.

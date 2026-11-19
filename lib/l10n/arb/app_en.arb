@@ -89,28 +89,7 @@
   "layerRename": "Rename layer",
   "layerMoveUp": "Move layer up",
   "layerMoveDown": "Move layer down",
-  "layerReorderEnable": "Enable layer reordering",
-  "layerReorderDisable": "Stop reordering layers",
   "layerDelete": "Delete layer",
-  "layerItemCount": "{count, plural, =0{0 items} =1{1 item} other{{count} items}}",
-  "@layerItemCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "layerContentCount": "{itemCount, plural, =0{0 items} =1{1 item} other{{itemCount} items}} · {groupCount, plural, =0{0 groups} =1{1 group} other{{groupCount} groups}}",
-  "@layerContentCount": {
-    "placeholders": {
-      "itemCount": {
-        "type": "int"
-      },
-      "groupCount": {
-        "type": "int"
-      }
-    }
-  },
   "layerHide": "Hide",
   "layerShow": "Show",
   "layerGroup": "Group",
@@ -697,11 +676,8 @@
   "ribbon3d": "3D",
   "layerMake3d": "Make 3D layer",
   "layerRemove3d": "Back to flat layer",
-  "model3dViewStraight": "Straight",
   "model3dViewLeft": "Left",
   "model3dViewRight": "Right",
-  "model3dTabModel": "3D",
-  "model3dTabImage": "Image",
   "model3dTitle": "3D setup of “{name}”",
   "model3dPreview": "Preview on canvas",
   "model3dPreviewNote": "Drawing and selecting are paused while previewing.",
@@ -721,23 +697,6 @@
   "model3dPivot": "Turning point",
   "model3dAcross": "Across",
   "model3dDown": "Down",
-  "model3dTyres": "Tyres",
-  "model3dTyreAdd": "Add tyre",
-  "model3dTyreRename": "Rename tyre",
-  "model3dTyreDelete": "Delete tyre",
-  "model3dDefaultTyreName": "Tyre {number}",
-  "model3dTyreNone": "No tyres yet. Add one to build a round part.",
-  "model3dRadius": "Radius",
-  "model3dWidth": "Width",
-  "model3dTreads": "Treads",
-  "model3dSpin": "Spin",
-  "model3dShoulder": "Round edges",
-  "model3dSidewall": "Sidewall size",
-  "model3dHub": "Hub size",
-  "model3dColorBody": "Body",
-  "model3dColorTread": "Tread lines",
-  "model3dColorSidewall": "Sidewall",
-  "model3dColorHub": "Hub",
   "@model3dTitle": {
     "placeholders": {
       "name": {
@@ -762,13 +721,6 @@
       }
     }
   },
-  "@model3dDefaultTyreName": {
-    "placeholders": {
-      "number": {
-        "type": "String"
-      }
-    }
-  },
   "model3dParts": "Parts",
   "model3dPartsNone": "No parts yet. Group shapes to move them as one part.",
   "model3dPartJoint": "Joint",
@@ -785,5 +737,54 @@
   },
   "model3dGhost": "Compare with",
   "model3dGhostNone": "Nothing",
-  "model3dPartVisible": "Visible in this view"
+  "model3dPartVisible": "Visible in this view",
+  "model3dViewFront": "Front",
+  "model3dFold": "Fold",
+  "model3dBend": "Bend",
+  "model3dAxis": "Fold line angle",
+  "model3dFoldHint": "Positive folds and bends the part away from you.",
+  "model3dLive": "Live 3D",
+  "model3dLiveNote": "Drag empty space to turn the view. Drag a shape to move it in depth, or hold Alt and drag to tilt it.",
+  "model3dLiveSave": "Save angle as view",
+  "model3dForm": "Shape form",
+  "model3dFormThicknessNote": "Give the shape a thickness to see its form.",
+  "model3dSectionBox": "Box",
+  "model3dSectionEllipse": "Ellipse",
+  "model3dSectionPolygon": "Polygon",
+  "model3dSectionSides": "Sides",
+  "model3dSectionAcrossWidth": "Across width",
+  "model3dSectionAcrossHeight": "Across height",
+  "model3dShapeTilt": "Tilt (3D only)",
+  "model3dWorkStart": "Work on this part",
+  "model3dWorkStop": "Stop working on this part",
+  "model3dWorkNote": "Working on “{part}”. Other parts are shown faded.",
+  "model3dAddFaceOn": "Add a face on",
+  "model3dAddFace": "Add face",
+  "model3dEdgeTop": "Top edge",
+  "model3dEdgeRight": "Right edge",
+  "model3dEdgeBottom": "Bottom edge",
+  "model3dEdgeLeft": "Left edge",
+  "model3dEdgeNumber": "Edge {number}",
+  "model3dFaceName": "Face {number}",
+  "@model3dWorkNote": {
+    "placeholders": {
+      "part": {
+        "type": "String"
+      }
+    }
+  },
+  "@model3dEdgeNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "@model3dFaceName": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  }
 }

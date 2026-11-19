@@ -9,7 +9,7 @@ import '../shapes/shape.dart';
 
 /// A named group of shapes, optionally with one picture underneath them.
 /// Layers draw bottom to top (the picture first, then the shapes) and export as
-/// one method (or one class) each, which is how a bike and its rider stay
+/// one method (or one class) each, which keeps the parts of a drawing
 /// separate. The picture is not exported; it is only there to trace over.
 class PaintLayer extends Equatable {
   const PaintLayer({

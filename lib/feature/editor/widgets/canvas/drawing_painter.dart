@@ -49,6 +49,7 @@ class DrawingPainter extends CustomPainter {
         paintShape(canvas, shape, paint);
       }
     }
+    paintWorkLayer(canvas, state, paint);
     paintComparison(canvas, state, paint);
     for (final shape in state.quickCodePreviews) {
       paintShape(canvas, shape, paint);
@@ -66,6 +67,8 @@ class DrawingPainter extends CustomPainter {
       _selection(canvas);
       _imageSelection(canvas);
       _marquee(canvas);
+    } else {
+      paintLiveSelection(canvas, state, ThemeColors.selection);
     }
     canvas.restore();
   }

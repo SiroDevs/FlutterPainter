@@ -3,12 +3,12 @@ part of 'editor_bloc.dart';
 /// Turns the active layer into a 3D layer, naming its first three views.
 class Model3dCreated extends EditorEvent {
   const Model3dCreated({
-    required this.straight,
+    required this.front,
     required this.left,
     required this.right,
   });
 
-  final String straight;
+  final String front;
   final String left;
   final String right;
 }
@@ -40,6 +40,27 @@ class Model3dPreviewChanged extends EditorEvent {
   final int? viewIndex;
 }
 
+/// Turns the live 3D camera on at [camera], or off with null.
+class LiveCameraChanged extends EditorEvent {
+  const LiveCameraChanged(this.camera);
+
+  final ViewAngle? camera;
+}
+
+/// Changes the cross-section of every selected shape.
+class ShapeSectionChanged extends EditorEvent {
+  const ShapeSectionChanged(this.change);
+
+  final SectionProfile Function(SectionProfile section) change;
+}
+
+/// Changes the tilt of every selected shape.
+class ShapeTiltChanged extends EditorEvent {
+  const ShapeTiltChanged(this.change);
+
+  final PartPose Function(PartPose tilt) change;
+}
+
 /// Picks the layer drawn faded over the preview; null shows none.
 class GhostLayerChanged extends EditorEvent {
   const GhostLayerChanged(this.layerIndex);
@@ -47,12 +68,33 @@ class GhostLayerChanged extends EditorEvent {
   final int? layerIndex;
 }
 
+/// Starts or stops working on a part: the canvas looks straight at it and
+/// tools only touch and add to its shapes.
+class WorkPartChanged extends EditorEvent {
+  const WorkPartChanged(this.partId);
+
+  final String? partId;
+}
+
+/// Adds a face next to an edge of a part, hinged and folded like a box side.
+class FaceAdded extends EditorEvent {
+  const FaceAdded({
+    required this.partId,
+    required this.edgeIndex,
+    required this.name,
+  });
+
+  final String partId;
+  final int edgeIndex;
+  final String name;
+}
+
 extension _EditorModel3dRegistrations on EditorBloc {
   void _registerModel3d() {
     _reduce<Model3dCreated>(
       (s, e) => Model3dLogic.create(
         s,
-        straight: e.straight,
+        front: e.front,
         left: e.left,
         right: e.right,
       ),
@@ -69,6 +111,20 @@ extension _EditorModel3dRegistrations on EditorBloc {
     _reduce<Model3dPreviewChanged>(
       (s, e) => Model3dLogic.preview(s, e.viewIndex),
     );
+    _reduce<LiveCameraChanged>((s, e) => Model3dLogic.live(s, e.camera));
+    _reduce<ShapeSectionChanged>(
+      (s, e) => Shape3dLogic.setSection(s, e.change),
+    );
+    _reduce<ShapeTiltChanged>((s, e) => Shape3dLogic.setTilt(s, e.change));
     _reduce<GhostLayerChanged>((s, e) => Model3dLogic.ghost(s, e.layerIndex));
+    _reduce<WorkPartChanged>((s, e) => Model3dLogic.work(s, e.partId));
+    _reduce<FaceAdded>(
+      (s, e) => FaceLogic.addOnEdge(
+        s,
+        partId: e.partId,
+        edgeIndex: e.edgeIndex,
+        name: e.name,
+      ),
+    );
   }
 }

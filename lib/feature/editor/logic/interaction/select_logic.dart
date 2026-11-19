@@ -133,7 +133,7 @@ abstract class SelectLogic {
       if (!layer.visible) continue;
       for (var si = layer.shapes.length - 1; si >= 0; si--) {
         final shape = layer.shapes[si];
-        if (!shape.visible) continue;
+        if (!shape.visible || !state.canEdit(shape, li)) continue;
         if (!shape.hitTest(point, tol)) continue;
         final switchedLayer = li != state.layerIndex;
         final base = switchedLayer
