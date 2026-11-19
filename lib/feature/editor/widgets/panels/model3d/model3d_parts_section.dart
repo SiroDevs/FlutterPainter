@@ -122,7 +122,6 @@ class Model3dPartsSection extends StatelessWidget {
     Point3 Function(double next) moved,
   ) => Model3dSlider(
     name: name,
-    valueText: value.toStringAsFixed(1),
     value: value,
     min: min,
     max: max,
@@ -131,7 +130,7 @@ class Model3dPartsSection extends StatelessWidget {
       (current) => withRig(
         current,
         part,
-        (rig) => rig.copyWith(pivot: moved(snapTo(next, 0.5))),
+        (rig) => rig.copyWith(pivot: moved(next)),
       ),
       record: false,
     ),
@@ -179,7 +178,7 @@ class Model3dPartsSection extends StatelessWidget {
     PartPose Function(PartPose pose, double radians) apply,
   ) => Model3dSlider(
     name: name,
-    valueText: '${degreesOf(radians).toStringAsFixed(1)}°',
+    unit: '°',
     value: degreesOf(radians),
     min: -180,
     max: 180,
@@ -189,7 +188,7 @@ class Model3dPartsSection extends StatelessWidget {
         current,
         part,
         viewIndex,
-        (pose) => apply(pose, radiansOf(snapTo(next, 0.5))),
+        (pose) => apply(pose, radiansOf(next)),
       ),
       record: false,
     ),

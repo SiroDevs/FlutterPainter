@@ -57,22 +57,28 @@ void paintComparison(Canvas canvas, EditorState state, Paint paint) {
   canvas.restore();
 }
 
-/// Outlines the selected shapes as the live camera shows them.
+/// Outlines the selected shapes as the live camera shows them: one line
+/// around everything the shape covers, not around each of its pieces.
 void paintLiveSelection(Canvas canvas, EditorState state, Color color) {
   final camera = state.camera;
   if (!state.liveMode || camera == null) return;
   final chosen = state.validSelectedIndices.toSet();
   if (chosen.isEmpty) return;
-  final outline = Paint()
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 1.5 / state.view.zoom
-    ..color = color;
+  var covered = Path();
   for (final item in projectLayerSourced(state.layer, camera)) {
     final points = item.shape.points;
-    if (!chosen.contains(item.source) || points.length < 2) continue;
-    canvas.drawPoints(PointMode.polygon, [
-      ...points,
-      if (item.shape.isClosed) points.first,
-    ], outline);
+    if (!chosen.contains(item.source) || points.length < 3) continue;
+    covered = Path.combine(
+      PathOperation.union,
+      covered,
+      Path()..addPolygon(points, true),
+    );
   }
+  canvas.drawPath(
+    covered,
+    Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5 / state.view.zoom
+      ..color = color,
+  );
 }

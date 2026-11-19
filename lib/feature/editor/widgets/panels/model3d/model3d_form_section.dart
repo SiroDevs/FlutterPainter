@@ -92,7 +92,8 @@ class Model3dFormSection extends StatelessWidget {
     if (section.kind == SectionKind.polygon)
       Model3dSlider(
         name: context.l10n.model3dSectionSides,
-        valueText: '${section.sides}',
+        step: 1,
+        decimals: 0,
         value: section.sides.toDouble(),
         min: SectionProfile.minSides.toDouble(),
         max: SectionProfile.maxSides.toDouble(),
@@ -109,12 +110,14 @@ class Model3dFormSection extends StatelessWidget {
     PartPose Function(PartPose pose, double radians) change,
   ) => Model3dSlider(
     name: name,
-    valueText: '${degreesOf(radians).toStringAsFixed(0)}°',
+    unit: '°',
+    step: 1,
+    decimals: 0,
     value: degreesOf(radians).clamp(-_angleRange, _angleRange).toDouble(),
     min: -_angleRange,
     max: _angleRange,
     onChanged: (next) => context.read<EditorBloc>().add(
-      ShapeTiltChanged((pose) => change(pose, radiansOf(snapTo(next, 1)))),
+      ShapeTiltChanged((pose) => change(pose, radiansOf(next))),
     ),
   );
 

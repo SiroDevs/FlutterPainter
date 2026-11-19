@@ -42,9 +42,6 @@ double degreesOf(double radians) => radians * 180 / math.pi;
 
 double radiansOf(double degrees) => degrees * math.pi / 180;
 
-/// Rounds [value] to the nearest multiple of [step].
-double snapTo(double value, double step) => (value / step).round() * step;
-
 /// Keeps a remembered list position valid after the list changed.
 int clampedIndex(int index, int length) =>
     length == 0 ? 0 : index.clamp(0, length - 1).toInt();

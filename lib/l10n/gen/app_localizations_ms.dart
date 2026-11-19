@@ -715,6 +715,12 @@ class AppLocalizationsMs extends AppLocalizations {
   }
 
   @override
+  String get imageOpacityName => 'Opacity';
+
+  @override
+  String get imageScaleName => 'Scale';
+
+  @override
   String imagePanelTitle(String name) {
     return 'Image on “$name”';
   }
@@ -905,6 +911,12 @@ class AppLocalizationsMs extends AppLocalizations {
   String propertyStrokeWidth(String value) {
     return 'Stroke width: $value';
   }
+
+  @override
+  String get propertyStrokeWidthName => 'Stroke width';
+
+  @override
+  String get propertyCornerRadiusName => 'Corner radius';
 
   @override
   String imageOnLayer(Object name) {
@@ -1377,6 +1389,12 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get model3dLive => 'Live 3D';
+
+  @override
+  String get model3dTabPreview => 'Canvas Preview';
+
+  @override
+  String get model3dTabLive => 'Live 3D';
 
   @override
   String get model3dLiveNote =>

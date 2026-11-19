@@ -1428,6 +1428,18 @@ abstract class AppLocalizations {
   /// **'Scale {value}'**
   String imageScale(String value);
 
+  /// No description provided for @imageOpacityName.
+  ///
+  /// In en, this message translates to:
+  /// **'Opacity'**
+  String get imageOpacityName;
+
+  /// No description provided for @imageScaleName.
+  ///
+  /// In en, this message translates to:
+  /// **'Scale'**
+  String get imageScaleName;
+
   /// No description provided for @imagePanelTitle.
   ///
   /// In en, this message translates to:
@@ -1793,6 +1805,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stroke width: {value}'**
   String propertyStrokeWidth(String value);
+
+  /// No description provided for @propertyStrokeWidthName.
+  ///
+  /// In en, this message translates to:
+  /// **'Stroke width'**
+  String get propertyStrokeWidthName;
+
+  /// No description provided for @propertyCornerRadiusName.
+  ///
+  /// In en, this message translates to:
+  /// **'Corner radius'**
+  String get propertyCornerRadiusName;
 
   /// No description provided for @imageOnLayer.
   ///
@@ -2567,6 +2591,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Live 3D'**
   String get model3dLive;
+
+  /// No description provided for @model3dTabPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Canvas Preview'**
+  String get model3dTabPreview;
+
+  /// No description provided for @model3dTabLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Live 3D'**
+  String get model3dTabLive;
 
   /// No description provided for @model3dLiveNote.
   ///

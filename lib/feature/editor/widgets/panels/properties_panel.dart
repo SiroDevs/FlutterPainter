@@ -49,14 +49,13 @@ class PropertiesPanel extends StatelessWidget {
                     width: 190,
                     child: LabeledSlider(
                       compact: true,
-                      label: context.l10n.propertyCornerRadius(
-                        st.radius.toStringAsFixed(2),
-                      ),
+                      name: context.l10n.propertyCornerRadiusName,
+                      step: 0.25,
+                      decimals: 2,
                       value: st.radius,
                       min: 0,
                       max: 40,
-                      onChanged: (v) =>
-                          bloc.add(RadiusChanged((v * 4).round() / 4)),
+                      onChanged: (v) => bloc.add(RadiusChanged(v)),
                       onChangeEnd: () => bloc.add(const ChangesCommitted()),
                     ),
                   ),

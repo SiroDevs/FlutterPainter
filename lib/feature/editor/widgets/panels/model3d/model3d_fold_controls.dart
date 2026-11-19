@@ -101,7 +101,7 @@ class _Model3dFoldControlsState extends State<Model3dFoldControls> {
     PartRigChange change,
   ) => Model3dSlider(
     name: name,
-    valueText: '${degreesOf(radians).toStringAsFixed(1)}°',
+    unit: '°',
     value: degreesOf(radians),
     min: -range,
     max: range,
@@ -110,7 +110,7 @@ class _Model3dFoldControlsState extends State<Model3dFoldControls> {
       (current) => withRig(
         current,
         widget.part,
-        (rig) => change(rig, radiansOf(snapTo(next, 0.5))),
+        (rig) => change(rig, radiansOf(next)),
       ),
       record: false,
     ),
