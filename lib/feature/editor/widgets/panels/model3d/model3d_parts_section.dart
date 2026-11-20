@@ -7,7 +7,10 @@ import '../../../../../core/utils/l10n_ext.dart';
 import '../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../domain/models/model3d/part_pose.dart';
 import '../../../../../domain/models/model3d/point3.dart';
+import '../../../../../domain/models/shapes/shape.dart';
 import 'model3d_edits.dart';
+import 'model3d_fold_controls.dart';
+import 'model3d_parent_picker.dart';
 import 'model3d_part_visibility.dart';
 import 'model3d_parts.dart';
 import 'model3d_slider.dart';
@@ -19,6 +22,8 @@ class Model3dPartsSection extends StatelessWidget {
     super.key,
     required this.model,
     required this.parts,
+    required this.shapes,
+    required this.workingPart,
     required this.selected,
     required this.viewIndex,
     required this.canvasSize,
@@ -27,6 +32,8 @@ class Model3dPartsSection extends StatelessWidget {
 
   final Model3d model;
   final List<PartEntry> parts;
+  final List<Shape> shapes;
+  final String? workingPart;
   final int selected;
   final int viewIndex;
   final Size canvasSize;
@@ -54,7 +61,14 @@ class Model3dPartsSection extends StatelessWidget {
             onSelected: onSelected,
           ),
           ..._joint(context, part),
-          _parent(context, part),
+          Model3dParentPicker(model: model, part: part, parts: parts),
+          Model3dFoldControls(
+            model: model,
+            part: part,
+            shapes: shapes,
+            workingPart: workingPart,
+            faceNumber: parts.length + 1,
+          ),
           ..._pose(context, part),
         ],
       ],
@@ -108,7 +122,6 @@ class Model3dPartsSection extends StatelessWidget {
     Point3 Function(double next) moved,
   ) => Model3dSlider(
     name: name,
-    valueText: value.toStringAsFixed(1),
     value: value,
     min: min,
     max: max,
@@ -117,45 +130,11 @@ class Model3dPartsSection extends StatelessWidget {
       (current) => withRig(
         current,
         part,
-        (rig) => rig.copyWith(pivot: moved(snapTo(next, 0.5))),
+        (rig) => rig.copyWith(pivot: moved(next)),
       ),
       record: false,
     ),
   );
-
-  Widget _parent(BuildContext context, PartEntry part) {
-    final options = [
-      for (final other in parts)
-        if (other.id != part.id && !hangsFrom(model, other.id, part.id)) other,
-    ];
-    final parentId = rigOf(model, part).parentId;
-    return Row(
-      children: [
-        Text(context.l10n.model3dPartParent),
-        const SizedBox(width: 8),
-        DropdownButton<String?>(
-          isDense: true,
-          value: options.any((other) => other.id == parentId) ? parentId : null,
-          items: [
-            DropdownMenuItem<String?>(
-              value: null,
-              child: Text(context.l10n.model3dPartParentNone),
-            ),
-            for (final other in options)
-              DropdownMenuItem<String?>(
-                value: other.id,
-                child: Text(other.name),
-              ),
-          ],
-          onChanged: (id) => editModel(
-            context,
-            (current) =>
-                withRig(current, part, (rig) => rig.copyWith(parentId: id)),
-          ),
-        ),
-      ],
-    );
-  }
 
   List<Widget> _pose(BuildContext context, PartEntry part) {
     if (viewIndex < 0 || viewIndex >= model.views.length) return const [];
@@ -199,7 +178,7 @@ class Model3dPartsSection extends StatelessWidget {
     PartPose Function(PartPose pose, double radians) apply,
   ) => Model3dSlider(
     name: name,
-    valueText: '${degreesOf(radians).toStringAsFixed(1)}°',
+    unit: '°',
     value: degreesOf(radians),
     min: -180,
     max: 180,
@@ -209,7 +188,7 @@ class Model3dPartsSection extends StatelessWidget {
         current,
         part,
         viewIndex,
-        (pose) => apply(pose, radiansOf(snapTo(next, 0.5))),
+        (pose) => apply(pose, radiansOf(next)),
       ),
       record: false,
     ),

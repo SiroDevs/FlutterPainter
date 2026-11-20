@@ -6,8 +6,9 @@ import 'dart:ui';
 import '../../models/shapes/shape.dart';
 import '../../models/shapes/shape_kind.dart';
 
-const int _ellipseSteps = 32;
-const int _cornerSteps = 4;
+const int _ellipseSteps = 48;
+const int _cornerSteps = 12;
+const int _densifyLimit = 600;
 
 /// The points around a shape in its drawing plane, rotation applied.
 List<Offset> outlineOf(Shape shape) {
@@ -22,6 +23,34 @@ List<Offset> outlineOf(Shape shape) {
     for (final point in points)
       Shape.rotatePoint(point, shape.rotation, centre),
   ];
+}
+
+/// [points] with extra points so no segment is longer than [maxSegment].
+/// Bent parts need them: a long straight edge can only curl if it has points
+/// along it. Very long outlines get fewer points, up to a fixed limit.
+List<Offset> densify(
+  List<Offset> points, {
+  required bool closed,
+  double maxSegment = 3,
+}) {
+  if (points.length < 2) return points;
+  final count = closed ? points.length : points.length - 1;
+  var total = 0.0;
+  for (var index = 0; index < count; index++) {
+    total += (points[(index + 1) % points.length] - points[index]).distance;
+  }
+  final segment = math.max(maxSegment, total / _densifyLimit);
+  final result = <Offset>[];
+  for (var index = 0; index < count; index++) {
+    final start = points[index];
+    final end = points[(index + 1) % points.length];
+    final pieces = math.max(1, ((end - start).distance / segment).ceil());
+    for (var piece = 0; piece < pieces; piece++) {
+      result.add(Offset.lerp(start, end, piece / pieces)!);
+    }
+  }
+  if (!closed) result.add(points.last);
+  return result;
 }
 
 List<Offset> _ellipseOutline(Shape shape) {

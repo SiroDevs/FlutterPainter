@@ -6,38 +6,47 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../../../common/widgets/inputs/labeled_slider.dart';
-import '../../../../../core/utils/l10n_ext.dart';
 import '../../../bloc/editor_bloc.dart';
 
-/// A named slider for the 3D panel. Dragging calls [onChanged] with no undo
-/// step; letting go records one.
+/// A named slider for the 3D panel with a box to type the value. Dragging
+/// calls [onChanged] with no undo step; letting go, or typing, records one.
 class Model3dSlider extends StatelessWidget {
   const Model3dSlider({
     super.key,
     required this.name,
-    required this.valueText,
     required this.value,
     required this.min,
     required this.max,
     required this.onChanged,
+    this.step = 0.5,
+    this.decimals = 1,
+    this.unit = '',
+    this.inputMax,
   });
 
   final String name;
-  final String valueText;
   final double value;
   final double min;
   final double max;
   final ValueChanged<double> onChanged;
+  final double step;
+  final int decimals;
+  final String unit;
+  final double? inputMax;
 
   @override
   Widget build(BuildContext context) => ConstrainedBox(
     constraints: const BoxConstraints(maxWidth: 260),
     child: LabeledSlider(
       compact: true,
-      label: context.l10n.model3dValue(name, valueText),
+      name: name,
       value: value,
       min: min,
       max: max,
+      step: step,
+      decimals: decimals,
+      unit: unit,
+      inputMax: inputMax,
       onChanged: onChanged,
       onChangeEnd: () => context.read<EditorBloc>().add(const ChangesCommitted()),
     ),

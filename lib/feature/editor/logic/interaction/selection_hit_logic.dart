@@ -16,7 +16,11 @@ abstract class SelectionHitLogic {
     final tolerance = 4 / state.view.zoom;
     for (var index = shapes.length - 1; index >= 0; index--) {
       final shape = shapes[index];
-      if (shape.visible && shape.hitTest(point, tolerance)) return index;
+      if (shape.visible &&
+          state.canEdit(shape, state.layerIndex) &&
+          shape.hitTest(point, tolerance)) {
+        return index;
+      }
     }
     return null;
   }

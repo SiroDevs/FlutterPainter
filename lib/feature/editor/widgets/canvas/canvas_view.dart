@@ -149,7 +149,7 @@ class _CanvasViewState extends State<CanvasView> {
         HardwareKeyboard.instance.isAltPressed ||
         HardwareKeyboard.instance.isControlPressed ||
         HardwareKeyboard.instance.isMetaPressed;
-    if (state.tool != Tool.select || modifiers || indices.length != 1) {
+    if (state.tool != Tool.select || modifiers || indices.length != 1 || state.previewAngle != null) {
       return false;
     }
     if (now - state.gesture.lastClickMs >= 320) return false;

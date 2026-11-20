@@ -15,9 +15,6 @@ extension _EditorShapeRegistrations on EditorBloc {
     _reduce<SelectAllRequested>((s, e) => ShapeLogic.selectAll(s));
     _reduce<ShapesGrouped>((s, e) => GroupLogic.group(s, e.nameFor));
     _reduce<ShapesUngrouped>((s, e) => GroupLogic.ungroup(s));
-    _reduce<ShapeUngroupedAt>(
-      (s, e) => GroupLogic.ungroupItem(s, e.layer, e.index),
-    );
     _reduce<SelectionScaled>((s, e) => ShapeLogic.scale(s, e.factor));
     _reduce<SelectionFlipped>(
       (s, e) => ShapeLogic.flip(s, horizontal: e.horizontal),

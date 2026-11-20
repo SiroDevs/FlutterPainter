@@ -256,44 +256,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get layerMoveDown => 'Move layer down';
 
   @override
-  String get layerReorderEnable => 'Enable layer reordering';
-
-  @override
-  String get layerReorderDisable => 'Stop reordering layers';
-
-  @override
   String get layerDelete => 'Delete layer';
-
-  @override
-  String layerItemCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count items',
-      one: '1 item',
-      zero: '0 items',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String layerContentCount(int itemCount, int groupCount) {
-    String _temp0 = intl.Intl.pluralLogic(
-      itemCount,
-      locale: localeName,
-      other: '$itemCount items',
-      one: '1 item',
-      zero: '0 items',
-    );
-    String _temp1 = intl.Intl.pluralLogic(
-      groupCount,
-      locale: localeName,
-      other: '$groupCount groups',
-      one: '1 group',
-      zero: '0 groups',
-    );
-    return '$_temp0 · $_temp1';
-  }
 
   @override
   String get layerHide => 'Hide';
@@ -752,6 +715,12 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get imageOpacityName => 'Opacity';
+
+  @override
+  String get imageScaleName => 'Scale';
+
+  @override
   String imagePanelTitle(String name) {
     return 'Image on “$name”';
   }
@@ -942,6 +911,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String propertyStrokeWidth(String value) {
     return 'Stroke width: $value';
   }
+
+  @override
+  String get propertyStrokeWidthName => 'Stroke width';
+
+  @override
+  String get propertyCornerRadiusName => 'Corner radius';
 
   @override
   String imageOnLayer(Object name) {
@@ -1294,19 +1269,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get layerRemove3d => 'Back to flat layer';
 
   @override
-  String get model3dViewStraight => 'Straight';
-
-  @override
   String get model3dViewLeft => 'Left';
 
   @override
   String get model3dViewRight => 'Right';
-
-  @override
-  String get model3dTabModel => '3D';
-
-  @override
-  String get model3dTabImage => 'Image';
 
   @override
   String model3dTitle(String name) {
@@ -1373,59 +1339,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get model3dDown => 'Down';
 
   @override
-  String get model3dTyres => 'Tyres';
-
-  @override
-  String get model3dTyreAdd => 'Add tyre';
-
-  @override
-  String get model3dTyreRename => 'Rename tyre';
-
-  @override
-  String get model3dTyreDelete => 'Delete tyre';
-
-  @override
-  String model3dDefaultTyreName(String number) {
-    return 'Tyre $number';
-  }
-
-  @override
-  String get model3dTyreNone => 'No tyres yet. Add one to build a round part.';
-
-  @override
-  String get model3dRadius => 'Radius';
-
-  @override
-  String get model3dWidth => 'Width';
-
-  @override
-  String get model3dTreads => 'Treads';
-
-  @override
-  String get model3dSpin => 'Spin';
-
-  @override
-  String get model3dShoulder => 'Round edges';
-
-  @override
-  String get model3dSidewall => 'Sidewall size';
-
-  @override
-  String get model3dHub => 'Hub size';
-
-  @override
-  String get model3dColorBody => 'Body';
-
-  @override
-  String get model3dColorTread => 'Tread lines';
-
-  @override
-  String get model3dColorSidewall => 'Sidewall';
-
-  @override
-  String get model3dColorHub => 'Hub';
-
-  @override
   String get model3dParts => 'Parts';
 
   @override
@@ -1457,4 +1370,103 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get model3dPartVisible => 'Visible in this view';
+
+  @override
+  String get model3dViewFront => 'Front';
+
+  @override
+  String get model3dFold => 'Fold';
+
+  @override
+  String get model3dBend => 'Bend';
+
+  @override
+  String get model3dAxis => 'Fold line angle';
+
+  @override
+  String get model3dFoldHint =>
+      'Positive folds and bends the part away from you.';
+
+  @override
+  String get model3dLive => 'Live 3D';
+
+  @override
+  String get model3dTabPreview => 'Canvas Preview';
+
+  @override
+  String get model3dTabLive => 'Live 3D';
+
+  @override
+  String get model3dLiveNote =>
+      'Drag empty space to turn the view. Drag a shape to move it in depth, or hold Alt and drag to tilt it.';
+
+  @override
+  String get model3dLiveSave => 'Save angle as view';
+
+  @override
+  String get model3dForm => 'Shape form';
+
+  @override
+  String get model3dFormThicknessNote =>
+      'Give the shape a thickness to see its form.';
+
+  @override
+  String get model3dSectionBox => 'Box';
+
+  @override
+  String get model3dSectionEllipse => 'Ellipse';
+
+  @override
+  String get model3dSectionPolygon => 'Polygon';
+
+  @override
+  String get model3dSectionSides => 'Sides';
+
+  @override
+  String get model3dSectionAcrossWidth => 'Across width';
+
+  @override
+  String get model3dSectionAcrossHeight => 'Across height';
+
+  @override
+  String get model3dShapeTilt => 'Tilt (3D only)';
+
+  @override
+  String get model3dWorkStart => 'Work on this part';
+
+  @override
+  String get model3dWorkStop => 'Stop working on this part';
+
+  @override
+  String model3dWorkNote(String part) {
+    return 'Working on “$part”. Other parts are shown faded.';
+  }
+
+  @override
+  String get model3dAddFaceOn => 'Add a face on';
+
+  @override
+  String get model3dAddFace => 'Add face';
+
+  @override
+  String get model3dEdgeTop => 'Top edge';
+
+  @override
+  String get model3dEdgeRight => 'Right edge';
+
+  @override
+  String get model3dEdgeBottom => 'Bottom edge';
+
+  @override
+  String get model3dEdgeLeft => 'Left edge';
+
+  @override
+  String model3dEdgeNumber(String number) {
+    return 'Edge $number';
+  }
+
+  @override
+  String model3dFaceName(String number) {
+    return 'Face $number';
+  }
 }

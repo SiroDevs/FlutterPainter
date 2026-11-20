@@ -12,20 +12,10 @@ import '../../logic/drawing/editor_ops.dart';
 
 /// Displays the common layer controls above the layer list.
 class LayersPanelHeader extends StatelessWidget {
-  const LayersPanelHeader({
-    super.key,
-    required this.bloc,
-    required this.state,
-    required this.canReorder,
-    required this.reorderEnabled,
-    required this.onReorderToggled,
-  });
+  const LayersPanelHeader({super.key, required this.bloc, required this.state});
 
   final EditorBloc bloc;
   final EditorState state;
-  final bool canReorder;
-  final bool reorderEnabled;
-  final VoidCallback onReorderToggled;
 
   Future<void> _rename(BuildContext context) async {
     final name = await promptText(
@@ -57,16 +47,17 @@ class LayersPanelHeader extends StatelessWidget {
           context.l10n.layerRename,
           () => _rename(context),
         ),
-        IconButton(
-          tooltip: reorderEnabled
-              ? context.l10n.layerReorderDisable
-              : context.l10n.layerReorderEnable,
-          iconSize: 18,
-          visualDensity: VisualDensity.compact,
-          isSelected: canReorder && reorderEnabled,
-          icon: const Icon(Icons.drag_handle),
-          selectedIcon: const Icon(Icons.drag_handle),
-          onPressed: canReorder ? onReorderToggled : null,
+        _button(
+          Icons.arrow_upward,
+          context.l10n.layerMoveUp,
+          () => bloc.add(LayerMoved(active, 1)),
+          enabled: active < layers.length - 1,
+        ),
+        _button(
+          Icons.arrow_downward,
+          context.l10n.layerMoveDown,
+          () => bloc.add(LayerMoved(active, -1)),
+          enabled: active > 0,
         ),
         _button(
           Icons.delete_outline,

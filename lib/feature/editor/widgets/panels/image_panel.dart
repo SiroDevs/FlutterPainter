@@ -121,9 +121,10 @@ class ImagePanel extends StatelessWidget {
                   ),
                 LabeledSlider(
                   compact: true,
-                  label: context.l10n.imageOpacity(
-                    (r.opacity * 100).round().toString(),
-                  ),
+                  name: context.l10n.imageOpacityName,
+                  displayFactor: 100,
+                  decimals: 0,
+                  unit: '%',
                   value: r.opacity,
                   min: 0.05,
                   max: 1,
@@ -132,7 +133,8 @@ class ImagePanel extends StatelessWidget {
                 ),
                 LabeledSlider(
                   compact: true,
-                  label: context.l10n.imageScale(r.scaleX.toStringAsFixed(3)),
+                  name: context.l10n.imageScaleName,
+                  decimals: 3,
                   value: r.scaleX,
                   min: math.min(0.01, r.scaleX),
                   max: math.max(4.0, r.scaleX * 1.5),

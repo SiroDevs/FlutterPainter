@@ -42,14 +42,13 @@ class PropertyStyleControls extends StatelessWidget {
           width: 190,
           child: LabeledSlider(
             compact: true,
-            label: context.l10n.propertyStrokeWidth(
-              style.strokeWidth.toStringAsFixed(2),
-            ),
+            name: context.l10n.propertyStrokeWidthName,
+            step: 0.25,
+            decimals: 2,
             value: style.strokeWidth,
             min: 0.25,
             max: 20,
-            onChanged: (value) =>
-                bloc.add(StrokeWidthChanged((value * 4).round() / 4)),
+            onChanged: (value) => bloc.add(StrokeWidthChanged(value)),
             onChangeEnd: () => bloc.add(const ChangesCommitted()),
           ),
         ),

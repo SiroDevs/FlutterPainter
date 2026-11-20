@@ -4,6 +4,7 @@ import 'dart:ui';
 // Project imports:
 import '../../../../domain/services/geometry/shape_geometry.dart';
 import '../../bloc/editor_bloc.dart';
+import '../drawing/editor_ops.dart';
 import '../drawing/style_logic.dart';
 
 /// Fills the topmost visible closed shape under the pointer.
@@ -23,6 +24,7 @@ abstract class PaintBucketLogic {
       ) {
         final shape = layer.shapes[shapeIndex];
         if (!shape.visible ||
+            !state.canEdit(shape, layerIndex) ||
             !shape.isClosed ||
             !shape.hitTest(point, tolerance)) {
           continue;

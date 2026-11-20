@@ -7,6 +7,8 @@ import 'package:equatable/equatable.dart';
 
 // Project imports:
 import '../../../core/utils/copy_with_util.dart';
+import '../model3d/part_pose.dart';
+import '../model3d/section_profile.dart';
 import 'shape_gradient.dart';
 import 'shape_kind.dart';
 
@@ -35,6 +37,8 @@ class Shape extends Equatable {
     this.visible = true,
     this.depth = 0,
     this.thickness = 0,
+    this.tilt = PartPose.rest,
+    this.section = SectionProfile.box,
   });
 
   final ShapeKind kind;
@@ -58,6 +62,12 @@ class Shape extends Equatable {
   /// How far the shape is extruded around [depth], used by 3D layers only.
   final double thickness;
 
+  /// Turns the shape around its own centre, used by 3D layers only.
+  final PartPose tilt;
+
+  /// The form of the shape's thickness, used by 3D layers only.
+  final SectionProfile section;
+
   Shape copyWith({
     ShapeKind? kind,
     List<Offset>? points,
@@ -73,6 +83,8 @@ class Shape extends Equatable {
     bool? visible,
     double? depth,
     double? thickness,
+    PartPose? tilt,
+    SectionProfile? section,
   }) => Shape(
     kind: kind ?? this.kind,
     points: points ?? this.points,
@@ -88,6 +100,8 @@ class Shape extends Equatable {
     visible: visible ?? this.visible,
     depth: depth ?? this.depth,
     thickness: thickness ?? this.thickness,
+    tilt: tilt ?? this.tilt,
+    section: section ?? this.section,
   );
 
   @override
@@ -106,6 +120,8 @@ class Shape extends Equatable {
     visible,
     depth,
     thickness,
+    tilt,
+    section,
   ];
 
   bool get isClosed => kind != ShapeKind.line && kind != ShapeKind.freehand;

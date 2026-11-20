@@ -14,6 +14,7 @@ import 'model3d_edits.dart';
 import 'model3d_slider.dart';
 
 const double _thicknessRange = 60;
+const double _thicknessInputLimit = 1000;
 
 /// Depth and thickness of the selected shapes.
 class Model3dShapeSection extends StatelessWidget {
@@ -40,21 +41,20 @@ class Model3dShapeSection extends StatelessWidget {
         else ...[
           Model3dSlider(
             name: context.l10n.model3dDepth,
-            valueText: current.depth.toStringAsFixed(1),
             value: current.depth,
             min: -kDepthRange,
             max: kDepthRange,
             onChanged: (next) =>
-                bloc.add(ShapeDepthChanged(depth: snapTo(next, 0.5))),
+                bloc.add(ShapeDepthChanged(depth: next)),
           ),
           Model3dSlider(
             name: context.l10n.model3dThickness,
-            valueText: current.thickness.toStringAsFixed(1),
             value: current.thickness,
             min: 0,
             max: _thicknessRange,
+            inputMax: _thicknessInputLimit,
             onChanged: (next) =>
-                bloc.add(ShapeDepthChanged(thickness: snapTo(next, 0.5))),
+                bloc.add(ShapeDepthChanged(thickness: next)),
           ),
         ],
       ],
@@ -120,13 +120,12 @@ class Model3dPivotSection extends StatelessWidget {
     Point3 Function(double next) moved,
   ) => Model3dSlider(
     name: name,
-    valueText: value.toStringAsFixed(1),
     value: value,
     min: min,
     max: max,
     onChanged: (next) => editModel(
       context,
-      (current) => current.copyWith(pivot: moved(snapTo(next, 0.5))),
+      (current) => current.copyWith(pivot: moved(next)),
       record: false,
     ),
   );

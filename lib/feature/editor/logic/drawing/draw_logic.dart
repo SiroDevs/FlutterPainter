@@ -19,6 +19,10 @@ abstract class DrawLogic {
     final open = kind == ShapeKind.line || kind == ShapeKind.freehand;
     final count = s.drawing.layers.fold<int>(0, (n, l) => n + l.shapes.length);
     final st = s.style;
+    final part = s.workingPart;
+    final partShape = part == null
+        ? null
+        : s.layer.shapes.firstWhere((shape) => shape.groupId == part);
     return Shape(
       kind: kind,
       points: points,
@@ -28,6 +32,9 @@ abstract class DrawLogic {
       stroke: (st.strokeOn || open) ? st.strokeColor : null,
       strokeWidth: st.strokeWidth,
       radius: kind == ShapeKind.rect ? st.radius : 0,
+      groupId: partShape?.groupId,
+      groupName: partShape?.groupName,
+      depth: partShape?.depth ?? 0,
     );
   }
 

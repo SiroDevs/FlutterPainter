@@ -54,34 +54,35 @@ class Model3dViewsSection extends StatelessWidget {
   List<Widget> _sliders(BuildContext context, ViewAngle view) => [
     Model3dSlider(
       name: context.l10n.model3dTurn,
-      valueText: '${degreesOf(view.yaw).toStringAsFixed(1)}°',
+      unit: '°',
       value: degreesOf(view.yaw),
       min: -85,
       max: 85,
       onChanged: (next) => _change(
         context,
-        (item) => item.copyWith(yaw: radiansOf(snapTo(next, 0.5))),
+        (item) => item.copyWith(yaw: radiansOf(next)),
       ),
     ),
     Model3dSlider(
       name: context.l10n.model3dTilt,
-      valueText: '${degreesOf(view.pitch).toStringAsFixed(1)}°',
+      unit: '°',
       value: degreesOf(view.pitch),
-      min: -60,
-      max: 60,
+      min: -85,
+      max: 85,
       onChanged: (next) => _change(
         context,
-        (item) => item.copyWith(pitch: radiansOf(snapTo(next, 0.5))),
+        (item) => item.copyWith(pitch: radiansOf(next)),
       ),
     ),
     Model3dSlider(
       name: context.l10n.model3dZoom,
-      valueText: view.scale.toStringAsFixed(2),
+      step: 0.01,
+      decimals: 2,
       value: view.scale,
       min: 0.5,
       max: 2,
       onChanged: (next) =>
-          _change(context, (item) => item.copyWith(scale: snapTo(next, 0.01))),
+          _change(context, (item) => item.copyWith(scale: next)),
     ),
   ];
 

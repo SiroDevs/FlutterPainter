@@ -8,14 +8,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
+import '../../../../../domain/models/model3d/depth_range.dart';
 import '../../../../../domain/models/model3d/model3d.dart';
-import '../../../../../domain/models/model3d/tyre_spec.dart';
 import '../../../../../domain/models/model3d/view_angle.dart';
 import '../../../bloc/editor_bloc.dart';
 import '../../../logic/drawing/editor_ops.dart';
 
-/// How far in front of or behind the drawing plane sliders can reach.
-const double kDepthRange = 120;
+export '../../../../../domain/models/model3d/depth_range.dart';
 
 /// Sends a change to the active layer's 3D setup. [record] also makes it one
 /// undo step; sliders pass false while dragging and commit when they let go.
@@ -40,23 +39,9 @@ Model3d updateView(
       )
     : model;
 
-/// Applies [change] to the tyre at [index], if it still exists.
-Model3d updateTyre(
-  Model3d model,
-  int index,
-  TyreSpec Function(TyreSpec tyre) change,
-) => index >= 0 && index < model.tyres.length
-    ? model.copyWith(
-        tyres: replacedAt(model.tyres, index, change(model.tyres[index])),
-      )
-    : model;
-
 double degreesOf(double radians) => radians * 180 / math.pi;
 
 double radiansOf(double degrees) => degrees * math.pi / 180;
-
-/// Rounds [value] to the nearest multiple of [step].
-double snapTo(double value, double step) => (value / step).round() * step;
 
 /// Keeps a remembered list position valid after the list changed.
 int clampedIndex(int index, int length) =>
