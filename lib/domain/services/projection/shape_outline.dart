@@ -6,8 +6,8 @@ import 'dart:ui';
 import '../../models/shapes/shape.dart';
 import '../../models/shapes/shape_kind.dart';
 
-const int _ellipseSteps = 32;
-const int _cornerSteps = 4;
+const int _ellipseSteps = 48;
+const int _cornerSteps = 12;
 const int _densifyLimit = 600;
 
 /// The points around a shape in its drawing plane, rotation applied.
