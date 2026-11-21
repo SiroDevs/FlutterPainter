@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../core/utils/l10n_ext.dart';
-import '../../export/widgets/code_editor.dart';
-import '../../export/widgets/vscode_colors.dart';
+import '../../export/widgets/code_editor/code_editor.dart';
+import '../../export/widgets/theme/vscode_colors.dart';
 import '../cubit/inline_code_cubit.dart';
 import 'inline_file_strip.dart';
 import 'inline_status_line.dart';

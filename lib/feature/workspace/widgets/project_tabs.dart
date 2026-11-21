@@ -7,8 +7,8 @@ import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
 import '../../../core/utils/l10n_ext.dart';
-import '../../editor/bloc/editor_bloc.dart';
-import '../../editor/logic/drawing/editor_ops.dart';
+import '../../editor/bloc/controller/editor_bloc.dart';
+import '../../editor/logic/drawing/shared/editor_ops.dart';
 import '../../quick_code/quick_code_request.dart';
 import '../cubit/workspace_cubit.dart';
 import '../flows/tab_flows.dart';

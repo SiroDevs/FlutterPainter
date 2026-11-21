@@ -6,7 +6,7 @@ import '../../../common/widgets/progress/custom_snackbar.dart';
 import '../../../core/di/injectable.dart';
 import '../../../core/platform/file_dialogs.dart';
 import '../../../core/utils/l10n_ext.dart';
-import '../bloc/editor_bloc.dart';
+import '../bloc/controller/editor_bloc.dart';
 
 /// Lets the user pick a picture and puts it on the active layer, or on a new
 /// layer above it when [onNewLayer] is set.

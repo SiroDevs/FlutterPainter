@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/editor/tool.dart';
-import '../../../editor/bloc/editor_bloc.dart';
+import '../../../editor/bloc/controller/editor_bloc.dart';
 import '../../../editor/flows/image_flow.dart';
 import '../../../editor/logic/exports.dart';
-import '../../../editor/widgets/toolbar/tool_info.dart';
+import '../../../editor/widgets/toolbar/tools/tool_info.dart';
 import '../app_command.dart';
 import '../workspace_commands.dart';
 

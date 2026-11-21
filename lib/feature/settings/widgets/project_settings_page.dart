@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../core/utils/l10n_ext.dart';
-import '../../editor/bloc/editor_bloc.dart';
+import '../../editor/bloc/controller/editor_bloc.dart';
 import 'setting_field.dart';
 
 /// Shows the editable name and canvas dimensions of the active project.

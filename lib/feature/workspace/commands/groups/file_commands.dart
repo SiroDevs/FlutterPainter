@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/app_router/route_names.dart';
 import '../../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../../core/utils/l10n_ext.dart';
-import '../../../editor/bloc/editor_bloc.dart';
+import '../../../editor/bloc/controller/editor_bloc.dart';
 import '../../../export/export_args.dart';
 import '../../../settings/widgets/settings_dialog.dart';
 import '../../flows/tab_flows.dart';

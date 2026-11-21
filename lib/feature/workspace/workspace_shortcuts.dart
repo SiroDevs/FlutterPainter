@@ -8,9 +8,9 @@ import 'package:go_router/go_router.dart';
 // Project imports:
 import '../../common/app_router/route_names.dart';
 import '../../domain/models/editor/tool.dart';
-import '../editor/bloc/editor_bloc.dart';
-import '../editor/logic/drawing/editor_ops.dart';
-import '../editor/widgets/toolbar/tool_info.dart';
+import '../editor/bloc/controller/editor_bloc.dart';
+import '../editor/logic/drawing/shared/editor_ops.dart';
+import '../editor/widgets/toolbar/tools/tool_info.dart';
 import '../export/export_args.dart';
 import '../settings/widgets/settings_dialog.dart';
 import 'clipboard/project_transfer_clipboard.dart';

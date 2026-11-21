@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
-import '../../bloc/editor_bloc.dart';
+import '../../bloc/controller/editor_bloc.dart';
 
 /// Shows vertex editing actions for a right-clicked polygon or line point.
 abstract class CanvasContextMenu {

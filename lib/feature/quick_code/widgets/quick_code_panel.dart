@@ -7,10 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../core/utils/l10n_ext.dart';
 import '../../../domain/models/export/export_file.dart';
-import '../../../domain/services/code_import/quick_code_format.dart';
-import '../../../domain/services/code_import/quick_code_validation.dart';
-import '../../export/widgets/code_editor.dart';
-import '../../export/widgets/vscode_colors.dart';
+import '../../../domain/services/code_import/quick_code/quick_code_format.dart';
+import '../../../domain/services/code_import/quick_code/quick_code_validation.dart';
+import '../../export/widgets/code_editor/code_editor.dart';
+import '../../export/widgets/theme/vscode_colors.dart';
 import '../cubit/quick_code_cubit.dart';
 
 /// The Quick Code coordinate editor and its canvas actions.

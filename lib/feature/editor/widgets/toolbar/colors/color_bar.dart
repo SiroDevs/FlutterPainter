@@ -1,0 +1,208 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+// Project imports:
+import '../../../../../common/constants/palette_constants.dart';
+import '../../../../../core/utils/l10n_ext.dart';
+import '../../../bloc/controller/editor_bloc.dart';
+import '../../../models/style_settings.dart';
+import 'color_cell.dart';
+import 'color_picker_dialog.dart';
+
+/// Paint-style colour strip with swatches, a hex field, and color palettes.
+class ColorBar extends StatelessWidget {
+  const ColorBar({super.key, this.height = 104});
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<EditorBloc, EditorState>(
+      buildWhen: (a, b) =>
+          a.style != b.style || !identical(a.history, b.history),
+      builder: (context, state) {
+        final st = state.style;
+        final active = st.editFill ? st.fillColor : st.strokeColor;
+        final activeOn = st.editFill ? st.fillOn : st.strokeOn;
+        final hex = hexOf(active);
+        final bloc = context.read<EditorBloc>();
+        return SizedBox(
+          height: height,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _Swatches(style: st),
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 124,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        key: ValueKey('${st.editFill}-$hex'),
+                        initialValue: hex,
+                        style: const TextStyle(
+                          fontFamily: 'monospace',
+                          fontSize: 13,
+                        ),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          border: const OutlineInputBorder(),
+                          labelText: st.editFill
+                              ? context.l10n.propertyFill
+                              : context.l10n.propertyStroke,
+                        ),
+                        onFieldSubmitted: (v) {
+                          final parsed = parseHex(v);
+                          if (parsed != null) bloc.add(ColorPicked(parsed));
+                        },
+                      ),
+                      Row(
+                        children: [
+                          TextButton.icon(
+                            style: TextButton.styleFrom(
+                              visualDensity: VisualDensity.compact,
+                              minimumSize: const Size(0, 28),
+                            ),
+                            onPressed: () => bloc.add(
+                              st.editFill
+                                  ? FillToggled(!activeOn)
+                                  : StrokeToggled(!activeOn),
+                            ),
+                            icon: Icon(
+                              activeOn ? Icons.block : Icons.check,
+                              size: 16,
+                            ),
+                            label: Text(
+                              activeOn
+                                  ? context.l10n.buttonNone
+                                  : context.l10n.buttonUse,
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            tooltip: context.l10n.colorMoreTooltip,
+                            iconSize: 18,
+                            visualDensity: VisualDensity.compact,
+                            icon: const Icon(Icons.palette_outlined),
+                            onPressed: () => _openPicker(context, st),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 10 * 26.0,
+                  child: Wrap(
+                    spacing: 2,
+                    runSpacing: 2,
+                    children: [
+                      for (final v in kPalette) ColorCell(color: v, size: 24),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      spacing: 2,
+                      runSpacing: 2,
+                      children: [
+                        for (final v in state.drawing.usedColors)
+                          ColorCell(color: v, size: 18),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+// Opens the color picker for whichever swatch is active and applies the answer.
+Future<void> _openPicker(BuildContext context, StyleSettings style) async {
+  final bloc = context.read<EditorBloc>();
+  final result = await showDialog<ColorPickerResult>(
+    context: context,
+    builder: (_) => ColorPickerDialog(
+      initialColor: style.editFill ? style.fillColor : style.strokeColor,
+      initialGradient: style.editFill ? style.fillGradient : null,
+      allowGradient: style.editFill,
+    ),
+  );
+  if (result == null) return;
+  final gradient = result.gradient;
+  bloc.add(
+    gradient == null ? ColorPicked(result.color) : GradientPicked(gradient),
+  );
+}
+
+class _Swatches extends StatelessWidget {
+  const _Swatches({required this.style});
+
+  final StyleSettings style;
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = Theme.of(context).colorScheme.primary;
+    final bloc = context.read<EditorBloc>();
+
+    Widget box(bool isFill, int color, bool on) => Tooltip(
+      message: isFill
+          ? context.l10n.colorFillTooltip
+          : context.l10n.colorStrokeTooltip,
+      child: GestureDetector(
+        onTap: () => bloc.add(StyleTargetChanged(isFill)),
+        child: Container(
+          width: 38,
+          height: 38,
+          decoration: BoxDecoration(
+            color: on ? Color(color) : const Color(0xFF2B2E34),
+            gradient: isFill && on && style.fillGradient != null
+                ? LinearGradient(
+                    colors: [
+                      for (final c in style.fillGradient!.colors) Color(c),
+                    ],
+                    stops: style.fillGradient!.stops,
+                  )
+                : null,
+            border: Border.all(
+              color: style.editFill == isFill ? accent : Colors.white38,
+              width: style.editFill == isFill ? 3 : 1,
+            ),
+          ),
+          child: on ? null : const Icon(Icons.block, size: 18),
+        ),
+      ),
+    );
+
+    return SizedBox(
+      width: 64,
+      height: 60,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 22,
+            top: 20,
+            child: box(false, style.strokeColor, style.strokeOn),
+          ),
+          Positioned(
+            left: 0,
+            top: 0,
+            child: box(true, style.fillColor, style.fillOn),
+          ),
+        ],
+      ),
+    );
+  }
+}

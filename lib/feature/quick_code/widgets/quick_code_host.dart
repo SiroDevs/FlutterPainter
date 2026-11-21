@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
-import '../../../domain/services/code_import/quick_code_validation.dart';
-import '../../editor/bloc/editor_bloc.dart';
+import '../../../domain/services/code_import/quick_code/quick_code_validation.dart';
+import '../../editor/bloc/controller/editor_bloc.dart';
 import '../cubit/quick_code_cubit.dart';
 import '../quick_code_request.dart';
 import 'quick_code_panel.dart';
