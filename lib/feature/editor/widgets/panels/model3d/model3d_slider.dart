@@ -21,6 +21,7 @@ class Model3dSlider extends StatelessWidget {
     this.step = 0.5,
     this.decimals = 1,
     this.unit = '',
+    this.inputMin,
     this.inputMax,
   });
 
@@ -32,6 +33,7 @@ class Model3dSlider extends StatelessWidget {
   final double step;
   final int decimals;
   final String unit;
+  final double? inputMin;
   final double? inputMax;
 
   @override
@@ -46,6 +48,7 @@ class Model3dSlider extends StatelessWidget {
       step: step,
       decimals: decimals,
       unit: unit,
+      inputMin: inputMin,
       inputMax: inputMax,
       onChanged: onChanged,
       onChangeEnd: () => context.read<EditorBloc>().add(const ChangesCommitted()),

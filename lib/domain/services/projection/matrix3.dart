@@ -2,7 +2,7 @@
 import 'dart:math' as math;
 
 // Project imports:
-import '../../models/model3d/point3.dart';
+import '../../models/model3d/points.dart';
 
 /// A rotation of object space, stored as its three rows.
 class Matrix3 {

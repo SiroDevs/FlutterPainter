@@ -4,7 +4,7 @@ import 'dart:ui';
 
 // Project imports:
 import '../../../../domain/models/model3d/part_rig.dart';
-import '../../../../domain/models/model3d/point3.dart';
+import '../../../../domain/models/model3d/points.dart';
 import '../../../../domain/models/shapes/shape.dart';
 import '../../../../domain/models/shapes/shape_kind.dart';
 import '../../../../domain/services/geometry/hinge_edges.dart';
@@ -42,11 +42,11 @@ abstract class FaceLogic {
       name: name,
       groupId: id,
       groupName: name,
-      depth: parent.depth,
+      z: parent.z,
     );
     final middle = (edge.start + edge.end) / 2;
     final rig = PartRig(
-      pivot: Point3(middle.dx, middle.dy, parent.depth),
+      pivot: Point3(middle.dx, middle.dy, parent.z),
       parentId: partId,
       axisAngle: math.atan2(edge.outward.dx, -edge.outward.dy),
       fold: _sideFold,

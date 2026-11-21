@@ -19,8 +19,11 @@ enum GestureMode {
   imageMove,
   imageScale,
   orbit,
-  depth,
+  plane,
   tilt,
+  moveX,
+  moveY,
+  moveZ,
 }
 
 /// The state of a pointer gesture in progress. It lives in the bloc state (not

@@ -6,7 +6,7 @@ import '../../../../../common/widgets/inputs/item_chip_row.dart';
 import '../../../../../core/utils/l10n_ext.dart';
 import '../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../domain/models/model3d/part_pose.dart';
-import '../../../../../domain/models/model3d/point3.dart';
+import '../../../../../domain/models/model3d/points.dart';
 import '../../../../../domain/models/shapes/shape.dart';
 import 'model3d_edits.dart';
 import 'model3d_fold_controls.dart';
@@ -85,7 +85,7 @@ class Model3dPartsSection extends StatelessWidget {
       _jointSlider(
         context,
         part,
-        context.l10n.model3dAcross,
+        context.l10n.model3dAxisX,
         pivot.dx,
         0,
         canvasSize.width,
@@ -94,7 +94,7 @@ class Model3dPartsSection extends StatelessWidget {
       _jointSlider(
         context,
         part,
-        context.l10n.model3dDown,
+        context.l10n.model3dAxisY,
         pivot.dy,
         0,
         canvasSize.height,
@@ -103,11 +103,12 @@ class Model3dPartsSection extends StatelessWidget {
       _jointSlider(
         context,
         part,
-        context.l10n.model3dDepth,
+        context.l10n.model3dAxisZ,
         pivot.dz,
-        -kDepthRange,
-        kDepthRange,
+        -kZSliderRange,
+        kZSliderRange,
         (next) => Point3(pivot.dx, pivot.dy, next),
+        inputLimit: kZRange,
       ),
     ];
   }
@@ -119,12 +120,15 @@ class Model3dPartsSection extends StatelessWidget {
     double value,
     double min,
     double max,
-    Point3 Function(double next) moved,
-  ) => Model3dSlider(
+    Point3 Function(double next) moved, {
+    double? inputLimit,
+  }) => Model3dSlider(
     name: name,
     value: value,
     min: min,
     max: max,
+    inputMin: inputLimit == null ? null : -inputLimit,
+    inputMax: inputLimit,
     onChanged: (next) => editModel(
       context,
       (current) => withRig(

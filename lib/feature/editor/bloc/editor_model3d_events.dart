@@ -25,11 +25,14 @@ class Model3dEdited extends EditorEvent {
   final Model3d Function(Model3d model) change;
 }
 
-/// Sets depth, thickness or both on every selected shape.
-class ShapeDepthChanged extends EditorEvent {
-  const ShapeDepthChanged({this.depth, this.thickness});
+/// Places the selected shapes: [x] and [y] set where their middle is, [z]
+/// how far front or back, [thickness] how thick.
+class ShapePlaced extends EditorEvent {
+  const ShapePlaced({this.x, this.y, this.z, this.thickness});
 
-  final double? depth;
+  final double? x;
+  final double? y;
+  final double? z;
   final double? thickness;
 }
 
@@ -101,10 +104,12 @@ extension _EditorModel3dRegistrations on EditorBloc {
     );
     _reduce<Model3dRemoved>((s, e) => Model3dLogic.remove(s));
     _reduce<Model3dEdited>((s, e) => Model3dLogic.edit(s, e.change));
-    _reduce<ShapeDepthChanged>(
-      (s, e) => Model3dLogic.setDepth(
+    _reduce<ShapePlaced>(
+      (s, e) => Model3dLogic.place(
         s,
-        depth: e.depth,
+        x: e.x,
+        y: e.y,
+        z: e.z,
         thickness: e.thickness,
       ),
     );

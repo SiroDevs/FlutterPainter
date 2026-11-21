@@ -36,7 +36,7 @@ Map<String, dynamic> shapeToJson(Shape s) => {
   if (s.groupId != null && s.groupName != null) 'groupName': s.groupName,
   if (s.rotation != 0) 'rotation': s.rotation,
   if (!s.visible) 'visible': false,
-  if (s.depth != 0) 'depth': s.depth,
+  if (s.z != 0) 'z': s.z,
   if (s.thickness != 0) 'thickness': s.thickness,
   if (!s.tilt.isRest) 'tilt': poseToJson(s.tilt),
   if (!s.section.isBox) 'section': sectionToJson(s.section),
@@ -58,7 +58,7 @@ Shape shapeFromJson(Map<String, dynamic> j) => Shape(
   groupName: j['groupName'] as String?,
   rotation: ((j['rotation'] as num?) ?? 0).toDouble(),
   visible: (j['visible'] as bool?) ?? true,
-  depth: ((j['depth'] as num?) ?? 0).toDouble(),
+  z: (((j['z'] ?? j['depth']) as num?) ?? 0).toDouble(),
   thickness: ((j['thickness'] as num?) ?? 0).toDouble(),
   tilt: j['tilt'] is Map<String, dynamic>
       ? poseFromJson(j['tilt'] as Map<String, dynamic>)

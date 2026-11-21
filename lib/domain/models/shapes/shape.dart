@@ -35,7 +35,7 @@ class Shape extends Equatable {
     this.groupName,
     this.rotation = 0,
     this.visible = true,
-    this.depth = 0,
+    this.z = 0,
     this.thickness = 0,
     this.tilt = PartPose.rest,
     this.section = SectionProfile.box,
@@ -57,9 +57,9 @@ class Shape extends Equatable {
   final bool visible;
 
   /// Distance behind the drawing plane, used by 3D layers only.
-  final double depth;
+  final double z;
 
-  /// How far the shape is extruded around [depth], used by 3D layers only.
+  /// How far the shape is extruded around [z], used by 3D layers only.
   final double thickness;
 
   /// Turns the shape around its own centre, used by 3D layers only.
@@ -81,7 +81,7 @@ class Shape extends Equatable {
     Object? groupName = unset,
     double? rotation,
     bool? visible,
-    double? depth,
+    double? z,
     double? thickness,
     PartPose? tilt,
     SectionProfile? section,
@@ -98,7 +98,7 @@ class Shape extends Equatable {
     groupName: keep<String>(groupName, this.groupName),
     rotation: rotation ?? this.rotation,
     visible: visible ?? this.visible,
-    depth: depth ?? this.depth,
+    z: z ?? this.z,
     thickness: thickness ?? this.thickness,
     tilt: tilt ?? this.tilt,
     section: section ?? this.section,
@@ -118,7 +118,7 @@ class Shape extends Equatable {
     groupName,
     rotation,
     visible,
-    depth,
+    z,
     thickness,
     tilt,
     section,

@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../models/model3d/point3.dart';
+import '../../models/model3d/points.dart';
 import '../../models/shapes/shape.dart';
 import '../../models/shapes/shape_kind.dart';
 import 'section_depths.dart';

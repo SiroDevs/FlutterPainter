@@ -6,8 +6,8 @@ import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../canvas/image_logic.dart';
-import '../drawing/editor_ops.dart';
 import '../drawing/draw_logic.dart';
+import '../drawing/editor_ops.dart';
 import 'live3d_logic.dart';
 import 'paint_bucket_logic.dart';
 import 'select_logic.dart';
@@ -59,8 +59,11 @@ abstract class PointerLogic {
       case GestureMode.imageScale:
         return ImageLogic.dragged(next, e.point, e.shift);
       case GestureMode.orbit:
-      case GestureMode.depth:
+      case GestureMode.plane:
       case GestureMode.tilt:
+      case GestureMode.moveX:
+      case GestureMode.moveY:
+      case GestureMode.moveZ:
         return Live3dLogic.moved(next, e.point);
       case GestureMode.none:
         return next;
@@ -81,8 +84,11 @@ abstract class PointerLogic {
       case GestureMode.imageScale:
         return ImageLogic.released(s);
       case GestureMode.orbit:
-      case GestureMode.depth:
+      case GestureMode.plane:
       case GestureMode.tilt:
+      case GestureMode.moveX:
+      case GestureMode.moveY:
+      case GestureMode.moveZ:
         return Live3dLogic.released(s);
       case GestureMode.none:
         return s;

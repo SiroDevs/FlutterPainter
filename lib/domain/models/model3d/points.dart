@@ -1,6 +1,9 @@
 // Package imports:
 import 'package:equatable/equatable.dart';
 
+/// How far in front of or behind the drawing plane a shape can be placed.
+const double kDepthRange = 120;
+
 /// A point in object space: right, down, and away from the viewer.
 class Point3 extends Equatable {
   const Point3(this.dx, this.dy, this.dz);

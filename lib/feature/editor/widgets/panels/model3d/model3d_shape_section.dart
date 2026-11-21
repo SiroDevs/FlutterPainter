@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../../core/utils/l10n_ext.dart';
 import '../../../../../domain/models/model3d/model3d.dart';
-import '../../../../../domain/models/model3d/point3.dart';
+import '../../../../../domain/models/model3d/points.dart';
 import '../../../../../domain/models/shapes/shape.dart';
 import '../../../bloc/editor_bloc.dart';
 import 'model3d_edits.dart';
@@ -16,16 +16,24 @@ import 'model3d_slider.dart';
 const double _thicknessRange = 60;
 const double _thicknessInputLimit = 1000;
 
-/// Depth and thickness of the selected shapes.
+/// Where the selected shapes are (X, Y, Z) and how thick they are.
 class Model3dShapeSection extends StatelessWidget {
-  const Model3dShapeSection({super.key, required this.shape});
+  const Model3dShapeSection({
+    super.key,
+    required this.shape,
+    required this.bounds,
+    required this.canvasSize,
+  });
 
   final Shape? shape;
+  final Rect? bounds;
+  final Size canvasSize;
 
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<EditorBloc>();
     final current = shape;
+    final middle = bounds?.center;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -33,19 +41,38 @@ class Model3dShapeSection extends StatelessWidget {
           context.l10n.model3dShape,
           style: Theme.of(context).textTheme.labelLarge,
         ),
-        if (current == null)
+        if (current == null || middle == null)
           Text(
             context.l10n.model3dNoShape,
             style: Theme.of(context).textTheme.bodySmall,
           )
         else ...[
           Model3dSlider(
-            name: context.l10n.model3dDepth,
-            value: current.depth,
-            min: -kDepthRange,
-            max: kDepthRange,
-            onChanged: (next) =>
-                bloc.add(ShapeDepthChanged(depth: next)),
+            name: context.l10n.model3dAxisX,
+            value: middle.dx,
+            min: 0,
+            max: canvasSize.width,
+            inputMin: -kPositionLimit,
+            inputMax: kPositionLimit,
+            onChanged: (next) => bloc.add(ShapePlaced(x: next)),
+          ),
+          Model3dSlider(
+            name: context.l10n.model3dAxisY,
+            value: middle.dy,
+            min: 0,
+            max: canvasSize.height,
+            inputMin: -kPositionLimit,
+            inputMax: kPositionLimit,
+            onChanged: (next) => bloc.add(ShapePlaced(y: next)),
+          ),
+          Model3dSlider(
+            name: context.l10n.model3dAxisZ,
+            value: current.z,
+            min: -kZSliderRange,
+            max: kZSliderRange,
+            inputMin: -kZRange,
+            inputMax: kZRange,
+            onChanged: (next) => bloc.add(ShapePlaced(z: next)),
           ),
           Model3dSlider(
             name: context.l10n.model3dThickness,
@@ -53,8 +80,7 @@ class Model3dShapeSection extends StatelessWidget {
             min: 0,
             max: _thicknessRange,
             inputMax: _thicknessInputLimit,
-            onChanged: (next) =>
-                bloc.add(ShapeDepthChanged(thickness: next)),
+            onChanged: (next) => bloc.add(ShapePlaced(thickness: next)),
           ),
         ],
       ],
@@ -85,7 +111,7 @@ class Model3dPivotSection extends StatelessWidget {
         ),
         _slider(
           context,
-          context.l10n.model3dAcross,
+          context.l10n.model3dAxisX,
           pivot.dx,
           0,
           canvasSize.width,
@@ -93,7 +119,7 @@ class Model3dPivotSection extends StatelessWidget {
         ),
         _slider(
           context,
-          context.l10n.model3dDown,
+          context.l10n.model3dAxisY,
           pivot.dy,
           0,
           canvasSize.height,
@@ -101,11 +127,12 @@ class Model3dPivotSection extends StatelessWidget {
         ),
         _slider(
           context,
-          context.l10n.model3dDepth,
+          context.l10n.model3dAxisZ,
           pivot.dz,
-          -kDepthRange,
-          kDepthRange,
+          -kZSliderRange,
+          kZSliderRange,
           (next) => Point3(pivot.dx, pivot.dy, next),
+          inputLimit: kZRange,
         ),
       ],
     );
@@ -117,12 +144,15 @@ class Model3dPivotSection extends StatelessWidget {
     double value,
     double min,
     double max,
-    Point3 Function(double next) moved,
-  ) => Model3dSlider(
+    Point3 Function(double next) moved, {
+    double? inputLimit,
+  }) => Model3dSlider(
     name: name,
     value: value,
     min: min,
     max: max,
+    inputMin: inputLimit == null ? null : -inputLimit,
+    inputMax: inputLimit,
     onChanged: (next) => editModel(
       context,
       (current) => current.copyWith(pivot: moved(next)),

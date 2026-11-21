@@ -1,5 +1,5 @@
 // Project imports:
-import '../../models/model3d/point3.dart';
+import '../../models/model3d/points.dart';
 import '../../models/shapes/shape.dart';
 import 'matrix3.dart';
 
@@ -12,7 +12,7 @@ class ShapeTilt {
     if (pose.isRest) return const ShapeTilt._(Point3.zero, null);
     final centre = shape.bounds.center;
     return ShapeTilt._(
-      Point3(centre.dx, centre.dy, shape.depth),
+      Point3(centre.dx, centre.dy, shape.z),
       Matrix3.pose(yaw: pose.yaw, pitch: pose.pitch, roll: pose.roll),
     );
   }

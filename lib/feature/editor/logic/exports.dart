@@ -17,6 +17,7 @@ export 'drawing/shape_logic.dart';
 export 'drawing/style_logic.dart';
 export 'drawing/vertex_logic.dart';
 export 'interaction/live3d_logic.dart';
+export 'interaction/live_gizmo.dart';
 export 'interaction/pointer_logic.dart';
 export 'interaction/paint_bucket_logic.dart';
 export 'interaction/select_logic.dart';

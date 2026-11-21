@@ -1,10 +1,15 @@
+// Dart imports:
 import 'dart:async';
 
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+
+// Package imports:
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+// Project imports:
 import 'app_localizations_ar.dart';
 import 'app_localizations_bn.dart';
 import 'app_localizations_de.dart';
@@ -2463,14 +2468,26 @@ abstract class AppLocalizations {
   /// No description provided for @model3dNoShape.
   ///
   /// In en, this message translates to:
-  /// **'Select a shape to set its depth and thickness.'**
+  /// **'Select a shape to set its position and thickness.'**
   String get model3dNoShape;
 
-  /// No description provided for @model3dDepth.
+  /// No description provided for @model3dAxisX.
   ///
   /// In en, this message translates to:
-  /// **'Depth'**
-  String get model3dDepth;
+  /// **'X (left–right)'**
+  String get model3dAxisX;
+
+  /// No description provided for @model3dAxisY.
+  ///
+  /// In en, this message translates to:
+  /// **'Y (up–down)'**
+  String get model3dAxisY;
+
+  /// No description provided for @model3dAxisZ.
+  ///
+  /// In en, this message translates to:
+  /// **'Z (front–back)'**
+  String get model3dAxisZ;
 
   /// No description provided for @model3dThickness.
   ///
@@ -2483,18 +2500,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Turning point'**
   String get model3dPivot;
-
-  /// No description provided for @model3dAcross.
-  ///
-  /// In en, this message translates to:
-  /// **'Across'**
-  String get model3dAcross;
-
-  /// No description provided for @model3dDown.
-  ///
-  /// In en, this message translates to:
-  /// **'Down'**
-  String get model3dDown;
 
   /// No description provided for @model3dParts.
   ///
@@ -2607,7 +2612,7 @@ abstract class AppLocalizations {
   /// No description provided for @model3dLiveNote.
   ///
   /// In en, this message translates to:
-  /// **'Drag empty space to turn the view. Drag a shape to move it in depth, or hold Alt and drag to tilt it.'**
+  /// **'Drag empty space to turn the view. Drag a shape to slide it across the drawing, or hold Alt to tilt it. Drag an arrow to move it along X, Y or Z.'**
   String get model3dLiveNote;
 
   /// No description provided for @model3dLiveSave.

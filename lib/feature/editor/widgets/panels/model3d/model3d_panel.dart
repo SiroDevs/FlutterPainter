@@ -129,7 +129,11 @@ class _Model3dPanelState extends State<Model3dPanel>
   List<Widget> _liveControls(EditorState state, Model3d model) => [
     Model3dLiveSection(camera: state.camera, model: model),
     const SizedBox(height: 8),
-    Model3dShapeSection(shape: state.selectedShape),
+    Model3dShapeSection(
+      shape: state.selectedShape,
+      bounds: state.selectedBounds,
+      canvasSize: _canvasSize(state),
+    ),
     const SizedBox(height: 8),
     Model3dFormSection(shape: state.selectedShape),
     const SizedBox(height: 8),

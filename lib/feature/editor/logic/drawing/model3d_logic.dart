@@ -1,6 +1,9 @@
+// Dart imports:
+import 'dart:ui';
+
 // Project imports:
 import '../../../../domain/models/model3d/model3d.dart';
-import '../../../../domain/models/model3d/point3.dart';
+import '../../../../domain/models/model3d/points.dart';
 import '../../../../domain/models/model3d/view_angle.dart';
 import '../../bloc/editor_bloc.dart';
 import 'editor_ops.dart';
@@ -47,18 +50,30 @@ abstract class Model3dLogic {
     return model == null ? s : _withModel(s, change(model));
   }
 
-  /// Sets depth and thickness on the selected shapes (no history entry).
-  static EditorState setDepth(
+  /// Places the selected shapes (no history entry): x and y set where their
+  /// middle is, z how far front or back, thickness how thick.
+  static EditorState place(
     EditorState s, {
-    double? depth,
+    double? x,
+    double? y,
+    double? z,
     double? thickness,
-  }) => s.withShapeChanges({
-    for (final index in s.validSelectedIndices)
-      index: s.layer.shapes[index].copyWith(
-        depth: depth,
-        thickness: thickness,
-      ),
-  });
+  }) {
+    final middle = s.selectedBounds?.center;
+    final shift = middle == null
+        ? Offset.zero
+        : Offset(x == null ? 0 : x - middle.dx, y == null ? 0 : y - middle.dy);
+    return s.withShapeChanges({
+      for (final index in s.validSelectedIndices)
+        index: s.layer.shapes[index].copyWith(
+          points: shift == Offset.zero
+              ? null
+              : [for (final vertex in s.layer.shapes[index].points) vertex + shift],
+          z: z,
+          thickness: thickness,
+        ),
+    });
+  }
 
   /// Previewing and working on a part are different views of the canvas, so
   /// turning one on turns the other off.

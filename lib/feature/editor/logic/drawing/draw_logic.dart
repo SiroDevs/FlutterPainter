@@ -34,7 +34,7 @@ abstract class DrawLogic {
       radius: kind == ShapeKind.rect ? st.radius : 0,
       groupId: partShape?.groupId,
       groupName: partShape?.groupName,
-      depth: partShape?.depth ?? 0,
+      z: partShape?.z ?? 0,
     );
   }
 

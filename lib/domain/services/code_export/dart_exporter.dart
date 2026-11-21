@@ -1,9 +1,9 @@
 // Project imports:
-import '../../models/editor/app_settings.dart';
 import '../../models/drawing/drawing.dart';
+import '../../models/drawing/paint_layer.dart';
+import '../../models/editor/app_settings.dart';
 import '../../models/export/export_file.dart';
 import '../../models/export/export_options.dart';
-import '../../models/drawing/paint_layer.dart';
 import '../../models/shapes/shape.dart';
 import '../../models/shapes/shape_kind.dart';
 import '../projection/model_baker.dart';

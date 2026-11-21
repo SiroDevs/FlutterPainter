@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../models/model3d/point3.dart';
+import '../../models/model3d/points.dart';
 import '../../models/model3d/section_profile.dart';
 import '../../models/shapes/shape.dart';
 import '../../models/shapes/shape_kind.dart';
@@ -42,7 +42,7 @@ List<SurfacePiece> sectionStrips(
   final axis = Point3(direction.dx, direction.dy, 0);
   double depthAt(Offset point, bool near) {
     final range = section.rangeAt(across(point));
-    return shape.depth + (near ? range.near : range.far) * half;
+    return shape.z + (near ? range.near : range.far) * half;
   }
 
   final pieces = <SurfacePiece>[];

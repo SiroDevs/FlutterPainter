@@ -18,8 +18,8 @@ SectionDepths sectionDepths(Shape shape, List<Offset> outline) {
       : bounds.height / 2;
   if (shape.section.isBox || shape.thickness <= 0 || reach < 1e-9) {
     return (
-      near: List.filled(outline.length, shape.depth - half),
-      far: List.filled(outline.length, shape.depth + half),
+      near: List.filled(outline.length, shape.z - half),
+      far: List.filled(outline.length, shape.z + half),
     );
   }
   final section = SectionShape(shape.section);
@@ -34,8 +34,8 @@ SectionDepths sectionDepths(Shape shape, List<Offset> outline) {
         ? (local.dx - centre.dx) / reach
         : (local.dy - centre.dy) / reach;
     final range = section.rangeAt(across);
-    near.add(shape.depth + range.near * half);
-    far.add(shape.depth + range.far * half);
+    near.add(shape.z + range.near * half);
+    far.add(shape.z + range.far * half);
   }
   return (near: near, far: far);
 }

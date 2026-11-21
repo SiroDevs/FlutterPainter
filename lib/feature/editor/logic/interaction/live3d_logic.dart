@@ -3,31 +3,47 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../../../domain/models/model3d/depth_range.dart';
+import '../../../../domain/models/model3d/space_range.dart';
+import '../../../../domain/models/model3d/world_axis.dart';
 import '../../../../domain/models/shapes/shape.dart';
 import '../../../../domain/services/geometry/shape_geometry.dart';
+import '../../../../domain/services/projection/axis_handles.dart';
 import '../../../../domain/services/projection/model_projection.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
 import '../drawing/editor_ops.dart';
+import 'live_gizmo.dart';
 
-/// Pointer gestures of the live 3D camera: turn the view, push shapes in
-/// depth, tilt them.
+/// Pointer gestures of the live 3D camera. Empty space turns the view; an
+/// arrow moves the selection along X, Y or Z; a shape slides across the
+/// drawing, or tilts with alt.
 abstract class Live3dLogic {
   Live3dLogic._();
 
   static const double _radiansPerPixel = 0.005;
-  static const double _viewLimit = 1.48;
+  static const double _viewLimit = math.pi;
   static const double _tiltLimit = math.pi;
   static const double _hitReach = 4;
   static const double _minAxisReach = 0.02;
+  static const double _minPlaneReach = 0.1;
+  static const double _moveStep = 0.5;
 
-  // Empty space turns the view; a shape is pushed, or tilted with alt.
   static EditorState pressed(
     EditorState state,
     Offset point, {
     required bool alt,
   }) {
+    final handle = LiveGizmo.handleAt(state, point);
+    if (handle != null) {
+      return state.copyWith(
+        gesture: _start(
+          state,
+          _modeOf(handle.axis),
+          point,
+          state.validSelectedIndices,
+        ),
+      );
+    }
     final hit = _sourceAt(state, point);
     if (hit == null) {
       final cleared = state.selectIndices(const []);
@@ -45,7 +61,7 @@ abstract class Live3dLogic {
     return selected.copyWith(
       gesture: _start(
         selected,
-        alt ? GestureMode.tilt : GestureMode.depth,
+        alt ? GestureMode.tilt : GestureMode.plane,
         point,
         selected.validSelectedIndices,
       ),
@@ -54,22 +70,30 @@ abstract class Live3dLogic {
 
   static EditorState moved(EditorState state, Offset point) {
     final gesture = state.gesture;
+    final drag = point - gesture.origin;
     final next = switch (gesture.mode) {
       GestureMode.orbit => _orbit(state, point - gesture.last),
-      GestureMode.depth => _push(state, point - gesture.origin),
-      GestureMode.tilt => _tilt(state, point - gesture.origin),
+      GestureMode.plane => _slide(state, drag),
+      GestureMode.tilt => _tilt(state, drag),
+      GestureMode.moveX => _along(state, drag, WorldAxis.x),
+      GestureMode.moveY => _along(state, drag, WorldAxis.y),
+      GestureMode.moveZ => _along(state, drag, WorldAxis.z),
       _ => state,
     };
     return next.copyWith(gesture: next.gesture.copyWith(last: point));
   }
 
   static EditorState released(EditorState state) {
-    final editedShapes =
-        state.gesture.mode == GestureMode.depth ||
-        state.gesture.mode == GestureMode.tilt;
+    final editedShapes = state.gesture.mode != GestureMode.orbit;
     final ended = state.endGesture();
     return editedShapes ? ended.commit() : ended;
   }
+
+  static GestureMode _modeOf(WorldAxis axis) => switch (axis) {
+    WorldAxis.x => GestureMode.moveX,
+    WorldAxis.y => GestureMode.moveY,
+    WorldAxis.z => GestureMode.moveZ,
+  };
 
   static GestureState _start(
     EditorState state,
@@ -107,29 +131,42 @@ abstract class Live3dLogic {
     );
   }
 
-  // Moves the shapes along the depth axis as it appears on screen.
-  static EditorState _push(EditorState state, Offset drag) {
+  // Moves the shapes along one axis, as far as the pointer follows it.
+  static EditorState _along(EditorState state, Offset drag, WorldAxis axis) {
     final camera = state.camera;
     if (camera == null) return state;
-    final depthOnScreen =
-        Offset(
-          math.sin(camera.yaw),
-          -math.cos(camera.yaw) * math.sin(camera.pitch),
-        ) *
-        camera.scale;
-    final reach = depthOnScreen.distanceSquared;
+    final onScreen = axisOnScreen(camera, axis);
+    final reach = onScreen.distanceSquared;
     if (reach < _minAxisReach) return state;
-    final change =
-        (drag.dx * depthOnScreen.dx + drag.dy * depthOnScreen.dy) / reach;
+    var change = (drag.dx * onScreen.dx + drag.dy * onScreen.dy) / reach;
+    if (state.view.snap) change = (change / _moveStep).round() * _moveStep;
     return _restart(
       state,
-      (start) => start.copyWith(
-        depth: _snapped(
-          state,
-          _limited(start.depth + change, kDepthRange),
+      (start) => switch (axis) {
+        WorldAxis.x => _shifted(start, Offset(change, 0)),
+        WorldAxis.y => _shifted(start, Offset(0, change)),
+        WorldAxis.z => start.copyWith(
+          z: _limited(start.z + change, kZRange),
         ),
-      ),
+      },
     );
+  }
+
+  // Moves the shapes across the drawing, following the pointer.
+  static EditorState _slide(EditorState state, Offset drag) {
+    final camera = state.camera;
+    if (camera == null) return state;
+    final facing = math.cos(camera.yaw) * camera.scale;
+    if (facing.abs() < _minPlaneReach) return state;
+    var shift = Offset(
+      drag.dx / facing,
+      (math.cos(camera.yaw) * drag.dy -
+              math.sin(camera.yaw) * math.sin(camera.pitch) * drag.dx) /
+          (facing * math.cos(camera.pitch)),
+    );
+    if (!shift.dx.isFinite || !shift.dy.isFinite) return state;
+    if (state.view.snap) shift = state.snapped(shift);
+    return _restart(state, (start) => _shifted(start, shift));
   }
 
   static EditorState _tilt(EditorState state, Offset drag) {
@@ -145,6 +182,9 @@ abstract class Live3dLogic {
     );
   }
 
+  static Shape _shifted(Shape shape, Offset shift) =>
+      shape.copyWith(points: [for (final vertex in shape.points) vertex + shift]);
+
   // Rebuilds each gesture shape from how it was when the drag began.
   static EditorState _restart(
     EditorState state,
@@ -158,7 +198,4 @@ abstract class Live3dLogic {
 
   static double _limited(double value, double limit) =>
       value.clamp(-limit, limit).toDouble();
-
-  static double _snapped(EditorState state, double value) =>
-      state.view.snap ? (value * 2).round() / 2 : value;
 }

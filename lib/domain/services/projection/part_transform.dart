@@ -6,7 +6,7 @@ import 'dart:ui';
 import '../../models/model3d/model3d.dart';
 import '../../models/model3d/part_pose.dart';
 import '../../models/model3d/part_rig.dart';
-import '../../models/model3d/point3.dart';
+import '../../models/model3d/points.dart';
 import '../../models/model3d/view_angle.dart';
 import 'matrix3.dart';
 

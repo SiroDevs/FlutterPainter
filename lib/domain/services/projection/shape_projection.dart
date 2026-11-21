@@ -4,7 +4,7 @@ import 'dart:ui';
 
 // Project imports:
 import '../../models/model3d/part_pose.dart';
-import '../../models/model3d/point3.dart';
+import '../../models/model3d/points.dart';
 import '../../models/model3d/section_profile.dart';
 import '../../models/shapes/shape.dart';
 import '../../models/shapes/shape_kind.dart';
@@ -78,7 +78,7 @@ Shape _face(Shape shape, List<Offset> points) => shape.copyWith(
   points: points,
   rotation: 0,
   radius: 0,
-  depth: 0,
+  z: 0,
   thickness: 0,
   tilt: PartPose.rest,
   section: SectionProfile.box,

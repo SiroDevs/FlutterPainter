@@ -8,13 +8,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
-import '../../../../../domain/models/model3d/depth_range.dart';
 import '../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../domain/models/model3d/view_angle.dart';
 import '../../../bloc/editor_bloc.dart';
 import '../../../logic/drawing/editor_ops.dart';
 
-export '../../../../../domain/models/model3d/depth_range.dart';
+export '../../../../../domain/models/model3d/space_range.dart';
 
 /// Sends a change to the active layer's 3D setup. [record] also makes it one
 /// undo step; sliders pass false while dragging and commit when they let go.

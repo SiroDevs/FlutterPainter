@@ -3,7 +3,7 @@ import '../../../../../domain/models/drawing/paint_layer.dart';
 import '../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../domain/models/model3d/part_pose.dart';
 import '../../../../../domain/models/model3d/part_rig.dart';
-import '../../../../../domain/models/model3d/point3.dart';
+import '../../../../../domain/models/model3d/points.dart';
 import '../../../../../domain/models/shapes/shape.dart';
 import 'model3d_edits.dart';
 
@@ -32,12 +32,12 @@ List<PartEntry> listParts(PaintLayer layer, Model3d model) {
 
 Point3 _centreOf(List<Shape> shapes) {
   var bounds = shapes.first.bounds;
-  var totalDepth = 0.0;
+  var totalZ = 0.0;
   for (final shape in shapes) {
     bounds = bounds.expandToInclude(shape.bounds);
-    totalDepth += shape.depth;
+    totalZ += shape.z;
   }
-  return Point3(bounds.center.dx, bounds.center.dy, totalDepth / shapes.length);
+  return Point3(bounds.center.dx, bounds.center.dy, totalZ / shapes.length);
 }
 
 /// The joint of [part]: the saved one, or one at the part's centre.

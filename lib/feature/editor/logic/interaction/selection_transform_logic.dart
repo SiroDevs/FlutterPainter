@@ -102,10 +102,19 @@ abstract class SelectionTransformLogic {
       case GestureMode.orbit:
         // TODO: Handle this case.
         throw UnimplementedError();
-      case GestureMode.depth:
+      case GestureMode.tilt:
         // TODO: Handle this case.
         throw UnimplementedError();
-      case GestureMode.tilt:
+      case GestureMode.plane:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case GestureMode.moveX:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case GestureMode.moveY:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case GestureMode.moveZ:
         // TODO: Handle this case.
         throw UnimplementedError();
     }

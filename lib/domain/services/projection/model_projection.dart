@@ -3,7 +3,7 @@ import 'dart:ui';
 
 // Project imports:
 import '../../models/drawing/paint_layer.dart';
-import '../../models/model3d/point3.dart';
+import '../../models/model3d/points.dart';
 import '../../models/model3d/view_angle.dart';
 import '../../models/shapes/shape.dart';
 import 'part_transform.dart';
@@ -95,7 +95,7 @@ List<SourcedShape> _project(
             Point3(
               bounds.center.dx,
               bounds.center.dy,
-              _averageDepth(members),
+              _averageZ(members),
             ),
           )
           .dz,
@@ -119,8 +119,8 @@ Rect _boundsOf(List<Shape> shapes) {
   return bounds;
 }
 
-double _averageDepth(List<Shape> shapes) =>
-    shapes.fold(0.0, (total, shape) => total + shape.depth) / shapes.length;
+double _averageZ(List<Shape> shapes) =>
+    shapes.fold(0.0, (total, shape) => total + shape.z) / shapes.length;
 
 int _farFirst(_Part first, _Part second) {
   final byDepth = second.depth.compareTo(first.depth);

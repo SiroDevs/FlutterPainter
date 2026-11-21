@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../models/model3d/point3.dart';
+import '../../models/model3d/points.dart';
 import '../../models/model3d/view_angle.dart';
 import 'part_transform.dart';
 
@@ -16,7 +16,7 @@ class ViewTransform {
       _pitchCos = math.cos(_limited(angle.pitch)),
       _pitchSin = math.sin(_limited(angle.pitch));
 
-  static const double _limit = 1.48;
+  static const double _limit = math.pi;
 
   final ViewAngle angle;
   final Point3 pivot;

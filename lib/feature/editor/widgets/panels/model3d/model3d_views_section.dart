@@ -56,8 +56,8 @@ class Model3dViewsSection extends StatelessWidget {
       name: context.l10n.model3dTurn,
       unit: '°',
       value: degreesOf(view.yaw),
-      min: -85,
-      max: 85,
+      min: -180,
+      max: 180,
       onChanged: (next) => _change(
         context,
         (item) => item.copyWith(yaw: radiansOf(next)),
@@ -67,8 +67,8 @@ class Model3dViewsSection extends StatelessWidget {
       name: context.l10n.model3dTilt,
       unit: '°',
       value: degreesOf(view.pitch),
-      min: -85,
-      max: 85,
+      min: -180,
+      max: 180,
       onChanged: (next) => _change(
         context,
         (item) => item.copyWith(pitch: radiansOf(next)),
