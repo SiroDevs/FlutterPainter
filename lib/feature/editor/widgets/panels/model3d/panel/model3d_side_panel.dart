@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../bloc/editor_bloc.dart';
 import '../../../../logic/drawing/operations/exports.dart';
-import '../../exports.dart';
+import '../../panel_resize_handle.dart';
 import 'exports.dart';
 
 /// The 3D setup beside the toolbar, shown only while the active layer is 3D.

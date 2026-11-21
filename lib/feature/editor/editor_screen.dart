@@ -12,13 +12,13 @@ import '../../domain/models/editor/app_settings.dart';
 import '../quick_code/quick_code_request.dart';
 import '../settings/cubit/settings_cubit.dart';
 import 'widgets/canvas/canvas_view.dart';
-import 'widgets/panels/exports.dart';
-import 'widgets/panels/layers/exports.dart';
+import 'widgets/panels/image_panel.dart';
+import 'widgets/panels/layers/panel/layers_panel.dart';
 import 'widgets/panels/model3d/panel/exports.dart';
-
+import 'widgets/panels/panel_resize_handle.dart';
 import 'widgets/panels/properties/exports.dart';
 import 'widgets/toolbar/colors/exports.dart';
-import 'widgets/toolbar/exports.dart';
+import 'widgets/toolbar/status_bar.dart';
 import 'widgets/toolbar/tools/exports.dart';
 
 /// One project's editor with draggable tool, inspector and color panels.
