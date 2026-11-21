@@ -3,10 +3,10 @@ import 'dart:ui';
 
 // Project imports:
 import '../../../../../domain/services/geometry/geometry_utils.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import '../shared/editor_ops.dart';
-import 'order_logic.dart';
-import '../styles/style_logic.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../operations/exports.dart';
+import 'exports.dart';
+import '../exports.dart';
 
 /// Operations on the selected shape: delete, duplicate, order, layer, name.
 abstract class ShapeLogic {

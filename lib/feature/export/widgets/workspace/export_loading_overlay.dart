@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 // Project imports:
-import '../theme/vscode_colors.dart';
+import '../exports.dart';
 
 /// Shows a progress overlay when export work lasts beyond a short delay.
 class ExportLoadingOverlay extends StatefulWidget {

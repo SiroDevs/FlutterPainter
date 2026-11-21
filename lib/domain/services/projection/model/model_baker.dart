@@ -2,7 +2,7 @@
 import '../../../models/drawing/drawing.dart';
 import '../../../models/drawing/paint_layer.dart';
 import '../../../models/model3d/view_angle.dart';
-import 'model_projection.dart';
+import 'exports.dart';
 
 /// Swaps every 3D layer for one flat layer per view, ready for export.
 Drawing bakeModelLayers(Drawing drawing) {

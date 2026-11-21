@@ -8,12 +8,12 @@ import '../../../models/model3d/points.dart';
 import '../../../models/model3d/section_profile.dart';
 import '../../../models/shapes/shape.dart';
 import '../../../models/shapes/shape_kind.dart';
-import '../sections/section_depths.dart';
-import '../sections/section_surface.dart';
-import 'shape_outline.dart';
-import 'shape_tilt.dart';
-import 'shape_walls.dart';
-import '../transforms/view_transform.dart';
+import '../sections/exports.dart';
+
+import 'exports.dart';
+
+
+import '../transforms/exports.dart';
 
 const double _sectionSteps = 40;
 

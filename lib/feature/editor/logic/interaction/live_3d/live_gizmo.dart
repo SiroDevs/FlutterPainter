@@ -3,10 +3,10 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 // Project imports:
-import '../../../../../domain/services/projection/parts/axis_handles.dart';
-import '../../../../../domain/services/projection/model/model_projection.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import '../../drawing/shared/editor_ops.dart';
+import '../../../../../domain/services/projection/parts/exports.dart';
+import '../../../../../domain/services/projection/model/exports.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../../drawing/operations/exports.dart';
 
 /// The X, Y and Z arrows shown on the selection in the live 3D view.
 abstract class LiveGizmo {

@@ -10,9 +10,9 @@ import '../../../../../../core/utils/l10n_ext.dart';
 import '../../../../../../domain/models/model3d/part_pose.dart';
 import '../../../../../../domain/models/model3d/section_profile.dart';
 import '../../../../../../domain/models/shapes/shape.dart';
-import '../../../../bloc/controller/editor_bloc.dart';
-import '../support/model3d_edits.dart';
-import '../controls/model3d_slider.dart';
+import '../../../../bloc/editor_bloc.dart';
+import '../support/exports.dart';
+import '../controls/exports.dart';
 
 const double _angleRange = 180;
 

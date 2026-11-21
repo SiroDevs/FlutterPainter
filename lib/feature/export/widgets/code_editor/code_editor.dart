@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 
 // Project imports:
 import '../../../../domain/models/export/export_file.dart';
-import 'syntax_controller.dart';
-import '../theme/vscode_colors.dart';
+import 'exports.dart';
+import '../exports.dart';
 
 /// Where the caret is, for the status bar ("Ln 3, Col 14").
 class CaretInfo {

@@ -4,8 +4,8 @@ import 'dart:ui';
 // Project imports:
 import '../../../../../domain/models/shapes/shape_kind.dart';
 import '../../../../../domain/services/geometry/shape_geometry.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import '../shared/editor_ops.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../operations/exports.dart';
 
 /// Edits points on line paths and polygons.
 abstract class VertexLogic {

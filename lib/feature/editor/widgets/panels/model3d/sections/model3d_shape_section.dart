@@ -9,9 +9,9 @@ import '../../../../../../core/utils/l10n_ext.dart';
 import '../../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../../domain/models/model3d/points.dart';
 import '../../../../../../domain/models/shapes/shape.dart';
-import '../../../../bloc/controller/editor_bloc.dart';
-import '../support/model3d_edits.dart';
-import '../controls/model3d_slider.dart';
+import '../../../../bloc/editor_bloc.dart';
+import '../support/exports.dart';
+import '../controls/exports.dart';
 
 const double _thicknessRange = 60;
 const double _thicknessInputLimit = 1000;

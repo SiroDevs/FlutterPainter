@@ -1,4 +1,4 @@
-part of 'editor_bloc.dart';
+part of '../editor_bloc.dart';
 
 class LayerAdded extends EditorEvent {
   /// [nameFor] turns a layer number into its default name, in the user's language.

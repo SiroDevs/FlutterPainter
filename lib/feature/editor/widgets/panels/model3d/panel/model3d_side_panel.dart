@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
-import '../../../../bloc/controller/editor_bloc.dart';
-import '../../../../logic/drawing/shared/editor_ops.dart';
-import '../../shared/panel_resize_handle.dart';
-import 'model3d_panel.dart';
+import '../../../../bloc/editor_bloc.dart';
+import '../../../../logic/drawing/operations/exports.dart';
+import '../../exports.dart';
+import 'exports.dart';
 
 /// The 3D setup beside the toolbar, shown only while the active layer is 3D.
 /// [onResize] receives how far the user dragged the edge, left or right.

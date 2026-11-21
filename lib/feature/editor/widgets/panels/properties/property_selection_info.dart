@@ -6,8 +6,8 @@ import '../../../../../common/widgets/dialogs/app_dialogs.dart';
 import '../../../../../core/utils/l10n_ext.dart';
 import '../../../../../domain/models/shapes/shape.dart';
 import '../../../../../domain/models/shapes/shape_kind.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import '../../../logic/drawing/shared/editor_ops.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../../../logic/drawing/operations/exports.dart';
 
 /// Shows selected item details and inline actions for renaming its item/group.
 class PropertySelectionInfo extends StatelessWidget {

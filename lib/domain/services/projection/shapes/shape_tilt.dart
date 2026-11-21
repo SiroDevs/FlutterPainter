@@ -1,7 +1,7 @@
 // Project imports:
 import '../../../models/model3d/points.dart';
 import '../../../models/shapes/shape.dart';
-import '../transforms/matrix3.dart';
+import '../transforms/exports.dart';
 
 /// Turns one shape around its own centre, leaving its drawn place alone.
 class ShapeTilt {

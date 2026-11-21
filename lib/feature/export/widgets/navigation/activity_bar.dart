@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../settings/widgets/settings_dialog.dart';
-import '../theme/vscode_colors.dart';
+import '../exports.dart';
 
 /// Shows the explorer shortcut and settings gear beside the export sidebar.
 class ActivityBar extends StatelessWidget {

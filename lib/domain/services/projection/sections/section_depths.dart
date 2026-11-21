@@ -4,7 +4,7 @@ import 'dart:ui';
 // Project imports:
 import '../../../models/model3d/section_profile.dart';
 import '../../../models/shapes/shape.dart';
-import 'section_shape.dart';
+import 'exports.dart';
 
 typedef SectionDepths = ({List<double> near, List<double> far});
 

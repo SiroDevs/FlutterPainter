@@ -10,8 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../../domain/models/model3d/view_angle.dart';
-import '../../../../bloc/controller/editor_bloc.dart';
-import '../../../../logic/drawing/shared/editor_ops.dart';
+import '../../../../bloc/editor_bloc.dart';
+import '../../../../logic/drawing/operations/exports.dart';
 
 export '../../../../../../domain/models/model3d/space_range.dart';
 

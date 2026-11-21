@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../../../../../core/utils/l10n_ext.dart';
 import '../../../../../../domain/models/model3d/model3d.dart';
-import '../support/model3d_edits.dart';
-import '../support/model3d_parts.dart';
+import '../support/exports.dart';
+
 
 /// Picks the part another part hangs from, so it follows that part's folds
 /// and poses. A part cannot hang from one that hangs from it.

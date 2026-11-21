@@ -10,10 +10,10 @@ import '../../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../../domain/models/shapes/shape.dart';
 import '../../../../../../domain/models/shapes/shape_kind.dart';
 import '../../../../../../domain/services/geometry/hinge_edges.dart';
-import '../../../../bloc/controller/editor_bloc.dart';
-import '../support/model3d_edits.dart';
-import '../support/model3d_parts.dart';
-import 'model3d_slider.dart';
+import '../../../../bloc/editor_bloc.dart';
+import '../support/exports.dart';
+
+import 'exports.dart';
 
 /// Folds and bends the selected part, adds faces next to its edges, and
 /// switches to working on it face-on.

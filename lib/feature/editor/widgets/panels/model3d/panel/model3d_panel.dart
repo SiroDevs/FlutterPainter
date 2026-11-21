@@ -8,16 +8,16 @@ import 'package:styled_widget/styled_widget.dart';
 // Project imports:
 import '../../../../../../core/utils/l10n_ext.dart';
 import '../../../../../../domain/models/model3d/model3d.dart';
-import '../../../../bloc/controller/editor_bloc.dart';
-import '../../../../logic/drawing/shared/editor_ops.dart';
-import '../support/model3d_edits.dart';
-import '../sections/model3d_form_section.dart';
-import '../sections/model3d_live_section.dart';
-import '../support/model3d_parts.dart';
-import '../sections/model3d_parts_section.dart';
-import '../sections/model3d_preview_section.dart';
-import '../sections/model3d_shape_section.dart';
-import '../sections/model3d_views_section.dart';
+import '../../../../bloc/editor_bloc.dart';
+import '../../../../logic/drawing/operations/exports.dart';
+import '../support/exports.dart';
+import '../sections/exports.dart';
+
+
+
+
+
+
 
 const int _previewTab = 0;
 const int _liveTab = 1;

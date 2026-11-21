@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../cubit/export_cubit.dart';
-import '../theme/vscode_colors.dart';
+import '../exports.dart';
 
 /// The file explorer: every generated file, in folders, with the active one
 /// highlighted. A click opens the file in a tab.

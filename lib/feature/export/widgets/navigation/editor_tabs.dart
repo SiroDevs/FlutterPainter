@@ -10,7 +10,7 @@ import 'package:styled_widget/styled_widget.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../cubit/export_cubit.dart';
-import '../theme/vscode_colors.dart';
+import '../exports.dart';
 
 /// The row of open files above the editor. Every tab has an X to close it
 /// (middle-click works too); a dot marks a file with unsaved edits.

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import '../../../core/theme/bloc/theme_bloc.dart';
-import '../../editor/bloc/controller/editor_bloc.dart';
+import '../../editor/bloc/editor_bloc.dart';
 import '../../editor/logic/exports.dart';
 import '../cubit/workspace_cubit.dart';
 

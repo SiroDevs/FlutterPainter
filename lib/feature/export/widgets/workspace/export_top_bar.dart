@@ -6,7 +6,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
-import '../theme/vscode_colors.dart';
+import '../exports.dart';
 
 /// The menu bar across the top of the code editor: save, archive, copy, format
 /// and regenerate on the left, and "Close code editor" on the far right.

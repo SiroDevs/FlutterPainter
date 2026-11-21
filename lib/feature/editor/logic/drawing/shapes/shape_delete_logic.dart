@@ -1,7 +1,7 @@
 // Project imports:
-import '../../../bloc/controller/editor_bloc.dart';
+import '../../../bloc/editor_bloc.dart';
 import '../../canvas/image_logic.dart';
-import '../shared/editor_ops.dart';
+import '../operations/exports.dart';
 
 /// Removes selected or layer-tree-addressed shapes.
 abstract class ShapeDeleteLogic {

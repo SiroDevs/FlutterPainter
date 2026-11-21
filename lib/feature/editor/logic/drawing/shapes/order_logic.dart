@@ -1,6 +1,6 @@
 // Project imports:
-import '../../../bloc/controller/editor_bloc.dart';
-import '../shared/editor_ops.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../operations/exports.dart';
 
 /// Changes selected shapes' drawing order without breaking their selection.
 abstract class ShapeOrderLogic {

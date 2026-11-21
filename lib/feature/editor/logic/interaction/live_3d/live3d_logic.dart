@@ -7,12 +7,12 @@ import '../../../../../domain/models/model3d/space_range.dart';
 import '../../../../../domain/models/model3d/world_axis.dart';
 import '../../../../../domain/models/shapes/shape.dart';
 import '../../../../../domain/services/geometry/shape_geometry.dart';
-import '../../../../../domain/services/projection/parts/axis_handles.dart';
-import '../../../../../domain/services/projection/model/model_projection.dart';
-import '../../../bloc/controller/editor_bloc.dart';
+import '../../../../../domain/services/projection/parts/exports.dart';
+import '../../../../../domain/services/projection/model/exports.dart';
+import '../../../bloc/editor_bloc.dart';
 import '../../../models/gesture_state.dart';
-import '../../drawing/shared/editor_ops.dart';
-import 'live_gizmo.dart';
+import '../../drawing/operations/exports.dart';
+import 'exports.dart';
 
 /// Pointer gestures of the live 3D camera. Empty space turns the view; an
 /// arrow moves the selection along X, Y or Z; a shape slides across the

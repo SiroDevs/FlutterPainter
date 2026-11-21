@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
-import '../../../editor/bloc/controller/editor_bloc.dart';
+import '../../../editor/bloc/editor_bloc.dart';
 import '../../../editor/logic/exports.dart';
 import '../app_command.dart';
 import '../workspace_commands.dart';

@@ -9,11 +9,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/utils/copy_with_util.dart';
 import '../../../domain/models/editor/tool.dart';
 import '../../../domain/models/shapes/shape_kind.dart';
-import '../../../domain/services/code_import/quick_code/quick_code_format.dart';
-import '../../../domain/services/code_import/quick_code/quick_code_points.dart';
-import '../../../domain/services/code_import/quick_code/quick_code_validation.dart';
-import '../../editor/bloc/controller/editor_bloc.dart';
-import '../../editor/logic/drawing/shared/editor_ops.dart';
+import '../../../domain/services/code_import/quick_code/exports.dart';
+
+
+import '../../editor/bloc/editor_bloc.dart';
+import '../../editor/logic/drawing/operations/exports.dart';
 import '../quick_code_request.dart';
 
 part 'quick_code_state.dart';

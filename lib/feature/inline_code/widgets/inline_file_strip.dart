@@ -7,7 +7,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
 import '../../../core/utils/l10n_ext.dart';
-import '../../export/widgets/theme/vscode_colors.dart';
+import '../../export/widgets/exports.dart';
 import '../cubit/inline_code_cubit.dart';
 
 // The files of the inline code view, piled in a scrollable row. A file that

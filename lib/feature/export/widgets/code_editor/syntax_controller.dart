@@ -1,9 +1,9 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
-import '../../../../domain/services/code_import/tokenization/dart_tokenizer.dart';
-import '../theme/vscode_colors.dart';
+// Project imports:\
+import '../../../../domain/services/code_import/dart_tokenizer.dart';
+import '../exports.dart';
 
 /// A text controller whose text is drawn with Dart syntax colours. The spans
 /// always add up to exactly the text, so the caret and selection stay correct.

@@ -1,8 +1,8 @@
 // Project imports:
 import '../../../../../domain/models/model3d/part_pose.dart';
 import '../../../../../domain/models/model3d/section_profile.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import '../shared/editor_ops.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../operations/exports.dart';
 
 /// The cross-section and tilt of the selected shapes of a 3D layer.
 abstract class Shape3dLogic {

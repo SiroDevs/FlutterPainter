@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../core/utils/l10n_ext.dart';
-import '../editor/bloc/controller/editor_bloc.dart';
+import '../editor/bloc/editor_bloc.dart';
 import '../editor/editor_screen.dart';
 import '../inline_code/widgets/inline_code_host.dart';
 import '../quick_code/quick_code_request.dart';

@@ -3,8 +3,8 @@ import 'dart:ui';
 
 // Project imports:
 import '../../../../../domain/services/geometry/shape_geometry.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import '../../drawing/shared/editor_ops.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../../drawing/operations/exports.dart';
 
 /// Finds visible shapes and updates additive canvas selections.
 abstract class SelectionHitLogic {

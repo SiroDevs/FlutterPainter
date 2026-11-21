@@ -7,9 +7,9 @@ import '../../../models/model3d/points.dart';
 import '../../../models/model3d/section_profile.dart';
 import '../../../models/shapes/shape.dart';
 import '../../../models/shapes/shape_kind.dart';
-import 'section_shape.dart';
-import '../shapes/shape_tilt.dart';
-import '../transforms/view_transform.dart';
+import 'exports.dart';
+import '../shapes/exports.dart';
+import '../transforms/exports.dart';
 
 /// A flat piece of a projected shape and how far from the viewer it is.
 typedef SurfacePiece = ({double depth, Shape shape});

@@ -1,4 +1,4 @@
-part of 'editor_bloc.dart';
+part of '../editor_bloc.dart';
 
 /// Events sent to the editor bloc.
 sealed class EditorEvent {

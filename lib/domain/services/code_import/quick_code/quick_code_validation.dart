@@ -1,6 +1,6 @@
 // Project imports:
 import '../../../models/shapes/shape_kind.dart';
-import 'quick_code_points.dart';
+import 'exports.dart';
 
 enum QuickCodeStatus { empty, invalid, tooFew, ready }
 

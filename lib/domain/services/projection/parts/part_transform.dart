@@ -8,7 +8,7 @@ import '../../../models/model3d/part_pose.dart';
 import '../../../models/model3d/part_rig.dart';
 import '../../../models/model3d/points.dart';
 import '../../../models/model3d/view_angle.dart';
-import '../transforms/matrix3.dart';
+import '../transforms/exports.dart';
 
 typedef _Step = ({Point3 pivot, Matrix3 turn});
 

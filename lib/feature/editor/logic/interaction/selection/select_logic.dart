@@ -4,13 +4,13 @@ import 'dart:ui';
 // Project imports:
 import '../../../../../domain/services/geometry/geometry_utils.dart';
 import '../../../../../domain/services/geometry/shape_geometry.dart';
-import '../../../bloc/controller/editor_bloc.dart';
+import '../../../bloc/editor_bloc.dart';
 import '../../../models/gesture_state.dart';
 import '../../canvas/image_logic.dart';
-import '../../drawing/shared/editor_ops.dart';
-import '../../drawing/styles/style_logic.dart';
-import '../../drawing/shapes/vertex_logic.dart';
-import 'selection_transform_logic.dart';
+import '../../drawing/operations/exports.dart';
+import '../../drawing/exports.dart';
+import '../../drawing/shapes/exports.dart';
+import 'exports.dart';
 
 /// Selection, marquee, move, resize, rotate, and vertex editing.
 abstract class SelectLogic {

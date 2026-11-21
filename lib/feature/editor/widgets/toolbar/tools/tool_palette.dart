@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/utils/l10n_ext.dart';
 import '../../../../../domain/models/editor/tool.dart';
 import '../../../../quick_code/quick_code_request.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import 'tool_info.dart';
+import '../../../bloc/editor_bloc.dart';
+import 'exports.dart';
 
 /// The toolbox, laid out like Photoshop's: a narrow column where related tools
 /// share one slot. The slot shows the tool you used last; a small triangle in

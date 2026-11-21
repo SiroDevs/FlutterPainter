@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../../../../common/widgets/inputs/labeled_slider.dart';
-import '../../../../bloc/controller/editor_bloc.dart';
+import '../../../../bloc/editor_bloc.dart';
 
 /// A named slider for the 3D panel with a box to type the value. Dragging
 /// calls [onChanged] with no undo step; letting go, or typing, records one.

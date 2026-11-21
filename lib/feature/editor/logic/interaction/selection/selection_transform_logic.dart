@@ -6,10 +6,10 @@ import 'dart:ui';
 import '../../../../../domain/models/shapes/shape.dart';
 import '../../../../../domain/models/shapes/shape_kind.dart';
 import '../../../../../domain/services/geometry/geometry_utils.dart';
-import '../../../bloc/controller/editor_bloc.dart';
+import '../../../bloc/editor_bloc.dart';
 import '../../../models/gesture_state.dart';
-import '../../drawing/shared/editor_ops.dart';
-import 'selection_hit_logic.dart';
+import '../../drawing/operations/exports.dart';
+import 'exports.dart';
 
 /// Applies pointer movement to the current selection gesture.
 abstract class SelectionTransformLogic {

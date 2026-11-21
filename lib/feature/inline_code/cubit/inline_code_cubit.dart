@@ -15,8 +15,8 @@ import '../../../domain/models/export/export_file.dart';
 import '../../../domain/models/export/export_options.dart';
 import '../../../domain/models/shapes/shape.dart';
 import '../../../domain/services/code_export/dart_exporter.dart';
-import '../../../domain/services/code_import/parser/code_importer.dart';
-import '../../editor/bloc/controller/editor_bloc.dart';
+import '../../../domain/services/code_import/parser/interpreter/code_importer.dart';
+import '../../editor/bloc/editor_bloc.dart';
 
 part 'inline_code_state.dart';
 

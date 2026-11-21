@@ -5,8 +5,8 @@ import 'dart:ui';
 import '../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../domain/models/model3d/points.dart';
 import '../../../../../domain/models/model3d/view_angle.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import '../shared/editor_ops.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../operations/exports.dart';
 
 /// Making layers 3D and editing their setup.
 abstract class Model3dLogic {

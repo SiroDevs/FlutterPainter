@@ -9,7 +9,7 @@ import 'package:styled_widget/styled_widget.dart';
 import '../../../../../common/widgets/color/color_swatch_button.dart';
 import '../../../../../common/widgets/inputs/labeled_slider.dart';
 import '../../../../../core/utils/l10n_ext.dart';
-import '../../../bloc/controller/editor_bloc.dart';
+import '../../../bloc/editor_bloc.dart';
 import '../../../models/style_settings.dart';
 
 /// Fill, stroke, and stroke-width controls grouped together.

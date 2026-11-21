@@ -5,7 +5,7 @@ import 'dart:ui';
 // Project imports:
 import '../../../models/model3d/points.dart';
 import '../../../models/model3d/view_angle.dart';
-import '../parts/part_transform.dart';
+import '../parts/exports.dart';
 
 /// Turns object-space points and directions into the flat view.
 class ViewTransform {

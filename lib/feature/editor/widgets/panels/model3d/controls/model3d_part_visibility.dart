@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../../../../../core/utils/l10n_ext.dart';
 import '../../../../../../domain/models/model3d/view_angle.dart';
-import '../support/model3d_edits.dart';
-import '../support/model3d_parts.dart';
+import '../support/exports.dart';
+
 
 /// A checkbox that shows or hides a part in one view.
 class Model3dPartVisibility extends StatelessWidget {

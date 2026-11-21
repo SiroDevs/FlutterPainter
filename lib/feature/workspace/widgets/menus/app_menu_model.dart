@@ -1,6 +1,6 @@
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
-import '../../../editor/widgets/toolbar/tools/tool_info.dart';
+import '../../../editor/widgets/toolbar/tools/exports.dart';
 import '../../commands/app_command.dart';
 import '../../commands/workspace_commands.dart';
 

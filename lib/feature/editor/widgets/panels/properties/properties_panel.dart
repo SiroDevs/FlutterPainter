@@ -10,10 +10,10 @@ import '../../../../../core/utils/l10n_ext.dart';
 import '../../../../../domain/models/editor/tool.dart';
 import '../../../../../domain/models/shapes/shape.dart';
 import '../../../../../domain/models/shapes/shape_kind.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import '../../../logic/drawing/shared/editor_ops.dart';
-import 'property_selection_info.dart';
-import 'property_style_controls.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../../../logic/drawing/operations/exports.dart';
+import 'exports.dart';
+
 
 /// Style controls. They edit the selected shape, or set the style used for the
 /// next shapes when nothing is selected.

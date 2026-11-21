@@ -1,4 +1,4 @@
-part of 'editor_bloc.dart';
+part of '../editor_bloc.dart';
 
 class ChangesCommitted extends EditorEvent {
   const ChangesCommitted();

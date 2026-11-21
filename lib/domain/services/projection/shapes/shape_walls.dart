@@ -6,10 +6,10 @@ import 'dart:ui';
 import '../../../models/model3d/points.dart';
 import '../../../models/shapes/shape.dart';
 import '../../../models/shapes/shape_kind.dart';
-import '../sections/section_depths.dart';
-import '../sections/section_surface.dart';
-import 'shape_tilt.dart';
-import '../transforms/view_transform.dart';
+import '../sections/exports.dart';
+
+import 'exports.dart';
+import '../transforms/exports.dart';
 
 // A turn sharper than this is an edge; a gentler one is part of a curve.
 const double _cornerAngle = math.pi / 6;

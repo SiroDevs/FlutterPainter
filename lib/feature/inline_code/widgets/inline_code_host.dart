@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 
 // Project imports:
 import '../../../common/app_router/route_names.dart';
-import '../../editor/bloc/controller/editor_bloc.dart';
+import '../../editor/bloc/editor_bloc.dart';
 import '../../export/export_args.dart';
 import '../../settings/cubit/settings_cubit.dart';
 import '../cubit/inline_code_cubit.dart';

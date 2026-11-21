@@ -6,9 +6,9 @@ import 'package:flutter/painting.dart';
 
 // Project imports:
 import '../../../../domain/models/model3d/world_axis.dart';
-import '../../../../domain/services/projection/parts/axis_handles.dart';
-import '../../bloc/controller/editor_bloc.dart';
-import '../../logic/interaction/live_3d/live_gizmo.dart';
+import '../../../../domain/services/projection/parts/exports.dart';
+import '../../bloc/editor_bloc.dart';
+import '../../logic/interaction/live_3d/exports.dart';
 
 const Color _xColor = Color(0xFFE5484D);
 const Color _yColor = Color(0xFF30A46C);

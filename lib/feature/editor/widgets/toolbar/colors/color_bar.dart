@@ -7,10 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../../common/constants/palette_constants.dart';
 import '../../../../../core/utils/l10n_ext.dart';
-import '../../../bloc/controller/editor_bloc.dart';
+import '../../../bloc/editor_bloc.dart';
 import '../../../models/style_settings.dart';
-import 'color_cell.dart';
-import 'color_picker_dialog.dart';
+import 'exports.dart';
+
 
 /// Paint-style colour strip with swatches, a hex field, and color palettes.
 class ColorBar extends StatelessWidget {

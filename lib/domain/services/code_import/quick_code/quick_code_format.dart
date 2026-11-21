@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 // Project imports:
-import 'quick_code_points.dart';
+import 'exports.dart';
 
 enum QuickCodeFormat { dartOffsets, compactCoordinates }
 

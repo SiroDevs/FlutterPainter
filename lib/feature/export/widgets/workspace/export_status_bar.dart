@@ -8,8 +8,8 @@ import 'package:styled_widget/styled_widget.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../cubit/export_cubit.dart';
-import '../code_editor/code_editor.dart';
-import '../theme/vscode_colors.dart';
+import '../code_editor/exports.dart';
+import '../exports.dart';
 
 /// The blue status bar along the bottom: caret position, line count, the last
 /// thing that happened, and the file's encoding, line ending and language.

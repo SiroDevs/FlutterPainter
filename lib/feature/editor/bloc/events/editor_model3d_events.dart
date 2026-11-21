@@ -1,4 +1,4 @@
-part of 'editor_bloc.dart';
+part of '../editor_bloc.dart';
 
 /// Turns the active layer into a 3D layer, naming its first three views.
 class Model3dCreated extends EditorEvent {

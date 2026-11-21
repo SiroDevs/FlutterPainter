@@ -6,9 +6,9 @@ import '../../../models/drawing/paint_layer.dart';
 import '../../../models/model3d/points.dart';
 import '../../../models/model3d/view_angle.dart';
 import '../../../models/shapes/shape.dart';
-import '../parts/part_transform.dart';
-import '../shapes/shape_projection.dart';
-import '../transforms/view_transform.dart';
+import '../parts/exports.dart';
+import '../shapes/exports.dart';
+import '../transforms/exports.dart';
 
 /// A projected shape and the index of the drawn shape it came from.
 typedef SourcedShape = ({int source, Shape shape});

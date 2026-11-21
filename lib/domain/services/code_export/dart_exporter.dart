@@ -6,7 +6,7 @@ import '../../models/export/export_file.dart';
 import '../../models/export/export_options.dart';
 import '../../models/shapes/shape.dart';
 import '../../models/shapes/shape_kind.dart';
-import '../projection/model/model_baker.dart';
+import '../projection/model/exports.dart';
 import 'code_format.dart';
 import 'gradient_code.dart';
 

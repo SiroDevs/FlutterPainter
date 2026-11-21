@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../../../common/constants/palette_constants.dart';
-import '../../../bloc/controller/editor_bloc.dart';
+import '../../../bloc/editor_bloc.dart';
 
 /// A palette cell that applies fill or stroke color on click.
 class ColorCell extends StatelessWidget {

@@ -5,7 +5,7 @@ import '../../../../../../domain/models/model3d/part_pose.dart';
 import '../../../../../../domain/models/model3d/part_rig.dart';
 import '../../../../../../domain/models/model3d/points.dart';
 import '../../../../../../domain/models/shapes/shape.dart';
-import 'model3d_edits.dart';
+import 'exports.dart';
 
 /// Changes one value of a joint, given the new angle in radians.
 typedef PartRigChange = PartRig Function(PartRig rig, double radians);

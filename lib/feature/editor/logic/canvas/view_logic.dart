@@ -4,7 +4,7 @@ import 'dart:ui';
 
 // Project imports:
 import '../../../../domain/models/drawing/drawing.dart';
-import '../../bloc/controller/editor_bloc.dart';
+import '../../bloc/editor_bloc.dart';
 import '../../models/view_settings.dart';
 
 /// Zoom, pan, fit-to-window and the view toggles.

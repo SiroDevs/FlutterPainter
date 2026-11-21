@@ -8,12 +8,12 @@ import '../../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../../domain/models/model3d/part_pose.dart';
 import '../../../../../../domain/models/model3d/points.dart';
 import '../../../../../../domain/models/shapes/shape.dart';
-import '../support/model3d_edits.dart';
-import '../controls/model3d_fold_controls.dart';
-import '../controls/model3d_parent_picker.dart';
-import '../controls/model3d_part_visibility.dart';
-import '../support/model3d_parts.dart';
-import '../controls/model3d_slider.dart';
+import '../support/exports.dart';
+import '../controls/exports.dart';
+
+
+
+
 
 /// Lets a part move on its own: where its joint is, what it hangs from, and
 /// how it is posed in the selected view.

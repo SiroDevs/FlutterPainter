@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../core/theme/bloc/theme_bloc.dart';
 import '../../../core/utils/l10n_ext.dart';
-import '../../editor/bloc/controller/editor_bloc.dart';
+import '../../editor/bloc/editor_bloc.dart';
 import '../cubit/settings_cubit.dart';
 import 'about_settings_page.dart';
 import 'general_settings_page.dart';

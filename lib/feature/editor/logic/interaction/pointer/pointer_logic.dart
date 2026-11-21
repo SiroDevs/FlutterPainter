@@ -3,14 +3,14 @@ import 'dart:ui';
 
 // Project imports:
 import '../../../../../domain/models/editor/tool.dart';
-import '../../../bloc/controller/editor_bloc.dart';
+import '../../../bloc/editor_bloc.dart';
 import '../../../models/gesture_state.dart';
 import '../../canvas/image_logic.dart';
-import '../../drawing/creation/draw_logic.dart';
-import '../../drawing/shared/editor_ops.dart';
-import '../live_3d/live3d_logic.dart';
-import '../painting/paint_bucket_logic.dart';
-import '../selection/select_logic.dart';
+import '../../drawing/operations/exports.dart';
+
+import '../live_3d/exports.dart';
+import '../exports.dart';
+import '../selection/exports.dart';
 
 /// Routes raw pointer events to the active tool, or to the gesture in progress.
 abstract class PointerLogic {

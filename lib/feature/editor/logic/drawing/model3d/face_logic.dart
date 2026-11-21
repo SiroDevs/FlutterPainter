@@ -8,9 +8,9 @@ import '../../../../../domain/models/model3d/points.dart';
 import '../../../../../domain/models/shapes/shape.dart';
 import '../../../../../domain/models/shapes/shape_kind.dart';
 import '../../../../../domain/services/geometry/hinge_edges.dart';
-import '../../../bloc/controller/editor_bloc.dart';
-import '../creation/draw_logic.dart';
-import '../shared/editor_ops.dart';
+import '../../../bloc/editor_bloc.dart';
+import '../operations/exports.dart';
+
 
 /// Building an object from faces, the way a box is folded from a net.
 abstract class FaceLogic {

@@ -7,13 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../cubit/export_cubit.dart';
-import '../navigation/activity_bar.dart';
-import '../code_editor/code_editor.dart';
-import '../navigation/editor_tabs.dart';
-import '../navigation/explorer_sidebar.dart';
-import 'export_status_bar.dart';
-import 'export_top_bar.dart';
-import '../theme/vscode_colors.dart';
+import '../navigation/exports.dart';
+import '../code_editor/exports.dart';
+
+
+import 'exports.dart';
+
+import '../exports.dart';
 
 /// Lays out the export controls, file explorer, editor and status bar.
 class ExportWorkspace extends StatefulWidget {

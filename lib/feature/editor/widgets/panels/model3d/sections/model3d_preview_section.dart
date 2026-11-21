@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Project imports:
 import '../../../../../../core/utils/l10n_ext.dart';
-import '../../../../bloc/controller/editor_bloc.dart';
-import '../../../../logic/drawing/shared/editor_ops.dart';
+import '../../../../bloc/editor_bloc.dart';
+import '../../../../logic/drawing/operations/exports.dart';
 
 /// Switch for previewing a saved view on the canvas, and what to compare it
 /// with.
