@@ -6,7 +6,7 @@ import '../../../domain/models/drawing/paint_layer.dart';
 import '../../../domain/models/drawing/project_transfer.dart';
 import '../../../domain/models/shapes/shape.dart';
 import '../../editor/bloc/editor_bloc.dart';
-import '../../editor/logic/drawing/editor_ops.dart';
+import '../../editor/logic/drawing/operations/exports.dart';
 
 /// Keeps copied project content available while the user switches tabs.
 class ProjectTransferClipboard extends ValueNotifier<ProjectTransfer?> {

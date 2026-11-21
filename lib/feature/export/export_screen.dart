@@ -18,9 +18,9 @@ import '../settings/cubit/settings_cubit.dart';
 import 'cubit/export_cubit.dart';
 import 'export_args.dart';
 import 'flows/export_flows.dart';
-import 'widgets/export_loading_overlay.dart';
-import 'widgets/export_workspace.dart';
-import 'widgets/vscode_colors.dart';
+import 'widgets/workspace/exports.dart';
+
+import 'widgets/exports.dart';
 
 /// The code editor, a page of its own laid out like VS Code: a menu bar across
 /// the top, an activity bar and file explorer on the left, tabs and the editor

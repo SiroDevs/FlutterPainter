@@ -4,8 +4,8 @@ import 'dart:ui';
 // Project imports:
 import '../../../../domain/services/geometry/shape_geometry.dart';
 import '../../bloc/editor_bloc.dart';
-import '../drawing/editor_ops.dart';
-import '../drawing/style_logic.dart';
+import '../drawing/operations/exports.dart';
+import '../drawing/exports.dart';
 
 /// Fills the topmost visible closed shape under the pointer.
 abstract class PaintBucketLogic {

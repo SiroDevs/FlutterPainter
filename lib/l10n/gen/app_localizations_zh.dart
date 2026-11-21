@@ -1321,22 +1321,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get model3dShape => 'Selected shapes';
 
   @override
-  String get model3dNoShape => 'Select a shape to set its depth and thickness.';
+  String get model3dNoShape =>
+      'Select a shape to set its position and thickness.';
 
   @override
-  String get model3dDepth => 'Depth';
+  String get model3dAxisX => 'X (left–right)';
+
+  @override
+  String get model3dAxisY => 'Y (up–down)';
+
+  @override
+  String get model3dAxisZ => 'Z (front–back)';
 
   @override
   String get model3dThickness => 'Thickness';
 
   @override
   String get model3dPivot => 'Turning point';
-
-  @override
-  String get model3dAcross => 'Across';
-
-  @override
-  String get model3dDown => 'Down';
 
   @override
   String get model3dParts => 'Parts';
@@ -1398,7 +1399,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get model3dLiveNote =>
-      'Drag empty space to turn the view. Drag a shape to move it in depth, or hold Alt and drag to tilt it.';
+      'Drag empty space to turn the view. Drag a shape to slide it across the drawing, or hold Alt to tilt it. Drag an arrow to move it along X, Y or Z.';
 
   @override
   String get model3dLiveSave => 'Save angle as view';

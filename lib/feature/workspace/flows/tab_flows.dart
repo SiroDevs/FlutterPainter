@@ -12,7 +12,7 @@ import '../../../core/utils/path_util.dart';
 import '../../../domain/models/drawing/project_format_exception.dart';
 import '../../../domain/repos/project_repo.dart';
 import '../../editor/bloc/editor_bloc.dart';
-import '../../editor/logic/drawing/editor_ops.dart';
+import '../../editor/logic/drawing/operations/exports.dart';
 import '../cubit/workspace_cubit.dart';
 
 /// The user-facing flows around tabs and files. They live apart from the cubit

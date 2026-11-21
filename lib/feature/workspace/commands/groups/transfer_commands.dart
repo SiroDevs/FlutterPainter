@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../editor/bloc/editor_bloc.dart';
-import '../../../editor/logic/drawing/editor_ops.dart';
+import '../../../editor/logic/drawing/operations/exports.dart';
 import '../../clipboard/project_transfer_clipboard.dart';
 import '../app_command.dart';
 import '../workspace_commands.dart';

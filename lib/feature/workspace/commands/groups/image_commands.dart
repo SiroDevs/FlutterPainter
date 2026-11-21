@@ -7,7 +7,7 @@ import '../../../../domain/models/editor/tool.dart';
 import '../../../editor/bloc/editor_bloc.dart';
 import '../../../editor/flows/image_flow.dart';
 import '../../../editor/logic/exports.dart';
-import '../../../editor/widgets/toolbar/tool_info.dart';
+import '../../../editor/widgets/toolbar/tools/exports.dart';
 import '../app_command.dart';
 import '../workspace_commands.dart';
 

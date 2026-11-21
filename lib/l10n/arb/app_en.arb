@@ -695,12 +695,12 @@
   "model3dZoom": "Zoom",
   "model3dValue": "{name}: {value}",
   "model3dShape": "Selected shapes",
-  "model3dNoShape": "Select a shape to set its depth and thickness.",
-  "model3dDepth": "Depth",
+  "model3dNoShape": "Select a shape to set its position and thickness.",
+  "model3dAxisX": "X (left–right)",
+  "model3dAxisY": "Y (up–down)",
+  "model3dAxisZ": "Z (front–back)",
   "model3dThickness": "Thickness",
   "model3dPivot": "Turning point",
-  "model3dAcross": "Across",
-  "model3dDown": "Down",
   "@model3dTitle": {
     "placeholders": {
       "name": {
@@ -750,7 +750,7 @@
   "model3dLive": "Live 3D",
   "model3dTabPreview": "Canvas Preview",
   "model3dTabLive": "Live 3D",
-  "model3dLiveNote": "Drag empty space to turn the view. Drag a shape to move it in depth, or hold Alt and drag to tilt it.",
+  "model3dLiveNote": "Drag empty space to turn the view. Drag a shape to slide it across the drawing, or hold Alt to tilt it. Drag an arrow to move it along X, Y or Z.",
   "model3dLiveSave": "Save angle as view",
   "model3dForm": "Shape form",
   "model3dFormThicknessNote": "Give the shape a thickness to see its form.",

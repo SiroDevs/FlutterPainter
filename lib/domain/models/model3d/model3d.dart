@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 // Project imports:
 import 'part_rig.dart';
-import 'point3.dart';
+import 'points.dart';
 import 'view_angle.dart';
 
 /// The 3D setup of a layer. The layer's shapes are the object drawn flat;

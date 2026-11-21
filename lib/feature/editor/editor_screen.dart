@@ -13,13 +13,13 @@ import '../quick_code/quick_code_request.dart';
 import '../settings/cubit/settings_cubit.dart';
 import 'widgets/canvas/canvas_view.dart';
 import 'widgets/panels/image_panel.dart';
-import 'widgets/panels/layers_panel.dart';
-import 'widgets/panels/model3d/model3d_side_panel.dart';
+import 'widgets/panels/layers/panel/layers_panel.dart';
+import 'widgets/panels/model3d/panel/exports.dart';
 import 'widgets/panels/panel_resize_handle.dart';
-import 'widgets/panels/properties_panel.dart';
-import 'widgets/toolbar/color_bar.dart';
+import 'widgets/panels/properties/exports.dart';
+import 'widgets/toolbar/colors/exports.dart';
 import 'widgets/toolbar/status_bar.dart';
-import 'widgets/toolbar/tool_palette.dart';
+import 'widgets/toolbar/tools/exports.dart';
 
 /// One project's editor with draggable tool, inspector and color panels.
 class EditorScreen extends StatefulWidget {

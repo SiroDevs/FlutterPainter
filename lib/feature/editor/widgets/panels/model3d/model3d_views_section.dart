@@ -7,9 +7,9 @@ import '../../../../../common/widgets/inputs/item_chip_row.dart';
 import '../../../../../core/utils/l10n_ext.dart';
 import '../../../../../domain/models/model3d/model3d.dart';
 import '../../../../../domain/models/model3d/view_angle.dart';
-import '../../../logic/drawing/editor_ops.dart';
-import 'model3d_edits.dart';
-import 'model3d_slider.dart';
+import '../../../logic/drawing/operations/exports.dart';
+import 'support/exports.dart';
+import 'controls/exports.dart';
 
 /// The named camera angles of a 3D layer; each one exports as a flat layer.
 class Model3dViewsSection extends StatelessWidget {
@@ -56,8 +56,8 @@ class Model3dViewsSection extends StatelessWidget {
       name: context.l10n.model3dTurn,
       unit: '°',
       value: degreesOf(view.yaw),
-      min: -85,
-      max: 85,
+      min: -180,
+      max: 180,
       onChanged: (next) => _change(
         context,
         (item) => item.copyWith(yaw: radiansOf(next)),
@@ -67,8 +67,8 @@ class Model3dViewsSection extends StatelessWidget {
       name: context.l10n.model3dTilt,
       unit: '°',
       value: degreesOf(view.pitch),
-      min: -85,
-      max: 85,
+      min: -180,
+      max: 180,
       onChanged: (next) => _change(
         context,
         (item) => item.copyWith(pitch: radiansOf(next)),

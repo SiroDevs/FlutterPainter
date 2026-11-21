@@ -7,7 +7,7 @@ import 'package:styled_widget/styled_widget.dart';
 
 // Project imports:
 import '../../../core/utils/l10n_ext.dart';
-import '../../export/widgets/vscode_colors.dart';
+import '../../export/widgets/exports.dart';
 import '../cubit/inline_code_cubit.dart';
 
 // A thin line under the code that says what the last edit did to the canvas.

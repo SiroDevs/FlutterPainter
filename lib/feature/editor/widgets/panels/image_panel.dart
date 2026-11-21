@@ -14,7 +14,7 @@ import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/editor/tool.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../flows/image_flow.dart';
-import '../../logic/drawing/editor_ops.dart';
+import '../../logic/drawing/operations/exports.dart';
 
 /// The picture on the active layer, for tracing or as a backdrop. Every layer
 /// can hold its own, so switching layers switches pictures; drag one on the

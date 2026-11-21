@@ -6,7 +6,7 @@ import '../../../../core/theme/bloc/theme_bloc.dart';
 import '../../../../core/utils/l10n_ext.dart';
 import '../../../../domain/models/editor/tool.dart';
 import '../../../editor/bloc/editor_bloc.dart';
-import '../../../editor/widgets/toolbar/tool_info.dart';
+import '../../../editor/widgets/toolbar/tools/exports.dart';
 import '../app_command.dart';
 import '../workspace_commands.dart';
 

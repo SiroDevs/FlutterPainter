@@ -3,7 +3,7 @@ import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../../../domain/models/drawing/project_transfer.dart';
 import '../../../../domain/models/shapes/shape.dart';
 import '../../bloc/editor_bloc.dart';
-import 'editor_ops.dart';
+import 'operations/exports.dart';
 
 abstract class ProjectTransferLogic {
   ProjectTransferLogic._();

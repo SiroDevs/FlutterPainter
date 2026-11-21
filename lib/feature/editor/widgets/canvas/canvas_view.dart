@@ -14,7 +14,7 @@ import '../../../../domain/services/geometry/shape_geometry.dart';
 import '../../../quick_code/quick_code_request.dart';
 import '../../../settings/cubit/settings_cubit.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/drawing/editor_ops.dart';
+import '../../logic/drawing/operations/exports.dart';
 import 'canvas_context_menu.dart';
 import 'drawing_painter.dart';
 

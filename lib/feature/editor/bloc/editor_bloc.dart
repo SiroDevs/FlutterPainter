@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 // Project imports:
+import '../../../core/di/injectable.dart';
 import '../../../core/utils/copy_with_util.dart';
 import '../../../core/utils/image_util.dart';
 import '../../../domain/models/drawing/drawing.dart';
@@ -15,27 +16,27 @@ import '../../../domain/models/drawing/edit_history.dart';
 import '../../../domain/models/drawing/paint_layer.dart';
 import '../../../domain/models/drawing/project_transfer.dart';
 import '../../../domain/models/drawing/reference_image.dart';
+import '../../../domain/models/editor/tool.dart';
 import '../../../domain/models/model3d/model3d.dart';
 import '../../../domain/models/model3d/part_pose.dart';
 import '../../../domain/models/model3d/section_profile.dart';
 import '../../../domain/models/model3d/view_angle.dart';
 import '../../../domain/models/shapes/shape.dart';
 import '../../../domain/models/shapes/shape_gradient.dart';
-import '../../../domain/models/editor/tool.dart';
-import '../../../domain/services/code_import/quick_code_points.dart';
+import '../../../domain/services/code_import/quick_code/exports.dart';
 import '../logic/exports.dart';
 import '../models/editor_seed.dart';
 import '../models/gesture_state.dart';
 import '../models/style_settings.dart';
 import '../models/view_settings.dart';
 
-part 'editor_document_events.dart';
-part 'editor_event.dart';
-part 'editor_model3d_events.dart';
-part 'editor_shape_events.dart';
+part 'events/editor_document_events.dart';
+part 'events/editor_event.dart';
+part 'events/editor_model3d_events.dart';
+part 'events/editor_shape_events.dart';
 part 'editor_shape_registrations.dart';
 part 'editor_state.dart';
-part 'editor_style_events.dart';
+part 'events/editor_style_events.dart';
 
 /// Routes each open project's events to pure functions in `logic/`.
 @injectable
@@ -202,4 +203,12 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     }
     return super.close();
   }
+}
+
+/// Creates one [EditorBloc] per open project. The workspace asks this factory
+/// instead of reaching into the service locator itself, so tests can hand it a
+/// fake that builds blocs directly.
+@lazySingleton
+class EditorBlocFactory {
+  EditorBloc create(EditorSeed seed) => getIt<EditorBloc>(param1: seed);
 }

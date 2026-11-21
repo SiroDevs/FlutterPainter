@@ -11,7 +11,7 @@ import '../../../../domain/models/editor/app_settings.dart';
 import '../../../settings/cubit/settings_cubit.dart';
 import '../../../workspace/cubit/workspace_cubit.dart';
 import '../../bloc/editor_bloc.dart';
-import 'tool_hint.dart';
+import 'tools/exports.dart';
 
 /// Cursor position in design units and a hint for the active tool.
 class StatusBar extends StatelessWidget {

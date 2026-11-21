@@ -2,7 +2,7 @@
 import '../../domain/models/model3d/model3d.dart';
 import '../../domain/models/model3d/part_pose.dart';
 import '../../domain/models/model3d/part_rig.dart';
-import '../../domain/models/model3d/point3.dart';
+import '../../domain/models/model3d/points.dart';
 import '../../domain/models/model3d/section_profile.dart';
 import '../../domain/models/model3d/view_angle.dart';
 

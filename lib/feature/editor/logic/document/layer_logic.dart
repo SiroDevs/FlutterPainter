@@ -1,7 +1,7 @@
 // Project imports:
 import '../../../../domain/models/drawing/paint_layer.dart';
 import '../../bloc/editor_bloc.dart';
-import '../drawing/editor_ops.dart';
+import '../drawing/operations/exports.dart';
 
 abstract class LayerLogic {
   LayerLogic._();

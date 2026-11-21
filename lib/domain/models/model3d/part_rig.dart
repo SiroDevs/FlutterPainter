@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 
 // Project imports:
 import '../../../core/utils/copy_with_util.dart';
-import 'point3.dart';
+import 'points.dart';
 
 /// The joint of a part: where it turns, what it hangs from, and how it is
 /// folded and bent. A part is a group of shapes.

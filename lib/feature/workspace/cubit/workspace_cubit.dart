@@ -22,8 +22,7 @@ import '../../../domain/repos/draft_repo.dart';
 import '../../../domain/repos/prefs_repo.dart';
 import '../../../domain/repos/project_repo.dart';
 import '../../editor/bloc/editor_bloc.dart';
-import '../../editor/bloc/editor_bloc_factory.dart';
-import '../../editor/logic/drawing/editor_ops.dart';
+import '../../editor/logic/drawing/operations/exports.dart';
 import '../../editor/models/editor_seed.dart';
 import 'project_saver.dart';
 

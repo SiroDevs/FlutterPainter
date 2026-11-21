@@ -3,9 +3,9 @@ import 'dart:ui';
 
 // Project imports:
 import '../../../../domain/models/shapes/shape.dart';
-import '../../../../domain/services/projection/model_projection.dart';
+import '../../../../domain/services/projection/model/exports.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/drawing/editor_ops.dart';
+import '../../logic/drawing/operations/exports.dart';
 import 'shape_painter.dart';
 
 const Color _fade = Color.fromRGBO(255, 255, 255, 0.4);

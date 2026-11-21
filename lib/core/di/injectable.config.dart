@@ -24,9 +24,9 @@ import 'package:flutter_painter/data/sources/project_file_source.dart' as _i85;
 import 'package:flutter_painter/domain/repos/draft_repo.dart' as _i760;
 import 'package:flutter_painter/domain/repos/prefs_repo.dart' as _i415;
 import 'package:flutter_painter/domain/repos/project_repo.dart' as _i741;
-import 'package:flutter_painter/feature/editor/bloc/editor_bloc.dart' as _i1017;
+import 'package:flutter_painter/feature/editor/bloc/controller/editor_bloc.dart' as _i1017;
 
-import 'package:flutter_painter/feature/editor/bloc/editor_bloc_factory.dart'
+import 'package:flutter_painter/feature/editor/bloc/controller/editor_bloc_factory.dart'
     as _i133;
 import 'package:flutter_painter/feature/editor/models/editor_seed.dart'
     as _i594;

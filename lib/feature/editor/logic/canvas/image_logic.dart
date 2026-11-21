@@ -10,7 +10,7 @@ import '../../../../domain/models/editor/tool.dart';
 import '../../../../domain/services/geometry/image_geometry.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/gesture_state.dart';
-import '../drawing/editor_ops.dart';
+import '../drawing/operations/exports.dart';
 
 /// The picture that sits under a layer's shapes (for tracing or as a
 /// background): load it, move it, resize or stretch it, fade it.

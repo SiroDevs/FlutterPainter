@@ -12,9 +12,10 @@ import '../../../../domain/models/editor/tool.dart';
 import '../../../../domain/services/geometry/geometry_utils.dart';
 import '../../../../domain/services/geometry/image_geometry.dart';
 import '../../bloc/editor_bloc.dart';
-import '../../logic/drawing/editor_ops.dart';
-import '../../logic/interaction/selection_transform_logic.dart';
+import '../../logic/drawing/operations/exports.dart';
+import '../../logic/interaction/selection/exports.dart';
 import '../../models/gesture_state.dart';
+import 'live_gizmo_painter.dart';
 import 'preview_shapes.dart';
 import 'shape_painter.dart';
 
@@ -69,6 +70,7 @@ class DrawingPainter extends CustomPainter {
       _marquee(canvas);
     } else {
       paintLiveSelection(canvas, state, ThemeColors.selection);
+      paintLiveGizmo(canvas, state);
     }
     canvas.restore();
   }

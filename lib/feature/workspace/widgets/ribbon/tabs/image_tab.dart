@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 // Project imports:
 import '../../../../../core/utils/l10n_ext.dart';
-import '../../../../editor/logic/drawing/editor_ops.dart';
+import '../../../../editor/logic/drawing/operations/exports.dart';
 import '../../../commands/workspace_commands.dart';
 import '../ribbon_parts.dart';
 

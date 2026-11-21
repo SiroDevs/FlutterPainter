@@ -12,7 +12,7 @@ import '../../../domain/repos/draft_repo.dart';
 import '../../../domain/repos/project_repo.dart';
 import '../../../domain/services/code_export/dart_exporter.dart';
 import '../../editor/bloc/editor_bloc.dart';
-import '../../editor/logic/drawing/editor_ops.dart';
+import '../../editor/logic/drawing/operations/exports.dart';
 
 /// Writes a tab to disk: the real file on save, or a side copy while it has
 /// unsaved changes.

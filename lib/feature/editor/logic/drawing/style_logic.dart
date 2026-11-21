@@ -4,7 +4,7 @@ import '../../../../domain/models/shapes/shape_gradient.dart';
 import '../../../../domain/models/shapes/shape_kind.dart';
 import '../../bloc/editor_bloc.dart';
 import '../../models/style_settings.dart';
-import 'editor_ops.dart';
+import 'operations/exports.dart';
 
 /// Colours and stroke. They update the current style and, when a shape is
 /// selected, that shape too.
